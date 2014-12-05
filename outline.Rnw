@@ -1,0 +1,68 @@
+\documentclass[letterpaper,12pt]{article}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{setspace}
+\usepackage[colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=blue]{hyperref}
+\usepackage{indentfirst}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage[final]{animate}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{rotating}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{subfig} 
+\usepackage[noae]{Sweave}
+\usepackage{cleveref}
+\usepackage[figureposition=bottom]{caption}
+\usepackage{paralist}
+\usepackage{acronym}
+\usepackage{outlines}
+
+%acronyms
+\acrodef{doc}[DoC]{depth of colonization}
+\acrodef{GIS}{Geographic Information System}
+
+%knitr options
+<<setup,include=F,cache=F>>=
+library(knitr)
+# set global chunk options
+opts_chunk$set(fig.path = 'figs/', fig.align='center', fig.show='hold',message=F,echo=F,results='asis',dev='pdf',dev.args=list(family='serif'),fig.pos='!ht',warning=F)
+options(replace.assign=TRUE,width=90,digits=1)
+@
+
+\begin{document}
+
+\setlength{\parskip}{5mm}
+\setlength{\parindent}{0in}
+
+\title{Improving spatial resolution in estimates of seagrass depth of colonization}
+\author{Marcus W. Beck}
+\maketitle
+
+\section{Outline}
+\begin{outline}
+\1 Needs
+\2 Seagrass related to habitat quality and strongly affected by water clarity
+\2 Extensive datasets describing historical and current seagrass growth patterns and distribution in Florida estuaries
+\2 No consistent approach for estimating \ac{doc} to establish restoration targets
+\2 WBID has been considered appropriate management unit although considerable spatial heterogeneity in seagrass growth
+\2 Reproducible and empirical approaches can be developed that leverage multiple types of information to provide more consistent estimates for restoration targets or nutrient criteria
+\1 Objectives
+\2 Use information-rich datasets to estimate seagrass \ac{doc} by incorporating spatially referenced information
+\2 Provide a basis for using these estimates to inform nutrient criteria development using empirical relationships with water clarity
+\1 Approach
+\2 Describe Hagy method and/or WBID approach, emphasis on situations where seagrass growth is spatially variable or when restoration target is misinformed
+\2 Describe spatially-referenced method, case studies
+\2 Compare/contrast the two, with emphasis on relation to secchi data
+\2 Implications for criteria development and/or restoration targets
+\1 To do
+\2 Rectify seagrass depth bin procedures
+\2 Tidal datum correction
+\2 Segment specific relationship of seagrass depth of col w/ Secchi
+\2 Compare cumulative sum approach with binning
+\2 Quantitative evaluation of grid spacing, grid location, and radius
+\end{outline}
+
+
+\end{document}
