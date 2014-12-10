@@ -1,5 +1,28 @@
 \begin{thebibliography}{}
 
+\bibitem[Bates and Chambers, 1992]{Bates92}
+Bates DM, Chambers JM. 1992.
+\newblock Nonlinear models.
+\newblock In: Chambers JM, Hastie TJ, editors, Statistical Models in S, pages
+  421--454. Wadsworth and Brooks/Cole, Pacific Grove, California.
+
+\bibitem[Bivand and Rundel, 2014]{Bivand14}
+Bivand R, Rundel C. 2014.
+\newblock rgeos: Interface to Geometry Engine - Open Source (GEOS).
+\newblock R package version 0.3-8.
+
+\bibitem[Bivand et~al., 2008]{Bivand08}
+Bivand RS, Pebesma EJ, G\'{o}mez-Rubio V. 2008.
+\newblock Applied Spatial Data Analysis with {R}.
+\newblock Springer, New York, New York.
+
+\bibitem[Cloern, 1996]{Cloern96}
+Cloern JE. 1996.
+\newblock Phytoplankton bloom dynamics in coastal ecosystems: {A} review with
+  some general lessons from sustained investigation of {S}an {F}rancisco {B}ay,
+  {C}alifornia.
+\newblock Review of Geophysics, 34(2):127--168.
+
 \bibitem[{Coastal Planning and Engineering}, 1997]{CPE97}
 {Coastal Planning and Engineering}. 1997.
 \newblock {I}ndian {R}iver {L}agoon bathymetric survey. {A} final report to
@@ -7,14 +30,67 @@
 \newblock Technical Report Contract 95W142, Coastal Planning and Engineering,
   Palatka, Florida.
 
+\bibitem[Diaz and Rosenberg, 2008]{Diaz08}
+Diaz RJ, Rosenberg R. 2008.
+\newblock Spreading dead zones and consequences for marine ecosystems.
+\newblock Science, 321:926--929.
+
+\bibitem[Duarte et~al., 2009]{Duarte09}
+Duarte CM, Conley DJ, Carstensen J, S\'{a}nchez-Camacho M. 2009.
+\newblock Return to \textit{Neverland}: Shifting baseline affect eutrophication
+  restoration targets.
+\newblock Estuaries and Coasts, 32(1):29--36.
+
 \bibitem[{Environmental Systems Research Institute}, 2012]{ESRI12}
 {Environmental Systems Research Institute}. 2012.
 \newblock {ArcGIS v10.1}.
 \newblock {ESRI}, Redlands, California.
 
-\bibitem[{Hagy III}, view]{HagyIR}
-{Hagy III} JD. In review.
+\bibitem[Greening and Janicki, 2006]{Greening06}
+Greening H, Janicki A. 2006.
+\newblock Toward reversal of eutrophic conditions in a subtrophical estuary:
+  Water quality and seagrass response to nitrogen loading reductions in {T}ampa
+  {B}ay, {F}lorida, {USA}.
+\newblock Environmental Management, 38(2):163--178.
+
+\bibitem[Hagy, view]{HagyIR}
+Hagy JD. {In review}.
 \newblock Seagrass depth of colonization in {F}lorida estuaries.
+
+\bibitem[Jones et~al., 1994]{Jones94}
+Jones CG, Lawton JH, Shachak M. 1994.
+\newblock Organisms as ecosystem engineers.
+\newblock OIKOS, 69(3):373--386.
+
+\bibitem[Just\'{i}c et~al., 1987]{Justic87}
+Just\'{i}c D, Legov\'{i}c T, Rottini-Sandrini L. 1987.
+\newblock Trends in oxygen content 1911--1984 and occurrence of benthic
+  mortality in the northern {A}driatic {S}ea.
+\newblock Estuarine, Coastal and Shelf Science, 25(4):435--445.
+
+\bibitem[Koch, 2001]{Koch01}
+Koch EW. 2001.
+\newblock Beyond light: Physical, geological, and geochemical parameters as
+  possible submersed aquatic vegetation habitat requirements.
+\newblock Estuaries, 24(1):1--17.
+
+\bibitem[Nixon, 1995]{Nixon95}
+Nixon SW. 1995.
+\newblock Coastal marine eutrophication: A definition, social causes, and
+  future concerns.
+\newblock Ophelia, 41:199--219.
+
+\bibitem[{R Development Core Team}, 2014]{RDCT14}
+{R Development Core Team}. 2014.
+\newblock {R: A language and environment for statistical computing, v3.1.2. R
+  Foundation for Statistical Computing, Vienna, Austria}.
+\newblock \url{http://www.R-project.org}.
+
+\bibitem[Tewfik et~al., 2007]{Tewfik07}
+Tewfik A, Rasmussen JB, McCann KS. 2007.
+\newblock Simplification of seagrass food webs across a gradient of nutrient
+  enrichment.
+\newblock Canadian Journal of Fisheries and Aquatic Sciences, 64(7):956--967.
 
 \bibitem[Tyler et~al., 2007]{Tyler07}
 Tyler D, Zawada DG, Nayegandhi A, Brock JC, Crane MP, Yates KK, Smith KEL.

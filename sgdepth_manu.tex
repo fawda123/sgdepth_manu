@@ -73,7 +73,7 @@
 \usepackage{array}
 \usepackage{pdflscape}
 \usepackage{bm}
-% \usepackage{showlabels}
+\usepackage{showlabels}
 \bibpunct{(}{)}{,}{a}{}{,}
 
 % page margins and section title formatting
@@ -104,12 +104,6 @@
 %knitr options
 
 
-% example of buffer points for depth of col
-
-
-% example of estimating seagrass depth of colonization
-
-
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
@@ -121,7 +115,7 @@
 \renewcommand\refname{References \vspace{12pt}}
 
 \begin{singlespace}
-\title{{\bf {\Large Improving spatial resolution in estimates of seagrass depth of colonization}}}
+\title{{\bf {\Large Spatially-referenced estimates of seagrass depth of colonization}}}
 \author{
   {\bf {\normalsize Marcus W. Beck$^1$, James D. Hagy III$^2$}}
   \\\\{\textit {\normalsize $^1$ORISE Research Participation Program}}
@@ -139,6 +133,30 @@
 
 \section{Introduction}
 
+Issues related to excessive nutrient pollution have motivated a substantial body of research to understand and address impacts on coastal waters.  Eutrophication, defined as an increase in the rate of supply of organic matter to an ecosystem \citep{Nixon95}, is primarily caused by anthropegenic inputs of limiting nutrients that exceed background concentrations of receiving waters.  Adverse impacts on aquatic resources are well-documented and have included increased occurrence in the frequency and severity of harmfal algal blooms \citep{Cloern96}, reduction of dissolved oxygen necessary to support heterotrophic organisms \citep{Justic87,Diaz08}, and loss of ecosystem functioning through food web simplification \citep{Tewfik07}. Although management activities have been successful in mitigating or reversing eutrophication impacts (e.g., \citealt{Greening06}), the evaluation of critical response endpoints remains an important topic given that ecosystem changes in response to nutrient reduction are not fully understood nor anticipated \citep{Duarte09}.  The most appropriate indicators of ecosystem response are those that exhibit clear biological linkages with water quality changes, such that the potential effects of management actions can be unambiguously characterized through known cause and effect pathways.  Critical management decisions may be forced by tentative assessments, political motivations, or qualitative criteria in the absence of empirical methods to identify adequate indicators of ecosytem response \citep{Duarte09}.  
+
+Seagrasses have been used for decades as eutrophication indicators such that their presence, coverage, and diversity are often used as biological endpoints for assessment.  Seagrasses are `ecosystem engineers'  \citep{Jones94,Koch01} that serve a structural and functional role in altering aquatic habitat often through complex feedback mechanisms with other ecosystem components.  For example, seagrass beds create habitat for juvenile fish and crabs by reducing wave action and stabilizing sediment \citep{}.  Seagrasses also respond to changes in water clarity through direct physiological linkages with light availability.  In short, light mechanism..
+Consequently, healthy seagrass communities 
+
+Seagrass related to habitat quality and strongly affected by water clarity
+
+restoration targets, load limits
+
+Extensive datasets describing historical and current seagrass growth patterns and distribution in Florida estuaries
+
+No consistent approach for estimating \ac{doc} to establish restoration targets
+
+
+WBID has been considered appropriate management unit although considerable spatial heterogeneity in seagrass growth
+ Reproducible and empirical approaches can be developed that leverage multiple types of information to provide more consistent estimates for restoration targets or nutrient criteria
+
+Objectives
+
+Use information-rich datasets to estimate seagrass \ac{doc} by incorporating spatially referenced information
+
+Provide a basis for using these estimates to inform nutrient criteria development using empirical relationships with water clarity
+
+
 \section{Methods}
 
 Development of a spatially-referenced approach to estimate seagrass \ac{doc} relied extensively on data and partially on methods described in \citetalias{HagyIR}.  The following is a summary of locations and data sources, methods in \citetalias{HagyIR}, methods and rationale developed to incorporate spatial information in seagrass \ac{doc}, and evaluation of the approach including relationships with water clarity.   
@@ -149,31 +167,40 @@ Four unique locations were chosen for the analysis: Choctowatchee Bay (Panhandle
 
 Data used to estimate seagrass \ac{doc} included a suite of publically available \ac{GIS} products.  At the most generic level, spatially-referenced information describing seagrass aerial coverage combined with co-located bathymetric depth information were used to estimate \ac{doc}.  These data products are available in coastal regions of Florida through the US Geological Survey, Florida Department of Environmental Protection, and watershed management districts.  Data are generally more available in larger estuaries that are of specific management concern, e.g., Tampa Bay, Indian River Lagoon.  For example, seagrass coverage data are available from 1950 (Tampa Bay) to present day (multiple estuaries), with more recent products available at annual or  biennial intervals.  Seagrass coverage maps are less frequent in areas with lower population densities (e.g., Big Bend region) or where seagrass is naturally absent (northeast Florida).  Seagrass maps were produced using photo-interpretations of aerial images to categorize coverage as absent, discontinuous (patchy), or continuous.  For this analysis, we considered seagrass coverage as being only present (continuous and patchy) or absent since the former did not represent unequivocal categories between regions. 
 
-Seagrass coverage maps were combined with bathymetric depth layers to characterize location and depth of growth in each location.  Bathymetric depth layers for each location were obtained from the National Oceanic and Atmospheric Administration's (\acsu{NOAA}) National Geophysical Data Center as either \acp{DEM} or raw sounding data from hydroacoustic surveys.  Tampa Bay data provided by the Tampa Bay National Estuary Program are described in \citet{Tyler07}. Bathymetic data for the Indian River Lagoon were obtained from the St. John's Water Management District \citep{CPE97}.  \ac{NOAA} products were referenced to mean lower low water, whereas Tampa Bay data were referenced to the North American Vertical Datum of 1988 and the Indian River Lagoon data were referenced to mean sea level.  Depth layers were combined with seagrass coverage layers using standard union techniques of raster and vector layers in ArcMap 10.1 \citep{ESRI12}.  To reduce computation time, depth layers were first masked using a 1 km buffer of the seagrass coverage layer.  The final layer used for analysis was a point layer with attributes describing location (latitude, longitude, segment), depth (m), and seagrass (present, absent).  Additional details describing the data are available in \citet{HagyIR}.    
+Seagrass coverage maps were combined with bathymetric depth layers to characterize location and depth of growth in each location.  Bathymetric depth layers for each location were obtained from the National Oceanic and Atmospheric Administration's (\acsu{NOAA}) National Geophysical Data Center as either \acp{DEM} or raw sounding data from hydroacoustic surveys.  Tampa Bay data provided by the Tampa Bay National Estuary Program are described in \citet{Tyler07}. Bathymetic data for the Indian River Lagoon were obtained from the St. John's Water Management District \citep{CPE97}.  \ac{NOAA} products were referenced to mean lower low water, whereas Tampa Bay data were referenced to the North American Vertical Datum of 1988 and the Indian River Lagoon data were referenced to mean sea level.  Depth layers were combined with seagrass coverage layers using standard union techniques of raster and vector layers in ArcMap 10.1 \citep{ESRI12}.  To reduce computation time, depth layers were first masked using a 1 km buffer of the seagrass coverage layer.  The final layer used for analysis was a point layer with attributes describing location (latitude, longitude, segment), depth (m), and seagrass (present, absent).  Additional details describing the data are available in \citetalias{HagyIR}.    
 
 \subsection{Segment-based estimates of seagrass depth of colonization}
 
-Methods described in \citet{HagyIR} estimate seagrass \ac{doc} for individual coastal segments.  Specifically, the combined seagrass depth data described above are used to estimate maximum ($Z_{cMax}$) and median ($Z_{c50\%}$) seagrass \ac{doc}, where the maximum depth is defined as the deepest depth at which a ``significant'' coverage of seagrasses occured in a segment and the median depht is defined as the median depth occurring at the deep water edge. The seagrass depth points are grouped into bins and the proportion of points within each depth bin that contain seagrass are quantified.  Both seagrass \ac{doc} estimates are obtained from the plot of proportion of points occupied at each depth bin.  In general, the plot is characterized by a decreasing trend such that the proportion of occupied points by depth bin decreases and eventually flattens with increasing depth.  A regression is fit on this descending portion of the curve such that the intercept point on the x-axis is considered the maximum depth of colonization.  The median portion of this curve is considered the median depth of the deepwater edge of seagrass.   
+Methods in \citetalias{HagyIR} describe an approach for estimating seagrass \ac{doc} at individual coastal segments.  Specifically, the combined seagrass depth data described above are used to estimate maximum ($Z_{cMax}$) and median ($Z_{c50\%}$) seagrass \ac{doc}, where the maximum depth is defined as the deepest depth at which a ``significant'' coverage of seagrasses occured in a segment and the median depht is defined as the median depth occurring at the deep water edge. The seagrass depth points are grouped into bins and the proportion of points within each depth bin that contain seagrass are quantified.  Both seagrass \ac{doc} estimates are obtained from the plot of proportion of points occupied at each depth bin.  In general, the plot is characterized by a decreasing trend such that the proportion of occupied points by depth bin decreases and eventually flattens with increasing depth.  A regression is fit on this descending portion of the curve such that the intercept point on the x-axis is considered the maximum depth of colonization.  The median portion of this curve is considered the median depth of the deepwater edge of seagrass.   
 
-Considerable spatial heterogeneity in the observed seagrass growth patterns suggests that a segment-wide estimate of seagrass \ac{doc} may be inappropriate, particularly for the chosen examples in the current analysis. \Cref{fig:wbid_doc} illustrates spatial variation in seagrass distribution on a latitudinal gradient in Old Tampa Bay, Florida.  Using methods in \citet{HagyIR}, the estimate for median seagrass \ac{doc} for the segment is an over- and under-estimate for northern and southern portions, respectively.  \Cref{fig:wbid_doc2} provides a similar example for the a segment in the Big Bend region of Florida.  Again, seagrass depth of colonization is over- and under-estimated for different areas of the segment.  In particular, \ac{doc} is greatly over-estimated at the outflow of the Steinhatchee where high concentrations of dissolved organic matter naturally limit seagrass growth.  These examples suggest that estimates of \ac{doc} are needed at finer spatial scales to provide a more robust determination of restoration targets and nutrient criteria.
+Considerable spatial heterogeneity in the observed seagrass growth patterns suggests that a segment-wide estimate of seagrass \ac{doc} may be inappropriate, particularly for the examples in the current analysis. \Cref{fig:wbid_doc2} illustrates spatial variation in seagrass distribution  for a location in the Big Bend region of Florida.  Using methods in \citetalias{HagyIR}, the estimate for median seagrass \ac{doc} for the segment is over- and under-estimated for different areas of the segment.  In particular, \ac{doc} is greatly over-estimated at the outflow of the Steinhatchee where high concentrations of dissolved organic matter naturally limit seagrass growth.  This example suggests that estimates of \ac{doc} may be needed at finer spatial scales to provide a more robust determination of restoration targets and nutrient criteria.
 
 \subsection{Estimating seagrass depth of colonization using spatial information}
 
-The approach used to estimate seagrass \ac{doc} with spatial information has a similar theoretical foundation as the original, although several key differences should be noted.  The first difference is that the maximum \ac{doc} is estimated from a logistic growth curve fit through the data, as compared to a simple linear regression in the previous example.  The second and more important difference is that the estimates are specific to locations using a grid-based approach.  The implications and methods for using these differences are described below using an example from the Big Bend region of Florida.  Finally, a third measure describing the depth at which seagrass were most commonly located, as compared to maximum depth of growth, was defined using these methods.                                    
+The approach used to estimate seagrass \ac{doc} with spatial information has a similar theoretical foundation as the original, although several key differences should be noted.  In general, seagrass \ac{doc} estimates are based on empirical measures of the frequency occurrence of seagrass by increasing depth.  The first difference is that the maximum \ac{doc} is estimated from a logistic growth curve fit through the data, as compared to a simple linear regression in the previous example.  Second, a third measure describing the depth at which seagrass were most commonly located, as compared to maximum depth of growth, was defined using these methods.  The third and most important difference is that the estimates are specific to discrete locations, using either a grid of points or as a single location of interest. Methods and implications of these differences are described below.                                   
 
-The spatially-referenced approach for estimating \ac{doc} begins by creating a grid of evenly-spaced sample points within the segment.  The same process for estimating \ac{doc} is used for each point.  Alternatively, a single location of interest can be chosen rather than a grid-based sampling design.  Seagrass depth data that occur within a set radius from the sampling point are selected (\cref{fig:buff_ex}).  An estimate of seagrass \ac{doc} is obtained using the selected seagrass depth points and assigned as a spatially-referenced value to each sampling point in the grid.  The seagrass \ac{doc} estimate for each sample point is quantified from the proportion of bathymetric soundings that contain seagrass at each depth bin in the data (\cref{fig:est_ex1}).  A buffer around a sample point that is sufficient to quantify depth of colonization typically has a plot similar to \cref{fig:est_ex1} such that the proportion of points that are occupied by seagrass decreases continuously with increasing depth.  
+The spatially-referenced approach for estimating \ac{doc} begins by creating a grid of evenly-spaced points within the segment.  The same process for estimating \ac{doc} is used for each point.  Alternatively, a single location of interest can be chosen rather than a grid-based design with multiple estimates.  Seagrass depth data that occur within a set radius from each grid point are selected (\cref{fig:buff_ex}).  An estimate of seagrass \ac{doc} for each point in the grid is obtained using the sampled seagrass depth points.  The seagrass \ac{doc} estimate for each grid location is quantified from a plot of the proportion of bathymetric soundings that contain seagrass at each depth bin (\cref{fig:est_ex1}).  A radius around a grid point for sampling seagrass depth points that is sufficient to quantify depth of colonization typically has a plot similar to \cref{fig:est_ex1}.  The proportion of points that are occupied by seagrass should decrease continuously with increasing depth.  
 
-A decreasing logistic growth curve was then fit to the points to create a monotonic and asymptotic function to estimate depth of colonization.  This curve is fit using non-linear regression to characterize the reduction in points occupied by seagrass as a function of depth.  The logistic growth curve is fit using standard residual sums-of-squares and user-supplied starting parameters that are an approximate estimate of the curve characteristics.  The model has the following form:
+A decreasing logistic growth curve is fit to the sampled seagrass depth points for the grid location to create a monotonic and asymptotic function.  This curve is fit using non-linear regression to characterize the reduction in points occupied by seagrass as a function of depth.  The logistic growth curve is fit by minimizing the residual sums-of-squares with the Gauss-Newton algorithm \citep{Bates92} and user-supplied starting parameters that are an approximate estimate of the curve characteristics.  The model has the following form:
 \begin{equation}
  Proportion = \frac{\alpha}{1 + \mathrm{e}^{{\left(\beta - Depth\right)/\gamma}}}
 \end{equation}
-where the proportion of points occupied by seagrass at each depth is defined by a logistic curve with an asymptote $\alpha$, a midpoint inflection $\beta$, and a scale parameter $\gamma$.  Starting values $\alpha$, $\beta$, and $\gamma$ are estimated empirically from the observed data.  
+where the proportion of points occupied by seagrass at each depth is defined by a logistic curve with an asymptote $\alpha$, a midpoint inflection $\beta$, and a scale parameter $\gamma$.  Starting values $\alpha$, $\beta$, and $\gamma$ were estimated empirically from the observed data.  
 
-Finally, a simple linear curve is fit through the inflection point ($\beta$) of the logistic curve to estimate depth of colonization (\cref{fig:est_ex3}).  The inflection point is the depth at which seagrass are decreasing at a maximum rate and is used as the slope of the linear curve.  Three measures are obtained from the linear curve. The maximum depth of seagrass colonization, $DOC_{max}$, is the x-axis intercept of the linear curve.  The depth of maximum seagrass occupany, $SG_{max}$ is the location where the linear curve intercepts the asymptote of the logistic growth curve.  The median depth of seagrass colonization, $DOC_{med}$, is the depth halfway between $SG_{max}$ and $DOC_{max}$.  $DOC_{med}$ was typically but not always the inflection point of the logistic growth curve.    
+Finally, a simple linear curve is fit through the inflection point ($\beta$) of the logistic curve to estimate depth of colonization (\cref{fig:est_ex3}).  The inflection point is the depth at which seagrass are decreasing at a maximum rate and is used as the slope of the linear curve.  Three measures are obtained from the linear curve. The maximum depth of seagrass colonization, $DOC_{max}$, is the x-axis intercept of the linear curve.  The depth of maximum seagrass occupancy, $SG_{max}$ is the location where the linear curve intercepts the asymptote of the logistic growth curve.  The median depth of seagrass colonization, $DOC_{med}$, is the depth halfway between $SG_{max}$ and $DOC_{max}$.  $DOC_{med}$ was typically but not always the inflection point of the logistic growth curve.  The estimation process is repated for each point in the grid.   
 
-Estimates for each of the three \ac{doc} measures are obtained only if specific criteria are met.  These criteria were implemented to provide a safety measure that ensures a sufficient amount and appropriate quality of data are used in the calculations.  First, estimates can only be provided if a sufficient number of seagrass depth points are present within the radius of the sample point to estimate a logistic growth curve.  This criteria applies to the sample size as well as the number of points with seagrass in the sample.  That is, the curve cannot be estimated for small samples or if an insufficient number of points contain seagrass regardless of sample size.  Second, estimates are only provided if an inflection point is present on the logistic curve within the range of the depth data.  This criteria may apply under two scenarios where the curve is estimated but a trend is not adequately described by the observed data.  That is, a curve may be estimated that describes only the initial decrease in points occupied as a function of depth but the observed points do not occur at depths deeper than the predicted inflection point.  The opposite scenario may occur where a curve is estimated but only the deeper locations beyond the inflection point are present in the sample.  Finally, the estimate for $SG_{max}$ is set to zero if the linear curve through the inflection point intercepts the asympote at x-axis values less than zero.  The estimate for $DOC_{med}$ is also shifted to halfways between $SG_{max}$ and $DOC_{max}$.  All estimates were obtained using ...........
+Estimates for each of the three \ac{doc} measures are obtained only if specific criteria are met.  These criteria were implemented as a safety measure that ensures a sufficient amount and appropriate quality of data are used.  First, estimates are provided only if a sufficient number of seagrass depth points are present within the radius of the grid point to estimate a logistic growth curve.  This criteria applies to the sample size as well as the number of points with seagrass in the sample.  That is, the curve cannot be estimated for small samples or if an insufficient number of points contain seagrass regardless of sample size.  Second, estimates are provided only if an inflection point is present on the logistic curve within the range of the sampled depth data.  This criteria may apply under two scenarios where the curve is estimated but a trend is not adequately described by the sampled data.  That is, a curve may be estimated that describes only the initial decrease in points occupied as a function of depth but the observed points do not occur at depths deeper than the predicted inflection point.  The opposite scenario may occur where a curve is estimated but only the deeper locations beyond the inflection point are present in the sample.  Finally, the estimate for $SG_{max}$ is set to zero if the linear curve through the inflection point intercepts the asympote at x-axis values less than zero.  The estimate for $DOC_{med}$ is also shifted to the depth value halfway between $SG_{max}$ and $DOC_{max}$.  
 
-\subsection{Sensitivity analysis and comparison with segment-based approach}
+All estimates were obtained using custom-made functions in program R that were based on the \texttt{nls} and \texttt{SSlogis} functions to fit a nonlinear least squares using a self-starting logistic growth model \citep{Bates92,RDCT14}.  All seagrass depth shapefiles were imported and processed in R using functions in the \texttt{rgeos} and \texttt{sp} packages \citep{Bivand08,Bivand14}.  
+
+\subsection{Comparison with segment-based approach and sensitivity analysis}
+
+Spatially-referenced estimates for seagrass \ac{doc} were obtained for each of the four segments described above.  Segment-wide estimates obtained using methods in \citetalias{HagyIR} were used as a basis of comparison such that departures from these values were evidence of spatial heterogeneity in seagrass growth patterns within each segment.  A sampling grid of locations for estimating each of the three depth values in \cref{fig:est_ex} was created for each segment.  This grid is a set of evenly spaced points with a random starting location for the first point.  The grid is masked by the segment boundaries to remove locations that did not occur on the water.  Initial spacing between sample points was chosen arbitrarily as 0.02 decimal degrees, which is approximately 2 km at 30 degrees N latitude.  Similarly, the sampling radius around each sampling location in the grid was chosen as 0.06 decimal degrees, or approximately 6 km.  
+
+Three factors influence the estimates at each sampling point, as well as the ability compare values between points.  First, the starting location of the first point of the sampling grid is chosen arbitrarily such that a unique grid is obtained comparisons of within-segment estimates may vary slightly given the starting location.  Second, the spacing between sampling points affects the degree of collinearity between estimates that are near each other.  For a set sampling radius around each point, estimates will be less correlated at larger spacing between sampling points, whereas the converse is true for smaller spacing.  Third and most important, the radius around each sampling point determines the number of seagrass depth points that are included in the estimate.  The chosen radius is considered an explicit area within which the estimate applies.  As before, increasing the radius around each sample point will increase the collinearity between estimates at adjacent points for a set grid spacing.  Collinearity between sample points based on the sampling scheme is not inherently problematic provided the results are interpreted in the context of the question of interest.  For example, small spacing and large sampling radii will create very similar estimates between points.  This approach does not necessarily invalidate the estimate at each point, although comparisons between points become less valid as the estimates are not related to a unique sampling area for each location.  Similarly, a grid with large spacing and small radii facilitates comparison between points as each location represents a unique collection of samples, although each estimate is relevant for a small location with undescribed and potentially important variation in seagrass growth patterns between points.  
+
+A systematic approach was used to evaluate validity of comparisons between sampling points given parameters that influence collinearity or spatial autocorrelation.  For the analysis, `validity' is considered relative uniqueness of estimates at each point in the context of grid spacing and sampling radius.  The effect of the random starting location of each grid was considered negligible for this analysis and set constant between analyses for comparison.  For each segment, unique combinations of grid spacing and sampling radii were used to estimate maximum seagrass \ac{doc}.  Spatial autocorrelation between all estimates was measured by semivariance 
+
 
 \subsection{Developing a spatially coherent relationship of water clarity with depth of colonization}
 
@@ -195,13 +222,6 @@ Estimates for each of the three \ac{doc} measures are obtained only if specific 
 %%%%%%
 % figures
 
-% example of depth of col ests for wbid - Old Tampa Bay
-\begin{figure}
-\centerline{\includegraphics[width = \textwidth]{figs/wbid_doc.pdf}}
-\caption{Example of over- and under-estimates for seagrass depth of colonization in Old Tampa Bay, Florida.  The top-left figure indicates over-estimation and the bottom-left indicates under-estimation.  Bathymetric points are color-coded by the median depth of colonization estimate for all seagrass (patchy and continuous) in the segment.}
-\label{fig:wbid_doc}
-\end{figure}
-
 % example of depth of col ests for wbid - big bend 820
 \begin{figure}
 \centerline{\includegraphics[width = \textwidth]{figs/wbid_doc2.pdf}}
@@ -209,12 +229,34 @@ Estimates for each of the three \ac{doc} measures are obtained only if specific 
 \label{fig:wbid_doc2}
 \end{figure}
 
-% example of depth of col ests for wbid - big bend 820
+% example of buffer points for depth of col
+
+
+% example of buffer points for depth of col
 \begin{figure}
-\centerline{\includegraphics[width = 0.6\textwidth]{figs/buff_ex.pdf}}
-\caption{Sample grid used to estimate spatially-referenced depth of colonization.  The selected bathymetric/seagrass points that were within a radius of 0.05 decimal degrees from the test point were selected for the estimate.  Estimates can be obtained for each sample grid point and an arbitrary radius.}
+\centering
+\subfloat[][Seagrass depth points for the segment]{
+\includegraphics[width=0.5\textwidth]{figs/buff_ex1.pdf}
+\label{fig:buff_ex1}
+}
+\subfloat[][Grid of locations and sample areas for estimates]{
+\includegraphics[width=0.5\textwidth]{figs/buff_ex2.pdf}
+\label{fig:buff_ex2}
+}
+
+\subfloat[][Sampled observations for a test point]{
+\includegraphics[width=0.5\textwidth]{figs/buff_ex3.pdf}
+\label{fig:buff_ex3}
+}
+\subfloat{
+\includegraphics[width = 0.5\textwidth]{figs/buff_ex4.pdf}
+}
+\caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  \Cref{fig:buff_ex1} shows the seagrass depth points that are used for sampling, \cref{fig:buff_ex2} shows a grid of locations and sampling radii for estimating seagrass \ac{doc}, and \cref{fig:buff_ex3} shows an example of sampled seagrass depth points for a location.  Estimates in \cref{fig:est_ex} were obtained from the sampled location in \cref{fig:buff_ex3}.}
 \label{fig:buff_ex}
 \end{figure}
+
+% example of estimating seagrass depth of colonization
+
 
 % example of depth of col ests for wbid - big bend 820
 \begin{figure}
@@ -233,7 +275,7 @@ Estimates for each of the three \ac{doc} measures are obtained only if specific 
 \includegraphics[page=3,width=0.5\textwidth]{figs/est_ex.pdf}
 \label{fig:est_ex3}
 }
-\caption{Methods for estimating seagrass depth of colonization. \Cref{fig:est_ex1} is the proportion of points with seagrass by depth using depth points within the buffer of the test point in \cref{fig:buff_ex}.  \Cref{fig:est_ex2} adds a decreasing logistic growth curve fit through the points.  \Cref{fig:est_ex3} shows three depth estimates based on a linear curve fit through the inflection point of logistic growth curve.}
+\caption{Methods for estimating seagrass depth of colonization using sampled seagrass depth points around a single location. \Cref{fig:est_ex1} is the proportion of points with seagrass by depth using depth points within the buffer of the test point in \cref{fig:buff_ex}.  \Cref{fig:est_ex2} adds a decreasing logistic growth curve fit through the points.  \Cref{fig:est_ex3} shows three depth estimates based on a linear curve fit through the inflection point of logistic growth curve.}
 \label{fig:est_ex}
 \end{figure}
 

@@ -22,6 +22,7 @@ library(rgdal)
 library(rgeos)
 library(gridExtra)
 library(shinyapps)
+library(ade4)
 
 # functions to use
 source('R/funcs.r')
