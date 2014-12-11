@@ -16,6 +16,12 @@ Bivand RS, Pebesma EJ, G\'{o}mez-Rubio V. 2008.
 \newblock Applied Spatial Data Analysis with {R}.
 \newblock Springer, New York, New York.
 
+\bibitem[Choice et~al., 2014]{Choice14}
+Choice ZD, Frazer TK, Jacoby CA. 2014.
+\newblock Light requirements of seagrasses determined from historical records
+  of light attenuatoin along the {G}ulf coast of peninsular {F}lorida.
+\newblock Marine Pollution Bulletin, 81(1):94--102.
+
 \bibitem[Cloern, 1996]{Cloern96}
 Cloern JE. 1996.
 \newblock Phytoplankton bloom dynamics in coastal ecosystems: {A} review with
@@ -34,6 +40,17 @@ Cloern JE. 1996.
 Diaz RJ, Rosenberg R. 2008.
 \newblock Spreading dead zones and consequences for marine ecosystems.
 \newblock Science, 321:926--929.
+
+\bibitem[Duarte, 1991]{Duarte91}
+Duarte CM. 1991.
+\newblock Seagrass depth limits.
+\newblock Aquatic Botany, 40(4):363--377.
+
+\bibitem[Duarte, 1995]{Duarte95}
+Duarte CM. 1995.
+\newblock Submerged aquatic vegetation in relation to different nutrient
+  regimes.
+\newblock Ophelia, 41:87--112.
 
 \bibitem[Duarte et~al., 2009]{Duarte09}
 Duarte CM, Conley DJ, Carstensen J, S\'{a}nchez-Camacho M. 2009.
@@ -57,6 +74,19 @@ Greening H, Janicki A. 2006.
 Hagy JD. {In review}.
 \newblock Seagrass depth of colonization in {F}lorida estuaries.
 
+\bibitem[Hughes et~al., 2009]{Hughes09}
+Hughes AR, Williams SL, Duarte CM, Heck KL, Waycott M. 2009.
+\newblock Associations of concern: declining seagrasses and threatened
+  dependent species.
+\newblock Frontiers in Ecology and the Environment, 7(5):242--246.
+
+\bibitem[Janicki and Wade, 1996]{Janicki96}
+Janicki A, Wade D. 1996.
+\newblock Estimating critical external nitrogen loads for the {T}ampa {B}ay
+  estuary: An empically based approach to setting management targets.
+\newblock Technical Report 06-96, Tampa Bay National Estuary Program, St.
+  Petersburg, Florida.
+
 \bibitem[Jones et~al., 1994]{Jones94}
 Jones CG, Lawton JH, Shachak M. 1994.
 \newblock Organisms as ecosystem engineers.
@@ -67,6 +97,13 @@ Just\'{i}c D, Legov\'{i}c T, Rottini-Sandrini L. 1987.
 \newblock Trends in oxygen content 1911--1984 and occurrence of benthic
   mortality in the northern {A}driatic {S}ea.
 \newblock Estuarine, Coastal and Shelf Science, 25(4):435--445.
+
+\bibitem[Kenworthy and Fonseca, 1996]{Kenworthy96}
+Kenworthy WJ, Fonseca MS. 1996.
+\newblock Light requirements of seagrasses \textit{Halodule wrightii} and
+  \textit{Syringodium filiforme} derived from the relationship between diffuse
+  light attenuation and maximum depth distribution.
+\newblock Estuaries, 19(3):740--750.
 
 \bibitem[Koch, 2001]{Koch01}
 Koch EW. 2001.
@@ -86,6 +123,12 @@ Nixon SW. 1995.
   Foundation for Statistical Computing, Vienna, Austria}.
 \newblock \url{http://www.R-project.org}.
 
+\bibitem[Steward et~al., 2005]{Steward05}
+Steward JS, Virnstein RW, Morris LJ, Lowe EF. 2005.
+\newblock Setting seagrass depth, coverage, and light targets for the {I}ndian
+  {R}iver {L}agoon system, {F}lorida.
+\newblock Estuaries, 28(6):923--935.
+
 \bibitem[Tewfik et~al., 2007]{Tewfik07}
 Tewfik A, Rasmussen JB, McCann KS. 2007.
 \newblock Simplification of seagrass food webs across a gradient of nutrient
@@ -98,5 +141,24 @@ Tyler D, Zawada DG, Nayegandhi A, Brock JC, Crane MP, Yates KK, Smith KEL.
 \newblock Topobathymetric data for {T}ampa {B}ay, {F}lorida.
 \newblock Technical Report Open-File Report 2007-1051 (revised), US Geological
   Survey, US Department of the Interior, St. Petersburg, Florida.
+
+\bibitem[{USEPA (US Environmental Protection Agency)}, 1998]{USEPA98}
+{USEPA (US Environmental Protection Agency)}. 1998.
+\newblock National strategy for the development of regional nutrient criteria.
+\newblock Technical Report EPA-822-R-98-002, Office of Water, Office of
+  Research and Development, US Environmental Protection Agency, Washington, DC.
+
+\bibitem[{WFD}, 2000]{WFD00}
+{WFD}. 2000.
+\newblock Water framework directive, 2000/60/ec. european communities official
+  journal l327 22.12.2000, p. 73.
+\newblock
+  \url{http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex:32000L0060}.
+
+\bibitem[Williams and Heck, 2001]{williams01}
+Williams SL, Heck KL. 2001.
+\newblock Seagrass community ecology.
+\newblock In: Bertness MD, Gaines SD, Hay ME, editors, Marine Community
+  Ecology. Sinauer Associates, Sunderland, Massachusetts.
 
 \end{thebibliography}
