@@ -74,11 +74,23 @@ Greening H, Janicki A. 2006.
 Hagy JD. {In review}.
 \newblock Seagrass depth of colonization in {F}lorida estuaries.
 
+\bibitem[Hale et~al., 2004]{Hale04}
+Hale JA, Frazer TK, Tomasko DA, Hall MO. 2004.
+\newblock Changes in the distribution of seagrass species along {F}lorida's
+  central gulf coast: {I}verson and {B}ittaker revisited.
+\newblock Estuaries, 27(1):36--43.
+
 \bibitem[Hughes et~al., 2009]{Hughes09}
 Hughes AR, Williams SL, Duarte CM, Heck KL, Waycott M. 2009.
 \newblock Associations of concern: declining seagrasses and threatened
   dependent species.
 \newblock Frontiers in Ecology and the Environment, 7(5):242--246.
+
+\bibitem[Iverson and Bittaker, 1986]{Iverson86}
+Iverson RL, Bittaker HF. 1986.
+\newblock Seagrass distribution and abundance in eastern {G}ulf of {M}exico
+  coastal waters.
+\newblock Estuarine, Coastal and Shelf Science, 22(5):577--602.
 
 \bibitem[Janicki and Wade, 1996]{Janicki96}
 Janicki A, Wade D. 1996.
@@ -122,6 +134,12 @@ Nixon SW. 1995.
 \newblock {R: A language and environment for statistical computing, v3.1.2. R
   Foundation for Statistical Computing, Vienna, Austria}.
 \newblock \url{http://www.R-project.org}.
+
+\bibitem[Spears et~al., 2009]{Spears09}
+Spears BM, Gunn IDM, Carvalho L, Winfield IJ, Dudley B, Murphy K, May L. 2009.
+\newblock An evaluation of methods for sampling macrophyte maximum colonisation
+  depth in {L}och {L}even, {S}cotland.
+\newblock Aquatic Botany, 91(2):75--81.
 
 \bibitem[Steward et~al., 2005]{Steward05}
 Steward JS, Virnstein RW, Morris LJ, Lowe EF. 2005.
