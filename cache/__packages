@@ -3,11 +3,14 @@ base
 doParallel
 foreach
 foreign
+Formula
 ggmap
 ggplot2
 gridExtra
+Hmisc
 iterators
 knitr
+lattice
 maps
 maptools
 plyr
@@ -18,3 +21,4 @@ rgeos
 scales
 shinyapps
 sp
+survival

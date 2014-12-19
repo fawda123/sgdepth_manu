@@ -2,6 +2,13 @@
 # functions for seagrass depth of col estimates
 
 ######
+# formatting of values in S expressions
+form_fun <- function(x, rnd_val = 2, dig_val = 2, nsm_val = 2) {
+  to_form <- as.numeric(as.character(x))
+  format(round(to_form, rnd_val), digits = dig_val, nsmall = nsm_val)
+  }
+
+######
 # function for estimating depth of colonization
 # also used for plots
 # 'dat_in' is data from 'buff_ext'
@@ -12,6 +19,9 @@ doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c
 	# order by depth, assumes column is negative
   dat_in <- dat_in[order(dat_in[, depth_var], decreasing = T), ]
 	dat_in$depth <- dat_in[, depth_var]
+  
+  # bin depth values
+  dat_in[, depth_var] <- round(dat_in[, depth_var], 1)
 	
 	# cumulative sum of pts with all seagrass and all points
 	# assumes NA is empty

@@ -23,6 +23,7 @@ library(rgeos)
 library(gridExtra)
 library(shinyapps)
 library(ade4)
+library(Hmisc)
 
 # functions to use
 source('R/funcs.r')

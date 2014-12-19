@@ -107,7 +107,7 @@ Development of a spatially-referenced approach to estimate seagrass \ac{doc} rel
 
 \subsection{Locations and data sources}
 
-Four unique locations were chosen for the analysis: Choctowatchee Bay (Panhandle), Big Bend region (northeast Gulf of Mexico), Tampa Bay (central Gulf Coast of Florida), and Indian River Lagoon (east coast) (\cref{fig:seg_all}).  These locations were chosen to represent the different geographic regions in the state, in addition to data availability and observed gradients in water clarity that likely contributed to hetereogeneity in seagrass growth patterns.  For example, the Big Bend region was chosen to an outflow of the Steinhatchee River where higher concentrations of dissolved organic matter are observed.  Seagrasses near the outflow were observed to grow at shallower depths as compared to locations far from the river source.  Coastal regions and estuaries in Florida are divided into individual spatial units based on a segmentation scheme developed by US \ac{EPA} for the development of numeric nutrient criteria.  One segment from each geographic location was used for the analysis to evaluate estimates of seagrass \ac{doc}.  The segments included numbers 0303 (Choctowatchee Bay), 0820 (Big Bend region), 0902 (Tampa Bay), and 1502 (Indian River Lagoon), where the first two digits indicate the estuary and the last two digits indicate the segment within the estuary. 
+Four unique locations were chosen for the analysis: Choctowatchee Bay (Panhandle), Big Bend region (northeast Gulf of Mexico), Tampa Bay (central Gulf Coast of Florida), and Indian River Lagoon (east coast) (\cref{tab:seg_summ,fig:seg_all}).  These locations represent different geographic regions in the state, in addition to readily available data and observed gradients in water clarity that likely contributed to hetereogeneity in seagrass growth patterns.  For example, the Big Bend region was chosen based on location near an outflow of the Steinhatchee River where higher concentrations of dissolved organic matter are observed.  Seagrasses near the outflow were observed to grow at shallower depths as compared to locations far from the river source.  Coastal regions and estuaries in Florida are divided into individual spatial units based on a segmentation scheme developed by US \ac{EPA} for the development of numeric nutrient criteria.  One segment from each geographic location was used for the analysis to evaluate estimates of seagrass \ac{doc}.  The segments included numbers 0303 (Choctowatchee Bay), 0820 (Big Bend region), 0902 (Tampa Bay), and 1502 (Indian River Lagoon), where the first two digits indicate the estuary and the last two digits indicate the segment within the estuary. 
 
 Data used to estimate seagrass \ac{doc} included a suite of publically available \ac{GIS} products.  At the most generic level, spatially-referenced information describing seagrass aerial coverage combined with co-located bathymetric depth information were used to estimate \ac{doc}.  These data products are available in coastal regions of Florida through the US Geological Survey, Florida Department of Environmental Protection, and watershed management districts.  Data are generally more available in larger estuaries that are of specific management concern, e.g., Tampa Bay, Indian River Lagoon.  For example, seagrass coverage data are available from 1950 (Tampa Bay) to present day (multiple estuaries), with more recent products available at annual or  biennial intervals.  Seagrass coverage maps are less frequent in areas with lower population densities (e.g., Big Bend region) or where seagrass is naturally absent (northeast Florida).  Seagrass maps were produced using photo-interpretations of aerial images to categorize coverage as absent, discontinuous (patchy), or continuous.  For this analysis, we considered seagrass coverage as being only present (continuous and patchy) or absent since the former did not represent unequivocal categories between regions. 
 
@@ -115,23 +115,23 @@ Seagrass coverage maps were combined with bathymetric depth layers to characteri
 
 \subsection{Segment-based estimates of seagrass depth of colonization}
 
-Methods in \citetalias{HagyIR} describe an approach for estimating seagrass \ac{doc} at individual coastal segments.  Specifically, the combined seagrass depth data described above are used to estimate maximum ($Z_{cMax}$) and median ($Z_{c50\%}$) seagrass \ac{doc}, where the maximum depth is defined as the deepest depth at which a ``significant'' coverage of seagrasses occured in a segment and the median depht is defined as the median depth occurring at the deep water edge. The seagrass depth points are grouped into bins and the proportion of points within each depth bin that contain seagrass are quantified.  Both seagrass \ac{doc} estimates are obtained from the plot of proportion of points occupied at each depth bin.  In general, the plot is characterized by a decreasing trend such that the proportion of occupied points by depth bin decreases and eventually flattens with increasing depth.  A regression is fit on this descending portion of the curve such that the intercept point on the x-axis is considered the maximum depth of colonization.  The median portion of this curve is considered the median depth of the deepwater edge of seagrass.   
+Methods in \citetalias{HagyIR} describe an approach for estimating seagrass \ac{doc} at individual coastal segments.  Seagrass depth data described above are used to estimate maximum ($Z_{cMax}$) and median ($Z_{c50\%}$) seagrass \ac{doc}, where the maximum depth is defined as the deepest depth at which a ``significant'' coverage of seagrasses occured in a segment and the median depth is defined as the median depth occurring at the deep water edge. The seagrass depth points are grouped into bins and the proportion of points within each depth bin that contain seagrass are quantified.  Both seagrass \ac{doc} estimates are obtained from a plot of proportion of points occupied at each depth bin.  In general, the plot is characterized by a decreasing trend such that the proportion of occupied points by depth bin decreases and eventually flattens with increasing depth.  A regression is fit on this descending portion of the curve such that the intercept point on the x-axis is considered the maximum depth of colonization.  The median portion of this curve is considered the median depth of the deepwater edge of seagrass.   
 
-Considerable spatial heterogeneity in the observed seagrass growth patterns suggests that a segment-wide estimate of seagrass \ac{doc} may be inappropriate, particularly for the examples in the current analysis. \Cref{fig:wbid_doc} illustrates spatial variation in seagrass distribution  for a location in the Big Bend region of Florida.  Using methods in \citetalias{HagyIR}, the estimate for median seagrass \ac{doc} for the segment is over- and under-estimated for different areas of the segment.  In particular, \ac{doc} is greatly over-estimated at the outflow of the Steinhatchee where high concentrations of dissolved organic matter naturally limit seagrass growth.  This example suggests that estimates of \ac{doc} may be needed at finer spatial scales to provide a more robust determination of restoration targets and nutrient criteria.
+Considerable spatial heterogeneity in the observed seagrass growth patterns suggests that a segment-wide estimate of seagrass \ac{doc} may be inadequate for fully characterizing growth patterns, particularly for the examples in the current analysis. \Cref{fig:wbid_doc} illustrates spatial variation in seagrass distribution  for a location in the Big Bend region of Florida.  Using methods in \citetalias{HagyIR}, the estimate for median seagrass \ac{doc} for the segment is over- and under-estimated for different areas of the segment.  In particular, \ac{doc} is greatly over-estimated at the outflow of the Steinhatchee where high concentrations of dissolved organic matter naturally limit seagrass growth.  This example suggests that estimates of \ac{doc} may be needed at finer spatial scales to provide a more robust determination of restoration targets and nutrient criteria.
 
 \subsection{Estimating seagrass depth of colonization using spatial information}
 
-The approach used to estimate seagrass \ac{doc} with spatial information has a similar theoretical foundation as the original, although several key differences should be noted.  In general, seagrass \ac{doc} estimates are based on empirical measures of the frequency occurrence of seagrass by increasing depth.  The first difference is that the maximum \ac{doc} is estimated from a logistic growth curve fit through the data, as compared to a simple linear regression in the previous example.  Second, a third measure describing the depth at which seagrass were most commonly located, as compared to maximum depth of growth, was defined using these methods.  The third and most important difference is that the estimates are specific to discrete locations, using either a grid of points or as a single location of interest. Methods and implications of these differences are described below.                                   
+The approach used to estimate seagrass \ac{doc} with spatial information has several key differences with the original method.  As before, seagrass \ac{doc} estimates are based on empirical measures of the frequency occurrence of seagrass by increasing depth.  The first difference is that maximum \ac{doc} is estimated from a logistic growth curve fit through the data, in addition to a simple linear regression in the previous example.  Second, a third measure describing the depth at which seagrass were most commonly located was defined, in addition to median and maximum depth of growth.  The third and most important difference is that the estimates are assigned to discrete locations, using either a grid of points or as a single location of interest. Methods and implications of these differences are described below.                                   
 
-The spatially-referenced approach for estimating \ac{doc} begins by creating a grid of evenly-spaced points within the segment.  The same process for estimating \ac{doc} is used for each point.  Alternatively, a single location of interest can be chosen rather than a grid-based design with multiple estimates.  Seagrass depth data that occur within a set radius from each grid point are selected (\cref{fig:buff_ex}).  An estimate of seagrass \ac{doc} for each point in the grid is obtained using the sampled seagrass depth points.  The seagrass \ac{doc} estimate for each grid location is quantified from a plot of the proportion of bathymetric soundings that contain seagrass at each depth bin (\cref{fig:est_ex1}).  A radius around a grid point for sampling seagrass depth points that is sufficient to quantify depth of colonization typically has a plot similar to \cref{fig:est_ex1}.  The proportion of points that are occupied by seagrass should decrease continuously with increasing depth.  
+The spatially-referenced approach for estimating \ac{doc} begins by creating a grid of evenly-spaced points within the segment.  The same process for estimating \ac{doc} is used for each point.  Alternatively, a single location of interest can be chosen rather than a grid-based design.  Seagrass depth data (i.e., merged bathymetric and seagrass coverage data) that occur within a set radius from the chosen locations are selected for estimating seagrass \ac{doc} values. The estimate for each location is quantified from a plot of the proportion of bathymetric soundings that contain seagrass at each depth bin (\cref{fig:est_ex1}).  Although the chosen radius for selecting depth points is problem-specific, the minimum radius must sample a sufficient number of points for estimating \ac{doc}.  In general, an appropriate radius will produce a plot that indicates a decrease in the proportion of points that are occupied by seagrass with increasing depth.  
 
-A decreasing logistic growth curve is fit to the sampled seagrass depth points for the grid location to create a monotonic and asymptotic function.  This curve is fit using non-linear regression to characterize the reduction in points occupied by seagrass as a function of depth.  The logistic growth curve is fit by minimizing the residual sums-of-squares with the Gauss-Newton algorithm \citep{Bates92} and user-supplied starting parameters that are an approximate estimate of the curve characteristics.  The model has the following form:
+A curve is fit to the sampled depth points using non-linear regression to characterize the reduction in seagrass as a function of depth.  Specifically, a decreasing logistic growth curve is fit to the plot to create a monotonic and asymptotic function of the sample data.   The curve is fit by minimizing the residual sums-of-squares with the Gauss-Newton algorithm \citep{Bates92} and user-supplied starting parameters that are an approximate estimate of the curve characteristics.  The model has the following form:
 \begin{equation}
  Proportion = \frac{\alpha}{1 + \mathrm{e}^{{\left(\beta - Depth\right)/\gamma}}}
 \end{equation}
 where the proportion of points occupied by seagrass at each depth is defined by a logistic curve with an asymptote $\alpha$, a midpoint inflection $\beta$, and a scale parameter $\gamma$.  Starting values $\alpha$, $\beta$, and $\gamma$ were estimated empirically from the observed data.  
 
-Finally, a simple linear curve is fit through the inflection point ($\beta$) of the logistic curve to estimate depth of colonization (\cref{fig:est_ex3}).  The inflection point is the depth at which seagrass are decreasing at a maximum rate and is used as the slope of the linear curve.  Three measures are obtained from the linear curve. The maximum depth of seagrass colonization, $DOC_{max}$, is the x-axis intercept of the linear curve.  The depth of maximum seagrass occupancy, $SG_{max}$ is the location where the linear curve intercepts the asymptote of the logistic growth curve.  The median depth of seagrass colonization, $DOC_{med}$, is the depth halfway between $SG_{max}$ and $DOC_{max}$.  $DOC_{med}$ was typically but not always the inflection point of the logistic growth curve.  The estimation process is repated for each point in the grid.   
+Finally, a simple linear curve is fit through the inflection point ($\beta$) of the logistic curve to estimate depth of colonization (\cref{fig:est_ex3}).  The inflection point is the depth at which seagrass are decreasing at a maximum rate and is used as the slope of the linear curve.  Three measures describing seagrass growth characteristics are obtained. The maximum depth of seagrass colonization, $DOC_{max}$, is the x-axis intercept of the linear curve.  The depth of maximum seagrass occupancy, $SG_{max}$ is the location where the linear curve intercepts the asymptote of the logistic growth curve.  The median depth of seagrass colonization, $DOC_{med}$, is the depth halfway between $SG_{max}$ and $DOC_{max}$.  $DOC_{med}$ was typically but not always the inflection point of the logistic growth curve.  Functionally, each measure has specific ecological significance.  The median and maximum depth estimates describe the growth limitations of seagrasses as a function of water clarity, whereas the maximum occupancy depth is considered the depth were most seagrasses were encountered in the sample.  Median and maximum depth estimates differ in that the former describes the median depth of the deep water edge, whereas the latter describes a nominal characterization of maximum depth independent of outliers.
 
 Estimates for each of the three \ac{doc} measures are obtained only if specific criteria are met.  These criteria were implemented as a safety measure that ensures a sufficient amount and appropriate quality of data are used.  First, estimates are provided only if a sufficient number of seagrass depth points are present within the radius of the grid point to estimate a logistic growth curve.  This criteria applies to the sample size as well as the number of points with seagrass in the sample.  That is, the curve cannot be estimated for small samples or if an insufficient number of points contain seagrass regardless of sample size.  Second, estimates are provided only if an inflection point is present on the logistic curve within the range of the sampled depth data.  This criteria may apply under two scenarios where the curve is estimated but a trend is not adequately described by the sampled data.  That is, a curve may be estimated that describes only the initial decrease in points occupied as a function of depth but the observed points do not occur at depths deeper than the predicted inflection point.  The opposite scenario may occur when a curve is estimated but only the deeper locations beyond the inflection point are present in the sample.  Finally, the estimate for $SG_{max}$ is set to zero if the linear curve through the inflection point intercepts the asympote at x-axis values less than zero.  The estimate for $DOC_{med}$ is also shifted to the depth value halfway between $SG_{max}$ and $DOC_{max}$.  
 
@@ -139,7 +139,7 @@ All estimates were obtained using custom-made functions in program R that were b
 
 \subsection{Comparison with segment-based approach and sensitivity analysis}
 
-Spatially-referenced estimates for seagrass \ac{doc} were obtained for each of the four segments described above.  Segment-wide estimates obtained using methods in \citetalias{HagyIR} were used as a basis of comparison such that departures from these values were evidence of spatial heterogeneity in seagrass growth patterns within each segment.  A sampling grid of locations for estimating each of the three depth values in \cref{fig:est_ex} was created for each segment.  This grid is a set of evenly spaced points with a random starting location for the first point.  The grid is masked by the segment boundaries to remove locations that did not occur on the water.  Initial spacing between sample points was chosen arbitrarily as 0.02 decimal degrees, which is approximately 2 km at 30 degrees N latitude.  Similarly, the sampling radius around each sampling location in the grid was chosen as 0.06 decimal degrees, or approximately 6 km.  
+Spatially-referenced estimates for seagrass \ac{doc} were obtained for each of the four segments described above.  Segment-wide estimates obtained using methods in \citetalias{HagyIR} were used as a basis of comparison such that departures from these values were evidence of spatial heterogeneity in seagrass growth patterns within each segment.  A sampling grid of locations for estimating each of the three depth values in \cref{fig:est_ex} was created for each segment.  The grid is masked by the segment boundaries to remove locations that did not occur on the water.  Initial spacing between sample points was chosen arbitrarily as 0.02 decimal degrees, which is approximately 2 km at 30 degrees N latitude.  Similarly, the sampling radii around each sampling location in the grid was chosen as 0.06 decimal degrees, or approximately 6 km.  
 
 Three factors influence the estimates at each sampling point, as well as the ability compare values between points.  First, the starting location of the first point of the sampling grid is chosen arbitrarily such that a unique grid is obtained comparisons of within-segment estimates may vary slightly given the starting location.  Second, the spacing between sampling points affects the degree of collinearity between estimates that are near each other.  For a set sampling radius around each point, estimates will be less correlated at larger spacing between sampling points, whereas the converse is true for smaller spacing.  Third and most important, the radius around each sampling point determines the number of seagrass depth points that are included in the estimate.  The chosen radius is considered an explicit area within which the estimate applies.  As before, increasing the radius around each sample point will increase the collinearity between estimates at adjacent points for a set grid spacing.  Collinearity between sample points based on the sampling scheme is not inherently problematic provided the results are interpreted in the context of the question of interest.  For example, small spacing and large sampling radii will create very similar estimates between points.  This approach does not necessarily invalidate the estimate at each point, although comparisons between points become less valid as the estimates are not related to a unique sampling area for each location.  Similarly, a grid with large spacing and small radii facilitates comparison between points as each location represents a unique collection of samples, although each estimate is relevant for a small location with undescribed and potentially important variation in seagrass growth patterns between points.  
 
@@ -149,6 +149,10 @@ A systematic approach was used to evaluate validity of comparisons between sampl
 \subsection{Developing a spatially coherent relationship of water clarity with depth of colonization}
 
 \section{Results}
+
+Acknowledge that comparisons with segment wide estimate are specific to grid spacing and radii tha twere used, thus the comparison is only useful for illustrating the presence of heterogeneity within segments, as well as variation between segments.  Absolute values will vary with different spacing and radii. 
+
+\Cref{fig:all_ests}
 
 \section{Discussion}
 
@@ -167,7 +171,7 @@ A systematic approach was used to evaluate validity of comparisons between sampl
 % tables
 
 % summary of wbid characteristics
-<<eval = F, echo = F>>=
+<<eval = T, echo = F>>=
 
 # # create shapefile object of seagrass coverages
 # id <- c('sg_303_2007.shp', 'sg_820_2006.shp', 'sg_902_2010.shp', 'sg_1502_2009.shp')
@@ -180,7 +184,7 @@ A systematic approach was used to evaluate validity of comparisons between sampl
 #   
 # }
 # save(sg_shps, file = 'data/sg_shps.RData')
-
+# 
 # # combine secchi from IWR39 for 820 with Jim's secchi data
 # load(file = 'data/secc_seg.RData')
 # secc_820 <- readShapeSpatial('M:/GIS/seagrass/secc_820.shp')
@@ -188,7 +192,7 @@ A systematic approach was used to evaluate validity of comparisons between sampl
 # names(secc_820) <- names(secc_seg)
 # secc_seg <- rbind(secc_seg, secc_820)
 # save(secc_seg, file = 'data/secc_seg.RData')
-
+# 
 # # bathymetry data
 # id <- c('dep_303.shp', 'dep_820.shp', 'dep_902.shp', 'dep_1502.shp')
 # dep_shps <- list()
@@ -201,92 +205,205 @@ A systematic approach was used to evaluate validity of comparisons between sampl
 #   
 # }
 # save(dep_shps, file = 'data/dep_shps.RData')
-
-load(file = 'data/shps.RData')
-load(file = 'data/sg_shps.RData')
-load(file = 'data/secc_seg.RData')
-load(file = 'data/dep_shps.RData')
-
-nm <- c('Western Choctawhatchee Bay', 'Big Bend', 'Old Tampa Bay', 'Upper Indian River Lagoon')
-id <- c('0303', '0820', '0902', '1502')
-
+# 
+# load(file = 'data/shps.RData')
+# load(file = 'data/sg_shps.RData')
+# load(file = 'data/secc_seg.RData')
+# load(file = 'data/dep_shps.RData')
+# 
+# nm <- c('Choctawhatchee Bay', 'Big Bend', 'Old Tampa Bay', 'Indian River Lagoon')
+# id <- c('0303', '0820', '0902', '1502')
+# 
 # lat, long
-lat <- sapply(
-  c('seg_303.shp', 'seg_820.shp', 'seg_902.shp', 'seg_1502.shp'), 
-  function(x) data.frame(rgeos::gCentroid(shps[[x]]))[, 2]
-)
-lon <- sapply(
-  c('seg_303.shp', 'seg_820.shp', 'seg_902.shp', 'seg_1502.shp'), 
-  function(x) data.frame(rgeos::gCentroid(shps[[x]]))[, 1]
-)
-
-# segment, seagrass, prop areas
-areas <- sapply(
-  c('303', '820', '902', '1502'), 
-  function(x){
-    
-    # data and projections
-    seg <- shps[[paste0('seg_', x, '.shp')]]
-    sg <- sg_shps[[grep(paste0('^sg_', x), names(sg_shps))]]
-    proj4string(seg) <- CRS("+proj=longlat +datum=WGS84")
-    proj4string(sg) <- CRS("+proj=longlat +datum=WGS84")
-    
-    # proj for transformation
-    trans_proj <- CRS("+proj=utm +zone=17 +datum=WGS84")
-    if(x == '303') trans_proj <- CRS("+proj=utm +zone=16 +datum=WGS84")
-    seg <- spTransform(seg, trans_proj)  
-    sg <- spTransform(sg, trans_proj)
-    
-    # clip, get area in sg km
-    clip_sg <- gIntersection(sg, seg, byid = TRUE, drop_lower_td = TRUE)
-    seg_est <- gArea(seg)/1e6
-    sg_est <- gArea(clip_sg)/1e6
-    prop_est <- sg_est/seg_est
-    
-    # list output
-    c(seg_est, sg_est, prop_est)
-      
-  })
-
-# segment depths
-deps <- sapply(
-  c('303', '820', '902', '1502'), 
-  function(x){
-    
-    tmp <- dep_shps[[paste0('dep_', x, '.shp')]]
-    nm <- c('depth', 'GRID_CODE', 'Depth')
-    nm <- names(tmp)[names(tmp) %in% nm]
-    tmp <- -1 * data.frame(tmp)[, nm, drop = T]
-    
-    tmp <- tmp[tmp <= quantile(tmp, 0.99)]
-    mn_val <- mean(tmp, na.rm = T)
-    max_val <- max(tmp, na.rm = T)
-  
-    c(mn_val, max_val)
-    
-  })
-
-# segment secchi
-seccs <- sapply(
-  c('303', '820', '902', '1502'), 
-  function(x){
-    
-    # data and projections
-    seg <- shps[[paste0('seg_', x, '.shp')]]
-    secc <- !is.na(secc_seg %over% seg)[, 1]
-    secc <- secc_seg[secc, ]
-    
-    mean(as.numeric(secc$SD), na.rm = T)
-    
-  })
-
+# lat <- sapply(
+#   c('seg_303.shp', 'seg_820.shp', 'seg_902.shp', 'seg_1502.shp'), 
+#   function(x) data.frame(rgeos::gCentroid(shps[[x]]))[, 2]
+# )
+# lon <- sapply(
+#   c('seg_303.shp', 'seg_820.shp', 'seg_902.shp', 'seg_1502.shp'), 
+#   function(x) data.frame(rgeos::gCentroid(shps[[x]]))[, 1]
+# )
+# 
+# # segment, seagrass, prop areas
+# areas <- sapply(
+#   c('303', '820', '902', '1502'), 
+#   function(x){
+#     
+#     # data and projections
+#     seg <- shps[[paste0('seg_', x, '.shp')]]
+#     sg <- sg_shps[[grep(paste0('^sg_', x), names(sg_shps))]]
+#     proj4string(seg) <- CRS("+proj=longlat +datum=WGS84")
+#     proj4string(sg) <- CRS("+proj=longlat +datum=WGS84")
+#     
+#     # proj for transformation
+#     trans_proj <- CRS("+proj=utm +zone=17 +datum=WGS84")
+#     if(x == '303') trans_proj <- CRS("+proj=utm +zone=16 +datum=WGS84")
+#     seg <- spTransform(seg, trans_proj)  
+#     sg <- spTransform(sg, trans_proj)
+#     
+#     # clip, get area in sg km
+#     clip_sg <- gIntersection(sg, seg, byid = TRUE, drop_lower_td = TRUE)
+#     seg_est <- gArea(seg)/1e6
+#     sg_est <- gArea(clip_sg)/1e6
+#     
+#     # list output
+#     c(seg_est, sg_est)
+#       
+#   })
+# 
+# # segment depths
+# deps <- sapply(
+#   c('303', '820', '902', '1502'), 
+#   function(x){
+#     
+#     tmp <- dep_shps[[paste0('dep_', x, '.shp')]]
+#     nm <- c('depth', 'GRID_CODE', 'Depth')
+#     nm <- names(tmp)[names(tmp) %in% nm]
+#     tmp <- -1 * data.frame(tmp)[, nm, drop = T]
+#     
+#     tmp <- tmp[tmp <= quantile(tmp, 0.99)]
+#     mn_val <- mean(tmp, na.rm = T)
+#     max_val <- max(tmp, na.rm = T)
+#   
+#     c(mn_val, max_val)
+#     
+#   })
+# 
+# # segment secchi
+# seccs <- sapply(
+#   c('303', '820', '902', '1502'), 
+#   function(x){
+#     
+#     # subset secchi
+#     seg <- shps[[paste0('seg_', x, '.shp')]]
+#     secc <- !is.na(secc_seg %over% seg)[, 1]
+#     secc <- secc_seg[secc, ]
+#     
+#     # mean secchi and n
+#     ave_secc <- mean(as.numeric(secc$SD), na.rm = T)
+#     se_secc <- sd(as.numeric(secc$SD), na.rm = T)/sqrt(length(na.omit(secc$SD)))
+#       
+#     c(ave_secc, se_secc)
+#     
+#   })
+# 
 # combine data
-out <- rbind(lat, lon, areas, deps, seccs)
-out <- data.frame(cbind(nm, id, t(out)))
-names(out) <- c('Name', 'Id', 'Lat', 'Lon', 'Surface area', 'Seagrass area', 'Prop seagrass', 'Mean depth', 'Max depth', 'Secchi')
-  
-seg_summ <- out
-save(seg_summ, file = 'data/seg_summ.RData')
+# out <- data.frame(rbind(id, lat, lon, areas, deps, seccs), stringsAsFactors = F)
+# names(out) <- nm
+# row.names(out) <- c('Segment', 'Latitude', 'Longitude', 'Surface area', 'Seagrass area', 'Depth (mean)', 'Depth (max)', 'Secchi (mean)', 'Secchi (se)')
+#   
+# seg_summ <- out
+# save(seg_summ, file = 'data/seg_summ.RData')
+
+load(file = 'data/seg_summ.RData')
+
+# prep table
+tab <- seg_summ
+nms <- names(tab)
+tab <- data.frame(rbind(tab[1, ], apply(tab[-1, ], 2, form_fun)), stringsAsFactors = F)
+names(tab) <- nms
+rows <- c('Segment', 'Latitude', 'Longitude', 'Surface area', 'Seagrass area', 'Depth (mean)', 'Depth (max)', 'Secchi (mean)', 'Secchi (se)')
+
+cap.val <- "Characteristics of coastal segments used to evaluate seagrass \\acl{doc} estimates.  Segments are spatial units defined by US \\ac{EPA} for nutrient criteria development (see \\cref{fig:seg_all}).  Area and depth values are meters and square kilometers, respectively.  Secchi measurements (m) were obtained from the Florida Department of Environmental Protection's Impaired Waters Record, upadate number 40 (IWR40)."
+
+latex( 
+  tab,
+  file = '',
+  rowlabel = '',
+  caption = cap.val,
+  caption.loc = 'top',
+  rowname = rows,
+  label = 'tab:seg_summ'
+  )
+
+@
+
+% comparisons with segment wide ests
+<<eval = T, echo = F>>=
+
+# ##
+# # get doc ests for whole seg
+# 
+# load('data/shps.RData')
+# 
+# segs <- c('303', '820', '902', '1502')
+# 
+# ests_seg <- vector('list', length = length(segs))
+# names(ests_seg) <- segs
+# 
+# for(seg in segs){
+#     
+#   seg_shp <- shps[[paste0('seg_', gsub('^.*_', '', seg), '.shp')]]
+#   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
+#   
+#   rad <- 0.25 # sufficient for each seg
+#   test_loc <- rgeos::gCentroid(seg_shp)
+#   ests <- doc_est_grd(test_loc, sgpts_shp, radius = rad)
+# 
+#   ests_seg[[seg]] <- data.frame(ests, seg = seg)
+#   
+# }
+# 
+# ests_seg <- do.call('rbind', ests_seg)
+# names(ests_seg)[names(ests_seg) %in% c('x', 'y')] <- c('long', 'lat')
+# 
+# save(ests_seg, file = 'data/ests_seg.RData')
+
+# load data, ests_out from all_ests figure chunk
+load(file = 'data/ests_seg.RData')
+load(file = 'data/ests_out.RData')
+
+# remove outliers from ests based on 99%
+ests <- ests_out[, c('sg_max', 'doc_med', 'doc_max')]
+filt_val <- quantile(unlist(c(ests)), 0.99)
+ests[ests > filt_val] <- NA
+ests_out[, c('sg_max', 'doc_med', 'doc_max')] <- ests
+ests_out <- na.omit(ests_out)
+
+# summarize spatail ests
+ests_out <- melt(ests_out, measure.var = c('sg_max', 'doc_med', 'doc_max'))
+ests_out <- ddply(ests_out, .variable = c('seg', 'variable'),   
+  .fun = function(x) {
+    c(mean_val = mean(x$value),
+    se_val = sd(x$value)/sqrt(length(x)),
+    min_val = min(x$value),
+    max_val = max(x$value)
+    )
+  })
+
+# merge with segment wide ests
+ests_seg <- melt(ests_seg, measure.var = c('sg_max', 'doc_med', 'doc_max'))
+to_tab <- merge(ests_seg[, c('seg', 'variable', 'value')], ests_out, by = c('seg', 'variable'))
+to_tab$variable <- factor(to_tab$variable, levels = c('sg_max', 'doc_med', 'doc_max'))
+to_tab <- to_tab[order(to_tab$seg, to_tab$variable), ]
+names(to_tab) <- c('Segment', 'Estimate', 'Whole segment', 'Mean', 'St. Err.', 'Min', 'Max')
+
+# prep table
+segs <- c('0303', '0820', '0902', '1502')
+estimate <- to_tab$Estimate
+estimate <- factor(estimate, levels = c('sg_max', 'doc_med', 'doc_max'), 
+  labels = c('$SG_{max}$', '$DOC_{med}$', '$DOC_{max}$'))
+nms <- names(to_tab)[-c(1, 2)]
+tab <- to_tab[, !names(to_tab) %in% c('Segment', 'Estimate')]
+
+tab <- data.frame(apply(tab, 2, form_fun), stringsAsFactors = F)
+names(tab) <- nms
+
+cap.val <- "Summary of seagrass depth estimates (m) from all grid locations in \\cref{fig:all_ests}.  Whole segment estimates were obtained from all seagrass depth data for each segment."
+
+latex(
+  tab,
+  file = '',
+  rowlabel = '{\\bf Segment}',
+  caption = cap.val,
+  dcolumn = T,
+  caption.loc = 'top',
+  rgroup = segs,
+  n.rgroup = rep(3,4),
+  rowname = estimate,
+  label = 'tab:est_summ'
+  )
+
 @
 
 \clearpage
@@ -571,6 +688,163 @@ dev.off()
 }
 \caption{Methods for estimating seagrass depth of colonization using sampled seagrass depth points around a single location. \Cref{fig:est_ex1} is the proportion of points with seagrass by depth using depth points within the buffer of the test point in \cref{fig:buff_ex}.  \Cref{fig:est_ex2} adds a decreasing logistic growth curve fit through the points.  \Cref{fig:est_ex3} shows three depth estimates based on a linear curve fit through the inflection point of logistic growth curve.}
 \label{fig:est_ex}
+\end{figure}
+
+% grid examples for each segment
+<<all_ests, echo = F, results = 'hide', eval = F>>=
+
+##
+# doc estimates
+
+load('data/shps.RData')
+
+# segs <- c('303', '820', '902', '1502')
+# 
+# ests_out <- vector('list', length = length(segs))
+# names(ests_out) <- segs
+# 
+# for(seg in segs){
+#     
+#   seg_shp <- shps[[paste0('seg_', gsub('^.*_', '', seg), '.shp')]]
+#   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
+#   
+#   grid_spc <- 0.02
+#   rad <- 0.06
+#   grid_seed <- 1234
+#   set.seed(grid_seed)
+#   pts <- grid_est(seg_shp, spacing = grid_spc) 
+#   ests <- doc_est_grd(pts, sgpts_shp, radius = rad)
+# 
+#   ests_out[[seg]] <- data.frame(ests, seg = seg)
+#   
+# }
+# 
+# ests_out <- do.call('rbind', ests_out)
+# names(ests_out)[names(ests_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
+# 
+# save(ests_out, file = 'data/ests_out.RData')
+
+load(file = 'data/ests_out.RData')
+
+##
+# make plots
+
+# color function
+col_fun <- function(x, cols = c('tomato1', 'blue', 'lightblue')){
+  vals_in <- scales::rescale(x, c(0, 1))
+  dim_vals <- dim(vals_in)
+  nms <- names(vals_in)
+  ramp <- colorRamp(cols)
+  cols <- ramp(unlist(c(vals_in)))
+  col <- rgb(cols, max = 255)
+  out <- matrix(col, ncol = dim_vals[2], nrow = dim_vals[1], byrow = F)
+  out <- data.frame(out, stringsAsFactors = F)
+  names(out) <- nms
+  return(out)
+}
+
+# segments for plotting
+all_segs <- shps[['all_segs.shp']]
+all_segs <- fortify(all_segs)
+all_segs$group <- factor(all_segs$group, levels = c('0.1', '1.1', '2.1', '3.1'), 
+  labels = c('1502', '0820', '0902', '0303'))
+levs <- sort(levels(all_segs$group))
+
+# assign plots by segment and doc est
+for(i in 1:length(levs)){
+  
+  # subset segment shapefiles and ests by segment
+  seg_sub <- all_segs[all_segs$group %in% levs[i], ]
+  est_sub <- ests_out[ests_out$seg %in% as.numeric(levs[i]), ]
+  
+  # remove outliers based on 99%
+  ests <- est_sub[, c('sg_max', 'doc_med', 'doc_max')]
+  filt_val <- quantile(unlist(c(ests)), 0.99)
+  ests[ests > filt_val] <- NA
+  est_sub[, c('sg_max', 'doc_med', 'doc_max')] <- ests
+  est_sub <- na.omit(est_sub)
+  
+  # scale for sizing
+  scls <- c(1, 6)
+  scl_vals <- scales::rescale(est_sub[, c('sg_max', 'doc_med', 'doc_max')], to = scls)
+
+  # scale for colour
+  col_vals <- col_fun(scl_vals)
+  pt_plo <- data.frame(est_sub[, c('seg', 'long', 'lat')], scl_vals, col_vals)
+  
+  # segment base plot
+  p_seg <- ggplot(seg_sub, aes(x = long, y = lat)) +
+    geom_polygon(fill = NA, colour = 'black') + 
+    coord_fixed() +
+    theme_classic() +
+    theme(axis.title = element_blank(), axis.text = element_text(size = 6), 
+      axis.text.x = element_text(angle = 90, vjust = 0.5),
+      plot.margin=unit(c(0, 0, 0, 0), "cm"))
+  
+  # sg_max
+  pa <- p_seg +
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$sg_max.1, 
+      size = pt_plo$sg_max)
+
+  # doc_med
+  pb <- p_seg +
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$doc_med.1, 
+      size = pt_plo$doc_med)
+
+  # doc_max
+  pc <- p_seg +
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$doc_max.1, 
+      size = pt_plo$doc_max) 
+  
+  # legend for all three
+  leg_plo <- est_sub[, !names(est_sub) %in% 'seg']
+  leg_plo <- melt(leg_plo, id.var = c('long', 'lat'))
+  
+  leg_brks <- quantile(leg_plo$value, c(0, 0.33, 0.66, 1))
+  leg_labs <- form_fun(leg_brks, 1, 1, 1)
+  
+  pleg <- p_seg +
+    geom_point(data = leg_plo, aes(x = jitter(long), y = jitter(lat), colour = value, 
+      size = value)) +
+    scale_size_continuous(name = levs[i], range = scls, breaks = leg_brks, labels = leg_labs) +
+    scale_colour_gradientn(name = levs[i], colours = eval(formals(col_fun)$cols),
+      breaks = leg_brks, labels = leg_labs) +
+    guides(colour = guide_legend(), size = guide_legend())
+  pleg <- g_legend(pleg)
+   
+  # assign to global
+  assign(paste0('pa', i), pa)
+  assign(paste0('pb', i), pb)
+  assign(paste0('pc', i), pc)
+  assign(paste0('pleg', i), pleg)
+}
+
+# labels
+lab1 <- expression(italic(SG [max]))
+lab2 <- expression(italic(DOC [med]))
+lab3 <- expression(italic(DOC [max]))
+
+# arrange all as grob
+grobwidths <- c(1, 1, 1, 0.3)
+
+pdf('figs/all_ests.pdf', height = 9, width = 7, family = 'serif')
+grid.arrange(
+  arrangeGrob(textGrob(lab1), textGrob(lab2), textGrob(lab3), textGrob(''), ncol = 4, widths = grobwidths), 
+  arrangeGrob(pa1, pb1, pc1, pleg1, ncol = 4, widths = grobwidths),
+  arrangeGrob(pa2, pb2, pc2, pleg2, ncol = 4, widths = grobwidths),
+  arrangeGrob(pa3, pb3, pc3, pleg3, ncol = 4, widths = grobwidths),
+  arrangeGrob(pa4, pb4, pc4, pleg4, ncol = 4, widths = grobwidths),
+  ncol = 1, heights = c(0.1, 0.75,1,1,1.25)
+)
+dev.off()
+
+@
+% example of depth of col ests for wbid - big bend 820
+\begin{figure}
+\centering
+\includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
+\caption{Spatially-referenced estimates of seagrass depth limits (m) for four coastal segments of Florida.  Estimates include depth of maximum seagrass growth ($SG_{max}$), median depth of colonization ($DOC_{med}$), and maximum depth of colonization ($DOC_{max}$).  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees.}
+\label{fig:all_ests}
 \end{figure}
 
 \end{document}
