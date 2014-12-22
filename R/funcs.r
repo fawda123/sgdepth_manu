@@ -240,7 +240,11 @@ doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace =
   maxd <- sp::SpatialPointsDataFrame(coords = coordinates(grid_in), data = maxd)
   
   # remove missing
-  if(rem_miss) maxd <- maxd[!is.na(maxd@data[, 1]), ]
+  if(rem_miss){
+    non_empty <- !is.na(maxd@data[, 1])
+    if(!any(non_empty)) maxd
+    else maxd <- maxd[!is.na(maxd@data[, 1]), ]
+  }
  
   return(maxd)
   
