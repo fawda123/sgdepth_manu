@@ -16,6 +16,9 @@ form_fun <- function(x, rnd_val = 2, dig_val = 2, nsm_val = 2) {
 # 'sg_var' is name of seagrass column in input data
 doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c('Continuous', 'Discontinuous')){
   
+  # sanity check
+  if(!'data.frame' %in% class(dat_in)) dat_in <- data.frame(dat_in)
+  
 	# order by depth, assumes column is negative
   dat_in <- dat_in[order(dat_in[, depth_var], decreasing = T), ]
 	dat_in$depth <- dat_in[, depth_var]
@@ -71,10 +74,12 @@ doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c
     if('try-error' %in% class(mod)) {
       pred_ls[[resp]] <- rep(NA_real_, length = length(new.x))
       asym_ls[[resp]] <- NA_real_
+      logis_mod <- NA
     } else {
 		  pred_ls[[resp]] <- as.numeric(predict(mod, 
 			  newdata = data.frame(Depth = new.x)))
       asym_ls[[resp]] <- summary(mod)$coefficients['Asym', 'Estimate']
+      logis_mod <- mod
     }
 		
 	}
@@ -95,7 +100,7 @@ doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c
   # if no curve fit
   if(sum(is.na(preds$sg_prp)) == nrow(preds)){
     
-    return(list(data = pts, preds = preds, est_fun = est_fun, 
+    return(list(data = pts, preds = preds, logis_mod = logis_mod, est_fun = est_fun, 
       sg_max = sg_max, doc_med = doc_med, doc_max = doc_max))
      
   }
@@ -103,7 +108,7 @@ doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c
   # check if curve is monotonic descending
   if(!with(preds, all(sg_prp == cummin(sg_prp)))){
     
-    return(list(data = pts, preds = preds, est_fun = est_fun, 
+    return(list(data = pts, preds = preds, logis_mod = logis_mod, est_fun = est_fun, 
       sg_max = sg_max, doc_med = doc_med, doc_max = doc_max))
     
   }
@@ -132,11 +137,102 @@ doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c
   }
     
   # all output
-  return(list(data = pts, preds = preds, est_fun = est_fun, 
+  return(list(data = pts, preds = preds, logis_mod = logis_mod, est_fun = est_fun, 
     sg_max = sg_max, doc_med = doc_med, doc_max = doc_max))
     
 }
 
+######
+# create a plot of doc estimates from doc_est, same inputs as doc_est
+# 'dat_in' is data from 'buff_ext'
+# 'depth_var' is name of depth column in input data
+# 'sg_var' is name of seagrass column in input data
+plot_doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c('Continuous', 'Discontinuous')){
+  
+  dat <- doc_est(data.frame(dat_in), depth_var, sg_var, sg_cat)
+  
+  to_plo <- dat$data
+  
+  # base plot if no estimate is available
+  p <- ggplot(to_plo, aes(x = Depth, y = sg_prp)) +
+    geom_point(pch = 1, size = 4) +
+    theme(text = element_text(size=20)) +
+    ylab('Proportion of points with seagrass') +
+    xlab('Depth (m)')
+
+  # get y value from est_fun for sg_max and doc_med
+  yends <- try({
+    with(dat, est_fun(c(sg_max, doc_med)))
+    })
+  
+  # add to baseplot if estimate is available
+  if(!'try-error' %in% class(yends)){
+  
+    ##
+		# simple plot of points by depth, all pts and those with seagrass
+    to_plo2 <- dat$preds
+    to_plo3 <- dat$est_fun
+    to_plo4 <- data.frame(
+      Depth = with(dat, c(sg_max, doc_med, doc_max)), 
+      yvals = rep(0, 3)
+    )
+    
+    # some formatting crap
+    x_lims <- max(1.1 * max(na.omit(to_plo)$Depth), 1.1 * dat$doc)
+    pt_cols <- brewer.pal(nrow(to_plo4), 'Blues')
+    leg_lab <- paste0(
+      c('SG max (', 'DOC med (', 'DOC max ('),
+      round(to_plo4$Depth, 2), 
+      rep(')', 3)
+    )
+  
+    # the plot
+    p <- p +
+      geom_line(data = to_plo2, 
+        aes(x = Depth, y = sg_prp)
+        ) +
+      scale_y_continuous(limits = c(0, 1.1 * max(to_plo2$sg_prp))) + 
+      scale_x_continuous(limits = c(min(to_plo$Depth), 1.1 * x_lims)) + 
+      stat_function(fun = to_plo3, colour = 'lightgreen', size = 1.5, 
+        alpha = 0.6) +
+      geom_segment(x = dat$sg_max, y = 0, xend = dat$sg_max, 
+        yend = yends[1], linetype = 'dashed', colour = 'lightgreen',
+        size = 1.5, alpha = 0.6) +
+      geom_segment(x = dat$doc_med, y = 0, xend = dat$doc_med, 
+        yend = yends[2], linetype = 'dashed', colour = 'lightgreen',
+        size = 1.5, alpha = 0.6) +
+      geom_point(data = to_plo4, 
+        aes(x = Depth, y = yvals, fill = factor(Depth)), 
+        size = 6, pch = 21) +
+      scale_fill_brewer('Depth estimate (m)', 
+        labels = leg_lab,
+        palette = 'Blues'
+        ) +
+      theme(legend.position = c(1, 1),
+        legend.justification = c(1, 1)) 
+    
+  }
+  
+  p
+  
+}
+
+######
+# sensitivity analysis of seagrass doc estimates
+# 'dat_in' is data from 'buff_ext'
+# 'depth_var' is name of depth column in input data
+# 'sg_var' is name of seagrass column in input data
+sens_doc <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c('Continuous', 'Discontinuous')){
+  
+  dat <- doc_est(dat_in, depth_var, sg_var, sg_cat)
+  
+  if(is.na(dat$logis_mod)) stop('Unable to estimate logistic model')
+  
+  
+  
+}
+  
+  
 #######
 # function for creating random grid of points, bounded by polygon extent
 # taken from ibi sampling manuscript functions
@@ -292,3 +388,107 @@ g_legend<-function(a.gplot){
   leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
   legend <- tmp$grobs[[leg]]
   return(legend)}
+
+######
+# get fitted values and confidence intervals for NLS model using MC sims
+# modified from...
+# http://rmazing.wordpress.com/2013/08/14/predictnls-part-1-monte-carlo-simulation-confidence-intervals-for-nls-models/
+predictNLS <- function(
+object, 
+xvar,
+newdata,
+level = 0.95, 
+nsim = 10000,
+...
+)
+{
+   
+  if(is.null(names(newdata)))
+    stop('Input data should be named')
+
+  ## extract predictor variable name   
+  predNAME <- names(newdata)
+   
+  ## get parameter coefficients from model
+  COEF <- coef(object)
+     
+  ## get variance-covariance matrix from model
+  VCOV <- vcov(object)
+   
+  ## augment variance-covariance matrix for 'mvrnorm' 
+  ## by adding a column/row for 'error in x'
+  NCOL <- ncol(VCOV)
+  ADD1 <- c(rep(0, NCOL))
+  ADD1 <- matrix(ADD1, ncol = 1)
+  colnames(ADD1) <- predNAME[1]
+  VCOV <- cbind(VCOV, ADD1)
+  ADD2 <- c(rep(0, NCOL + 1))
+  ADD2 <- matrix(ADD2, nrow = 1)
+  rownames(ADD2) <- predNAME[1]
+  VCOV <- rbind(VCOV, ADD2) 
+         
+  ## iterate over all entries in 'newdata' as in usual 'predict.' functions
+  ## NR is number of its, varPLACE index in VCOV for exp var
+  NR <- nrow(newdata)
+  varPLACE <- ncol(VCOV)   
+   
+  ## define counter function
+  counter <- function (i) 
+  {
+    if (i%%10 == 0) 
+      cat(i)
+    else cat(".")
+    flush.console()
+  }
+   
+  outMAT <- matrix(nrow = NR, ncol = 7) 
+   
+  for (i in 1:NR) {
+    counter(i)
+     
+    ## get predictor values and optional errors
+    predVAL <- newdata[i, 1]
+    if (ncol(newdata) == 2){ 
+      predERROR <- newdata[i, 2] 
+    } else {
+      predERROR <- 0
+    }
+    names(predVAL) <- predNAME[1] 
+    names(predERROR) <- predNAME[1] 
+     
+    ## create mean vector for 'mvrnorm'
+    ## these are expected values for coefficients and input value
+    MU <- c(COEF, predVAL)
+     
+    ## create variance-covariance matrix for 'mvrnorm'
+    ## by putting error^2 in lower-right position of VCOV
+    newVCOV <- VCOV
+    newVCOV[varPLACE, varPLACE] <- predERROR^2
+     
+    ## create MC simulation matrix
+    simMAT <- MASS::mvrnorm(n = nsim, mu = MU, Sigma = newVCOV, empirical = TRUE)
+     
+    ## evaluate expression on rows of simMAT
+    EVAL <- eval(expression(SSlogis(Depth, Asym, xmid, scal)), 
+      envir = as.data.frame(simMAT))
+
+    ## collect statistics
+    PRED <- data.frame(predVAL)
+    colnames(PRED) <- predNAME[1]  
+    FITTED <- predict(object, newdata = data.frame(PRED))
+    MEAN.sim <- mean(EVAL, na.rm = TRUE)
+    SD.sim <- sd(EVAL, na.rm = TRUE)
+    MEDIAN.sim <- median(EVAL, na.rm = TRUE)
+    MAD.sim <- mad(EVAL, na.rm = TRUE)
+    QUANT <- quantile(EVAL, c((1 - level)/2, level + (1 - level)/2))
+    RES <- c(FITTED, MEAN.sim, SD.sim, MEDIAN.sim, MAD.sim, QUANT[1], QUANT[2])
+    outMAT[i, ] <- RES
+  }
+   
+  colnames(outMAT) <- c("fit", "mean", "sd", "median", "mad", names(QUANT[1]), names(QUANT[2]))
+  rownames(outMAT) <- NULL
+   
+  cat("\n")
+   
+  return(outMAT)  
+}

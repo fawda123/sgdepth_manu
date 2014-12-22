@@ -24,6 +24,7 @@ library(gridExtra)
 library(shinyapps)
 library(ade4)
 library(Hmisc)
+library(MASS)
 
 # functions to use
 source('R/funcs.r')
