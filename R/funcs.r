@@ -2,11 +2,135 @@
 # functions for seagrass depth of col estimates
 
 ######
+#' Create a doc object
+#' 
+#' Wrapper for creating a doc object
+#' 
+#' @param  ls_in list input created internally within \code{\link{doc_est}}
+#' 
+#' @export doc
+#' 
+#' @return Returns a doc object to be used with S3 methods
+#' 
+#' @details 
+#' This function is a simple wrapper to \code{\link[base]{structure}} that is used internally within other functions to create a doc object.  The function does not have to be used explicitly.    
+#' 
+doc <- function(ls_in){
+    
+  # sanity check
+  if(any(!names(ls_in) %in% c('data', 'preds', 'logis_mod', 'est_fun', 'sg_max', 'doc_med', 'doc_max', 'lower_est', 'upper_est'))) stop('Incorrect input for doc object')
+
+  # create class, with multiple attributes
+  structure(
+    .Data = ls_in[['data']], 
+    class = c('doc', 'data.frame'), 
+    preds = ls_in$preds,
+    logis_mod = ls_in$logis_mod, 
+    est_fun = ls_in$est_fun,
+    sg_max = ls_in$sg_max,
+    doc_med = ls_in$doc_med, 
+    doc_max = ls_in$doc_max,
+    lower_est = NA,
+    upper_est = NA
+    )
+  
+}
+
+
+######
 # formatting of values in S expressions
 form_fun <- function(x, rnd_val = 2, dig_val = 2, nsm_val = 2) {
   to_form <- as.numeric(as.character(x))
   format(round(to_form, rnd_val), digits = dig_val, nsmall = nsm_val)
   }
+
+######
+# get logistic model from input
+# dat_in is data frame of empirical estimates of seagrass occupancy by depth
+# resp is name of response variable, usually sg_prp
+# new_val is number of obs for predicting from fitted mod
+logis_est <- function(dat_in, resp = 'sg_prp', new_vals = 500){
+  
+  pts <- dat_in
+  
+	# logistic growth
+	Asym <- max(pts[, resp], na.rm = T)
+	xmid <- median(pts$Depth, na.rm = T)
+	scal <- quantile(pts$Depth, 0.75, na.rm = T) - xmid
+	form_in <- substitute(x ~ SSlogis(Depth, Asym,  xmid, scal), 
+    list(x = as.name(resp)))
+
+	# model
+	mod <- try({nls(form_in, data = pts, na.action = na.exclude)}, silent = T)
+	
+  # values for prediction
+	dep_rng <- range(pts[, 'Depth'], na.rm = T)
+	new.x <- seq(dep_rng[1], dep_rng[2], length = new_vals)
+
+  # return NAs if model fail, else get model predictions
+  if('try-error' %in% class(mod)) {
+    pred <- rep(NA_real_, length = length(new.x))
+    asym <- NA_real_
+    logis_mod <- NA
+    message('Cannot fit curve to data\n')
+  } else {
+	  pred <- as.numeric(predict(mod, 
+		  newdata = data.frame(Depth = new.x)))
+    pred <- data.frame(new.x, pred)
+    names(pred) <- c('Depth', resp)
+    asym <- summary(mod)$coefficients['Asym', 'Estimate']
+    logis_mod <- mod
+  }
+  
+  # return output
+  out <- list(pred = pred, asym = asym, logis_mod = logis_mod)
+  return(out)
+  
+}
+
+######
+# get doc ests from fitted logistic regression curve
+# dat_in is two column data frame first is depth, second is predicted proportion of points occupied by seagrass
+# asym is asymptote estimate from logistic mod
+get_ests <- function(dat_in, asym){
+  
+  if(class(dat_in) != 'data.frame') stop('Input must be data frame')
+  
+  # exp and resp columns from dat_in
+  x_val <- dat_in[, 1]
+  y_val <- dat_in[, 2]
+  
+  # first deriv
+  inflect <- diff(y_val)/diff(x_val)
+  ind_min <- which.min(inflect)
+    
+  est_fun <- NA
+  sg_max <- NA
+  doc_med <- NA
+  doc_max <- NA
+  
+  # get curve estimate if the minimum slope is not the last value
+  if(ind_min != (nrow(dat_in) - 1)){
+    
+    inflect_val <- dat_in[ind_min + 1, ]
+    slope_val <- inflect[ind_min]
+    int_val <- inflect_val[, 2] - slope_val * inflect_val[, 1]
+    est_fun <- function(x) slope_val * x + int_val
+    doc_max <- -1 * int_val / slope_val
+    
+    # get doc_med, halfway between sg_max and doc_max
+    # sg_max is based on asymptote intercept with linear reg
+    # sg_max defaults to zero if value is extrapolated
+    sg_max <- max(c(0, (asym - int_val)/slope_val))
+    doc_med  <- sg_max + ((doc_max - sg_max)/2)
+
+  }
+  
+  # output
+  out <- list(preds = dat_in, est_fun = est_fun, sg_max = sg_max, doc_med = doc_med, doc_max = doc_max)
+  return(out)
+  
+}
 
 ######
 # function for estimating depth of colonization
@@ -47,98 +171,54 @@ doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c
 	
 	##
 	# estimate a logistic growth function for the data
-	resps <- c('sg_prp')
-	pred_ls <- vector('list', length(resps))
-	names(pred_ls) <- resps
-  asym_ls <- pred_ls
-	for(resp in resps){
-		
-		##
-		# estimates of starting parameters
-		
-		# logistic growth
-		Asym <- max(pts[, resp], na.rm = T)
-		xmid <- median(pts$Depth, na.rm = T)
-		scal <- quantile(pts$Depth, 0.75, na.rm = T) - xmid
-		form_in <- substitute(x ~ SSlogis(Depth, Asym,  xmid, scal), 
-      list(x = as.name(resp)))
+  mod_est <- logis_est(pts, 'sg_prp')
 
-		# model
-		mod <- try(nls(form_in, data = pts, na.action = na.exclude))
-		
-    # values for prediction
-		dep_rng <- range(pts[, 'Depth'], na.rm = T)
-		new.x <- seq(dep_rng[1], dep_rng[2], length = 500)
-	
-    # return NAs if model fail, else get model predictions
-    if('try-error' %in% class(mod)) {
-      pred_ls[[resp]] <- rep(NA_real_, length = length(new.x))
-      asym_ls[[resp]] <- NA_real_
-      logis_mod <- NA
-    } else {
-		  pred_ls[[resp]] <- as.numeric(predict(mod, 
-			  newdata = data.frame(Depth = new.x)))
-      asym_ls[[resp]] <- summary(mod)$coefficients['Asym', 'Estimate']
-      logis_mod <- mod
-    }
-		
-	}
-	
   # output
-	preds <- data.frame(Depth = new.x, do.call('cbind', pred_ls))
-	asym <- unlist(asym_ls)
+	preds <- mod_est$pred
+	asym <- mod_est$asym
+  logis_mod <- mod_est$logis_mod
   
   ##
-	# calculate depth of col using inflection point
-  
-  # out put vals
-  est_fun <- NA
-  sg_max <- NA
-  doc_med <- NA
-  doc_max <- NA
-  
+	# calculate depth of col using get_est
+
   # if no curve fit
-  if(sum(is.na(preds$sg_prp)) == nrow(preds)){
+  if(any(is.na(logis_mod))){
     
-    return(list(data = pts, preds = preds, logis_mod = logis_mod, est_fun = est_fun, 
-      sg_max = sg_max, doc_med = doc_med, doc_max = doc_max))
+    # create doc output
+    ls_in <- list(data = pts, preds = preds, logis_mod = logis_mod, est_fun = NA, 
+      sg_max = NA, doc_med = NA, doc_max = NA, lower_est = NA, upper_est = NA)
+    
+    out <- doc(ls_in)
+    return(out)
      
   }
   
   # check if curve is monotonic descending
   if(!with(preds, all(sg_prp == cummin(sg_prp)))){
     
-    return(list(data = pts, preds = preds, logis_mod = logis_mod, est_fun = est_fun, 
-      sg_max = sg_max, doc_med = doc_med, doc_max = doc_max))
+    ls_in <- list(data = pts, preds = preds, logis_mod = logis_mod, est_fun = NA, 
+      sg_max = NA, doc_med = NA, doc_max = NA, lower_est = NA, upper_est = NA)
+    
+    out <- doc(ls_in)
+    return(out)
     
   }
   
-  # search for inflection point if monotonic descending and curve is fit
-
-  # first deriv
-  inflect <- diff(preds$sg_prp)/diff(preds$Depth)
-  ind_min <- which.min(inflect)
-    
-  # get curve estimate if the minimum slope is not the last value
-  if(ind_min != (nrow(preds) - 1)){
-    
-    inflect_val <- preds[ind_min + 1, ]
-    slope_val <- inflect[ind_min]
-    int_val <- inflect_val$sg_prp - slope_val * inflect_val$Depth
-    est_fun <- function(x) slope_val * x + int_val
-    doc_max <- -1 * int_val / slope_val
-    
-    # get doc_med, halfway between sg_max and doc_max
-    # sg_max is based on asymptote intercept with linear reg
-    # sg_max defaults to zero if value is extrapolated
-    sg_max <- max(c(0, (asym - int_val)/slope_val))
-    doc_med  <- sg_max + ((doc_max - sg_max)/2)
-
-  }
+  # get doc estimates using get_ests functions
+  ests <- get_ests(preds, asym)
+  preds <- ests[['preds']]
+  est_fun <- ests[['est_fun']]
+  sg_max <- ests[['sg_max']]
+  doc_med <- ests[['doc_med']]
+  doc_max <- ests[['doc_max']]
     
   # all output
-  return(list(data = pts, preds = preds, logis_mod = logis_mod, est_fun = est_fun, 
-    sg_max = sg_max, doc_med = doc_med, doc_max = doc_max))
+  ls_in <- list(data = pts, preds = preds, logis_mod = logis_mod, est_fun = est_fun, 
+    sg_max = sg_max, doc_med = doc_med, doc_max = doc_max, lower_est = NA, 
+    upper_est = NA)
+  
+  out <- doc(ls_in)
+  return(out)
     
 }
 
@@ -147,11 +227,11 @@ doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c
 # 'dat_in' is data from 'buff_ext'
 # 'depth_var' is name of depth column in input data
 # 'sg_var' is name of seagrass column in input data
-plot_doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c('Continuous', 'Discontinuous')){
+plot.doc <- function(doc_in, sens = F){
   
-  dat <- doc_est(data.frame(dat_in), depth_var, sg_var, sg_cat)
-  
-  to_plo <- dat$data
+  to_plo <- data.frame(doc_in)
+  ests <- attributes(doc_in)[c('sg_max', 'doc_med', 'doc_max')]
+  est_fun <- attr(doc_in, 'est_fun')
   
   # base plot if no estimate is available
   p <- ggplot(to_plo, aes(x = Depth, y = sg_prp)) +
@@ -162,30 +242,30 @@ plot_doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_ca
 
   # get y value from est_fun for sg_max and doc_med
   yends <- try({
-    with(dat, est_fun(c(sg_max, doc_med)))
-    })
+    with(attributes(doc_in), est_fun(c(sg_max, doc_med)))
+    }, silent = T)
   
   # add to baseplot if estimate is available
   if(!'try-error' %in% class(yends)){
   
     ##
 		# simple plot of points by depth, all pts and those with seagrass
-    to_plo2 <- dat$preds
-    to_plo3 <- dat$est_fun
+    to_plo2 <- attr(doc_in, 'pred')
+    to_plo3 <- attr(doc_in, 'est_fun')
     to_plo4 <- data.frame(
-      Depth = with(dat, c(sg_max, doc_med, doc_max)), 
+      Depth = unlist(ests), 
       yvals = rep(0, 3)
     )
     
     # some formatting crap
-    x_lims <- max(1.1 * max(na.omit(to_plo)$Depth), 1.1 * dat$doc)
+    x_lims <- max(1.1 * max(na.omit(to_plo)$Depth), 1.1 * ests$doc_max)
     pt_cols <- brewer.pal(nrow(to_plo4), 'Blues')
     leg_lab <- paste0(
       c('SG max (', 'DOC med (', 'DOC max ('),
       round(to_plo4$Depth, 2), 
       rep(')', 3)
     )
-  
+    
     # the plot
     p <- p +
       geom_line(data = to_plo2, 
@@ -195,10 +275,10 @@ plot_doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_ca
       scale_x_continuous(limits = c(min(to_plo$Depth), 1.1 * x_lims)) + 
       stat_function(fun = to_plo3, colour = 'lightgreen', size = 1.5, 
         alpha = 0.6) +
-      geom_segment(x = dat$sg_max, y = 0, xend = dat$sg_max, 
+      geom_segment(x = ests$sg_max, y = 0, xend = ests$sg_max, 
         yend = yends[1], linetype = 'dashed', colour = 'lightgreen',
         size = 1.5, alpha = 0.6) +
-      geom_segment(x = dat$doc_med, y = 0, xend = dat$doc_med, 
+      geom_segment(x = ests$doc_med, y = 0, xend = ests$doc_med, 
         yend = yends[2], linetype = 'dashed', colour = 'lightgreen',
         size = 1.5, alpha = 0.6) +
       geom_point(data = to_plo4, 
@@ -211,28 +291,27 @@ plot_doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_ca
       theme(legend.position = c(1, 1),
         legend.justification = c(1, 1)) 
     
+    # add upper, lower estimates to plot
+    if(sens){
+      
+      # run sensitivity analysis if not present
+      if(!'data.frame' %in% class(attr(doc_in, 'lower_est')$preds)) 
+        doc_in <- sens(doc_in)
+      
+      lower_est <- attr(doc_in, 'lower_est')
+      upper_est <- attr(doc_in, 'upper_est')
+      p <- p +
+        geom_line(data = lower_est$preds, aes(y = sg_prp), colour = 'tomato') +
+        geom_line(data = upper_est$preds, aes(y = sg_prp), colour = 'tomato')
+      
+    }
+    
   }
   
   p
   
 }
-
-######
-# sensitivity analysis of seagrass doc estimates
-# 'dat_in' is data from 'buff_ext'
-# 'depth_var' is name of depth column in input data
-# 'sg_var' is name of seagrass column in input data
-sens_doc <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c('Continuous', 'Discontinuous')){
-  
-  dat <- doc_est(dat_in, depth_var, sg_var, sg_cat)
-  
-  if(is.na(dat$logis_mod)) stop('Unable to estimate logistic model')
-  
-  
-  
-}
-  
-  
+ 
 #######
 # function for creating random grid of points, bounded by polygon extent
 # taken from ibi sampling manuscript functions
@@ -321,7 +400,7 @@ doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace =
     ests <- try({
       buff_pts <- buff_ext(dat_in, eval_pt, buff = radius)
   	  est_pts <- data.frame(buff_pts)
-      doc_single <- doc_est(est_pts)[c('sg_max', 'doc_med', 'doc_max')]
+      doc_single <- attributes(est_pts)[c('sg_max', 'doc_med', 'doc_max')]
       unlist(doc_single)
     }, silent = T)
     
@@ -346,41 +425,6 @@ doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace =
   
 }
 
-
-
-######
-#' krige results from spatial grid of seagrass depth of col ests
-#'
-#' @param maxd data frame of maximum depth estimates with Var1 and Var2 columns of coordinates
-#' @param seg_shp spatial polygon data frame of segment to clip kriging estimate
-#' @param length number of points on x or y axis for predicting based on kriging results, passed to seq
-#'
-#' @import automap gstat
-sg_krige <- function(maxd, seg_shp, length = 250){
-  
-  # maxd as spatial data frame
-  maxd <- na.omit(maxd)
-  coordinates(maxd) = ~ Var1 + Var2
-  
-  # new coordinates to predict
-  newdat <- apply(bbox(seg_shp), 1, function(x) seq(x[1], x[2], length = length))
-  newdat <- expand.grid(newdat[, 1], newdat[, 2])
-  gridded(newdat) = ~ Var1 + Var2
-  
-  # kriging results
-  res <- suppressWarnings(autoKrige(zmax_all ~ 1, maxd, newdat))
-  res <- res['krige_output'][[1]]
-  
-  # clip results by segment
-  sel <- !is.na(res %over% seg_shp)[, 1]
-  res <- res[sel, ]
-  res <- data.frame(coordinates(res), maxd = res$var1.pred)
-  
-  # return results
-  return(res)
-  
-}
-
 ######
 # get legend from an existing ggplot object
 g_legend<-function(a.gplot){
@@ -390,33 +434,30 @@ g_legend<-function(a.gplot){
   return(legend)}
 
 ######
-# get fitted values and confidence intervals for NLS model using MC sims
+# get confidence intervals for doc object using MC sims
 # modified from...
 # http://rmazing.wordpress.com/2013/08/14/predictnls-part-1-monte-carlo-simulation-confidence-intervals-for-nls-models/
-predictNLS <- function(
-object, 
-xvar,
-newdata,
-level = 0.95, 
-nsim = 10000,
-...
-)
-{
+sens <- function(doc_in, ...) UseMethod('sens')
+sens.doc <- function(doc_in, newdata, level = 0.95, nsim = 5000, trace = T, ...){
    
-  if(is.null(names(newdata)))
-    stop('Input data should be named')
+  # use object attribute if not supplied
+  if(missing(newdata))
+    newdata <- attr(doc_in, 'pred')[, 'Depth', drop = F]
 
-  ## extract predictor variable name   
+  mod <- attr(doc_in, 'logis_mod')
+  if(!'nls' %in% class(mod)) stop('No model in object')
+  
+  # extract predictor variable name   
   predNAME <- names(newdata)
    
-  ## get parameter coefficients from model
-  COEF <- coef(object)
+  # get parameter coefficients from model
+  COEF <- coef(mod)
      
   ## get variance-covariance matrix from model
-  VCOV <- vcov(object)
+  VCOV <- vcov(mod)
    
-  ## augment variance-covariance matrix for 'mvrnorm' 
-  ## by adding a column/row for 'error in x'
+  # augment variance-covariance matrix for 'mvrnorm' 
+  # by adding a column/row for 'error in x'
   NCOL <- ncol(VCOV)
   ADD1 <- c(rep(0, NCOL))
   ADD1 <- matrix(ADD1, ncol = 1)
@@ -427,12 +468,12 @@ nsim = 10000,
   rownames(ADD2) <- predNAME[1]
   VCOV <- rbind(VCOV, ADD2) 
          
-  ## iterate over all entries in 'newdata' as in usual 'predict.' functions
-  ## NR is number of its, varPLACE index in VCOV for exp var
+  # iterate over all entries in 'newdata' as in usual 'predict.' functions
+  # NR is number of its, varPLACE index in VCOV for exp var
   NR <- nrow(newdata)
   varPLACE <- ncol(VCOV)   
    
-  ## define counter function
+  # define counter function
   counter <- function (i) 
   {
     if (i%%10 == 0) 
@@ -444,9 +485,10 @@ nsim = 10000,
   outMAT <- matrix(nrow = NR, ncol = 7) 
    
   for (i in 1:NR) {
-    counter(i)
+    
+    if(trace) counter(i)
      
-    ## get predictor values and optional errors
+    # get predictor values and optional errors
     predVAL <- newdata[i, 1]
     if (ncol(newdata) == 2){ 
       predERROR <- newdata[i, 2] 
@@ -456,26 +498,26 @@ nsim = 10000,
     names(predVAL) <- predNAME[1] 
     names(predERROR) <- predNAME[1] 
      
-    ## create mean vector for 'mvrnorm'
-    ## these are expected values for coefficients and input value
+    # create mean vector for 'mvrnorm'
+    # these are expected values for coefficients and input value
     MU <- c(COEF, predVAL)
      
-    ## create variance-covariance matrix for 'mvrnorm'
-    ## by putting error^2 in lower-right position of VCOV
+    # create variance-covariance matrix for 'mvrnorm'
+    # by putting error^2 in lower-right position of VCOV
     newVCOV <- VCOV
     newVCOV[varPLACE, varPLACE] <- predERROR^2
      
-    ## create MC simulation matrix
+    # create MC simulation matrix
     simMAT <- MASS::mvrnorm(n = nsim, mu = MU, Sigma = newVCOV, empirical = TRUE)
      
-    ## evaluate expression on rows of simMAT
+    # evaluate expression on rows of simMAT
     EVAL <- eval(expression(SSlogis(Depth, Asym, xmid, scal)), 
       envir = as.data.frame(simMAT))
 
-    ## collect statistics
+    # collect statistics
     PRED <- data.frame(predVAL)
     colnames(PRED) <- predNAME[1]  
-    FITTED <- predict(object, newdata = data.frame(PRED))
+    FITTED <- predict(mod, newdata = data.frame(PRED))
     MEAN.sim <- mean(EVAL, na.rm = TRUE)
     SD.sim <- sd(EVAL, na.rm = TRUE)
     MEDIAN.sim <- median(EVAL, na.rm = TRUE)
@@ -483,12 +525,41 @@ nsim = 10000,
     QUANT <- quantile(EVAL, c((1 - level)/2, level + (1 - level)/2))
     RES <- c(FITTED, MEAN.sim, SD.sim, MEDIAN.sim, MAD.sim, QUANT[1], QUANT[2])
     outMAT[i, ] <- RES
+    
   }
    
-  colnames(outMAT) <- c("fit", "mean", "sd", "median", "mad", names(QUANT[1]), names(QUANT[2]))
+  outMAT <- data.frame(outMAT)
+  colnames(outMAT) <- c('fit', 'mean', 'sd', 'median', 'mad', 
+    names(QUANT[1]), names(QUANT[2]))
   rownames(outMAT) <- NULL
    
-  cat("\n")
-   
-  return(outMAT)  
+  if(trace) cat("\n")
+  
+  ## use logis_est and get_ests for outMAT
+  # returns lower and upper bounds on doc estimates
+  
+  # lower limits
+  pred_dat <- data.frame(
+    Depth = attr(doc_in, 'preds')$Depth, 
+    sg_prp = outMAT[, '2.5%']
+  )
+  lower_est <- logis_est(pred_dat)
+  lower_est <- try({get_ests(lower_est$pred, lower_est$asym)})
+  if('try-error' %in% class(lower_est)) lower_est <- NA
+  
+  # upper limits
+  pred_dat <- data.frame(
+    Depth = attr(doc_in, 'preds')$Depth, 
+    sg_prp = outMAT[, '97.5%']
+  )
+  upper_est <- logis_est(pred_dat)
+  upper_est <- try({get_ests(upper_est$pred, upper_est$asym)})
+  if('try-error' %in% class(upper_est)) upper_est <- NA
+  
+  # output
+  # fill lower_est, upper_est attributes
+  attr(doc_in, 'lower_est') <- lower_est
+  attr(doc_in, 'upper_est') <- upper_est
+  return(doc_in)
+  
 }

@@ -1,4 +1,6 @@
-library(ape)
+
+library(foreach)
+
 
 load('data/shps.RData')
 
@@ -6,8 +8,7 @@ source('R/funcs.R')
 
 # values to iterate
 spc_val <- 0.02
-rad_val <- 0.005
-seg_val <- '1502'
+seg_val <- '820'
 seed_val <- 1234
 
 sgpts_nm <- grep(paste0('^sgpts.*', seg_val, '\\.shp'), names(shps))
@@ -19,29 +20,44 @@ seg <- shps[[seg_nm]]
 set.seed(seed_val)
 smps <- grid_est(seg, spacing = spc_val)
 # point from random points for buffer
-rand <- 10 #sample(1:length(smps), 1)
+rand <- 34 #sample(1:length(smps), 1)
 test_pt <- smps[rand, ]
+
+# setup parallel
+cl <- makeCluster(8)
+registerDoParallel(cl)
+
+rads <- seq(0.01, 0.2, length = 30)
+# out_ls <- vector('list', length = length(rads))
+# names(out_ls) <- rads
+out_ls <- foreach(rad = rads) %dopar% {
   
-# get bathym points around test_pt
-buff_pts <- buff_ext(sgdep, test_pt, buff = rad_val)
+  # log
+  sink('log.txt')
+  cat(which(rad == rads), 'of', length(rads), '\n')
+  sink()
+  
+  # get bathym points around test_pt
+  buff_pts <- buff_ext(sgdep, test_pt, buff = rad)
 
-# get plot
-# plot_doc_est(buff_pts)
+  # estimate
+  ests <- doc_est(buff_pts)
 
-# sensitivity
+  # mc sens analysis
+  sens_val <- sens.doc(ests)
+  
+  # organize results for output
+  get_vals <- c('sg_max', 'doc_med', 'doc_max')
+  lower_est <- unlist(attr(sens_val, 'lower_est')[get_vals])
+  act_est <- unlist(attributes(sens_val)[get_vals])
+  upper_est <- unlist(attr(sens_val, 'upper_est')[get_vals])
+  
+  # output
+  out <- rbind(lower_est, act_est, upper_est)
+  out
+  
+}
 
-depth_var <- 'Depth'
-ests <- doc_est(buff_pts)
-
-
-newdat <- data.frame(Depth = ests$pred[, depth_var])
-xvar <- ests$data[, depth_var, drop = F]
-tmp <- predictNLS(ests$logis_mod, newdata = data.frame(newdat, error = 0), nsim = 10000)
-unc <- data.frame(Depth = ests$pred[, depth_var], tmp)
-
-plot(X97.5. ~ Depth, data = unc, type = 'l', col = 'tomato')
-lines(fit ~ Depth, data = unc, col = 'black')
-lines(X2.5. ~ Depth, data = unc, col = 'tomato')
 
 
 
