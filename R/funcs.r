@@ -227,19 +227,30 @@ doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c
 # 'doc_in' doc object input from doc_est
 # 'sens' logical indicating of plot includes sensitivity estimates
 # 'allsens' logical indicating if upper, lower estimates for logistic curve are obtained
-plot.doc <- function(doc_in, sens = F, allsens = F){
+# 'baseonly' logical indicating of only observed data are plotted
+# 'logisonly' logical indicating of only observed data and logistic curve are plotted
+plot.doc <- function(doc_in, sens = F, allsens = F, baseonly = F, logisonly = F){
   
   to_plo <- data.frame(doc_in)
   ests <- attributes(doc_in)[c('sg_max', 'doc_med', 'doc_max')]
   est_fun <- attr(doc_in, 'est_fun')
   
+  # y, x axis limits
+  y_lims <- 1.2 * max(na.omit(to_plo$sg_prp))
+  y_lims <- c(-0.05 * y_lims, y_lims)
+  x_lims <- max(1.2 * max(na.omit(to_plo)$Depth), 1.2 * ests$sg_max)
+  x_lims <- c(-0.025 * x_lims, x_lims)
+
   # base plot if no estimate is available
   p <- ggplot(to_plo, aes(x = Depth, y = sg_prp)) +
     geom_point(pch = 1, size = 4) +
     theme(text = element_text(size=20)) +
     ylab('Proportion of points with seagrass') +
-    xlab('Depth (m)')
-
+    xlab('Depth (m)') +
+    coord_cartesian(xlim = x_lims, ylim = y_lims) 
+  
+  if(baseonly) return(p)
+  
   # get y value from est_fun for sg_max and doc_med
   yends <- try({
     with(attributes(doc_in), est_fun(c(sg_max, doc_med)))
@@ -261,8 +272,17 @@ plot.doc <- function(doc_in, sens = F, allsens = F){
     lowers <- round(unlist(attr(doc_in, 'lower_est')[get_vals]), 2)
     uppers <- round(unlist(attr(doc_in, 'upper_est')[get_vals]), 2)
     
+    # return fig with pts and logistic curve only
+    if(logisonly){
+      
+      p <- p + geom_line(data = to_plo2, 
+        aes(x = Depth, y = sg_prp)
+        ) 
+      return(p)
+      
+    }
+      
     # some formatting crap
-    x_lims <- max(1.1 * max(na.omit(to_plo)$Depth), 1.1 * ests$doc_max)
     pt_cols <- brewer.pal(nrow(to_plo4), 'Blues')
     leg_lab <- paste0(
       c('SG max ', 'DOC med ', 'DOC max '),
@@ -295,8 +315,7 @@ plot.doc <- function(doc_in, sens = F, allsens = F){
       geom_line(data = to_plo2, 
         aes(x = Depth, y = sg_prp)
         ) +
-      coord_cartesian(xlim = c(min(to_plo$Depth), 1.1 * x_lims), 
-        ylim = c(-0.02, 1.1 * max(to_plo2$sg_prp))) + 
+      coord_cartesian(xlim = x_lims, ylim = y_lims) + 
       stat_function(fun = est_fun, colour = 'lightgreen', size = 1.5, 
         alpha = 0.8) +
       geom_segment(x = ests$sg_max, y = 0, xend = ests$sg_max, 
@@ -407,13 +426,14 @@ buff_ext <- function(pts, center, buff = 0.03){
 #' @param buff radius of buffer in dec degrees around each sample location for estimating seagrass depth estimates
 #' @param rem_miss logical indicating if unestimable points are removed from the output, default \code{TRUE}
 #' @param trace logical indicating if progress is returned in console, default \code{FALSE}
+#' @param out_sens logical indicating if output should include lower and upper estimates of seagrass growth limits
 #' 
 #' @details This function estimates three seagrass depth of colonization values for each point in a sampling grid.  Functions \code{\link{buff_ext} and \code{\link{doc_est}} are used iteratively for each point in the sample grid.
 #' 
 #' @import sp
 #' 
 #' @return 
-doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace = FALSE){
+doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace = FALSE, out_sens = F){
       
   # get estimates for each point
   maxd <- vector('list', length = length(grid_in))
@@ -425,11 +445,20 @@ doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace =
     ests <- try({
       buff_pts <- buff_ext(dat_in, eval_pt, buff = radius)
   	  est_pts <- data.frame(buff_pts)
-      doc_single <- attributes(est_pts)[c('sg_max', 'doc_med', 'doc_max')]
-      unlist(doc_single)
+      ests <- doc_est(est_pts)
+      ests
     }, silent = T)
     
-  	if('try-error' %in% class(ests)) ests <- rep(NA, 3)
+  	if('try-error' %in% class(ests)){ ests <- rep(NA, 9)
+    } else {
+      get_ests <- c('sg_max', 'doc_med', 'doc_max')
+      ests <- sens(ests, trace = F)
+      lower <- unlist(attr(ests, 'lower_est')[get_ests])
+      upper <- unlist(attr(ests, 'upper_est')[get_ests])
+      actual <- unlist(attributes(ests)[get_ests])
+      ests <- c(actual, lower, upper)
+      names(ests) <- c(get_ests, paste0('l_', get_ests), paste0('h_', get_ests))
+    }
     
     maxd[[i]] <- ests
     
@@ -446,6 +475,12 @@ doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace =
     else maxd <- maxd[!is.na(maxd@data[, 1]), ]
   }
  
+  # remove sensitivity if T
+  if(!out_sens){
+    rem_nms <- !grepl('^h_|^l_', names(maxd))
+    maxd <- maxd[, rem_nms]
+  }
+  
   return(maxd)
   
 }
@@ -585,8 +620,7 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, allsens = F, trace = T,
   }
    
   outMAT <- data.frame(newdata[, 'Depth'], outMAT)
-  colnames(outMAT) <- c('Depth', 'fit', 'mean', 'sd', 'median', 'mad', 
-    names(QUANT[1]), names(QUANT[2]))
+  colnames(outMAT) <- c('Depth', 'fit', 'mean', 'sd', 'median', 'mad', 'low', 'hi')
   rownames(outMAT) <- NULL
    
   if(trace) cat("\n")
@@ -600,8 +634,8 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, allsens = F, trace = T,
   # get slope, intercept from 'est_fun' in 'doc_in'
   int_val <- est_fun(0)
   slope_val <- (-1 * int_val) + est_fun(1)
-  low_shift <- asym_dep[, '2.5%'] - asym_dep[, 'fit']
-  up_shift <- asym_dep[, '97.5%'] - asym_dep[, 'fit']
+  low_shift <- asym_dep[, 'low'] - asym_dep[, 'fit']
+  up_shift <- asym_dep[, 'hi'] - asym_dep[, 'fit']
   
   # lower estimates based on intercept shift
   doc_max <- max(c(0, -1 * ((int_val + low_shift) / slope_val)))
@@ -621,7 +655,7 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, allsens = F, trace = T,
     # lower limits
     pred_dat <- data.frame(
       Depth = newdata$Depth,
-      sg_prp = outMAT[, '2.5%']
+      sg_prp = outMAT[, 'low']
     )
     lower_pred <- logis_est(pred_dat)
     lower_est$preds <- lower_pred$pred
@@ -629,7 +663,7 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, allsens = F, trace = T,
     # upper limits
     pred_dat <- data.frame(
       Depth = newdata$Depth, 
-      sg_prp = outMAT[, '97.5%']
+      sg_prp = outMAT[, 'hi']
     )
     upper_pred <- logis_est(pred_dat)
     upper_est$preds <- upper_pred$pred

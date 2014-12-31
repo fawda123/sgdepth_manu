@@ -184,17 +184,15 @@ All estimates were obtained using custom-made functions in program R that were b
 
 \subsection{Comparison with segment-based approach and sensitivity analysis}
 
-Spatially-referenced estimates for seagrass \ac{doc} were obtained for each of the four segments described above.  Segment-wide estimates obtained using methods in \citetalias{HagyIR} were used as a basis of comparison such that departures from these values were evidence of spatial heterogeneity in seagrass growth patterns within each segment.  A sampling grid of locations for estimating each of the three depth values in \cref{fig:est_ex} was created for each segment.  The grid is masked by the segment boundaries to remove locations that did not occur on the water, whereas seagrass depth points used to estimate \ac{doc} extended beyond the segment  boundaries.  Initial spacing between sample points was chosen arbitrarily as 0.02 decimal degrees, which is approximately 2 km at 30 degrees N latitude.  Similarly, the sampling radii around each sampling location in the grid was chosen as 0.06 decimal degrees, or approximately 6 km.  % redo this analysis 
+Spatially-referenced estimates for seagrass \ac{doc} were obtained for each of the four segments described above.  Segment-wide estimates obtained using methods in \citetalias{HagyIR} were used as a basis of comparison such that departures from these values were evidence of spatial heterogeneity in seagrass growth patterns within each segment.  A sampling grid of locations for estimating each of the three depth values in \cref{fig:est_ex} was created for each segment.  The grid is masked by the segment boundaries to remove locations that did not occur on the water, whereas seagrass depth points used to estimate \ac{doc} extended beyond the segment  boundaries.  Initial spacing between sample points was chosen arbitrarily as 0.02 decimal degrees, which is approximately 2 km at 30 degrees N latitude.  The sampling radius around each sampling location in the grid was also chosen as 0.02 decimal degrees to allow for complete coverage of seagrass within the segment while also minimizing redundancy of information described by each location.  In other words, radii were set such that the seagrass depth points sampled by each grid location were only partially overlapped by those sampled by neighboring points.
 
- The ability to characterize heterogeneity in seagrass growth patterns using the grid-based approach can be informed by evaluating the level of confidence associated with \ac{doc} estimates.  Confidence intervals for non-linear regression can be estimated using a Monte Carlo simulation approach that considers the variance and covariance between the model parameters and the input variables \citep{Hilborn97}.  For simplicity, we assume that the observation uncertainty associated with the depth measurements is zero such that the variability associated with parameter estimates is considered the primary source of uncertainty.  A 95\% confidence interval for a vector of depth values was constructed by repeated sampling of a multivariate normal distribution followed by prediction of the proportion of points occupied by seagrass as in \cref{eqn:prop}.  The sampling distribution assumes:
+The ability to characterize heterogeneity in seagrass growth patterns using the grid-based approach can be informed by evaluating the level of confidence associated with \ac{doc} estimates.  Confidence intervals for non-linear regression can be estimated using a Monte Carlo simulation approach that considers the variance and covariance between the model parameters and the depth measurements \citep{Hilborn97}.  For simplicity, we assume that the observation uncertainty associated with the depth measurements is zero such that the variability associated with parameter estimates is considered the primary source of uncertainty.  A 95\% confidence interval for each \ac{doc} estimates was constructed by repeated sampling of a multivariate normal distribution followed by prediction of the proportion of points occupied by seagrass as in \cref{eqn:prop}.  The sampling distribution assumes:
 \begin{equation}
 x \sim N(\mu, \Sigma)
 \end{equation}
-\noindent where $x$ is a predictor variable used in \cref{eqn:prop} that follows a multivariate normal distribution with mean $\mu$, and variance-covariance matrix $\Sigma$.  The mean values are set at the depth value for a given observation and the predicted model parameters (i.e., $\alpha$, $\beta$, and $\gamma$) for the logistic curve, and $\Sigma$ is the variance-covariance matrix of the model parameters and depth, with the latter being zero.  A large number of samples ($n = 10000$) were drawn from the distrubution for each $x$ value to characterize the uncertainty.  The 2.5\textsuperscript{th} and 97.5\textsuperscript{th} quantile values of the sample were considered bounds on the 95\% confidence interval for each fitted value.  The sampling is repeated across the range of the predictor variable to create a continuous estimate of the lower and upper bounds of the fitted logistic curve.
+\noindent where $x$ is a predictor variable used in \cref{eqn:prop} that follows a multivariate normal distribution with mean $\mu$, and variance-covariance matrix $\Sigma$.  The mean values are set at the depth value corresponding to the inflection point on the logistic curve and the predicted model parameters (i.e., $\alpha$, $\beta$, and $\gamma$), whereas $\Sigma$ is the variance-covariance matrix of the model parameters and depth, with the latter being zero.  A large number of samples ($n = 10000$) were drawn from the distrubution to characterize the uncertainty.  The 2.5\textsuperscript{th} and 97.5\textsuperscript{th} quantile values of the sample were considered bounds on the 95\% confidence interval.
 
-The uncertainty associated with the \ac{doc} estimates were based on the upper and lower limits of the fitted logistic curve.  Specifically, a linear curve was fit through the upper and lower logistic curves to identify upper and lower limits for the estimates of $SG_{max}$, $DOC_{med}$, and $DOC_{maxd}$.  These values were compared with the initial estimates from the linear curve that was fit through the predicted logistic curve (i.e., \cref{fig:est_ex3}).  This approach provided an indication of uncertainty for individual estimates for a set radius.  The analysis can be repeated  for different radii to estimate how uncertainty varies with sampling area around a location.    
-
-
+The uncertainty associated with the \ac{doc} estimates were based on the upper and lower limits of the estimated inflection point on the logistic growth curve.  This approach was used because uncertainty in the inflection point is directly related to uncertainty in each of the \ac{doc} estimates that are based on the linear curve fit through the inflection point.   Specifically, a linear curve was fit through the upper and lower estimates of the infletion point to identify upper and lower limits for the estimates of $SG_{max}$, $DOC_{med}$, and $DOC_{maxd}$.  These values were compared with the initial estimates from the linear curve that was fit through the predicted logistic curve (i.e., \cref{fig:est_ex3}).  This approach provided an indication of uncertainty for individual estimates for a set radius.  Uncertainty estimates were obtained for each \ac{doc} estimate for the grids in each segment.  Uncertainty was also evaluated as a function of sampling radius for selected locations in each segment.
 
 \subsection{Developing a spatially coherent relationship of water clarity with depth of colonization}
 
@@ -202,11 +200,15 @@ The uncertainty associated with the \ac{doc} estimates were based on the upper a
 
 Describe spatial heterogeneity within segments reasons why
 
+Describe why estimates were unavailable in particular areas of each segment
+
 Acknowledge that comparisons with segment wide estimate are specific to grid spacing and radii tha twere used, thus the comparison is only useful for illustrating the presence of heterogeneity within segments, as well as variation between segments.  Absolute values will vary with different spacing and radii. 
 
 \cref{fig:all_ests}
 
 \cref{tab:est_summ}
+
+\cref{fig:all_sens}
 
 \section{Discussion}
 
@@ -261,24 +263,24 @@ Secchi (se)&  0.07&  0.19&  0.01&  0.01\tabularnewline
 \multicolumn{1}{l}{{\bf Segment}}&\multicolumn{1}{c}{Whole segment}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Err.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
 \hline
 {\bfseries 0303}&&&&&\tabularnewline
-~~$SG_{max}$&1.92&1.93&0.08&1.62&2.22\tabularnewline
-~~$DOC_{med}$&2.26&2.22&0.09&1.86&2.49\tabularnewline
-~~$DOC_{max}$&2.60&2.52&0.10&2.09&2.75\tabularnewline
+~~$SG_{max}$&1.92&1.65&0.24&0.52&2.30\tabularnewline
+~~$DOC_{med}$&2.26&2.01&0.15&1.52&2.46\tabularnewline
+~~$DOC_{max}$&2.60&2.36&0.16&1.90&2.85\tabularnewline
 \hline
 {\bfseries 0820}&&&&&\tabularnewline
-~~$SG_{max}$&1.50&1.47&0.48&0.00&2.96\tabularnewline
-~~$DOC_{med}$&2.92&2.39&0.37&0.96&3.49\tabularnewline
-~~$DOC_{max}$&4.34&3.30&0.33&1.86&4.18\tabularnewline
+~~$SG_{max}$&1.50&1.71&0.43&0.06&3.23\tabularnewline
+~~$DOC_{med}$&2.92&2.07&0.42&0.52&3.46\tabularnewline
+~~$DOC_{max}$&4.34&2.42&0.43&0.69&3.97\tabularnewline
 \hline
 {\bfseries 0902}&&&&&\tabularnewline
-~~$SG_{max}$&0.52&0.28&0.13&0.00&0.81\tabularnewline
-~~$DOC_{med}$&0.79&0.66&0.10&0.35&1.04\tabularnewline
-~~$DOC_{max}$&1.07&1.03&0.10&0.70&1.62\tabularnewline
+~~$SG_{max}$&0.52&0.45&0.15&0.00&1.03\tabularnewline
+~~$DOC_{med}$&0.79&0.82&0.14&0.29&1.59\tabularnewline
+~~$DOC_{max}$&1.07&1.18&0.17&0.59&2.15\tabularnewline
 \hline
 {\bfseries 1502}&&&&&\tabularnewline
-~~$SG_{max}$&1.25&1.29&0.07&0.93&1.81\tabularnewline
-~~$DOC_{med}$&1.51&1.51&0.08&1.08&1.98\tabularnewline
-~~$DOC_{max}$&1.77&1.73&0.10&1.23&2.21\tabularnewline
+~~$SG_{max}$&1.25&1.33&0.11&0.90&2.02\tabularnewline
+~~$DOC_{med}$&1.51&1.50&0.10&0.98&2.08\tabularnewline
+~~$DOC_{max}$&1.77&1.66&0.10&1.06&2.16\tabularnewline
 \hline
 \end{tabular}\end{center}
 
@@ -362,6 +364,16 @@ Secchi (se)&  0.07&  0.19&  0.01&  0.01\tabularnewline
 \includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
 \caption{Spatially-referenced estimates of seagrass depth limits (m) for four coastal segments of Florida.  Estimates include depth of maximum seagrass growth ($SG_{max}$), median depth of colonization ($DOC_{med}$), and maximum depth of colonization ($DOC_{max}$).  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees.}
 \label{fig:all_ests}
+\end{figure}
+
+% grid examples for each segment
+
+% range of confidence intervals for estimates
+\begin{figure}
+\centering
+\includegraphics[width = 0.95\textwidth]{figs/all_sens.pdf}
+\caption{Size of confidence intervals (m) for \acl{doc} estimates in \cref{fig:all_ests}.  Points are colored and sized based on the difference between the upper and lower bounds of a 95\% confidence interval for all three \ac{doc} estimates ($SG_{max}$, $DOC_{med}$, $DOC_{max}$). Bounds were obtained using Monte Carlo simulations to estimate uncertainty associated with the inflection point of the estimated logistic curve (\cref{fig:est_ex}) for each sample.}
+\label{fig:all_sens}
 \end{figure}
 
 \end{document}

@@ -13,6 +13,7 @@ knitr
 lattice
 maps
 maptools
+MASS
 plyr
 RColorBrewer
 reshape2

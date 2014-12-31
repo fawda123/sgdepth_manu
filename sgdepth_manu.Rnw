@@ -139,17 +139,15 @@ All estimates were obtained using custom-made functions in program R that were b
 
 \subsection{Comparison with segment-based approach and sensitivity analysis}
 
-Spatially-referenced estimates for seagrass \ac{doc} were obtained for each of the four segments described above.  Segment-wide estimates obtained using methods in \citetalias{HagyIR} were used as a basis of comparison such that departures from these values were evidence of spatial heterogeneity in seagrass growth patterns within each segment.  A sampling grid of locations for estimating each of the three depth values in \cref{fig:est_ex} was created for each segment.  The grid is masked by the segment boundaries to remove locations that did not occur on the water, whereas seagrass depth points used to estimate \ac{doc} extended beyond the segment  boundaries.  Initial spacing between sample points was chosen arbitrarily as 0.02 decimal degrees, which is approximately 2 km at 30 degrees N latitude.  Similarly, the sampling radii around each sampling location in the grid was chosen as 0.06 decimal degrees, or approximately 6 km.  % redo this analysis 
+Spatially-referenced estimates for seagrass \ac{doc} were obtained for each of the four segments described above.  Segment-wide estimates obtained using methods in \citetalias{HagyIR} were used as a basis of comparison such that departures from these values were evidence of spatial heterogeneity in seagrass growth patterns within each segment.  A sampling grid of locations for estimating each of the three depth values in \cref{fig:est_ex} was created for each segment.  The grid is masked by the segment boundaries to remove locations that did not occur on the water, whereas seagrass depth points used to estimate \ac{doc} extended beyond the segment  boundaries.  Initial spacing between sample points was chosen arbitrarily as 0.02 decimal degrees, which is approximately 2 km at 30 degrees N latitude.  The sampling radius around each sampling location in the grid was also chosen as 0.02 decimal degrees to allow for complete coverage of seagrass within the segment while also minimizing redundancy of information described by each location.  In other words, radii were set such that the seagrass depth points sampled by each grid location were only partially overlapped by those sampled by neighboring points.
 
- The ability to characterize heterogeneity in seagrass growth patterns using the grid-based approach can be informed by evaluating the level of confidence associated with \ac{doc} estimates.  Confidence intervals for non-linear regression can be estimated using a Monte Carlo simulation approach that considers the variance and covariance between the model parameters and the input variables \citep{Hilborn97}.  For simplicity, we assume that the observation uncertainty associated with the depth measurements is zero such that the variability associated with parameter estimates is considered the primary source of uncertainty.  A 95\% confidence interval for a vector of depth values was constructed by repeated sampling of a multivariate normal distribution followed by prediction of the proportion of points occupied by seagrass as in \cref{eqn:prop}.  The sampling distribution assumes:
+The ability to characterize heterogeneity in seagrass growth patterns using the grid-based approach can be informed by evaluating the level of confidence associated with \ac{doc} estimates.  Confidence intervals for non-linear regression can be estimated using a Monte Carlo simulation approach that considers the variance and covariance between the model parameters and the depth measurements \citep{Hilborn97}.  For simplicity, we assume that the observation uncertainty associated with the depth measurements is zero such that the variability associated with parameter estimates is considered the primary source of uncertainty.  A 95\% confidence interval for each \ac{doc} estimates was constructed by repeated sampling of a multivariate normal distribution followed by prediction of the proportion of points occupied by seagrass as in \cref{eqn:prop}.  The sampling distribution assumes:
 \begin{equation}
 x \sim N(\mu, \Sigma)
 \end{equation}
-\noindent where $x$ is a predictor variable used in \cref{eqn:prop} that follows a multivariate normal distribution with mean $\mu$, and variance-covariance matrix $\Sigma$.  The mean values are set at the depth value for a given observation and the predicted model parameters (i.e., $\alpha$, $\beta$, and $\gamma$) for the logistic curve, and $\Sigma$ is the variance-covariance matrix of the model parameters and depth, with the latter being zero.  A large number of samples ($n = 10000$) were drawn from the distrubution for each $x$ value to characterize the uncertainty.  The 2.5\textsuperscript{th} and 97.5\textsuperscript{th} quantile values of the sample were considered bounds on the 95\% confidence interval for each fitted value.  The sampling is repeated across the range of the predictor variable to create a continuous estimate of the lower and upper bounds of the fitted logistic curve.
+\noindent where $x$ is a predictor variable used in \cref{eqn:prop} that follows a multivariate normal distribution with mean $\mu$, and variance-covariance matrix $\Sigma$.  The mean values are set at the depth value corresponding to the inflection point on the logistic curve and the predicted model parameters (i.e., $\alpha$, $\beta$, and $\gamma$), whereas $\Sigma$ is the variance-covariance matrix of the model parameters and depth, with the latter being zero.  A large number of samples ($n = 10000$) were drawn from the distrubution to characterize the uncertainty.  The 2.5\textsuperscript{th} and 97.5\textsuperscript{th} quantile values of the sample were considered bounds on the 95\% confidence interval.
 
-The uncertainty associated with the \ac{doc} estimates were based on the upper and lower limits of the fitted logistic curve.  Specifically, a linear curve was fit through the upper and lower logistic curves to identify upper and lower limits for the estimates of $SG_{max}$, $DOC_{med}$, and $DOC_{maxd}$.  These values were compared with the initial estimates from the linear curve that was fit through the predicted logistic curve (i.e., \cref{fig:est_ex3}).  This approach provided an indication of uncertainty for individual estimates for a set radius.  The analysis can be repeated  for different radii to estimate how uncertainty varies with sampling area around a location.    
-
-
+The uncertainty associated with the \ac{doc} estimates were based on the upper and lower limits of the estimated inflection point on the logistic growth curve.  This approach was used because uncertainty in the inflection point is directly related to uncertainty in each of the \ac{doc} estimates that are based on the linear curve fit through the inflection point.   Specifically, a linear curve was fit through the upper and lower estimates of the infletion point to identify upper and lower limits for the estimates of $SG_{max}$, $DOC_{med}$, and $DOC_{maxd}$.  These values were compared with the initial estimates from the linear curve that was fit through the predicted logistic curve (i.e., \cref{fig:est_ex3}).  This approach provided an indication of uncertainty for individual estimates for a set radius.  Uncertainty estimates were obtained for each \ac{doc} estimate for the grids in each segment.  Uncertainty was also evaluated as a function of sampling radius for selected locations in each segment.
 
 \subsection{Developing a spatially coherent relationship of water clarity with depth of colonization}
 
@@ -157,11 +155,15 @@ The uncertainty associated with the \ac{doc} estimates were based on the upper a
 
 Describe spatial heterogeneity within segments reasons why
 
+Describe why estimates were unavailable in particular areas of each segment
+
 Acknowledge that comparisons with segment wide estimate are specific to grid spacing and radii tha twere used, thus the comparison is only useful for illustrating the presence of heterogeneity within segments, as well as variation between segments.  Absolute values will vary with different spacing and radii. 
 
 \cref{fig:all_ests}
 
 \cref{tab:est_summ}
+
+\cref{fig:all_sens}
 
 \section{Discussion}
 
@@ -445,16 +447,11 @@ sgpoly <- maptools::readShapeSpatial('data/bbend_sg_diss.shp')
 sgrass <- maptools::readShapeSpatial('data/sgpts_820_2006_buff.shp')
 sgrass <- sgrass[sample(1:length(sgrass), 1000), ]
 
-set.seed(1234)
+set.seed(123)
 est_pts <- grid_est(seg, spacing = 0.02)
-test_pt <- est_pts[26, ]
+test_pt <- est_pts[49, ]
 
-buff_pts <- buff_ext(sgrass, test_pt, buff = 0.05)
-
-doc_in <- data.frame(buff_pts)
-doc_in$GRID_CODE <- -1 * doc_in$GRID_CODE
-doc <- doc_est(doc_in, 'GRID_CODE', 'SEAGRASS')
-ests <- doc$doc_max
+buff_pts <- buff_ext(sgrass, test_pt, buff = 0.02)
 
 # format buff_pts and sgrass for plotting
 buff_pts <- data.frame(buff_pts)
@@ -499,7 +496,7 @@ p2 <- ggplot(seg, aes(long, lat)) +
   ) +  
   geom_point(
     data = data.frame(est_pts), 
-    aes(Var1, Var2), size = 50, pch = 1, colour = 'grey',
+    aes(Var1, Var2), size = 17, pch = 1, colour = 'grey',
   )  +
   scale_x_continuous(limits = c(-83.65, -83.35)) +
   scale_y_continuous(limits = c(29.4, 29.8)) + 
@@ -606,73 +603,30 @@ sgpoly <- maptools::readShapeSpatial('data/bbend_sg_diss.shp')
 sgrass <- maptools::readShapeSpatial('data/sgpts_820_2006_buff.shp')
 # sgrass <- sgrass[sample(1:nrow(sgrass), 2000, replace = F),]
 
-set.seed(1234)
+set.seed(123)
 est_pts <- grid_est(seg, spacing = 0.02)
-test_pt <- est_pts[26, ]
+test_pt <- est_pts[49, ]
 
-buff_pts <- buff_ext(sgrass, test_pt, buff = 0.05)
+buff_pts <- buff_ext(sgrass, test_pt, buff = 0.02)
 
 doc_in <- data.frame(buff_pts)
 doc_in$GRID_CODE <- -1 * doc_in$GRID_CODE
-doc <- doc_est(doc_in, 'GRID_CODE', 'SEAGRASS')
+dat <- doc_est(doc_in, 'GRID_CODE', 'SEAGRASS')
 
 ##
-# data for plots
-dat <- doc
-to_plo <- dat$data
-to_plo2 <- dat$preds
-to_plo3 <- dat$est_fun
-to_plo4 <- data.frame(
-  Depth = with(dat, c(sg_max, doc_med, doc_max)), 
-  yvals = rep(0, 3)
-)
+# plots 
 
-# some formatting crap
-x_lims <- max(1.1 * max(na.omit(to_plo)$Depth), 1.1 * dat$doc)
-pt_cols <- brewer.pal(nrow(to_plo4), 'Blues')
-leg_lab <- paste0(
-  c('SG max (', 'DOC med (', 'DOC max ('),
-  round(to_plo4$Depth, 2), 
-  rep(')', 3)
-)
 
 # base plot if no estimate is available
-pa <- ggplot(to_plo, aes(x = Depth, y = sg_prp)) +
-  geom_point(pch = 1, size = 3) +
-  theme_bw() +
-  ylab('Proportion of points with seagrass') +
-  xlab('Depth (m)') +
-  scale_y_continuous(limits = c(0, 1.1 * max(to_plo2$sg_prp))) + 
-  scale_x_continuous(limits = c(0, 1.1 * x_lims))
+pa <- plot(dat, baseonly = T)
 
-# get y value from est_fun for sg_max and doc_med
-yends <- with(dat, est_fun(c(sg_max, doc_med)))
+# base plot with logistic curve
+pb <- plot(dat, logisonly = T)
+  
+# complete plot
+pc <- plot(dat)
 
-# the plot
-pb <- pa +
-  geom_line(data = to_plo2, 
-    aes(x = Depth, y = sg_prp)
-    )
-pc <- pb +
-  stat_function(fun = to_plo3, colour = 'lightgreen', size = 1.1, 
-    alpha = 0.6) +
-  geom_segment(x = dat$sg_max, y = 0, xend = dat$sg_max, 
-    yend = yends[1], linetype = 'dashed', colour = 'lightgreen',
-    size = 1.1, alpha = 0.6) +
-  geom_segment(x = dat$doc_med, y = 0, xend = dat$doc_med, 
-    yend = yends[2], linetype = 'dashed', colour = 'lightgreen',
-    size = 1.1, alpha = 0.6) +
-  geom_point(data = to_plo4, 
-    aes(x = Depth, y = yvals, fill = factor(Depth)), 
-    size = 4, pch = 21) +
-  scale_fill_brewer('Depth estimate (m)', 
-    labels = leg_lab,
-    palette = 'Blues'
-    ) +
-  theme(legend.position = c(1, 1),
-    legend.justification = c(1, 1)) 
-
-pdf('figs/est_ex.pdf', height = 3, width = 5, family = 'serif')
+pdf('figs/est_ex.pdf', height = 4, width = 8, family = 'serif')
 
 print(pa)
 print(pb)
@@ -722,8 +676,8 @@ load('data/shps.RData')
 #   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
 #   
 #   grid_spc <- 0.02
-#   rad <- 0.06
-#   grid_seed <- 1234
+#   rad <- 0.02
+#   grid_seed <- 123
 #   set.seed(grid_seed)
 #   pts <- grid_est(seg_shp, spacing = grid_spc) 
 #   ests <- doc_est_grd(pts, sgpts_shp, radius = rad)
@@ -858,6 +812,162 @@ dev.off()
 \includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
 \caption{Spatially-referenced estimates of seagrass depth limits (m) for four coastal segments of Florida.  Estimates include depth of maximum seagrass growth ($SG_{max}$), median depth of colonization ($DOC_{med}$), and maximum depth of colonization ($DOC_{max}$).  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees.}
 \label{fig:all_ests}
+\end{figure}
+
+% grid examples for each segment
+<<all_sens, echo = F, results = 'hide', eval = F>>=
+
+##
+# doc sensitivity estimates
+
+load('data/shps.RData')
+
+# segs <- c('303', '820', '902', '1502')
+# 
+# sens_out <- vector('list', length = length(segs))
+# names(sens_out) <- segs
+# 
+# for(seg in segs){
+#     
+#   seg_shp <- shps[[paste0('seg_', gsub('^.*_', '', seg), '.shp')]]
+#   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
+#   
+#   grid_spc <- 0.02
+#   rad <- 0.02
+#   grid_seed <- 123
+#   set.seed(grid_seed)
+#   pts <- grid_est(seg_shp, spacing = grid_spc) 
+#   ests <- doc_est_grd(pts, sgpts_shp, radius = rad, out_sens = T)
+# 
+#   sens_out[[seg]] <- data.frame(ests, seg = seg)
+#   
+# }
+# 
+# sens_out <- do.call('rbind', sens_out)
+# names(sens_out)[names(sens_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
+# 
+# # get ci range, these are all the same
+# sens_out$sg_max <- with(sens_out, h_sg_max - l_sg_max)
+# sens_out$doc_med <- with(sens_out, h_doc_med - l_doc_med)
+# sens_out$doc_max <- with(sens_out, h_doc_max - l_doc_max)
+# sens_out <- sens_out[, !grepl('^h_|^l_', names(sens_out))]
+# 
+# save(sens_out, file = 'data/sens_out.RData')
+
+load(file = 'data/sens_out.RData')
+
+##
+# make plots
+
+# color function
+col_fun <- function(x, cols = c('tomato1', 'blue', 'lightblue')){
+  vals_in <- scales::rescale(x, c(0, 1))
+  dim_vals <- dim(vals_in)
+  nms <- names(vals_in)
+  ramp <- colorRamp(cols)
+  cols <- ramp(unlist(c(vals_in)))
+  col <- rgb(cols, max = 255)
+  out <- matrix(col, ncol = dim_vals[2], nrow = dim_vals[1], byrow = F)
+  out <- data.frame(out, stringsAsFactors = F)
+  names(out) <- nms
+  return(out)
+}
+
+# segments for plotting
+all_segs <- shps[['all_segs.shp']]
+all_segs <- fortify(all_segs)
+all_segs$group <- factor(all_segs$group, levels = c('0.1', '1.1', '2.1', '3.1'), 
+  labels = c('1502', '0820', '0902', '0303'))
+levs <- sort(levels(all_segs$group))
+
+# assign plots by segment and doc est
+for(i in 1:length(levs)){
+  
+  # subset segment shapefiles and ests by segment
+  seg_sub <- all_segs[all_segs$group %in% levs[i], ]
+  est_sub <- sens_out[sens_out$seg %in% as.numeric(levs[i]), ]
+  
+  # remove outliers based on 99%
+  ests <- est_sub[, c('sg_max'), drop = F]
+  filt_val <- quantile(unlist(c(ests)), 0.99)
+  ests[ests > filt_val] <- NA
+  est_sub[, c('sg_max')] <- ests
+  est_sub <- na.omit(est_sub)
+  
+  # scale for sizing
+  scls <- c(1, 6)
+  scl_vals <- scales::rescale(est_sub[, c('sg_max'), drop = F], to = scls)
+
+  # scale for colour
+  col_vals <- col_fun(scl_vals)
+  pt_plo <- data.frame(est_sub[, c('seg', 'long', 'lat')], scl_vals, col_vals)
+  
+  # segment base plot
+  p_seg <- ggplot(seg_sub, aes(x = long, y = lat)) +
+    geom_polygon(fill = NA, colour = 'black') + 
+    coord_fixed() +
+    theme_classic() +
+    theme(axis.title = element_blank(), axis.text = element_text(size = 6), 
+      axis.text.x = element_text(angle = 90, vjust = 0.5),
+      plot.margin=unit(c(0, 0, 0, 0), "cm"))
+  
+  # sg_max
+  pa <- p_seg +
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$sg_max.1, 
+      size = pt_plo$sg_max)
+
+  # doc_med
+  pb <- p_seg +
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$doc_med.1, 
+      size = pt_plo$doc_med)
+
+  # sg_max
+  pc <- p_seg +
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$sg_max.1, 
+      size = pt_plo$sg_max) 
+  
+  # legend for all three
+  leg_plo <- est_sub[, !names(est_sub) %in% 'seg']
+  leg_plo <- melt(leg_plo, id.var = c('long', 'lat'))
+  
+  leg_brks <- quantile(leg_plo$value, c(0, 0.33, 0.66, 1))
+  leg_labs <- form_fun(leg_brks, 2, 2, 2)
+  
+  pleg <- p_seg +
+    geom_point(data = leg_plo, aes(x = jitter(long), y = jitter(lat), colour = value, 
+      size = value)) +
+    scale_size_continuous(name = levs[i], range = scls, breaks = leg_brks, labels = leg_labs) +
+    scale_colour_gradientn(name = levs[i], colours = eval(formals(col_fun)$cols),
+      breaks = leg_brks, labels = leg_labs) +
+    guides(colour = guide_legend(), size = guide_legend())
+  pleg <- g_legend(pleg)
+   
+  # assign to global
+  assign(paste0('pc', i), pc)
+  assign(paste0('pleg', i), pleg)
+}
+
+# labels
+# arrange all as grob
+grobwidths <- c(1, 0.3)
+
+pdf('figs/all_sens.pdf', height = 7, width = 7, family = 'serif')
+grid.arrange(
+  arrangeGrob(pc1, pleg1, ncol = 2, widths = grobwidths),
+  arrangeGrob(pc2, pleg2, ncol = 2, widths = grobwidths),
+  arrangeGrob(pc3, pleg3, ncol = 2, widths = grobwidths),
+  arrangeGrob(pc4, pleg4, ncol = 2, widths = grobwidths),
+  ncol = 2, heights = c(1.25, 1)
+)
+dev.off()
+
+@
+% range of confidence intervals for estimates
+\begin{figure}
+\centering
+\includegraphics[width = 0.95\textwidth]{figs/all_sens.pdf}
+\caption{Size of confidence intervals (m) for \acl{doc} estimates in \cref{fig:all_ests}.  Points are colored and sized based on the difference between the upper and lower bounds of a 95\% confidence interval for all three \ac{doc} estimates ($SG_{max}$, $DOC_{med}$, $DOC_{max}$). Bounds were obtained using Monte Carlo simulations to estimate uncertainty associated with the inflection point of the estimated logistic curve (\cref{fig:est_ex}) for each sample.}
+\label{fig:all_sens}
 \end{figure}
 
 \end{document}
