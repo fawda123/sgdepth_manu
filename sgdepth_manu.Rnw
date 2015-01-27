@@ -71,7 +71,7 @@ options(replace.assign=TRUE,width=90,digits=1)
 \renewcommand\refname{References \vspace{12pt}}
 
 \begin{singlespace}
-\title{{\bf {\Large Spatially-referenced estimates of seagrass depth of colonization}}}
+\title{{\bf {\Large A reproducible and empirical approach for spatially-referenced estimates of seagrass depth of colonization}}}
 \author{
   {\bf {\normalsize Marcus W. Beck$^1$, James D. Hagy III$^2$}}
   \\\\{\textit {\normalsize $^1$ORISE Research Participation Program}}
@@ -152,9 +152,9 @@ The uncertainty associated with the \ac{doc} estimates were based on the upper a
 
 \subsection{Developing a spatially coherent relationship of water clarity with depth of colonization}
 
-Potentially useful information can be obtained from the seagrass depth estimates for each segment by evaluating the relationship with water clarity through space and time.  In particular, increased resolution of seagrass depth estimates compared with multiple measures of water clarity can potentially improve the ability to empirically describe light requirements leading to the development of numeric criteria. Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations described in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. All available secchi data for each of the four segments were obtained from the \ac{IWR} database, update number 40.  Prior to analyses, all secchi data were screened to exclude observations that were coded with any flags indicating that the value was lower  than the maximum depth of the observation point.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.
+Potentially useful information can be obtained from the seagrass depth estimates for each segment by evaluating the relationship with water clarity through space and time.  In particular, increased resolution of seagrass depth estimates compared with multiple measures of water clarity can potentially improve the ability to empirically describe light requirements leading to the development of numeric criteria. Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations documented in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. All available secchi data for each of the four segments were obtained from the \ac{IWR} database, update number 40.  Prior to analysis, all secchi data were screened to exclude observations that were flagged indicating that the value was lower than the maximum depth of the observation point.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.
 
-The relationship between seagrass depth limits and secchi measurements were explored using empirically estimated light requirements and attenuation equations.  The traditional Lambert-Beer equation describes the exponential decrease of light availability with depth:
+The relationship between seagrass depth limits and secchi measurements were explored using previously established light requirements and attenuation equations.  The traditional Lambert-Beer equation describes the exponential decrease of light availability with depth:
 \begin{equation} \label{eqn:lambeer}
 I_{z} = I_{O} \cdot \exp\left(-K_{d} \cdot Z\right)
 \end{equation}
@@ -162,11 +162,11 @@ I_{z} = I_{O} \cdot \exp\left(-K_{d} \cdot Z\right)
 \begin{equation}
 0.11 = \exp\left(-K_{d} \cdot DOC_{max}\right)
 \end{equation}
-A conversion factor is commonly used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $1.44 = K_{d} \cdot Z_{d}$ \citep{Holmes70}.  Thus, $K_{d}$ is replaced with the the conversion factor and the equation is rearranged to describe $DOC_{max}$ as a function of secchi depth $Z_{d}$:
+A conversion factor is commonly used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $1.44 = K_{d} \cdot Z_{d}$ \citep{Holmes70}.  Thus, $K_{d}$ is replaced with the conversion factor and the equation is rearranged to describe $DOC_{max}$ as a function of secchi depth $Z_{d}$:
 \begin{equation} \label{eqn:sgreg}
 DOC_{max} = \frac{-\log\left(0.11\right)}{1.44} \cdot Z_{d}
 \end{equation}
-\noindent A regression of seagrass depth estimates against secchi measurement is expected to have a slope corresponding to \cref{eqn:sgreg}, provided that the current approach for estimating maximum \ac{doc} is consistent with previous analyses that have empirically related seagrass depth limits with light requirements.  The geographic coordinates for each secchi measurement were used as locations for estimating $DOC_{max}$ in each segment.  These estimates were compared with the secchi estimates using linear regression forced through the origin.  The slope of the corresonding regression was compared with that in \cref{eqn:sgreg} with the assumption that the two would not differ significantly.  However, the relationship between the depth estimates and secchi measurements may vary depending on the specific radius around each sample point for estimating $DOC_{max}$.  The effect of radius size on the relationship was also explored.         
+\noindent A regression of seagrass depth estimates against secchi measurements is expected to have a slope corresponding to the constant in \cref{eqn:sgreg}, provided that the current approach for estimating maximum \ac{doc} is consistent with previous analyses that have empirically related seagrass depth limits with light requirements.  The geographic coordinates for each secchi measurement were used as locations for estimating $DOC_{max}$ in each segment.  These estimates were compared with the secchi estimates using linear regression forced through the origin.  The slopes of the corresonding regressions were compared with that in \cref{eqn:sgreg} with the assumption that the two would not differ significantly if the method for estimating seagrass \ac{DOC} is robust.  However, the relationship between the depth estimates and secchi measurements may vary depending on the specific radius around each sample point for estimating $DOC_{max}$.  The effect of radius size on the relationship was also explored.         
 
 \section{Results}
 
@@ -458,10 +458,14 @@ latex(
 % example of buffer points for depth of col
 <<buff_ex, cache = T, echo = F, eval = F, message = F, results = 'hide'>>=
 
-seg <- maptools::readShapeSpatial('data/seg_820.shp')
-state <- maptools::readShapeSpatial('data/FL_state.shp')
-sgpoly <- maptools::readShapeSpatial('data/bbend_sg_diss.shp')
-sgrass <- maptools::readShapeSpatial('data/sgpts_820_2006_buff.shp')
+# load data, buff_ex_dat was created from various shapefiles
+buff_ex_dat <- readRDS('data/buff_ex_dat.rds')
+seg <- buff_ex_dat[['seg']] # 820 segment polygon
+state <- buff_ex_dat[['state']] # florida state polygon
+sgpoly <- buff_ex_dat[['sgpoly']] # 820 segment seagrass polygon
+sgrass <- buff_ex_dat[['sgrass']] # 820 segment seagrass depth point
+rm('buff_ex_dat')
+
 sgrass <- sgrass[sample(1:length(sgrass), 1000), ]
 
 set.seed(123)

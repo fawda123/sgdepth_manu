@@ -677,3 +677,72 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, allsens = F, trace = T,
   return(doc_in)
   
 }
+
+######
+#' Get seagrass depth of colonization estimates at secchi locations
+#' 
+#' Get seagrass depth of colonization estimates at secchi locations using IWR database records, seagrass depth points, and segment polygon data
+#'
+#' @param secc_seg SpatialPointsDataFrame of secchi data for segments from IWR database 
+#' @param sgpts_shp SpatialPointsDataFrame of seagrass depth points to sample
+#' @param seg_shp SpatialPlygonsDataFrame of segment polygon data
+#' @param radius sampling radius for estimating seagrass depth of colonization in decimal degress
+#' @param trace logical indicating if progress is returned to console
+secc_doc <- function(secc_dat, sgpts_shp, seg_shp, radius = 0.2, trace = F){
+    
+  # clip secchi by seg
+  # clip secchi data by segments
+  sel <- !is.na(secc_seg %over% seg_shp)[, 1]
+  secc <- secc_seg[sel, ]
+  
+  # get unique locations of secchi data
+  uni_secc <- data.frame(secc)[, c('Station_ID', 'Longitude', 'Latitude')]
+  uni_secc <- unique(uni_secc)
+  uni_secc <- SpatialPointsDataFrame(
+    coords = uni_secc[, c('Longitude', 'Latitude')], 
+    data = uni_secc[, 'Station_ID', drop = F]
+    )
+  
+  # get sg doc estimates for each location with secchi data
+  maxd <- list()
+  for(i in 1:length(uni_secc)){
+    
+    if(trace) cat(length(uni_secc) - i, '\t')
+    
+    eval_pt <- uni_secc[i, ]
+    ests <- try({
+      buff_pts <- buff_ext(sgpts_shp, eval_pt, buff = radius)
+      est_pts <- data.frame(buff_pts)
+      doc_single <- doc_est(est_pts)[['doc_max']]
+      doc_single
+    })
+  	if('try-error' %in% class(ests)) ests <- NA
+    maxd[[i]] <- ests
+    
+  }
+  maxd <- data.frame(uni_secc, zmax_all = do.call('c', maxd))
+  
+  all_dat <- merge(data.frame(secc), 
+    maxd[, !names(maxd) %in% c('Longitude', 'Latitude')],
+    by = 'Station_ID')
+  
+  # get average secchi by date
+  ave_secc <- ddply(
+    data.frame(secc),
+    .variable = 'Station_ID',
+    .fun = function(x) mean(as.numeric(x$SD), na.rm = T)
+    )
+  names(ave_secc)[names(ave_secc) %in% 'V1'] <- 'SD'
+    
+  # merge averaged secchi with zmax
+  ave_dat <- merge(data.frame(ave_secc), maxd, by = c('Station_ID'))
+  
+  # output, all data and averaged secchi data
+  out <- list(
+    seg_shp = seg_shp,
+    all_dat = all_dat, 
+    ave_dat = ave_dat
+  )
+  return(out)
+
+}
