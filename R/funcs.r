@@ -687,9 +687,15 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, allsens = F, trace = T,
 #' @param sgpts_shp SpatialPointsDataFrame of seagrass depth points to sample
 #' @param seg_shp SpatialPlygonsDataFrame of segment polygon data
 #' @param radius sampling radius for estimating seagrass depth of colonization in decimal degress
+#' @param seg_pts_yr numeric indicating year of seagrass coverage data
 #' @param trace logical indicating if progress is returned to console
-secc_doc <- function(secc_dat, sgpts_shp, seg_shp, radius = 0.2, trace = F){
+#' 
+#' @return A four-element list where the first is a SpatialPolygonsDataFrame of the segment, the second is a data frame of all dates of all secchi data for the segment and the spatially-referenced depth of colonization estimate, the third is a summarized version of the second element for all unique locations with secchi data averaged across dates, and the third is depth of colonization data matched to the nearest date of the secchi data for the seagrass coverage. 
+secc_doc <- function(secc_dat, sgpts_shp, seg_shp, radius = 0.2, seg_pts_yr, trace = F){
     
+  if('character' %in% class(seg_pts_yr)) seg_pts_yr <- as.numeric(seg_pts_yr)
+  if('factor' %in% class(seg_pts_yr)) stop('seg_pts_yr cannot be a factor')
+  
   # clip secchi by seg
   # clip secchi data by segments
   sel <- !is.na(secc_seg %over% seg_shp)[, 1]
@@ -702,6 +708,8 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, radius = 0.2, trace = F){
     coords = uni_secc[, c('Longitude', 'Latitude')], 
     data = uni_secc[, 'Station_ID', drop = F]
     )
+
+  if(trace) cat('Estimating seagrass depth of colonization for radius', radius, 'at points...\n')
   
   # get sg doc estimates for each location with secchi data
   maxd <- list()
@@ -713,18 +721,36 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, radius = 0.2, trace = F){
     ests <- try({
       buff_pts <- buff_ext(sgpts_shp, eval_pt, buff = radius)
       est_pts <- data.frame(buff_pts)
-      doc_single <- doc_est(est_pts)[['doc_max']]
-      doc_single
+      doc_single <- doc_est(est_pts)
+      attr(doc_single, 'doc_max')
     })
   	if('try-error' %in% class(ests)) ests <- NA
     maxd[[i]] <- ests
     
   }
+  
+  # dataframe of all maximum depth results
   maxd <- data.frame(uni_secc, zmax_all = do.call('c', maxd))
   
+  # all secchi data, all dates
   all_dat <- merge(data.frame(secc), 
     maxd[, !names(maxd) %in% c('Longitude', 'Latitude')],
     by = 'Station_ID')
+  
+  # matched seagrass year data with closest secchi date
+  near_dat <- split(all_dat, all_dat$Station_ID)
+  near_dat <- llply(
+    near_dat, 
+    .fun = function(x){
+    
+      x <- x[which.max(x$Date), ]
+      x$diff <- seg_pts_yr - as.numeric(strftime(x$Date, '%Y'))
+      x$SD <- as.numeric(as.character(x$SD))
+      x
+    
+  })
+  near_dat <- do.call('rbind', near_dat)
+  row.names(near_dat) <- 1:nrow(near_dat)
   
   # get average secchi by date
   ave_secc <- ddply(
@@ -733,16 +759,18 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, radius = 0.2, trace = F){
     .fun = function(x) mean(as.numeric(x$SD), na.rm = T)
     )
   names(ave_secc)[names(ave_secc) %in% 'V1'] <- 'SD'
-    
-  # merge averaged secchi with zmax
   ave_dat <- merge(data.frame(ave_secc), maxd, by = c('Station_ID'))
-  
+
   # output, all data and averaged secchi data
   out <- list(
     seg_shp = seg_shp,
     all_dat = all_dat, 
-    ave_dat = ave_dat
+    ave_dat = ave_dat,
+    near_dat = near_dat
   )
+  
+  if(trace) cat('\n')
+  
   return(out)
 
 }

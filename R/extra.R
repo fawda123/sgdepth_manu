@@ -1,66 +1,86 @@
 ######
 # eval of seagrass doc with secchi depth
 
-# data 
+######
+# for individual wbids
+
+# lots of shapefile data
 data(shps)
-seg_shp <- shps[['seg_902']]
-data(sgpts_2010_902)
+
+# change these here for new data
+seg_num <- '902'
+seg_yr <- '2010'
+
+# segment shapefile
+seg_shp <- shps[[paste0('seg_', seg_num, '.shp')]]
+
+# segment seagrass depth points
+seg_pts <- shps[[paste0('sgpts_', seg_yr, '_', seg_num, '.shp')]]
+
+# SpatialPointsDataFrame of secchi data
 data(secc_seg)
 
-rad <- 0.07
-tmp <- secc_doc(seg_shp, sgpts_shp, radius = rad, trace = T)
-
-
-##@#@#$234234234
-
-
-# plot(tmp$seg_shp)
-# with(tmp$ave_dat, points(Longitude, Latitude)) 
-# 
-# plot(zmax_all ~ SD, data = tmp$ave_dat)
-# 
-# plot(table(strftime(tmp$all_dat$Date, '%Y')))
-
-near_date <- tmp$all_dat
-near_date <- split(near_date, near_date$Station_ID)
-near_date <- llply(
-  near_date, 
-  .fun = function(x){
-    
-    x <- x[which.max(x$Date), ]
-    x$diff <- 2010 - as.numeric(strftime(x$Date, '%Y'))
-    x
-    
-  })
-near_date <- do.call('rbind', near_date)
-near_date$wts <- scales::rescale(near_date$diff, to = c(0.5, 7))
-near_date$diff <- scales::rescale(near_date$diff, to = c(1, 3))
-
-par(mfrow = c(1, 2))
-
-plot(zmax_all ~ SD, near_date, cex = near_date$diff, pch = 16, main = 'Nearest', ylim = c(0, 2))
-mod <- lm(zmax_all ~ as.numeric(SD), near_date)
-wt_mod <- lm(zmax_all ~ as.numeric(SD), near_date, weights = near_date$wts)
-abline(reg = mod, lty =  2)
-abline(reg = wt_mod)
-
-plot(zmax_all ~ SD, tmp$ave_dat, pch = 16, main = 'Averaged', ylim = c(0,2))
-mod <- lm(zmax_all ~ as.numeric(SD), tmp$ave_dat)
-abline(reg = mod)
-
-#####
-# all data for TB
-
-load('seagrass_gis/shps.RData')
-seg_shp <- shps[[grep('seg_902', names(shps))]]
-sgpts <- shps[grep('^sgpts.*902\\.shp$', names(shps))]
-
-rad <- 0.07
-
-out_ls <- vector('list', length(sgpts))
-names(out_ls) <- names(sgpts)
-for(sgpt in names(sgpts)){
-  cat(sgpt, '\n')
-  tmp <- secc_doc(seg_shp, sgpts[[sgpt]], radius = rad, trace = T)
-  out_ls[[sgpt]] <- tmp[[2]]
+##
+# run secchi_doc function with data
+rads <- seq(0.005, 0.2, length = 50)
+out_rads <- vector('list', length(rads))
+for(rad in seq_along(rads)){
+  
+  # process, remove segment shapefile, add to output
+  tmp <- secc_doc(secc_seg, seg_pts, seg_shp, radius = rads[rad], seg_yr, trace = T)
+  tmp$seg_shp <- NULL
+  out_rads[[rad]] <- tmp
+  
 }
+
+##
+# create plots
+
+mod_txt <- function(mod_in, round_val = 3){
+ 
+  slo <- round(coef(mod_in)['SD'], round_val)
+  dif <- round((-log(0.2)/1.7) - slo, round_val)
+  fit <- round(summary(mod_in)$r.squared, round_val)
+  out <- paste0('Slope ', slo, '\nDifference ', dif, '\nFit ', fit)
+  return(out)
+  
+}
+
+x_lab <- 'Secchi depth (m)'
+y_lab <- 'Seagrass depth of colonization (m)'
+x_lim <- c(0, 3)
+y_lim <- x_lim
+
+pdf('C:/Users/mbeck/Desktop/res.pdf', family = 'serif', width = 9, height = 5)
+  
+for(i in seq_along(rads)){
+  
+  tmp_dat <- out_rads[[i]]
+
+  ave_plo <- tmp_dat$ave_dat
+  # ave_plo <- dplyr::filter(ave_plo, SD > 0.5)
+  ave_mod <- lm(zmax_all ~  SD, data = ave_plo)
+  near_plo <- tmp_dat$near_dat
+  # near_plo <- dplyr::filter(near_plo, SD > 0.5)
+  near_mod <- lm(zmax_all ~  SD, data = near_plo)
+
+  par(mfrow = c(1, 2))
+  plot(zmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
+    main = paste0('Averaged secchi, radius ', round(rads[i], 3)), 
+    xlim = x_lim, ylim = y_lim)
+  abline(ave_mod)
+  legend('bottomright', mod_txt(ave_mod), bty = 'n', adj = c(0, 0))
+  plot(zmax_all ~ SD, near_plo, xlab = x_lab, ylab = y_lab, 
+    main = c('Nearest secchi', round(rads[i], 3)),
+    xlim = x_lim, ylim = y_lim)
+  abline(near_mod)
+  legend('bottomright', mod_txt(near_mod), bty = 'n', adj = c(0, 0))
+  
+}
+
+dev.off()
+  
+######
+# for all of Tampa Bay
+
+
