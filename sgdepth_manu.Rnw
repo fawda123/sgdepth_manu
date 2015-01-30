@@ -152,21 +152,21 @@ The uncertainty associated with the \ac{doc} estimates were based on the upper a
 
 \subsection{Developing a spatially coherent relationship of water clarity with depth of colonization}
 
-Potentially useful information can be obtained from the seagrass depth estimates for each segment by evaluating the relationship with water clarity through space and time.  In particular, increased resolution of seagrass depth estimates compared with multiple measures of water clarity can potentially improve the ability to empirically describe light requirements leading to the development of numeric criteria. Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations documented in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. All available secchi data for each of the four segments were obtained from the \ac{IWR} database, update number 40.  Prior to analysis, all secchi data were screened to exclude observations that were flagged indicating that the value was lower than the maximum depth of the observation point.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.
+Potentially useful information describing seagrass light requirements can be obtained from the maximum depth estimates by evaluating the relationship with water clarity through space and time.  In particular, increased resolution of seagrass depth estimates compared with multiple measures of water clarity can potentially improve the ability to empirically describe light requirements leading to the development of numeric criteria. Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations documented in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. All available secchi data for each of the four segments were obtained from the \ac{IWR} database, update number 40.  Prior to analysis, all secchi data were screened to exclude observations that were flagged indicating that the value was lower than the maximum depth of the observation point.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.
 
 The relationship between seagrass depth limits and secchi measurements were explored using previously established light requirements and attenuation equations.  The traditional Lambert-Beer equation describes the exponential decrease of light availability with depth:
 \begin{equation} \label{eqn:lambeer}
 I_{z} = I_{O} \cdot \exp\left(-K_{d} \cdot Z\right)
 \end{equation}
-\noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{d}$). Minimum seagrass light requirements have also been estimated on average as approximately 11\% surface irradiance \citep{Duarte91}, such that \cref{eqn:lambeer} can be described by $DOC_{max}$:
+\noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{d}$). Minimum seagrass light requirements have also been estimated numerous times.  For example, \citet{Duarte91} indicate that minimum light requirements for seagrass are on average 11\% of surface irradiance. Others have shown that light requirements are species dependent and variable by latitude witgh estimates ranging from less than 5\% to greater than 30\% \citep{Dennison93}.  Estimated light requirements (e.g., 11\%) can be used with \cref{eqn:lambeer} to describe $DOC_{max}$:
 \begin{equation}
 0.11 = \exp\left(-K_{d} \cdot DOC_{max}\right)
 \end{equation}
-A conversion factor is commonly used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $1.44 = K_{d} \cdot Z_{d}$ \citep{Holmes70}.  Thus, $K_{d}$ is replaced with the conversion factor and the equation is rearranged to describe $DOC_{max}$ as a function of secchi depth $Z_{d}$:
+A conversion factor is commonly used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $c = K_{d} \cdot Z_{d}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{d}$ is replaced with the conversion factor and the equation is rearranged to describe $DOC_{max}$ as a function of secchi depth $Z_{d}$:
 \begin{equation} \label{eqn:sgreg}
-DOC_{max} = \frac{-\log\left(0.11\right)}{1.44} \cdot Z_{d}
+DOC_{max} = \frac{-\log\left(0.11\right)}{1.7} \cdot Z_{d}
 \end{equation}
-\noindent A regression of seagrass depth estimates against secchi measurements is expected to have a slope corresponding to the constant in \cref{eqn:sgreg}, provided that the current approach for estimating maximum \ac{doc} is consistent with previous analyses that have empirically related seagrass depth limits with light requirements.  The geographic coordinates for each secchi measurement were used as locations for estimating $DOC_{max}$ in each segment.  These estimates were compared with the secchi estimates using linear regression forced through the origin.  The slopes of the corresonding regressions were compared with that in \cref{eqn:sgreg} with the assumption that the two would not differ significantly if the method for estimating seagrass \ac{DOC} is robust.  However, the relationship between the depth estimates and secchi measurements may vary depending on the specific radius around each sample point for estimating $DOC_{max}$.  The effect of radius size on the relationship was also explored.         
+\noindent A regression of seagrass depth estimates against secchi measurements is expected to have a slope corresponding to the constant in \cref{eqn:sgreg}.  The geographic coordinates for each secchi measurement were used as locations for estimating $DOC_{max}$ in each segment.  These estimates were compared with the secchi estimates using linear regression forced through the origin.  However, the relationship is expected to vary depending on the specific radius around each sample point for estimating $DOC_{max}$.  An appropriate radius was chosen that minimized the difference between the empirically estimated slope and that in \cref{eqn:sgreg}.  Scatter in the regression through these points can be considered biologically meaningful, such that points below the curve are locations where seagrasses are observed at maximum depth with less irradiance than expected given \cref{eqn:sgreg}, whereas points above the curve are those where seagrasses are growing deeper than expected. An analogous interpretation is that points below the curve are those where seagrasses are light-limited, whereas the opposite is true above the curve.   
 
 \section{Results}
 
@@ -181,6 +181,8 @@ Acknowledge that comparisons with segment wide estimate are specific to grid spa
 \cref{tab:est_summ}
 
 \cref{fig:all_sens}
+
+\cref{fig:light_tb}
 
 \section{Discussion}
 
@@ -334,7 +336,7 @@ tab <- data.frame(rbind(tab[1, ], apply(tab[-1, ], 2, form_fun)), stringsAsFacto
 names(tab) <- nms
 rows <- c('Segment', 'Latitude', 'Longitude', 'Surface area', 'Seagrass area', 'Depth (mean)', 'Depth (max)', 'Secchi (mean)', 'Secchi (se)')
 
-cap.val <- "Characteristics of coastal segments used to evaluate seagrass \\acl{doc} estimates.  Segments are spatial units defined by US \\ac{EPA} for nutrient criteria development (see \\cref{fig:seg_all}).  Area and depth values are meters and square kilometers, respectively.  Secchi measurements (m) were obtained from the Florida Department of Environmental Protection's Impaired Waters Record, upadate number 40 (IWR40)."
+cap.val <- "Characteristics of coastal segments used to evaluate seagrass \\acl{doc} estimates.  Segments are spatial units defined by US \\ac{EPA} for nutrient criteria development (see \\cref{fig:seg_all}).  Area and depth values are meters and square kilometers, respectively.  Secchi measurements (m) were obtained from the Florida Department of Environmental Protection's \\acl{IWR}, update number 40."
 
 latex( 
   tab,
@@ -718,7 +720,7 @@ load(file = 'data/ests_out.RData')
 # make plots
 
 # color function
-col_fun <- function(x, cols = c('tomato1', 'blue', 'lightblue')){
+col_fun <- function(x, cols = c('purple', 'blue', 'lightblue')){
   vals_in <- scales::rescale(x, c(0, 1))
   dim_vals <- dim(vals_in)
   nms <- names(vals_in)
@@ -827,7 +829,6 @@ grid.arrange(
 dev.off()
 
 @
-% example of depth of col ests for wbid - big bend 820
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
@@ -835,7 +836,7 @@ dev.off()
 \label{fig:all_ests}
 \end{figure}
 
-% grid examples for each segment
+% range of confidence intervals for estimates
 <<all_sens, echo = F, results = 'hide', eval = F>>=
 
 ##
@@ -881,7 +882,7 @@ load(file = 'data/sens_out.RData')
 # make plots
 
 # color function
-col_fun <- function(x, cols = c('tomato1', 'blue', 'lightblue')){
+col_fun <- function(x, cols = c('purple', 'blue', 'lightblue')){
   vals_in <- scales::rescale(x, c(0, 1))
   dim_vals <- dim(vals_in)
   nms <- names(vals_in)
@@ -983,12 +984,98 @@ grid.arrange(
 dev.off()
 
 @
-% range of confidence intervals for estimates
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/all_sens.pdf}
 \caption{Size of confidence intervals (m) for \acl{doc} estimates in \cref{fig:all_ests}.  Points are colored and sized based on the difference between the upper and lower bounds of a 95\% confidence interval for all three \ac{doc} estimates ($SG_{max}$, $DOC_{med}$, $DOC_{max}$). Bounds were obtained using Monte Carlo simulations to estimate uncertainty associated with the inflection point of the estimated logistic curve (\cref{fig:est_ex}) for each sample.}
 \label{fig:all_sens}
+\end{figure}
+
+% estimated light reuqirements for Tampa Bay
+<<light_tb, echo = F, results = 'hide'>>=
+
+# source('R/funcs.r')
+# 
+# # tb polygon segment
+# tb_seg <- readRDS('data/tb_seg.rds')
+# 
+# # tb secchi data
+# data(secc_tb)
+# 
+# # tb seagrass points
+# sgpts_2010_tb <- readRDS('data/sgpts_2010_tb.rds')
+# 
+# # process, get ave secchi data results
+# proc <- secc_doc(secc_tb, sgpts_2010_tb, tb_seg, radius = 0.07, '2010', trace = T)
+# dat <- na.omit(proc$ave_dat)
+# dat <- dplyr::filter(dat, SD <3)
+# dat <- dplyr::mutate(dat, 
+#   light = exp(-zmax_all * 1.7/SD),
+#   seg = NA
+#   )
+# 
+# # convert to spatialpointsdataframe
+# coords <- dat[, c('Longitude', 'Latitude')]
+# dat <- dat[, !names(dat) %in% c('Longitude', 'Latitude')]
+# coordinates(dat) <- coords
+# 
+# # get segment for each point
+# tb_seg <- readRDS('M:/docs/manuscripts/sgdepth_manu/data/tb_seg.rds')
+# for(seg in as.character(tb_seg$seg)){
+#   
+#   to_sel <- tb_seg[tb_seg$seg %in% seg, ]
+#   sel <- !is.na(dat %over% to_sel)[, 1]
+#   dat[sel, 'seg'] <- as.character(seg)
+#   
+# }
+# 
+# tb_light <- dat
+# save(tb_light, file = 'data/tb_light.RData')
+# 
+
+data(tb_light)
+tb_seg <- readRDS('M:/docs/manuscripts/sgdepth_manu/data/tb_seg.rds')
+
+# centroids for labels
+labs <- data.frame(rgeos::gCentroid(tb_seg, byid = T))
+labs$seg <- c('HB', 'LTB', 'MTB', 'OTB')
+
+fill_col <- colors()[245]
+
+dat <- data.frame(tb_light)
+p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = light, size = light), fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  theme_classic() +
+  coord_equal() +
+  xlab('Longitude') +
+  ylab('Latitude') +
+  scale_size(name = 'Light requirements', range = c(2, 9)) + 
+  scale_colour_gradientn(name = 'Light requirements', 
+    colours = c('blue', 'lightblue', 'green')) + #rev(brewer.pal(9,  'BuGn'))) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  theme(
+    legend.position = c(1, 0),
+    legend.justification = c(1, 0))
+
+p2 <- ggplot(data.frame(dat), aes(x = seg, y = light, size = light)) + 
+  geom_boxplot(fill = fill_col) + 
+  ylab('Light requirements') +
+  theme_classic() +
+  theme(axis.title.y = element_blank()) + 
+  coord_flip()
+
+pdf('figs/light_tb.pdf', height = 6, width = 7, family = 'serif')
+grid.arrange(p1, p2, nrow = 1, widths = c(1, 0.5))
+dev.off()
+@
+\begin{figure}
+\centering
+\includegraphics[width = 0.95\textwidth]{figs/light_tb.pdf}
+\caption{Estimated light requirements of seagrass for multiple locations in Tampa Bay, Florida.  Map locations are georeferenced observations of water clarity from secchi measurements in the Florida \acl{IWR} database, update 40.  Data are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range.  Light requirements are based on daily average secchi values for each location using all observations for Tampa Bay, estimated maximum depth of colonization using a radius of 0.7 decimal degrees for each secchi location to sample seagrass depth points for 2010 coverage data, and empirical relationships described by \cref{eqn:lambeer}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\label{fig:light_tb}
 \end{figure}
 
 \end{document}

@@ -36,6 +36,12 @@ Cloern JE. 1996.
 \newblock Technical Report Contract 95W142, Coastal Planning and Engineering,
   Palatka, Florida.
 
+\bibitem[Dennison et~al., 1993]{Dennison93}
+Dennison WC, Orth RJ, Moore KA, Stevenson JC, Carter V, Kollar S, Bergstrom PW,
+  Batiuk RA. 1993.
+\newblock Assessing water quality with submersed aquatic vegetation.
+\newblock BioScience, 43(2):86--94.
+
 \bibitem[Diaz and Rosenberg, 2008]{Diaz08}
 Diaz RJ, Rosenberg R. 2008.
 \newblock Spreading dead zones and consequences for marine ecosystems.
@@ -85,16 +91,17 @@ Hilborn R, Mangel M. 1997.
 \newblock The Ecological Detective: Confronting Models with Data.
 \newblock Princeton University Press, Princeton, New Jersey.
 
-\bibitem[Holmes, 1970]{Holmes70}
-Holmes RW. 1970.
-\newblock The secchi disk in turbid coastal waters.
-\newblock Limnology and Oceanography, 15(5):688--694.
-
 \bibitem[Hughes et~al., 2009]{Hughes09}
 Hughes AR, Williams SL, Duarte CM, Heck KL, Waycott M. 2009.
 \newblock Associations of concern: declining seagrasses and threatened
   dependent species.
 \newblock Frontiers in Ecology and the Environment, 7(5):242--246.
+
+\bibitem[Idso and Gilbert, 1974]{Idso74}
+Idso SB, Gilbert RG. 1974.
+\newblock On the universality of the {P}oole and {A}tkins secchi disk-light
+  extinction equation.
+\newblock Journal of Applied Ecology, 11(1):399--401.
 
 \bibitem[Iverson and Bittaker, 1986]{Iverson86}
 Iverson RL, Bittaker HF. 1986.
@@ -138,6 +145,13 @@ Nixon SW. 1995.
 \newblock Coastal marine eutrophication: A definition, social causes, and
   future concerns.
 \newblock Ophelia, 41:199--219.
+
+\bibitem[Poole and Atkins, 1929]{Poole29}
+Poole HH, Atkins WRG. 1929.
+\newblock Photo-electric measurements of submarine illumination throughout the
+  year.
+\newblock Journal of the Marine Biological Association of the United Kingdom,
+  16:297--324.
 
 \bibitem[{R Development Core Team}, 2014]{RDCT14}
 {R Development Core Team}. 2014.
