@@ -132,9 +132,9 @@ A curve is fit to the sampled depth points using non-linear regression to charac
 \end{equation}
 where the proportion of points occupied by seagrass at each depth is defined by a logistic curve with an asymptote $\alpha$, a midpoint inflection $\beta$, and a scale parameter $\gamma$.  Starting values $\alpha$, $\beta$, and $\gamma$ were estimated empirically from the observed data.  
 
-Finally, a simple linear curve is fit through the inflection point ($\beta$) of the logistic curve to estimate depth of colonization (\cref{fig:est_ex3}).  The inflection point is the depth at which seagrass are decreasing at a maximum rate and is used as the slope of the linear curve.  Three measures describing seagrass growth characteristics are obtained. The maximum depth of seagrass colonization, $DOC_{max}$, is the x-axis intercept of the linear curve.  The depth of maximum seagrass occupancy, $SG_{max}$ is the location where the linear curve intercepts the asymptote of the logistic growth curve.  The median depth of seagrass colonization, $DOC_{med}$, is the depth halfway between $SG_{max}$ and $DOC_{max}$.  $DOC_{med}$ was typically but not always the inflection point of the logistic growth curve.  Functionally, each measure has specific ecological significance.  The median and maximum depth estimates describe the growth limitations of seagrasses as a function of water clarity, whereas the maximum occupancy depth is considered the depth were most seagrasses were encountered in the sample.  Median and maximum depth estimates differ in that the former describes the median depth of the deep water edge, whereas the latter describes a nominal characterization of maximum depth independent of outliers.
+Finally, a simple linear curve is fit through the inflection point ($\beta$) of the logistic curve to estimate depth of colonization (\cref{fig:est_ex3}).  The inflection point is the depth at which seagrass are decreasing at a maximum rate and is used as the slope of the linear curve.  Three measures describing seagrass growth characteristics are obtained. The maximum depth of seagrass colonization, $DOC_{max}$, is the x-axis intercept of the linear curve.  The minimum depth of seagrass growth, $DOC_{min}$ is the location where the linear curve intercepts the asymptote of the logistic growth curve.  This depth can be considered the start of the decline in seagrass coverage with increasing depth.  The median depth of seagrass colonization, $DOC_{med}$, is the depth halfway between $DOC_{min}$ and $DOC_{max}$.  $DOC_{med}$ was typically but not always the inflection point of the logistic growth curve.  Functionally, each measure has specific ecological significance.  The median and maximum depth estimates describe the growth limitations of seagrasses as a function of water clarity, whereas minimum depth of growth was often where the highest percentage of seagrass coverage was obesrved in the sample.  Median and maximum depth estimates differ in that the former describes the median depth of the deep water edge, whereas the latter describes a nominal characterization of maximum depth independent of outliers.
 
-Estimates for each of the three \ac{doc} measures are obtained only if specific criteria are met.  These criteria were implemented as a safety measure that ensures a sufficient amount and appropriate quality of data are used.  First, estimates are provided only if a sufficient number of seagrass depth points are present within the radius of the grid point to estimate a logistic growth curve.  This criteria applies to the sample size as well as the number of points with seagrass in the sample.  That is, the curve cannot be estimated for small samples or if an insufficient number of points contain seagrass regardless of sample size.  Second, estimates are provided only if an inflection point is present on the logistic curve within the range of the sampled depth data.  This criteria may apply under two scenarios where the curve is estimated but a trend is not adequately described by the sampled data.  That is, a curve may be estimated that describes only the initial decrease in points occupied as a function of depth but the observed points do not occur at depths deeper than the predicted inflection point.  The opposite scenario may occur when a curve is estimated but only the deeper locations beyond the inflection point are present in the sample.  Finally, the estimate for $SG_{max}$ is set to zero if the linear curve through the inflection point intercepts the asympote at x-axis values less than zero.  The estimate for $DOC_{med}$ is also shifted to the depth value halfway between $SG_{max}$ and $DOC_{max}$.  
+Estimates for each of the three \ac{doc} measures are obtained only if specific criteria are met.  These criteria were implemented as a safety measure that ensures a sufficient amount and appropriate quality of data are used.  First, estimates are provided only if a sufficient number of seagrass depth points are present within the radius of the grid point to estimate a logistic growth curve.  This criteria applies to the sample size as well as the number of points with seagrass in the sample.  That is, the curve cannot be estimated for small samples or if an insufficient number of points contain seagrass regardless of sample size.  Second, estimates are provided only if an inflection point is present on the logistic curve within the range of the sampled depth data.  This criteria may apply under two scenarios where the curve is estimated but a trend is not adequately described by the sampled data.  That is, a curve may be estimated that describes only the initial decrease in points occupied as a function of depth but the observed points do not occur at depths deeper than the predicted inflection point.  The opposite scenario may occur when a curve is estimated but only the deeper locations beyond the inflection point are present in the sample.  Finally, the estimate for $DOC_{min}$ is set to zero depth if the linear curve through the inflection point intercepts the asympote at x-axis values less than zero.  The estimate for $DOC_{med}$ is also shifted to the depth value halfway between $DOC_{min}$ and $DOC_{max}$.  
 
 All estimates were obtained using custom-made functions in program R that were based on the \texttt{nls} and \texttt{SSlogis} functions to fit a nonlinear least squares using a self-starting logistic growth model \citep{Bates92,RDCT14}.  All seagrass depth shapefiles were imported and processed in R using functions in the \texttt{rgeos} and \texttt{sp} packages \citep{Bivand08,Bivand14}.  
 
@@ -148,25 +148,25 @@ x \sim N(\mu, \Sigma)
 \end{equation}
 \noindent where $x$ is a predictor variable used in \cref{eqn:prop} that follows a multivariate normal distribution with mean $\mu$, and variance-covariance matrix $\Sigma$.  The mean values are set at the depth value corresponding to the inflection point on the logistic curve and the predicted model parameters (i.e., $\alpha$, $\beta$, and $\gamma$), whereas $\Sigma$ is the variance-covariance matrix of the model parameters and depth, with the latter being zero.  A large number of samples ($n = 10000$) were drawn from the distrubution to characterize the uncertainty.  The 2.5\textsuperscript{th} and 97.5\textsuperscript{th} quantile values of the sample were considered bounds on the 95\% confidence interval.
 
-The uncertainty associated with the \ac{doc} estimates were based on the upper and lower limits of the estimated inflection point on the logistic growth curve.  This approach was used because uncertainty in the inflection point is directly related to uncertainty in each of the \ac{doc} estimates that are based on the linear curve fit through the inflection point.   Specifically, linear curves were fit through the upper and lower estimates of the inflection point to identify upper and lower limits for the estimates of $SG_{max}$, $DOC_{med}$, and $DOC_{max}$.  These values were compared with the initial estimates from the linear curve that was fit through the predicted logistic curve (i.e., \cref{fig:est_ex3}).  This approach provided an indication of uncertainty for individual estimates for a set radius.  Uncertainty estimates were obtained for each \ac{doc} estimate for the grids in each segment.
+The uncertainty associated with the \ac{doc} estimates were based on the upper and lower limits of the estimated inflection point on the logistic growth curve.  This approach was used because uncertainty in the inflection point is directly related to uncertainty in each of the \ac{doc} estimates that are based on the linear curve fit through the inflection point.   Specifically, linear curves were fit through the upper and lower estimates of the inflection point to identify upper and lower limits for the estimates of $DOC_{min}$, $DOC_{med}$, and $DOC_{max}$.  These values were compared with the initial estimates from the linear curve that was fit through the predicted logistic curve (i.e., \cref{fig:est_ex3}).  This approach provided an indication of uncertainty for individual estimates for a set radius.  Uncertainty estimates were obtained for each \ac{doc} estimate for the grids in each segment.
 
 \subsection{Developing a spatially coherent relationship of water clarity with depth of colonization}
 
-Potentially useful information describing seagrass light requirements can be obtained from the maximum depth estimates by evaluating the relationship with water clarity through space and time.  In particular, increased resolution of seagrass depth estimates compared with multiple measures of water clarity can potentially improve the ability to empirically describe light requirements leading to the development of numeric criteria. Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations documented in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. All available secchi data for each of the four segments were obtained from the \ac{IWR} database, update number 40.  Prior to analysis, all secchi data were screened to exclude observations that were flagged indicating that the value was lower than the maximum depth of the observation point.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.
+Information describing seagrass light requirements can be obtained from the maximum depth estimates by evaluating spatial relationships with water clarity.  In particular, increased resolution of seagrass depth estimates compared with multiple measures of water clarity can potentially improve the ability to empirically describe light requirements leading to the development of numeric criteria. Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations documented in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. Secchi data for Florida coastal waters were obtained from update 40 of the \ac{IWR} database for Tampa Bay and the Indian River Lagoon given the spatial and temporal coverage relative to the other segments used in the current analysis.  All secchi data were screened to exclude observations that were flagged indicating that the value was lower than the maximum depth of the observation point.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.
 
 The relationship between seagrass depth limits and secchi measurements were explored using previously established light requirements and attenuation equations.  The traditional Lambert-Beer equation describes the exponential decrease of light availability with depth:
 \begin{equation} \label{eqn:lambeer}
 I_{z} = I_{O} \cdot \exp\left(-K_{d} \cdot Z\right)
 \end{equation}
-\noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{d}$). Minimum seagrass light requirements have also been estimated numerous times.  For example, \citet{Duarte91} indicate that minimum light requirements for seagrass are on average 11\% of surface irradiance. Others have shown that light requirements are species dependent and variable by latitude witgh estimates ranging from less than 5\% to greater than 30\% \citep{Dennison93}.  Estimated light requirements (e.g., 11\%) can be used with \cref{eqn:lambeer} to describe $DOC_{max}$:
+\noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{d}$). Minimum seagrass light requirements have also been estimated numerous times.  For example, \citet{Duarte91} indicate that minimum light requirements for seagrass are on average 11\% of surface irradiance. Others have shown that light requirements are species dependent and variable by latitude witgh estimates ranging from less than 5\% to greater than 30\% \citep{Dennison93}.  Estimated light requirements (e.g., 20\%) can be used with \cref{eqn:lambeer} to describe $DOC_{max}$:
 \begin{equation}
-0.11 = \exp\left(-K_{d} \cdot DOC_{max}\right)
+0.20 = \exp\left(-K_{d} \cdot DOC_{max}\right)
 \end{equation}
-A conversion factor is commonly used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $c = K_{d} \cdot Z_{d}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{d}$ is replaced with the conversion factor and the equation is rearranged to describe $DOC_{max}$ as a function of secchi depth $Z_{d}$:
+A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $c = K_{d} \cdot Z_{d}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{d}$ can be replaced with the conversion factor and the equation is rearranged to describe $DOC_{max}$ as a function of secchi depth $Z_{d}$:
 \begin{equation} \label{eqn:sgreg}
-DOC_{max} = \frac{-\log\left(0.11\right)}{1.7} \cdot Z_{d}
+DOC_{max} = \frac{-\log\left(0.20\right)}{1.7} \cdot Z_{d}
 \end{equation}
-\noindent A regression of seagrass depth estimates against secchi measurements is expected to have a slope corresponding to the constant in \cref{eqn:sgreg}.  The geographic coordinates for each secchi measurement were used as locations for estimating $DOC_{max}$ in each segment.  These estimates were compared with the secchi estimates using linear regression forced through the origin.  However, the relationship is expected to vary depending on the specific radius around each sample point for estimating $DOC_{max}$.  An appropriate radius was chosen that minimized the difference between the empirically estimated slope and that in \cref{eqn:sgreg}.  Scatter in the regression through these points can be considered biologically meaningful, such that points below the curve are locations where seagrasses are observed at maximum depth with less irradiance than expected given \cref{eqn:sgreg}, whereas points above the curve are those where seagrasses are growing deeper than expected. An analogous interpretation is that points below the curve are those where seagrasses are light-limited, whereas the opposite is true above the curve.   
+\noindent A regression of seagrass depth estimates against secchi measurements is expected to have a slope corresponding to the constant in \cref{eqn:sgreg}.  The geographic coordinates for each secchi measurement were used as locations for estimating $DOC_{max}$ in each segment.  These estimates were compared with the secchi estimates using linear regression forced through the origin.  However, the relationship is expected to vary depending on the specific radius around each sample point for estimating $DOC_{max}$.  An appropriate radius was chosen that minimized the difference between the empirically estimated slope and that in \cref{eqn:sgreg}.  Scatter in the regression through these points can be considered biologically meaningful, such that points below the curve are locations where seagrasses are observed at maximum depth with less irradiance than expected given \cref{eqn:sgreg}, whereas points above the curve are those where seagrasses are growing deeper than expected. The estimated light requirements of each point can be plotted using the cartesian coordinates to evaluate spatial variation in seagrass growth as a function of light-limitation.  
 
 \section{Results}
 
@@ -353,11 +353,11 @@ latex(
 % comparisons with segment wide ests
 <<eval = T, echo = F>>=
 
-# ##
-# # get doc ests for whole seg
-# 
-# load('data/shps.RData')
-# 
+##
+# get doc ests for whole seg
+
+load('data/shps.RData')
+
 # segs <- c('303', '820', '902', '1502')
 # 
 # ests_seg <- vector('list', length = length(segs))
@@ -386,35 +386,35 @@ load(file = 'data/ests_seg.RData')
 load(file = 'data/ests_out.RData')
 
 # remove outliers from ests based on 99%
-ests <- ests_out[, c('sg_max', 'doc_med', 'doc_max')]
+ests <- ests_out[, c('doc_min', 'doc_med', 'doc_max')]
 filt_val <- quantile(unlist(c(ests)), 0.99)
 ests[ests > filt_val] <- NA
-ests_out[, c('sg_max', 'doc_med', 'doc_max')] <- ests
+ests_out[, c('doc_min', 'doc_med', 'doc_max')] <- ests
 ests_out <- na.omit(ests_out)
 
 # summarize spatail ests
-ests_out <- melt(ests_out, measure.var = c('sg_max', 'doc_med', 'doc_max'))
+ests_out <- melt(ests_out, measure.var = c('doc_min', 'doc_med', 'doc_max'))
 ests_out <- ddply(ests_out, .variable = c('seg', 'variable'),   
   .fun = function(x) {
     c(mean_val = mean(x$value),
-    se_val = sd(x$value)/sqrt(length(x)),
+    sd_val = sd(x$value),
     min_val = min(x$value),
     max_val = max(x$value)
     )
   })
 
 # merge with segment wide ests
-ests_seg <- melt(ests_seg, measure.var = c('sg_max', 'doc_med', 'doc_max'))
+ests_seg <- melt(ests_seg, measure.var = c('doc_min', 'doc_med', 'doc_max'))
 to_tab <- merge(ests_seg[, c('seg', 'variable', 'value')], ests_out, by = c('seg', 'variable'))
-to_tab$variable <- factor(to_tab$variable, levels = c('sg_max', 'doc_med', 'doc_max'))
+to_tab$variable <- factor(to_tab$variable, levels = c('doc_min', 'doc_med', 'doc_max'))
 to_tab <- to_tab[order(to_tab$seg, to_tab$variable), ]
-names(to_tab) <- c('Segment', 'Estimate', 'Whole segment', 'Mean', 'St. Err.', 'Min', 'Max')
+names(to_tab) <- c('Segment', 'Estimate', 'Whole segment', 'Mean', 'St. Dev.', 'Min', 'Max')
 
 # prep table
 segs <- c('0303', '0820', '0902', '1502')
 estimate <- to_tab$Estimate
-estimate <- factor(estimate, levels = c('sg_max', 'doc_med', 'doc_max'), 
-  labels = c('$SG_{max}$', '$DOC_{med}$', '$DOC_{max}$'))
+estimate <- factor(estimate, levels = c('doc_min', 'doc_med', 'doc_max'), 
+  labels = c('$DOC_{min}$', '$DOC_{med}$', '$DOC_{max}$'))
 nms <- names(to_tab)[-c(1, 2)]
 tab <- to_tab[, !names(to_tab) %in% c('Segment', 'Estimate')]
 
@@ -620,10 +620,9 @@ dev.off()
 % example of estimating seagrass depth of colonization
 <<est_ex, cache = T, echo = F, results = 'hide'>>=
 
-seg <- maptools::readShapeSpatial('data/seg_820.shp')
-state <- maptools::readShapeSpatial('data/FL_state.shp')
-sgpoly <- maptools::readShapeSpatial('data/bbend_sg_diss.shp')
-sgrass <- maptools::readShapeSpatial('data/sgpts_820_2006_buff.shp')
+buff_ex_dat <- readRDS('data/buff_ex_dat.rds')
+seg <- buff_ex_dat[['seg']] # 820 segment polygon
+sgrass <- buff_ex_dat[['sgrass']]
 # sgrass <- sgrass[sample(1:nrow(sgrass), 2000, replace = F),]
 
 set.seed(123)
@@ -638,7 +637,6 @@ dat <- doc_est(doc_in, 'GRID_CODE', 'SEAGRASS')
 
 ##
 # plots 
-
 
 # base plot if no estimate is available
 pa <- plot(dat, baseonly = T)
@@ -748,15 +746,15 @@ for(i in 1:length(levs)){
   est_sub <- ests_out[ests_out$seg %in% as.numeric(levs[i]), ]
   
   # remove outliers based on 99%
-  ests <- est_sub[, c('sg_max', 'doc_med', 'doc_max')]
+  ests <- est_sub[, c('doc_min', 'doc_med', 'doc_max')]
   filt_val <- quantile(unlist(c(ests)), 0.99)
   ests[ests > filt_val] <- NA
-  est_sub[, c('sg_max', 'doc_med', 'doc_max')] <- ests
+  est_sub[, c('doc_min', 'doc_med', 'doc_max')] <- ests
   est_sub <- na.omit(est_sub)
   
   # scale for sizing
   scls <- c(1, 6)
-  scl_vals <- scales::rescale(est_sub[, c('sg_max', 'doc_med', 'doc_max')], to = scls)
+  scl_vals <- scales::rescale(est_sub[, c('doc_min', 'doc_med', 'doc_max')], to = scls)
 
   # scale for colour
   col_vals <- col_fun(scl_vals)
@@ -771,10 +769,10 @@ for(i in 1:length(levs)){
       axis.text.x = element_text(angle = 90, vjust = 0.5),
       plot.margin=unit(c(0, 0, 0, 0), "cm"))
   
-  # sg_max
+  # doc_min
   pa <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$sg_max.1, 
-      size = pt_plo$sg_max)
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$doc_min.1, 
+      size = pt_plo$doc_min)
 
   # doc_med
   pb <- p_seg +
@@ -790,7 +788,7 @@ for(i in 1:length(levs)){
   leg_plo <- est_sub[, !names(est_sub) %in% 'seg']
   leg_plo <- melt(leg_plo, id.var = c('long', 'lat'))
   
-  leg_brks <- quantile(leg_plo$value, c(0, 0.33, 0.66, 1))
+  leg_brks <- seq(min(leg_plo$value, na.rm =  T), max(leg_plo$value, na.rm = T), length = 4)
   leg_labs <- form_fun(leg_brks, 1, 1, 1)
   
   pleg <- p_seg +
@@ -832,7 +830,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
-\caption{Spatially-referenced estimates of seagrass depth limits (m) for four coastal segments of Florida.  Estimates include depth of maximum seagrass growth ($SG_{max}$), median depth of colonization ($DOC_{med}$), and maximum depth of colonization ($DOC_{max}$).  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees.}
+\caption{Spatially-referenced estimates of seagrass depth limits (m) for four coastal segments of Florida.  Estimates include minimum ($DOC_{min}$), median ($DOC_{med}$), and maximum depth of colonization ($DOC_{max}$).  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees.}
 \label{fig:all_ests}
 \end{figure}
 
@@ -869,7 +867,7 @@ load('data/shps.RData')
 # names(sens_out)[names(sens_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
 # 
 # # get ci range, these are all the same
-# sens_out$sg_max <- with(sens_out, h_sg_max - l_sg_max)
+# sens_out$doc_min <- with(sens_out, h_doc_min - l_doc_min)
 # sens_out$doc_med <- with(sens_out, h_doc_med - l_doc_med)
 # sens_out$doc_max <- with(sens_out, h_doc_max - l_doc_max)
 # sens_out <- sens_out[, !grepl('^h_|^l_', names(sens_out))]
@@ -910,15 +908,15 @@ for(i in 1:length(levs)){
   est_sub <- sens_out[sens_out$seg %in% as.numeric(levs[i]), ]
   
   # remove outliers based on 99%
-  ests <- est_sub[, c('sg_max'), drop = F]
+  ests <- est_sub[, c('doc_min'), drop = F]
   filt_val <- quantile(unlist(c(ests)), 0.99)
   ests[ests > filt_val] <- NA
-  est_sub[, c('sg_max')] <- ests
+  est_sub[, c('doc_min')] <- ests
   est_sub <- na.omit(est_sub)
   
   # scale for sizing
   scls <- c(1, 6)
-  scl_vals <- scales::rescale(est_sub[, c('sg_max'), drop = F], to = scls)
+  scl_vals <- scales::rescale(est_sub[, c('doc_min'), drop = F], to = scls)
 
   # scale for colour
   col_vals <- col_fun(scl_vals)
@@ -933,26 +931,16 @@ for(i in 1:length(levs)){
       axis.text.x = element_text(angle = 90, vjust = 0.5),
       plot.margin=unit(c(0, 0, 0, 0), "cm"))
   
-  # sg_max
-  pa <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$sg_max.1, 
-      size = pt_plo$sg_max)
-
-  # doc_med
-  pb <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$doc_med.1, 
-      size = pt_plo$doc_med)
-
-  # sg_max
-  pc <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$sg_max.1, 
-      size = pt_plo$sg_max) 
+  # add sens points
+  p <- p_seg +
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$doc_min.1, 
+      size = pt_plo$doc_min) 
   
   # legend for all three
   leg_plo <- est_sub[, !names(est_sub) %in% 'seg']
   leg_plo <- melt(leg_plo, id.var = c('long', 'lat'))
   
-  leg_brks <- quantile(leg_plo$value, c(0, 0.33, 0.66, 1))
+  leg_brks <- seq(min(leg_plo$value, na.rm =  T), max(leg_plo$value, na.rm = T), length = 4)
   leg_labs <- form_fun(leg_brks, 2, 2, 2)
   
   pleg <- p_seg +
@@ -965,7 +953,7 @@ for(i in 1:length(levs)){
   pleg <- g_legend(pleg)
    
   # assign to global
-  assign(paste0('pc', i), pc)
+  assign(paste0('p', i), pc)
   assign(paste0('pleg', i), pleg)
 }
 
@@ -987,7 +975,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/all_sens.pdf}
-\caption{Size of confidence intervals (m) for \acl{doc} estimates in \cref{fig:all_ests}.  Points are colored and sized based on the difference between the upper and lower bounds of a 95\% confidence interval for all three \ac{doc} estimates ($SG_{max}$, $DOC_{med}$, $DOC_{max}$). Bounds were obtained using Monte Carlo simulations to estimate uncertainty associated with the inflection point of the estimated logistic curve (\cref{fig:est_ex}) for each sample.}
+\caption{Size of confidence intervals (m) for \acl{doc} estimates in \cref{fig:all_ests}.  Points are colored and sized based on the difference between the upper and lower bounds of a 95\% confidence interval for all three \ac{doc} estimates ($DOC_{min}$, $DOC_{med}$, $DOC_{max}$). Bounds were obtained using Monte Carlo simulations to estimate uncertainty associated with the inflection point of the estimated logistic curve (\cref{fig:est_ex}) for each sample.}
 \label{fig:all_sens}
 \end{figure}
 
@@ -1000,7 +988,7 @@ dev.off()
 # tb_seg <- readRDS('data/tb_seg.rds')
 # 
 # # tb secchi data
-# data(secc_tb)
+# data(secc_all)
 # 
 # # tb seagrass points
 # sgpts_2010_tb <- readRDS('data/sgpts_2010_tb.rds')
@@ -1031,7 +1019,6 @@ dev.off()
 # 
 # tb_light <- dat
 # save(tb_light, file = 'data/tb_light.RData')
-# 
 
 data(tb_light)
 tb_seg <- readRDS('M:/docs/manuscripts/sgdepth_manu/data/tb_seg.rds')
@@ -1062,6 +1049,7 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
 
 p2 <- ggplot(data.frame(dat), aes(x = seg, y = light, size = light)) + 
   geom_boxplot(fill = fill_col) + 
+  geom_hline(yintercept = 0.2, linetype = 'dashed') +
   ylab('Light requirements') +
   theme_classic() +
   theme(axis.title.y = element_blank()) + 

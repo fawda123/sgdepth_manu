@@ -4,26 +4,32 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 # Data
 
-<code>buff_ex_dat.rds</code> Shapefile data for buff_ex figure, includes four shapefiles
+`buff_ex_dat.rds` Shapefile data for buff_ex figure, includes four shapefiles
 
-<code>dep_shps.RData</code> Bathymetry data shapefiles for each segment
+`dep_shps.RData` Bathymetry data shapefiles for each segment
 
-<code>ests_out.RData</code> Seagrass DOC estimates for grids in each segment
+`ests_out.RData` Seagrass DOC estimates for grids in each segment
 
-<code>ests_seg.RData</code> Seagrass DOC estimates for entire segments (large radius)
+`ests_seg.RData` Seagrass DOC estimates for entire segments (large radius)
 
-<code>secc_seg.RData</code> Secchi data for each segment, from Jim's paper, created in sg_depth.RProj
+`res_irl.RData` Results of seagrass doc estimates and secchi comparisons for different radii, indian river lagoon  
 
-<code>secc_tb.RData</code> Secchi data for all of Tampa Bay, created in sg_depth.RProj
+`secc_all.RData` Secchi data for all of Florida from IWR40 database, created in sg_depth.RProj
 
-<code>seg_summ.RData</code> Summarized data for table of segment characteristics
+`secc_seg.RData` Secchi data for each segment, from Jim's paper, created in sg_depth.RProj
 
-<code>sens_out.RData</code> Uncertainty for estimates in <code>ests_out.RData</code
+`seg_summ.RData` Summarized data for table of segment characteristics
 
-<code>sgpts_2010_tb.rds</code> All seagrass depth points for Tampa Bay (all segments)
+`sens_out.RData` Uncertainty for estimates in `ests_out.RData</code
 
-<code>sg_shps.RData</code> Shapefiles of seagrass coverage polygons for each segment
+`sgpts_2009_tb.rds` All seagrass depth points for Indian River Lagoon (all segments)
 
-<code>shps.RData</code> Multiple shapefiles for each segment, including all segment polygons, individual segment polygons, and seagrass depth points for each segment
+`sgpts_2010_tb.rds` All seagrass depth points for Tampa Bay (all segments)
 
-<code>tb_seg.rds</code> Shapefile polygon of Tampa Bay, merged data from 'WBID_Run39_TampaBay.shp' on L drive that was selected based on intersected by location with original seagrass points layer from Jim's paper
+`sg_shps.RData` Shapefiles of seagrass coverage polygons for each segment
+
+`shps.RData` Multiple shapefiles for each segment, including all segment polygons, individual segment polygons, and seagrass depth points for each segment
+
+`irl_seg.rds` Shapefile polygon of Indian River Lagoon, all segments
+
+`tb_seg.rds` Shapefile polygon of Tampa Bay, all segments
