@@ -22,6 +22,7 @@ library(shinyapps)
 library(ade4)
 library(Hmisc)
 library(MASS)
+library(dplyr)
 
 # functions to use
 source('R/funcs.r')

@@ -200,9 +200,9 @@ out_rads <- res_irl
 mod_txt <- function(mod_in, round_val = 3){
  
   slo <- round(coef(mod_in)['SD'], round_val)
-  dif <- round((-log(0.2)/1.4) - slo, round_val)
-  fit <- round(summary(mod_in)$r.squared, round_val)
-  out <- paste0('Slope ', slo, '\nDifference ', dif, '\nR2 ', fit)
+  dif <- round((-log(0.2)/1.7) - slo, round_val)
+  fit <- round(mean(resid(mod_in)^2), 3)
+  out <- paste0('Slope ', slo, '\nDifference ', dif, '\nMSE ', fit)
   return(out)
   
 }
