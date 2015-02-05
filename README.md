@@ -16,15 +16,15 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `secc_all.RData` Secchi data for all of Florida from IWR40 database, created in sg_depth.RProj
 
-`secc_seg.RData` Secchi data for each segment, from Jim's paper, created in sg_depth.RProj
+`secc_seg.RData` Secchi data for each segment, created in manuscript code cunk
 
 `seg_summ.RData` Summarized data for table of segment characteristics
 
 `sens_out.RData` Uncertainty for estimates in `ests_out.RData</code
 
-`sgpts_2009_tb.rds` All seagrass depth points for Indian River Lagoon (all segments)
+`sgpts_irl_2009.rds` All seagrass depth points for Indian River Lagoon (all segments)
 
-`sgpts_2010_tb.rds` All seagrass depth points for Tampa Bay (all segments)
+`sgpts_tb_2010.rds` All seagrass depth points for Tampa Bay (all segments)
 
 `sg_shps.RData` Shapefiles of seagrass coverage polygons for each segment
 

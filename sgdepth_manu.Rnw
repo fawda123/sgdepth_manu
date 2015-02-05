@@ -51,6 +51,8 @@
 \acrodef{doc}[DoC]{depth of colonization}
 \acrodef{GIS}{Geographic Information System}
 \acrodef{IWR}{Impaired Waters Rule}
+\acrodef{MSL}{mean sea level}
+\acrodef{NAVD88}{North American Vertical Datum of 1988}
 \acrodef{NOAA}{National Oceanic and Atmospheric Administration}
 
 %knitr options
@@ -112,7 +114,9 @@ Four unique locations were chosen for the analysis: Choctowatchee Bay (Panhandle
 
 Data used to estimate seagrass \ac{doc} were primarily obtained from publically available \ac{GIS} products.  At the most generic level, spatially-referenced information describing seagrass aerial coverage combined with co-located bathymetric depth information were used to estimate \ac{doc}.  These data products are available in coastal regions of Florida through the US Geological Survey, Florida Department of Environmental Protection, and watershed management districts.  Data are generally more available in larger estuaries that are of specific management concern, e.g., Tampa Bay, Indian River Lagoon.  For example, seagrass coverage data are available from 1950 (Tampa Bay) to present day (multiple estuaries), with more recent products available at annual or  biennial intervals.  Seagrass coverage maps are less frequent in areas with lower population densities (e.g., Big Bend region) or where seagrass is naturally absent (northeast Florida).  Seagrass maps were produced using photo-interpretations of aerial images to categorize coverage as absent, discontinuous (patchy), or continuous.  For this analysis, we considered seagrass coverage as being only present (continuous and patchy) or absent since the former did not represent unequivocal categories between regions. 
 
-Seagrass coverage maps were combined with bathymetric depth layers to characterize location and depth of growth in each location.  Bathymetric depth layers for each location were obtained from the National Oceanic and Atmospheric Administration's (\acsu{NOAA}) National Geophysical Data Center as either \acp{DEM} or raw sounding data from hydroacoustic surveys.  Tampa Bay data provided by the Tampa Bay National Estuary Program are described in \citet{Tyler07}. Bathymetic data for the Indian River Lagoon were obtained from the St. John's Water Management District \citep{CPE97}.  \ac{NOAA} products were referenced to mean lower low water, whereas Tampa Bay data were referenced to the North American Vertical Datum of 1988 and the Indian River Lagoon data were referenced to mean sea level.  Depth layers were combined with seagrass coverage layers using standard union techniques of raster and vector layers in ArcMap 10.1 \citep{ESRI12}.  To reduce computation time, depth layers were first masked using a 1 km buffer of the seagrass coverage layer.  The final layer used for analysis was a point layer with attributes describing location (latitude, longitude, segment), depth (m), and seagrass (present, absent).  Additional details describing the data are available in \citetalias{HagyIR}.    
+Seagrass coverage maps were combined with bathymetric depth layers to characterize location and depth of growth in each location.  Bathymetric depth layers for each location were obtained from the National Oceanic and Atmospheric Administration's (\acsu{NOAA}) National Geophysical Data Center as either \acp{DEM} or raw sounding data from hydroacoustic surveys.  Tampa Bay data provided by the Tampa Bay National Estuary Program are described in \citet{Tyler07}. Bathymetric data for the Indian River Lagoon were obtained from the St. John's Water Management District \citep{CPE97}.  \ac{NOAA} products were referenced to mean lower low water, whereas Tampa Bay data were referenced to the \ac{NAVD88} and the Indian River Lagoon data were referenced to mean sea level.  Depth layers were combined with seagrass coverage layers using standard union techniques for raster and vector layers in ArcMap 10.1 \citep{ESRI12}.  To reduce computation time, depth layers were first masked using a 1 km buffer of the seagrass coverage layer.  The final layer used for analysis was a point layer with attributes describing location (latitude, longitude, segment), depth (m), and seagrass (present, absent).  Additional details describing the data are available in \citetalias{HagyIR}.  
+
+Depth values in each seagrass layer were further adjusted to local \ac{MSL} for each location.  Depth data that were referenced to a tidal datum were converted to local \ac{MSL} by adding the difference between \ac{MSL} and the source datum.  The Tampa Bay dataset referenced to \ac{NAVD88} was adjusted using the \ac{NOAA} VDatum tool.  
 
 \subsection{Segment-based estimates of seagrass depth of colonization}
 
@@ -219,14 +223,6 @@ Acknowledge that comparisons with segment wide estimate are specific to grid spa
 # }
 # save(sg_shps, file = 'data/sg_shps.RData')
 # 
-# # combine secchi from IWR39 for 820 with Jim's secchi data
-# load(file = 'data/secc_seg.RData')
-# secc_820 <- readShapeSpatial('M:/GIS/seagrass/secc_820.shp')
-# secc_820 <- secc_820[, c('STATION', 'SECCHI', 'DATE')]
-# names(secc_820) <- names(secc_seg)
-# secc_seg <- rbind(secc_seg, secc_820)
-# save(secc_seg, file = 'data/secc_seg.RData')
-# 
 # # bathymetry data
 # id <- c('dep_303.shp', 'dep_820.shp', 'dep_902.shp', 'dep_1502.shp')
 # dep_shps <- list()
@@ -242,13 +238,13 @@ Acknowledge that comparisons with segment wide estimate are specific to grid spa
 # 
 # load(file = 'data/shps.RData')
 # load(file = 'data/sg_shps.RData')
-# load(file = 'data/secc_seg.RData')
+# load(file = 'data/secc_all.RData')
 # load(file = 'data/dep_shps.RData')
 # 
 # nm <- c('Choctawhatchee Bay', 'Big Bend', 'Old Tampa Bay', 'Indian River Lagoon')
-# id <- c('0303', '0820', '0902', '1502')
+# id <- c('0303', '0820', '0902', '1502') 
 # 
-# lat, long
+# # lat, long
 # lat <- sapply(
 #   c('seg_303.shp', 'seg_820.shp', 'seg_902.shp', 'seg_1502.shp'), 
 #   function(x) data.frame(rgeos::gCentroid(shps[[x]]))[, 2]
@@ -266,17 +262,17 @@ Acknowledge that comparisons with segment wide estimate are specific to grid spa
 #     # data and projections
 #     seg <- shps[[paste0('seg_', x, '.shp')]]
 #     sg <- sg_shps[[grep(paste0('^sg_', x), names(sg_shps))]]
-#     proj4string(seg) <- CRS("+proj=longlat +datum=WGS84")
-#     proj4string(sg) <- CRS("+proj=longlat +datum=WGS84")
+#     proj4string(seg) <- CRS("+proj=longlat +datum=NAD83")
+#     proj4string(sg) <- CRS("+proj=longlat +datum=NAD83")
 #     
 #     # proj for transformation
-#     trans_proj <- CRS("+proj=utm +zone=17 +datum=WGS84")
-#     if(x == '303') trans_proj <- CRS("+proj=utm +zone=16 +datum=WGS84")
+#     trans_proj <- CRS("+proj=utm +zone=17 +datum=NAD83")
+#     if(x == '303') trans_proj <- CRS("+proj=utm +zone=16 +datum=NAD83")
 #     seg <- spTransform(seg, trans_proj)  
 #     sg <- spTransform(sg, trans_proj)
 #     
 #     # clip, get area in sg km
-#     clip_sg <- gIntersection(sg, seg, byid = TRUE, drop_lower_td = TRUE)
+#     clip_sg <- gIntersection(sg, seg, byid = TRUE) #, drop_lower_td = TRUE)
 #     seg_est <- gArea(seg)/1e6
 #     sg_est <- gArea(clip_sg)/1e6
 #     
@@ -310,8 +306,8 @@ Acknowledge that comparisons with segment wide estimate are specific to grid spa
 #     
 #     # subset secchi
 #     seg <- shps[[paste0('seg_', x, '.shp')]]
-#     secc <- !is.na(secc_seg %over% seg)[, 1]
-#     secc <- secc_seg[secc, ]
+#     secc <- !is.na(secc_all %over% seg)[, 1]
+#     secc <- secc_all[secc, ]
 #     
 #     # mean secchi and n
 #     ave_secc <- mean(as.numeric(secc$SD), na.rm = T)
@@ -320,8 +316,10 @@ Acknowledge that comparisons with segment wide estimate are specific to grid spa
 #     c(ave_secc, se_secc)
 #     
 #   })
+# # fill in 820 manually, data are from elsewhere
+# seccs[, 2] <- c(1.34, 0.19)
 # 
-# combine data
+# # combine data
 # out <- data.frame(rbind(id, lat, lon, areas, deps, seccs), stringsAsFactors = F)
 # names(out) <- nm
 # row.names(out) <- c('Segment', 'Latitude', 'Longitude', 'Surface area', 'Seagrass area', 'Depth (mean)', 'Depth (max)', 'Secchi (mean)', 'Secchi (se)')
