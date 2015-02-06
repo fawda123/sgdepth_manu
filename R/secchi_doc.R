@@ -5,13 +5,13 @@
 # for all of Tampa Bay
 
 # tb polygon segment
-tb_seg <- readRDS('data/tb_seg.rds')
+data(tb_seg)
 
-# tb secchi data
-data(secc_tb)
+# secchi data
+data(secc_all)
 
 # tb seagrass points
-sgpts_2010_tb <- readRDS('data/sgpts_2010_tb.rds')
+data(sgpts_2010_tb)
 
 ##
 # run secchi_doc function with data
@@ -80,122 +80,41 @@ for(i in seq_along(rads)){
 
 dev.off()
 
-######
 # 0.07 radius was chosen based on eval of plots created from above for all of Tampa Bay
-
-rm(list = ls())
-
-library(ggplot2)
-library(gtable)
-library(gridExtra)
-
-source('R/funcs.r')
-
-# tb polygon segment
-tb_seg <- readRDS('data/tb_seg.rds')
-
-# all secchi data
-data(secc_all)
-
-# tb seagrass points
-sgpts_2010_tb <- readRDS('data/sgpts_2010_tb.rds')
-
-# process, get ave secchi data results
-proc <- secc_doc(secc_tb, sgpts_2010_tb, tb_seg, radius = 0.07, '2010', trace = T)
-dat <- na.omit(proc$ave_dat)
-dat <- dplyr::filter(dat, SD <3)
-dat <- dplyr::mutate(dat, 
-  light = exp(-zmax_all * 1.7/SD),
-  seg = NA
-  )
-
-# convert to spatialpointsdataframe
-coords <- dat[, c('Longitude', 'Latitude')]
-dat <- dat[, !names(dat) %in% c('Longitude', 'Latitude')]
-coordinates(dat) <- coords
-
-# get segment for each point
-tb_seg <- readRDS('M:/docs/manuscripts/sgdepth_manu/data/tb_seg.rds')
-for(seg in as.character(tb_seg$seg)){
-  
-  to_sel <- tb_seg[tb_seg$seg %in% seg, ]
-  sel <- !is.na(dat %over% to_sel)[, 1]
-  dat[sel, 'seg'] <- as.character(seg)
-  
-}
-
-# centroids for labels
-labs <- data.frame(rgeos::gCentroid(tb_seg, byid = T))
-labs$seg <- c('HB', 'LTB', 'MTB', 'OTB')
-
-fill_col <- colors()[245]
-
-dat <- data.frame(dat)
-p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
-    colour = light, size = light), fill = 'black', alpha = 0.8) +
-  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
-  theme_classic() +
-  coord_equal() +
-  xlab('Longitude') +
-  ylab('Latitude') +
-  scale_size(name = 'Light requirements', range = c(2, 9)) + 
-  scale_colour_gradientn(name = 'Light requirements', 
-    colours = c('blue', 'lightblue', 'green')) + #rev(brewer.pal(9,  'BuGn'))) +
-  guides(colour = guide_legend(), size = guide_legend()) + 
-  theme(
-    legend.position = c(1, 0),
-    legend.justification = c(1, 0))
-
-p2 <- ggplot(data.frame(dat), aes(x = seg, y = light, size = light)) + 
-  geom_boxplot(fill = fill_col) + 
-  ylab('Light requirements') +
-  theme_classic() +
-  theme(axis.title.y = element_blank()) + 
-  coord_flip()
-
-grid.arrange(p1, p2, nrow = 1, widths = c(1, 0.5))
 
 ######
 # for all of IRL
 
 # irl polygon segment
-irl_seg <- readRDS(file = 'data/irl_seg.rds')
+data(irl_seg)
 
 # all secchi data
 data(secc_all)
 
 # tb seagrass points
-sgpts_2009_irl <- readRDS('data/sgpts_2009_irl.rds')
+data(sgpts_2009_irl)
 
 ##
 # run secchi_doc function with data
 rads <- seq(0.01, 0.2, length = 50)
 
-# cl <- makeCluster(7)
-# registerDoParallel(cl)
-# 
-# # process
-# out_rads <- foreach(rad = seq_along(rads)) %dopar% {
-#   
-#   # process, remove segment shapefile, add to output
-#   tmp <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = rads[rad], '2009', 
-#     trace = T)
-#   tmp$seg_shp <- NULL
-#   # out_rads[[rad]] <- tmp
-#   tmp
-#   
-# }
-# 
-# res_irl <- out_rads
-# save(res_irl, file = 'data/res_irl.RData')
+cl <- makeCluster(7)
+registerDoParallel(cl)
+
+# process
+out_rads <- foreach(rad = seq_along(rads)) %dopar% {
+  
+  # process, remove segment shapefile, add to output
+  tmp <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = rads[rad], '2009', 
+    trace = T)
+  tmp$seg_shp <- NULL
+  # out_rads[[rad]] <- tmp
+  tmp
+  
+}
 
 ##
 # create plots
-
-data(res_irl)
-out_rads <- res_irl
 
 mod_txt <- function(mod_in, round_val = 3){
  

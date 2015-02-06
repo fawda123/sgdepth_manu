@@ -101,7 +101,7 @@
 \acrodef{GIS}{Geographic Information System}
 \acrodef{IWR}{Impaired Waters Rule}
 \acrodef{MSL}{mean sea level}
-\acrodef{NAVD}{North American Vertical Datum of 1988}
+\acrodef{NAVD88}{North American Vertical Datum of 1988}
 \acrodef{NOAA}{National Oceanic and Atmospheric Administration}
 
 %knitr options
@@ -159,9 +159,9 @@ Four unique locations were chosen for the analysis: Choctowatchee Bay (Panhandle
 
 Data used to estimate seagrass \ac{doc} were primarily obtained from publically available \ac{GIS} products.  At the most generic level, spatially-referenced information describing seagrass aerial coverage combined with co-located bathymetric depth information were used to estimate \ac{doc}.  These data products are available in coastal regions of Florida through the US Geological Survey, Florida Department of Environmental Protection, and watershed management districts.  Data are generally more available in larger estuaries that are of specific management concern, e.g., Tampa Bay, Indian River Lagoon.  For example, seagrass coverage data are available from 1950 (Tampa Bay) to present day (multiple estuaries), with more recent products available at annual or  biennial intervals.  Seagrass coverage maps are less frequent in areas with lower population densities (e.g., Big Bend region) or where seagrass is naturally absent (northeast Florida).  Seagrass maps were produced using photo-interpretations of aerial images to categorize coverage as absent, discontinuous (patchy), or continuous.  For this analysis, we considered seagrass coverage as being only present (continuous and patchy) or absent since the former did not represent unequivocal categories between regions. 
 
-Seagrass coverage maps were combined with bathymetric depth layers to characterize location and depth of growth in each location.  Bathymetric depth layers for each location were obtained from the National Oceanic and Atmospheric Administration's (\acsu{NOAA}) National Geophysical Data Center as either \acp{DEM} or raw sounding data from hydroacoustic surveys.  Tampa Bay data provided by the Tampa Bay National Estuary Program are described in \citet{Tyler07}. Bathymetic data for the Indian River Lagoon were obtained from the St. John's Water Management District \citep{CPE97}.  \ac{NOAA} products were referenced to mean lower low water, whereas Tampa Bay data were referenced to the \ac{NAVD} and the Indian River Lagoon data were referenced to mean sea level.  Depth layers were combined with seagrass coverage layers using standard union techniques for raster and vector layers in ArcMap 10.1 \citep{ESRI12}.  To reduce computation time, depth layers were first masked using a 1 km buffer of the seagrass coverage layer.  The final layer used for analysis was a point layer with attributes describing location (latitude, longitude, segment), depth (m), and seagrass (present, absent).  Additional details describing the data are available in \citetalias{HagyIR}.  
+Seagrass coverage maps were combined with bathymetric depth layers to characterize location and depth of growth in each location.  Bathymetric depth layers for each location were obtained from the National Oceanic and Atmospheric Administration's (\acsu{NOAA}) National Geophysical Data Center as either \acp{DEM} or raw sounding data from hydroacoustic surveys.  Tampa Bay data provided by the Tampa Bay National Estuary Program are described in \citet{Tyler07}. Bathymetric data for the Indian River Lagoon were obtained from the St. John's Water Management District \citep{CPE97}.  \ac{NOAA} products were referenced to mean lower low water, whereas Tampa Bay data were referenced to the \ac{NAVD88} and the Indian River Lagoon data were referenced to mean sea level.  Depth layers were combined with seagrass coverage layers using standard union techniques for raster and vector layers in ArcMap 10.1 \citep{ESRI12}.  To reduce computation time, depth layers were first masked using a 1 km buffer of the seagrass coverage layer.  The final layer used for analysis was a point layer with attributes describing location (latitude, longitude, segment), depth (m), and seagrass (present, absent).  Additional details describing the data are available in \citetalias{HagyIR}.  
 
-Depth values in each seagrass layer were further adjusted to local \ac{MSL} for each location.  Depth data that were referenced to a tidal datum were converted to local \ac{MSL} by adding the difference between \ac{MSL} and the source datum.  The Tampa Bay dataset referenced to \ac{NAVD} was adjusted using the \ac{NOAA} VDatum tool.  
+Depth values in each seagrass layer were further adjusted to local \ac{MSL} for each location.  Depth data that were referenced to a tidal datum were converted to local \ac{MSL} by adding the difference between \ac{MSL} and the source datum.  The Tampa Bay dataset referenced to \ac{NAVD88} was adjusted using the \ac{NOAA} VDatum tool.  
 
 \subsection{Segment-based estimates of seagrass depth of colonization}
 
@@ -288,19 +288,19 @@ Secchi (se)&  0.07&  0.19&  0.01&  0.01\tabularnewline
 \multicolumn{1}{l}{{\bf Segment}}&\multicolumn{1}{c}{Whole segment}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
 \hline
 {\bfseries 0303}&&&&&\tabularnewline
-~~$DOC_{min}$&1.92&1.65&0.54&0.52&2.30\tabularnewline
-~~$DOC_{med}$&2.26&2.01&0.34&1.52&2.46\tabularnewline
-~~$DOC_{max}$&2.60&2.36&0.35&1.90&2.85\tabularnewline
+~~$DOC_{min}$&1.82&1.55&0.54&0.42&2.20\tabularnewline
+~~$DOC_{med}$&2.16&1.91&0.34&1.42&2.36\tabularnewline
+~~$DOC_{max}$&2.50&2.26&0.35&1.80&2.75\tabularnewline
 \hline
 {\bfseries 0820}&&&&&\tabularnewline
-~~$DOC_{min}$&1.50&1.71&0.96&0.06&3.23\tabularnewline
-~~$DOC_{med}$&2.92&2.07&0.94&0.52&3.46\tabularnewline
-~~$DOC_{max}$&4.34&2.42&0.97&0.69&3.97\tabularnewline
+~~$DOC_{min}$&1.25&1.35&0.82&0.00&2.63\tabularnewline
+~~$DOC_{med}$&2.46&1.71&0.77&0.56&2.86\tabularnewline
+~~$DOC_{max}$&3.66&2.07&0.79&0.84&3.37\tabularnewline
 \hline
 {\bfseries 0902}&&&&&\tabularnewline
-~~$DOC_{min}$&0.52&0.45&0.34&0.00&1.03\tabularnewline
-~~$DOC_{med}$&0.79&0.82&0.31&0.29&1.59\tabularnewline
-~~$DOC_{max}$&1.07&1.18&0.38&0.59&2.15\tabularnewline
+~~$DOC_{min}$&0.61&0.51&0.36&0.00&1.11\tabularnewline
+~~$DOC_{med}$&0.88&0.86&0.34&0.33&1.59\tabularnewline
+~~$DOC_{max}$&1.15&1.20&0.41&0.60&2.15\tabularnewline
 \hline
 {\bfseries 1502}&&&&&\tabularnewline
 ~~$DOC_{min}$&1.25&1.33&0.24&0.90&2.02\tabularnewline
@@ -323,9 +323,9 @@ Secchi (se)&  0.07&  0.19&  0.01&  0.01\tabularnewline
 \multicolumn{1}{l}{Segment}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
 \hline
 0303&0.49&0.45&0.12&1.63\tabularnewline
-0820&0.14&0.16&0.01&0.73\tabularnewline
-0902&0.43&0.29&0.12&1.19\tabularnewline
-1502&0.08&0.06&0.01&0.31\tabularnewline
+0820&0.13&0.13&0.01&0.65\tabularnewline
+0902&0.45&0.31&0.10&1.22\tabularnewline
+1502&0.08&0.06&0.00&0.31\tabularnewline
 \hline
 \end{tabular}\end{center}
 
@@ -358,20 +358,20 @@ Secchi (se)&  0.07&  0.19&  0.01&  0.01\tabularnewline
 \begin{figure}
 \centering
 \subfloat[][Seagrass depth points for the segment]{
-\includegraphics[width=0.5\textwidth]{figs/buff_ex1.pdf}
+\includegraphics[width=0.5\textwidth, page = 1]{figs/buff_ex.pdf}
 \label{fig:buff_ex1}
 }
 \subfloat[][Grid of locations and sample areas for estimates]{
-\includegraphics[width=0.5\textwidth]{figs/buff_ex2.pdf}
+\includegraphics[width=0.5\textwidth, page = 2]{figs/buff_ex.pdf}
 \label{fig:buff_ex2}
 }
 
 \subfloat[][Sampled observations for a test point]{
-\includegraphics[width=0.5\textwidth]{figs/buff_ex3.pdf}
+\includegraphics[width=0.5\textwidth, page = 3]{figs/buff_ex.pdf}
 \label{fig:buff_ex3}
 }
 \subfloat{
-\includegraphics[width = 0.5\textwidth]{figs/buff_ex4.pdf}
+\includegraphics[width = 0.5\textwidth, page = 4]{figs/buff_ex.pdf}
 }
 \caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  \Cref{fig:buff_ex1} shows the seagrass depth points that are used for sampling, \cref{fig:buff_ex2} shows a grid of locations and sampling radii for estimating seagrass \ac{doc}, and \cref{fig:buff_ex3} shows an example of sampled seagrass depth points for a location.  Estimates in \cref{fig:est_ex} were obtained from the sampled location in \cref{fig:buff_ex3}.}
 \label{fig:buff_ex}

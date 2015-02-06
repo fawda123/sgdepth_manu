@@ -61,6 +61,7 @@ library(knitr)
 # set global chunk options
 opts_chunk$set(fig.path = 'figs/', fig.align='center', fig.show='hold',message=F,echo=F,results='asis',dev='pdf',dev.args=list(family='serif'),fig.pos='!ht',warning=F)
 options(replace.assign=TRUE,width=90,digits=1)
+source('R/funcs.r')
 @
 
 \begin{document}
@@ -380,6 +381,30 @@ load('data/shps.RData')
 # names(ests_seg)[names(ests_seg) %in% c('x', 'y')] <- c('long', 'lat')
 # 
 # save(ests_seg, file = 'data/ests_seg.RData')
+# 
+# ests_out <- vector('list', length = length(segs))
+# names(ests_out) <- segs
+# 
+# for(seg in segs){
+#     
+#   seg_shp <- shps[[paste0('seg_', gsub('^.*_', '', seg), '.shp')]]
+#   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
+#   
+#   grid_spc <- 0.02
+#   rad <- 0.02
+#   grid_seed <- 123
+#   set.seed(grid_seed)
+#   pts <- grid_est(seg_shp, spacing = grid_spc) 
+#   ests <- doc_est_grd(pts, sgpts_shp, radius = rad)
+# 
+#   ests_out[[seg]] <- data.frame(ests, seg = seg)
+#   
+# }
+# 
+# ests_out <- do.call('rbind', ests_out)
+# names(ests_out)[names(ests_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
+# 
+# save(ests_out, file = 'data/ests_out.RData')
 
 # load data, ests_out from all_ests figure chunk
 load(file = 'data/ests_seg.RData')
@@ -440,6 +465,42 @@ latex(
 
 % summary of sensitivity analysis
 <<eval = T, echo = F>>=
+
+# get uncertainty estimates for all grid points in each segment
+# 
+# load('data/shps.RData')
+# 
+# segs <- c('303', '820', '902', '1502')
+# 
+# sens_out <- vector('list', length = length(segs))
+# names(sens_out) <- segs
+# 
+# for(seg in segs){
+#     
+#   seg_shp <- shps[[paste0('seg_', gsub('^.*_', '', seg), '.shp')]]
+#   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
+#   
+#   grid_spc <- 0.02
+#   rad <- 0.02
+#   grid_seed <- 123
+#   set.seed(grid_seed)
+#   pts <- grid_est(seg_shp, spacing = grid_spc) 
+#   ests <- doc_est_grd(pts, sgpts_shp, radius = rad, out_sens = T)
+# 
+#   sens_out[[seg]] <- data.frame(ests, seg = seg)
+#   
+# }
+# 
+# sens_out <- do.call('rbind', sens_out)
+# names(sens_out)[names(sens_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
+# 
+# # get ci range, these are all the same
+# sens_out$doc_min <- with(sens_out, h_doc_min - l_doc_min)
+# sens_out$doc_med <- with(sens_out, h_doc_med - l_doc_med)
+# sens_out$doc_max <- with(sens_out, h_doc_max - l_doc_max)
+# sens_out <- sens_out[, !grepl('^h_|^l_', names(sens_out))]
+# 
+# save(sens_out, file = 'data/sens_out.RData')
 
 # results of sensitivity analysis from all_sens code chunk
 load(file = 'data/sens_out.RData')
@@ -505,7 +566,7 @@ latex(
 <<buff_ex, cache = T, echo = F, eval = F, message = F, results = 'hide'>>=
 
 # load data, buff_ex_dat was created from various shapefiles
-buff_ex_dat <- readRDS('data/buff_ex_dat.rds')
+data(buff_ex_dat)
 seg <- buff_ex_dat[['seg']] # 820 segment polygon
 state <- buff_ex_dat[['state']] # florida state polygon
 sgpoly <- buff_ex_dat[['sgpoly']] # 820 segment seagrass polygon
@@ -516,19 +577,17 @@ sgrass <- sgrass[sample(1:length(sgrass), 1000), ]
 
 set.seed(123)
 est_pts <- grid_est(seg, spacing = 0.02)
-test_pt <- est_pts[49, ]
+test_pt <- est_pts[35, ]
 
 buff_pts <- buff_ext(sgrass, test_pt, buff = 0.02)
 
 # format buff_pts and sgrass for plotting
 buff_pts <- data.frame(buff_pts)
-buff_pts$Seagrass <- rep('Absent', nrow(buff_pts))
-buff_pts$Seagrass[!is.na(buff_pts$SEAGRASS)] <- 'Present'
-buff_pts$Depth <- -1 * buff_pts$GRID_CODE
+levels(buff_pts$Seagrass) <- c('Present', 'Present', 'Absent')
+buff_pts$Seagrass <- as.character(buff_pts$Seagrass)
 sgrass <- data.frame(sgrass)
-sgrass$Seagrass <- rep('Absent', nrow(sgrass))
-sgrass$Seagrass[!is.na(sgrass$SEAGRASS)] <- 'Present'
-sgrass$Depth <- -1 * sgrass$GRID_CODE
+levels(sgrass$Seagrass) <- c('Present', 'Present', 'Absent')
+sgrass$Seagrass <- as.character(sgrass$Seagrass)
 
 p1 <- ggplot(seg, aes_string('long', 'lat')) + 
   geom_polygon(fill = 'white') +
@@ -623,16 +682,10 @@ pleg <- ggplot(seg, aes(long, lat)) +
 
 pleg <- g_legend(pleg)
 
-pdf('figs/buff_ex1.pdf', height = 6, width = 6, family = 'serif')
+pdf('figs/buff_ex.pdf', height = 6, width = 6, family = 'serif')
 print(p1)
-dev.off()
-pdf('figs/buff_ex2.pdf', height = 6, width = 6, family = 'serif')
 print(p2)
-dev.off()
-pdf('figs/buff_ex3.pdf', height = 6, width = 6, family = 'serif')
 print(p3)
-dev.off()
-pdf('figs/buff_ex4.pdf', height = 6, width = 6, family = 'serif')
 grid.arrange(p1leg, pleg, ncol = 1, heights = c(1, 0.7))
 dev.off()
     
@@ -642,42 +695,40 @@ dev.off()
 \begin{figure}
 \centering
 \subfloat[][Seagrass depth points for the segment]{
-\includegraphics[width=0.5\textwidth]{figs/buff_ex1.pdf}
+\includegraphics[width=0.5\textwidth, page = 1]{figs/buff_ex.pdf}
 \label{fig:buff_ex1}
 }
 \subfloat[][Grid of locations and sample areas for estimates]{
-\includegraphics[width=0.5\textwidth]{figs/buff_ex2.pdf}
+\includegraphics[width=0.5\textwidth, page = 2]{figs/buff_ex.pdf}
 \label{fig:buff_ex2}
 }
 
 \subfloat[][Sampled observations for a test point]{
-\includegraphics[width=0.5\textwidth]{figs/buff_ex3.pdf}
+\includegraphics[width=0.5\textwidth, page = 3]{figs/buff_ex.pdf}
 \label{fig:buff_ex3}
 }
 \subfloat{
-\includegraphics[width = 0.5\textwidth]{figs/buff_ex4.pdf}
+\includegraphics[width = 0.5\textwidth, page = 4]{figs/buff_ex.pdf}
 }
 \caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  \Cref{fig:buff_ex1} shows the seagrass depth points that are used for sampling, \cref{fig:buff_ex2} shows a grid of locations and sampling radii for estimating seagrass \ac{doc}, and \cref{fig:buff_ex3} shows an example of sampled seagrass depth points for a location.  Estimates in \cref{fig:est_ex} were obtained from the sampled location in \cref{fig:buff_ex3}.}
 \label{fig:buff_ex}
 \end{figure}
 
 % example of estimating seagrass depth of colonization
-<<est_ex, cache = T, echo = F, results = 'hide'>>=
+<<est_ex, cache = T, echo = F, results = 'hide', eval = F>>=
 
-buff_ex_dat <- readRDS('data/buff_ex_dat.rds')
-seg <- buff_ex_dat[['seg']] # 820 segment polygon
-sgrass <- buff_ex_dat[['sgrass']]
+seg <- shps[['seg_820.shp']] # 820 segment polygon
+sgrass <- shps[['sgpts_2006_820.shp']] # 820 segment seagrass depth point
 # sgrass <- sgrass[sample(1:nrow(sgrass), 2000, replace = F),]
 
 set.seed(123)
 est_pts <- grid_est(seg, spacing = 0.02)
-test_pt <- est_pts[49, ]
+test_pt <- est_pts[35, ]
 
 buff_pts <- buff_ext(sgrass, test_pt, buff = 0.02)
 
 doc_in <- data.frame(buff_pts)
-doc_in$GRID_CODE <- -1 * doc_in$GRID_CODE
-dat <- doc_est(doc_in, 'GRID_CODE', 'SEAGRASS')
+dat <- doc_est(doc_in)
 
 ##
 # plots 
@@ -691,7 +742,7 @@ pb <- plot(dat, logisonly = T)
 # complete plot
 pc <- plot(dat)
 
-pdf('figs/est_ex.pdf', height = 4, width = 8, family = 'serif')
+pdf('figs/est_ex.pdf', height = 4.5, width = 8.5, family = 'serif')
 
 print(pa)
 print(pb)
@@ -730,31 +781,7 @@ dev.off()
 
 load('data/shps.RData')
 
-# segs <- c('303', '820', '902', '1502')
-# 
-# ests_out <- vector('list', length = length(segs))
-# names(ests_out) <- segs
-# 
-# for(seg in segs){
-#     
-#   seg_shp <- shps[[paste0('seg_', gsub('^.*_', '', seg), '.shp')]]
-#   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
-#   
-#   grid_spc <- 0.02
-#   rad <- 0.02
-#   grid_seed <- 123
-#   set.seed(grid_seed)
-#   pts <- grid_est(seg_shp, spacing = grid_spc) 
-#   ests <- doc_est_grd(pts, sgpts_shp, radius = rad)
-# 
-#   ests_out[[seg]] <- data.frame(ests, seg = seg)
-#   
-# }
-# 
-# ests_out <- do.call('rbind', ests_out)
-# names(ests_out)[names(ests_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
-# 
-# save(ests_out, file = 'data/ests_out.RData')
+# ests out created in chunk for table 'tab:est_summ'
 
 load(file = 'data/ests_out.RData')
 
@@ -776,10 +803,12 @@ col_fun <- function(x, cols = c('purple', 'blue', 'lightblue')){
 }
 
 # segments for plotting
-all_segs <- shps[['all_segs.shp']]
-all_segs <- fortify(all_segs)
-all_segs$group <- factor(all_segs$group, levels = c('0.1', '1.1', '2.1', '3.1'), 
-  labels = c('1502', '0820', '0902', '0303'))
+all_segs <- shps[grepl('^seg_', names(shps))]
+all_segs <- lapply(all_segs, fortify)
+all_segs <- do.call('rbind', all_segs)
+all_segs$group <- gsub('^seg_|\\.shp\\.[0-9]*$', '', row.names(all_segs))
+all_segs$group <- factor(all_segs$group, levels = c('1502', '303', '820', '902'), 
+  labels = c('1502', '0303', '0820', '0902'))
 levs <- sort(levels(all_segs$group))
 
 # assign plots by segment and doc est
@@ -886,38 +915,7 @@ dev.off()
 
 load('data/shps.RData')
 
-# segs <- c('303', '820', '902', '1502')
-# 
-# sens_out <- vector('list', length = length(segs))
-# names(sens_out) <- segs
-# 
-# for(seg in segs){
-#     
-#   seg_shp <- shps[[paste0('seg_', gsub('^.*_', '', seg), '.shp')]]
-#   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
-#   
-#   grid_spc <- 0.02
-#   rad <- 0.02
-#   grid_seed <- 123
-#   set.seed(grid_seed)
-#   pts <- grid_est(seg_shp, spacing = grid_spc) 
-#   ests <- doc_est_grd(pts, sgpts_shp, radius = rad, out_sens = T)
-# 
-#   sens_out[[seg]] <- data.frame(ests, seg = seg)
-#   
-# }
-# 
-# sens_out <- do.call('rbind', sens_out)
-# names(sens_out)[names(sens_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
-# 
-# # get ci range, these are all the same
-# sens_out$doc_min <- with(sens_out, h_doc_min - l_doc_min)
-# sens_out$doc_med <- with(sens_out, h_doc_med - l_doc_med)
-# sens_out$doc_max <- with(sens_out, h_doc_max - l_doc_max)
-# sens_out <- sens_out[, !grepl('^h_|^l_', names(sens_out))]
-# 
-# save(sens_out, file = 'data/sens_out.RData')
-
+# created in chunk for 'tab:sens_summ'
 load(file = 'data/sens_out.RData')
 
 ##
@@ -938,10 +936,12 @@ col_fun <- function(x, cols = c('purple', 'blue', 'lightblue')){
 }
 
 # segments for plotting
-all_segs <- shps[['all_segs.shp']]
-all_segs <- fortify(all_segs)
-all_segs$group <- factor(all_segs$group, levels = c('0.1', '1.1', '2.1', '3.1'), 
-  labels = c('1502', '0820', '0902', '0303'))
+all_segs <- shps[grepl('^seg_', names(shps))]
+all_segs <- lapply(all_segs, fortify)
+all_segs <- do.call('rbind', all_segs)
+all_segs$group <- gsub('^seg_|\\.shp\\.[0-9]*$', '', row.names(all_segs))
+all_segs$group <- factor(all_segs$group, levels = c('1502', '303', '820', '902'), 
+  labels = c('1502', '0303', '0820', '0902'))
 levs <- sort(levels(all_segs$group))
 
 # assign plots by segment and doc est
@@ -997,7 +997,7 @@ for(i in 1:length(levs)){
   pleg <- g_legend(pleg)
    
   # assign to global
-  assign(paste0('p', i), pc)
+  assign(paste0('p', i), p)
   assign(paste0('pleg', i), pleg)
 }
 
@@ -1008,10 +1008,10 @@ grobwidths <- c(1, 0.3)
 options(digits = 2)
 pdf('figs/all_sens.pdf', height = 7, width = 7, family = 'serif')
 grid.arrange(
-  arrangeGrob(pc1, pleg1, ncol = 2, widths = grobwidths),
-  arrangeGrob(pc2, pleg2, ncol = 2, widths = grobwidths),
-  arrangeGrob(pc3, pleg3, ncol = 2, widths = grobwidths),
-  arrangeGrob(pc4, pleg4, ncol = 2, widths = grobwidths),
+  arrangeGrob(p1, pleg1, ncol = 2, widths = grobwidths),
+  arrangeGrob(p2, pleg2, ncol = 2, widths = grobwidths),
+  arrangeGrob(p3, pleg3, ncol = 2, widths = grobwidths),
+  arrangeGrob(p4, pleg4, ncol = 2, widths = grobwidths),
   ncol = 2, heights = c(1.25, 1)
 )
 dev.off()
@@ -1031,16 +1031,16 @@ options(digits = 1)
 # source('R/funcs.r')
 # 
 # # tb polygon segment
-# tb_seg <- readRDS('data/tb_seg.rds')
+# data(tb_seg)
 # 
 # # tb secchi data
 # data(secc_all)
 # 
 # # tb seagrass points
-# sgpts_2010_tb <- readRDS('data/sgpts_2010_tb.rds')
+# data(sgpts_2010_tb)
 # 
 # # process, get ave secchi data results
-# proc <- secc_doc(secc_tb, sgpts_2010_tb, tb_seg, radius = 0.07, '2010', trace = T)
+# proc <- secc_doc(secc_all, sgpts_2010_tb, tb_seg, radius = 0.07, '2010', trace = T)
 # dat <- na.omit(proc$ave_dat)
 # dat <- dplyr::filter(dat, SD <3)
 # dat <- dplyr::mutate(dat, 
@@ -1054,7 +1054,6 @@ options(digits = 1)
 # coordinates(dat) <- coords
 # 
 # # get segment for each point
-# tb_seg <- readRDS('M:/docs/manuscripts/sgdepth_manu/data/tb_seg.rds')
 # for(seg in as.character(tb_seg$seg)){
 #   
 #   to_sel <- tb_seg[tb_seg$seg %in% seg, ]
@@ -1067,7 +1066,7 @@ options(digits = 1)
 # save(tb_light, file = 'data/tb_light.RData')
 
 data(tb_light)
-tb_seg <- readRDS('M:/docs/manuscripts/sgdepth_manu/data/tb_seg.rds')
+data(tb_seg)
 
 # centroids for labels
 labs <- data.frame(rgeos::gCentroid(tb_seg, byid = T))
@@ -1119,13 +1118,13 @@ options(digits = 1)
 # source('R/funcs.r')
 # 
 # # irl polygon segment
-# irl_seg <- readRDS('data/irl_seg.rds')
+# data(irl_seg)
 # 
 # # irl secchi data
 # data(secc_all)
 # 
 # # irl seagrass points
-# sgpts_2009_irl <- readRDS('data/sgpts_2009_irl.rds')
+# data(sgpts_2009_irl)
 # 
 # # process, get ave secchi data results
 # proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.02, '2009', trace = T)
@@ -1157,7 +1156,7 @@ options(digits = 1)
 
 data(irl_light)
 
-irl_seg <- readRDS('data/irl_seg.rds')
+data(irl_seg)
 levels(irl_seg$Segment) <- c('BR', 'LCIRL', 'LHR', 'LIRL', 'LML', 'LSL', 'UCIRL', 'UIRL', 'UML')
 
 # centroids for labels, offset

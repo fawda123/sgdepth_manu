@@ -1,6 +1,7 @@
 ade4
 base
 doParallel
+dplyr
 foreach
 foreign
 Formula

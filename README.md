@@ -4,15 +4,13 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 # Data
 
-`buff_ex_dat.rds` Shapefile data for buff_ex figure, includes four shapefiles
+`buff_ex_dat.RData` Shapefile data for buff_ex figure, includes four shapefiles
 
 `dep_shps.RData` Bathymetry data shapefiles for each segment
 
 `ests_out.RData` Seagrass DOC estimates for grids in each segment
 
 `ests_seg.RData` Seagrass DOC estimates for entire segments (large radius)
-
-`res_irl.RData` Results of seagrass doc estimates and secchi comparisons for different radii, indian river lagoon  
 
 `secc_all.RData` Secchi data for all of Florida from IWR40 database, created in sg_depth.RProj
 
