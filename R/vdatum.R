@@ -4,6 +4,8 @@
 # tampa bay is nadv88
 # all others are mllw from USGS bathymetry
 # 
+# Original files are processed in sg_depth project, copied to this project, than manually processed with the vdatum program (http://vdatum.noaa.gov/welcome.html).  Output from vdatum is then copied back into the project. 
+# 
 # sgpts_2010_902.RData (Old Tampa Bay)
 # 
 #   Original File: M:\GIS\seagrass\sgpts_2010_902.shp
