@@ -18,8 +18,6 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `seg_summ.RData` Summarized data for table of segment characteristics
 
-`sens_out.RData` Uncertainty for estimates in `ests_out.RData</code
-
 `sgpts_irl_2009.rds` All seagrass depth points for Indian River Lagoon (all segments)
 
 `sgpts_tb_2010.rds` All seagrass depth points for Tampa Bay (all segments)

@@ -206,19 +206,12 @@ secchis <- as.numeric(secchis)
 names(secchis) <- names(seg_summ)
 @
 
-Each of the four segments used in the analysis varied by several key characteristics that potentially explain within-segment variation of seagrass growth patterns (\cref{tab:seg_summ}).  Each segment was of similar size with average surface area of \Sexpr{mean(areas[names(areas) != 'Choctawhatchee Bay'])} square kilometers for the Big Bend, Old Tampa Bay, and Indian River Lagoon segments, whereas the Choctawhatchee Bay segment covered only \Sexpr{areas[names(areas) == 'Choctawhatchee Bay']} square kilometers.  Seagrass coverage as a percentage of total surface area varied considerably by segment.  Seagrasses covered a majority of the surface area for the Big Bend segment (\Sexpr{sgperc['Big Bend']} \%), whereas coverage was much less for Indian River Lagoon (\Sexpr{sgperc['Indian River Lagoon']} \%), Old Tampa Bay (\Sexpr{sgperc['Old Tampa Bay']} \%), and Choctawhatchee Bay (\Sexpr{sgperc['Choctawhatchee Bay']} \%).  Visual examination of the seagrass coverage maps for each year suggested that seagrasses were not uniformly distributed within each segment (\cref{fig:seg_all}).  Seagrasses in Choctawatchee Bay were generally sparse with the exception of a large patch located to the west of the inlet connection with the Gulf of Mexico.  Seagrasses in the Big Bend segment were located throughout the segment with noticeable declines near the outflow of the Steinhatchee River, whereas seagrasses in Old Tampa Bay and the Indian River Lagoon segment were generally confined to shallow areas near the shore. Seagrass coverage showed a partial decline toward the northern ends of both Old Tampa Bay and the Indian River Lagoon segments.  Mean depth was less than 5 meters for each segment, excluding Choctawhatchee Bay which was slightly deeper than the other segments on average (\Sexpr{depths['Choctawhatchee Bay']} m).  Maximum depths were considerably deeper for Choctawhatchee Bay (\Sexpr{mdepths['Choctawhatchee Bay']} m) and Old Tampa Bay (\Sexpr{mdepths['Old Tampa Bay']} m), as compared to the Big Bend (\Sexpr{mdepths['Big Bend']} m) and Indian River Lagoon (\Sexpr{depths['Indian River Lagoon']} m) segments.  Average secchi depths were also similar between the segments (\Sexpr{mean(secchis)} m), although Choctowhatchee Bay had a slightly higher average (\Sexpr{secchis['Choctawhatchee Bay']} m).     
+Each of the four segments varied by several key characteristics that potentially explain within-segment variation of seagrass growth patterns (\cref{tab:seg_summ}).  Mean surface area was \Sexpr{mean(areas)} square kilometers, with area decreasing for the Big Bend (\Sexpr{areas['Big Bend']} km), Indian River Lagooon (\Sexpr{areas['Indian River Lagoon']} km), Old Tampa Bay (\Sexpr{areas['Old Tampa Bay']} km), and Choctawhatchee Bay (\Sexpr{areas['Choctawhatchee Bay']} km) segments.  Seagrass coverage as a percentage of total surface area varied considerably by segment.  Seagrasses covered a majority of the surface area for the Big Bend segment (\Sexpr{sgperc['Big Bend']} \%), whereas coverage was much less for Indian River Lagoon (\Sexpr{sgperc['Indian River Lagoon']} \%), Old Tampa Bay (\Sexpr{sgperc['Old Tampa Bay']} \%), and Choctawhatchee Bay (\Sexpr{sgperc['Choctawhatchee Bay']} \%).  Visual examination of the seagrass coverage maps for the respective year of each segment suggested that seagrasses were not uniformly distributed (\cref{fig:seg_all}).  Seagrasses in the Choctawatchee Bay segments were generally sparse with the exception of a large patch located to the west of the inlet connection with the Gulf of Mexico.  Seagrasses in the Big Bend segment were located throughout the segment with noticeable declines near the outflow of the Steinhatchee River, whereas seagrasses in Old Tampa Bay and the Indian River Lagoon segment were generally confined to shallow areas near the shore. Seagrass coverage showed a partial decline toward the northern ends of both Old Tampa Bay and the Indian River Lagoon segments.  Mean depth was less than 5 meters for each segment, excluding Choctawhatchee Bay which was slightly deeper than the other segments on average (\Sexpr{depths['Choctawhatchee Bay']} m).  Maximum depths were considerably deeper for Choctawhatchee Bay (\Sexpr{mdepths['Choctawhatchee Bay']} m) and Old Tampa Bay (\Sexpr{mdepths['Old Tampa Bay']} m), as compared to the Big Bend (\Sexpr{mdepths['Big Bend']} m) and Indian River Lagoon (\Sexpr{depths['Indian River Lagoon']} m) segments.  Water clarity as indicated by average secchi depths was similar between the segments (\Sexpr{mean(secchis)} m), although Choctowhatchee Bay had a slightly higher average (\Sexpr{secchis['Choctawhatchee Bay']} m).     
 
 % seagrass estimates from table
 <<echo = F>>=
 data(ests_seg)
 data(ests_out)
-
-# remove outliers from ests based on 99%
-ests <- ests_out[, c('doc_min', 'doc_med', 'doc_max')]
-filt_val <- quantile(unlist(c(ests)), 0.99)
-ests[ests > filt_val] <- NA
-ests_out[, c('doc_min', 'doc_med', 'doc_max')] <- ests
-ests_out <- na.omit(ests_out)
 
 # big bend doc max diff
 bb_ests <- mean(ests_out[ests_out$seg == '820', 'doc_max'])
@@ -226,18 +219,19 @@ bb_ests <- mean(ests_out[ests_out$seg == '820', 'doc_max'])
 # irl estimates
 irl_maxdocmin <- max(ests_out[ests_out$seg == '1502', c('doc_min')])
 irl_meandocmax <- mean(ests_out[ests_out$seg == '1502', c('doc_max')])
+irl_maxdocmax <- max(ests_out[ests_out$seg == '1502', c('doc_max')])
 @
 
-Estimates of seagrass \ac{doc} using a segment-wide approach indicated that seagrasses generally did not grow deeper than three meters (\cref{tab:est_summ}).  Maximum and median depth of colonization were deepest for the Big Bend segment (\Sexpr{ests_seg[ests_seg$seg == '820', 'doc_max']} and \Sexpr{ests_seg[ests_seg$seg == '820', 'doc_med']} m, respectively) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'doc_max']} and \Sexpr{ests_seg[ests_seg$seg == '902', 'doc_med']} m), whereas the minimum depth of colonization was deepest for Choctowhatchee Bay (\Sexpr{ests_seg[ests_seg$seg == '303', 'doc_min']} m) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'doc_min']} m).  Averages of all grid-based estimates for each segment were different than the segment wide estimates, which suggests potential biases if an individual segment is considered a relevant spatial unit for estimating depth of colonization.  In most cases, the averages of the grid-based estimates were less than the whole segment estimates, suggesting the latter provided an over-estimate of seagrass growth limits.  For example, the average of all grid estimates for $DOC_{max}$ in the Big Bend region suggested seagrasses grew to approximately \Sexpr{bb_ests} m, which is \Sexpr{ests_seg[ests_seg$seg == 
-'820', 'doc_max'] - bb_ests} m less than the segment-wide estimate.  This reduction is likely related to improved resolution of seagrass depth limits near the outflow of the Steinhatchee river.  Although reductions were not as severe for the average grid estimates for the remaining segments, considerable within-segment variation was observed depending on grid location.  For example, the deepest estimate for $DOC_{min}$ (\Sexpr{irl_maxdocmin} m) in the Indian River Lagoon exceeded the average of all grid locations for $DOC_{max}$ (\Sexpr{irl_meandocmax} m).  $DOC_{min}$ also had minimum values of zero meters for the Big Bend and Old Tampa Bay segments, suggesting that seagrasses declined continously with depth from the surface for several locations.   
+Estimates of seagrass \ac{doc} using a segment-wide approach that did not consider spatially explicit locations indicated that seagrasses generally did not grow deeper than three meters in any of the segments (\cref{tab:est_summ}).  Maximum and median depth of colonization were deepest for the Big Bend segment (\Sexpr{ests_seg[ests_seg$seg == '820', 'doc_max']} and \Sexpr{ests_seg[ests_seg$seg == '820', 'doc_med']} m, respectively) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'doc_max']} and \Sexpr{ests_seg[ests_seg$seg == '902', 'doc_med']} m), whereas the minimum depth of colonization was deepest for Choctowhatchee Bay (\Sexpr{ests_seg[ests_seg$seg == '303', 'doc_min']} m) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'doc_min']} m).  Averages of all grid-based estimates for each segment were different than the segment wide estimates, which suggests potential bias associated with using a whole segment as a relevant spatial unit for estimating depth of colonization.  In most cases, the averages of all grid-based estimates were less than the whole segment estimates, suggesting the latter provided an over-estimate of seagrass growth limits.  For example, the average of all grid estimates for $DOC_{max}$ in the Big Bend region suggested seagrasses grew to approximately \Sexpr{bb_ests} m, which was \Sexpr{ests_seg[ests_seg$seg == '820', 'doc_max'] - bb_ests} m less than the whole segment estimate.  This reduction is likely related to improved resolution of seagrass depth limits near the outflow of the Steinhatchee river.  Although reductions were not as severe for the average grid estimates for the remaining segments, considerable within-segment variation was observed depending on grid location.  For example, the deepest estimate for $DOC_{min}$ (\Sexpr{irl_maxdocmin} m) in the Indian River Lagoon exceeded the average of all grid locations for $DOC_{max}$ (\Sexpr{irl_meandocmax} m).  $DOC_{min}$ also had minimum values of zero meters for the Big Bend and Old Tampa Bay segments, suggesting that seagrasses declined continously from the surface for several locations.   
 
-Visual interpretations of seagrass depth estimates using the grid-based approach provided further information on the distribution of seagrasses in each segment (\cref{fig:all_ests}).
+Visual interpretations of seagrass depth estimates using the grid-based approach provided further information on the distribution of seagrasses in each segment (\cref{fig:all_ests}).  Spatial heterogeneity in depth limits was particularly apparent for the Big Bend and Indian River Lagoon segments.  As expected, depth estimates indicated that seagrasses grew deeper at locations far from the outflow of the SteinHatchee River in the Big Bend segment.  Similarly, seagrasses were limited to shallower depths at the north end of the Indian River Lagoon segment near the Merrit Island National Wildlife Refuge. Seagrases were estimated to grow at maximum depths up to \Sexpr{irl_maxdocmax} m on the eastern portion of the Indian River Lagoon segment.  Spatial heterogeneity was less distinct for the remaining segments.  Seagrasses in Old Tampa Bay grew deeper in the northeast portion of the segment and declined to shallower depths near the inflow at the northern edge.  Spatial variation in the Choctowatchee Bay segment was not apparent, although the maximum \ac{doc} estimate was observed in the northeast portion of the segment.  \ac{doc} values were not available for all grid locations givne the limitations imposed in the estimation method.  \ac{doc} could not be estimated in locations where seagrasses were sparse or absent, nor where seagrasses were present but the sampled points did not exhibit a sufficient decline with depth.  The latter scenario was most common in Old Tampa Bay and Choctawhatchee Bay where seagrasses were unevenly distributed or confined to shallow areas near the shore.  The former scenario was most common in the Big Bend segment where seagrasses were abundant but locations near the shore were inestimable given that seagrasses did not decline appreciably within the depths that were sampled.   
 
-Sensitivity... 
+<<echo = F>>=
+data(ests_out)
 
-\cref{fig:all_sens}
-
-\cref{tab:sens_summ}
+# 
+@
+Uncertainty associated with the \ac{doc} estimates suggested that, in most cases, confidence intervals were within acceptable limits (\cref{fig:all_sens,tab:sens_summ}).  All estimates were 
 
 \subsection{Evaluation of seagrass light requirements}
 
@@ -246,6 +240,8 @@ Sensitivity...
 \cref{fig:light_irl}
 
 \section{Discussion}
+
+% note that outliers were removed for sensitivity (99th percentile) and all estimates
 
 % Describe why estimates were unavailable in particular areas of each segment
 
@@ -450,10 +446,10 @@ load('data/shps.RData')
 #   
 #   grid_spc <- 0.02
 #   rad <- 0.02
-#   grid_seed <- 123
+#   grid_seed <- 4321
 #   set.seed(grid_seed)
 #   pts <- grid_est(seg_shp, spacing = grid_spc) 
-#   ests <- doc_est_grd(pts, sgpts_shp, radius = rad)
+#   ests <- doc_est_grd(pts, sgpts_shp, radius = rad, out_sens = T)
 # 
 #   ests_out[[seg]] <- data.frame(ests, seg = seg)
 #   
@@ -462,18 +458,22 @@ load('data/shps.RData')
 # ests_out <- do.call('rbind', ests_out)
 # names(ests_out)[names(ests_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
 # 
+# # get ci size, these are all the same for each measure
+# ests_out$confint <- with(ests_out, h_doc_min - l_doc_min)
+# ests_out <- ests_out[, !grepl('^h_|^l_', names(ests_out))]
+# 
+# # remove outliers from ests based on 99%
+# ests <- ests_out[, c('doc_min', 'doc_med', 'doc_max')]
+# filt_val <- quantile(unlist(c(ests)), 0.99)
+# ests[ests > filt_val] <- NA
+# ests_out[, c('doc_min', 'doc_med', 'doc_max')] <- ests
+# ests_out <- na.omit(ests_out)
+# 
 # save(ests_out, file = 'data/ests_out.RData')
 
 # load data, ests_out from all_ests figure chunk
 load(file = 'data/ests_seg.RData')
 load(file = 'data/ests_out.RData')
-
-# remove outliers from ests based on 99%
-ests <- ests_out[, c('doc_min', 'doc_med', 'doc_max')]
-filt_val <- quantile(unlist(c(ests)), 0.99)
-ests[ests > filt_val] <- NA
-ests_out[, c('doc_min', 'doc_med', 'doc_max')] <- ests
-ests_out <- na.omit(ests_out)
 
 # summarize spatail ests
 ests_out <- melt(ests_out, measure.var = c('doc_min', 'doc_med', 'doc_max'))
@@ -524,59 +524,17 @@ latex(
 % summary of sensitivity analysis
 <<eval = T, echo = F>>=
 
-# get uncertainty estimates for all grid points in each segment
-# 
-# load('data/shps.RData')
-# 
-# segs <- c('303', '820', '902', '1502')
-# 
-# sens_out <- vector('list', length = length(segs))
-# names(sens_out) <- segs
-# 
-# for(seg in segs){
-#     
-#   seg_shp <- shps[[paste0('seg_', gsub('^.*_', '', seg), '.shp')]]
-#   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
-#   
-#   grid_spc <- 0.02
-#   rad <- 0.02
-#   grid_seed <- 123
-#   set.seed(grid_seed)
-#   pts <- grid_est(seg_shp, spacing = grid_spc) 
-#   ests <- doc_est_grd(pts, sgpts_shp, radius = rad, out_sens = T)
-# 
-#   sens_out[[seg]] <- data.frame(ests, seg = seg)
-#   
-# }
-# 
-# sens_out <- do.call('rbind', sens_out)
-# names(sens_out)[names(sens_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
-# 
-# # get ci range, these are all the same
-# sens_out$doc_min <- with(sens_out, h_doc_min - l_doc_min)
-# sens_out$doc_med <- with(sens_out, h_doc_med - l_doc_med)
-# sens_out$doc_max <- with(sens_out, h_doc_max - l_doc_max)
-# sens_out <- sens_out[, !grepl('^h_|^l_', names(sens_out))]
-# 
-# save(sens_out, file = 'data/sens_out.RData')
-
-# results of sensitivity analysis from all_sens code chunk
-load(file = 'data/sens_out.RData')
-
-# remove outliers from sens based on 99%
-sens <- sens_out[, c('doc_min', 'doc_med', 'doc_max')]
-filt_val <- quantile(unlist(c(sens)), 0.99)
-sens[sens > filt_val] <- NA
-sens_out[, c('doc_min', 'doc_med', 'doc_max')] <- sens
-sens_out <- na.omit(sens_out)
+# load data
+data(shps)
+data(ests_out)
 
 # summarize 
-to_tab <- group_by(sens_out, seg) %>% 
+to_tab <- group_by(ests_out, seg) %>% 
   summarize(
-    `Mean` = mean(doc_max),
-    `St. Dev` = sd(doc_max), 
-    `Min` = min(doc_max), 
-    `Max` = max(doc_max)
+    `Mean` = mean(confint),
+    `St. Dev` = sd(confint), 
+    `Min` = min(confint), 
+    `Max` = max(confint)
     )
 
 # prep table
@@ -636,9 +594,9 @@ rm('buff_ex_dat')
 
 sgrass <- sgrass[sample(1:length(sgrass), 1000), ]
 
-set.seed(123)
+set.seed(4321)
 est_pts <- grid_est(seg, spacing = 0.02)
-test_pt <- est_pts[35, ]
+test_pt <- est_pts[27, ]
 
 buff_pts <- buff_ext(sgrass, test_pt, buff = 0.02)
 
@@ -778,13 +736,15 @@ dev.off()
 % example of estimating seagrass depth of colonization
 <<est_ex, cache = T, echo = F, results = 'hide', eval = F>>=
 
+data(shps)
+
 seg <- shps[['seg_820.shp']] # 820 segment polygon
 sgrass <- shps[['sgpts_2006_820.shp']] # 820 segment seagrass depth point
 # sgrass <- sgrass[sample(1:nrow(sgrass), 2000, replace = F),]
 
-set.seed(123)
+set.seed(4321)
 est_pts <- grid_est(seg, spacing = 0.02)
-test_pt <- est_pts[35, ]
+test_pt <- est_pts[27, ]
 
 buff_pts <- buff_ext(sgrass, test_pt, buff = 0.02)
 
@@ -838,13 +798,10 @@ dev.off()
 <<all_ests, echo = F, results = 'hide', eval = F>>=
 
 ##
-# doc estimates
-
-load('data/shps.RData')
-
+# load data
 # ests out created in chunk for table 'tab:est_summ'
-
-load(file = 'data/ests_out.RData')
+data(shps)
+data(ests_out)
 
 ##
 # make plots
@@ -878,13 +835,6 @@ for(i in 1:length(levs)){
   # subset segment shapefiles and ests by segment
   seg_sub <- all_segs[all_segs$group %in% levs[i], ]
   est_sub <- ests_out[ests_out$seg %in% as.numeric(levs[i]), ]
-  
-  # remove outliers based on 99%
-  ests <- est_sub[, c('doc_min', 'doc_med', 'doc_max')]
-  filt_val <- quantile(unlist(c(ests)), 0.99)
-  ests[ests > filt_val] <- NA
-  est_sub[, c('doc_min', 'doc_med', 'doc_max')] <- ests
-  est_sub <- na.omit(est_sub)
   
   # scale for sizing
   scls <- c(1, 6)
@@ -921,7 +871,7 @@ for(i in 1:length(levs)){
       size = pt_plo$doc_max) 
   
   # legend for all three
-  leg_plo <- est_sub[, !names(est_sub) %in% 'seg']
+  leg_plo <- est_sub[, !names(est_sub) %in% c('seg', 'confint')]
   leg_plo <- melt(leg_plo, id.var = c('long', 'lat'))
   
   leg_brks <- seq(min(leg_plo$value, na.rm =  T), max(leg_plo$value, na.rm = T), length = 4)
@@ -944,7 +894,7 @@ for(i in 1:length(levs)){
 }
 
 # labels
-lab1 <- expression(italic(SG [max]))
+lab1 <- expression(italic(DOC [min]))
 lab2 <- expression(italic(DOC [med]))
 lab3 <- expression(italic(DOC [max]))
 
@@ -974,12 +924,9 @@ dev.off()
 <<all_sens, echo = F, results = 'hide', eval = F>>=
 
 ##
-# doc sensitivity estimates
-
-load('data/shps.RData')
-
-# created in chunk for 'tab:sens_summ'
-load(file = 'data/sens_out.RData')
+# ests out created in chunk for table 'tab:est_summ'
+data(shps)
+data(ests_out)
 
 ##
 # make plots
@@ -1012,18 +959,11 @@ for(i in 1:length(levs)){
   
   # subset segment shapefiles and ests by segment
   seg_sub <- all_segs[all_segs$group %in% levs[i], ]
-  est_sub <- sens_out[sens_out$seg %in% as.numeric(levs[i]), ]
-  
-  # remove outliers based on 99%
-  ests <- est_sub[, c('doc_min'), drop = F]
-  filt_val <- quantile(unlist(c(ests)), 0.99)
-  ests[ests > filt_val] <- NA
-  est_sub[, c('doc_min')] <- ests
-  est_sub <- na.omit(est_sub)
+  est_sub <- ests_out[ests_out$seg %in% as.numeric(levs[i]), ]
   
   # scale for sizing
   scls <- c(1, 6)
-  scl_vals <- scales::rescale(est_sub[, c('doc_min'), drop = F], to = scls)
+  scl_vals <- scales::rescale(est_sub[, c('confint'), drop = F], to = scls)
 
   # scale for colour
   col_vals <- col_fun(scl_vals)
@@ -1042,19 +982,16 @@ for(i in 1:length(levs)){
   
   # add sens points
   p <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$doc_min.1, 
-      size = pt_plo$doc_min) 
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$confint.1, 
+      size = pt_plo$confint) 
   
-  # legend for all three
-  leg_plo <- est_sub[, !names(est_sub) %in% 'seg']
-  leg_plo <- melt(leg_plo, id.var = c('long', 'lat'))
-  
-  leg_brks <- seq(min(leg_plo$value, na.rm =  T), max(leg_plo$value, na.rm = T), length = 4)
+  # legend
+  leg_brks <- seq(min(est_sub$confint, na.rm =  T), max(est_sub$confint, na.rm = T), length = 4)
   leg_labs <- form_fun(leg_brks, 2, 2, 2)
   
   pleg <- p_seg +
-    geom_point(data = leg_plo, aes(x = jitter(long), y = jitter(lat), colour = value, 
-      size = value)) +
+    geom_point(data = est_sub, aes(x = jitter(long), y = jitter(lat), colour = confint, 
+      size = confint)) +
     scale_size_continuous(name = levs[i], range = scls, breaks = leg_brks, labels = leg_labs) +
     scale_colour_gradientn(name = levs[i], colours = eval(formals(col_fun)$cols),
       breaks = leg_brks, labels = leg_labs) +
