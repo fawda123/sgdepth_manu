@@ -229,9 +229,35 @@ Visual interpretations of seagrass depth estimates using the grid-based approach
 <<echo = F>>=
 data(ests_out)
 
-# 
+# uncertainty means
+means <- dplyr::group_by(ests_out, seg) %>% 
+  summarize(means = mean(confint, na.rm = T)) %>% 
+  as.data.frame(.)
+
+
+# uncertainty means
+maxs <- dplyr::group_by(ests_out, seg) %>% 
+  summarize(maxs = max(confint, na.rm = T)) %>% 
+  as.data.frame(.)
+
+# percent non-overlapping
+# 'overlapped' indicates percent non-different between depth measures
+# 'grzero' indicates percent of grid ests where doc_max was greater than zero
+# interval is non-symmetric but this does not affect overlap
+nonsigs <- dplyr::mutate(ests_out, halved = confint/2) %>% 
+  mutate(
+    overlapped = (doc_max - halved) < (doc_med + halved),
+    ltzero = lower_max < 0
+  ) %>% 
+  group_by(seg) %>% 
+  summarize(
+    overlapped = 100 * sum(overlapped)/length(overlapped),
+    ltzero = 100 * sum(ltzero)/length(ltzero)
+  ) %>% 
+  as.data.frame(.)
+
 @
-Uncertainty associated with the \ac{doc} estimates suggested that, in most cases, confidence intervals were within acceptable limits (\cref{fig:all_sens,tab:sens_summ}).  All estimates were 
+Uncertainty for estimates of $DOC_{max}$ indicated that confidence intervals were generally acceptable (i.e., greater than zero), although the ability to discriminate between the three depth estimates varied by segment (\cref{fig:all_sens,tab:sens_summ}).  Mean uncertainty for all estimates in each segment measured as the width of a 95\% confidence interval was \Sexpr{mean(ests_out$confint, na.rm = T)} m.  Greater uncertainty was observed for Choctowhatchee Bay (mean width of all confidence intervals was \Sexpr{means[means$seg == '303', 'means']} m) and Old Tampa Bay (\Sexpr{means[means$seg == '902', 'means']} m), compared to the Big Bend (\Sexpr{means[means$seg == '820', 'means']} m) and Indian River Lagoon (\Sexpr{means[means$seg == '1502', 'means']} m) segments.  The largest confidence interval for each segment was \Sexpr{maxs[maxs$seg == '902', 'maxs']} m for Old Tampa Bay, \Sexpr{maxs[maxs$seg == '303', 'maxs']} m for Choctawhatchee Bay, \Sexpr{maxs[maxs$seg == '820', 'maxs']} m for the Big Bend, and \Sexpr{maxs[maxs$seg == '1502', 'maxs']} m for the Indian River Lagoon segments.  However, most confidence intervals for the remaining grid locations were much smaller than the maximum in each segment.  A comparison of overlapping confidence interals for $DOC_{min}$, $DOC_{med}$, and $DOC_{max}$ at each grid location indicated that not every measure was unique.  Specifically, only \Sexpr{100 - nonsigs[nonsigs$seg == '303', 'overlapped']}\% of grid points in Choctawhatchee Bay and \Sexpr{100 - nonsigs[nonsigs$seg == '902', 'overlapped']}\% in Old Tampa Bay had significantly different estimates, whereas \Sexpr{100 - nonsigs[nonsigs$seg == '1502', 'overlapped']}\% of grid points in the Indian River Lagoon and \Sexpr{100 - nonsigs[nonsigs$seg == '820', 'overlapped']}\% of grid points in the Big Bend segments had estimates that were significantly different.  By contrast, all grid estimates in Choctawhatchee Bay and Indian River Lagoon had $DOC_{max}$ estimates that were significantly greater than zero, whereas all but \Sexpr{nonsigs[nonsigs$seg == '902', 'ltzero']}\% of grid points in Old Tampa Bay and \Sexpr{nonsigs[nonsigs$seg == '820', 'ltzero']}\% of grid points in the Big Bend segment had $DOC_{max}$ estimates significantly greater than zero. 
 
 \subsection{Evaluation of seagrass light requirements}
 
@@ -244,6 +270,8 @@ Uncertainty associated with the \ac{doc} estimates suggested that, in most cases
 % note that outliers were removed for sensitivity (99th percentile) and all estimates
 
 % Describe why estimates were unavailable in particular areas of each segment
+
+% ability to create significantly different estimates for each segment - depends on slope, radius size
 
 % Acknowledge that comparisons with segment wide estimate are specific to grid spacing and radii tha twere used, thus the comparison is only useful for illustrating the presence of heterogeneity within segments, as well as variation between segments.  Absolute values will vary with different spacing and radii. 
 
@@ -459,7 +487,9 @@ load('data/shps.RData')
 # names(ests_out)[names(ests_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
 # 
 # # get ci size, these are all the same for each measure
+# # get lower bound of doc_max for eval of those greater than zero
 # ests_out$confint <- with(ests_out, h_doc_min - l_doc_min)
+# ests_out$lower_max <- ests_out$l_doc_max
 # ests_out <- ests_out[, !grepl('^h_|^l_', names(ests_out))]
 # 
 # # remove outliers from ests based on 99%
