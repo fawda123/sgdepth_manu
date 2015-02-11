@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.8.29)  11 FEB 2015 14:13
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.8.29)  11 FEB 2015 16:18
 entering extended mode
 **sgdepth_manu.tex
 (M:\docs\manuscripts\sgdepth_manu\sgdepth_manu.tex
@@ -710,117 +710,117 @@ although it is yet undefined on input line 203.
 
 ] [22]) [23]
 
-Package array Warning: Column . is already defined on input line 329.
+Package array Warning: Column . is already defined on input line 331.
 
 [24] [25]
 
 pdfTeX warning: pdflatex.exe (file M:/docs/manuscripts/sgdepth_manu/figs/seg_al
 l.pdf): PDF inclusion: found PDF version <1.6>, but at most version <1.5> allow
 ed
-<figs/seg_all.pdf, id=359, 596.2275pt x 758.835pt>
+<figs/seg_all.pdf, id=364, 596.2275pt x 758.835pt>
 File: figs/seg_all.pdf Graphic file (type pdf)
  <use figs/seg_all.pdf>
-Package pdftex.def Info: figs/seg_all.pdf used on input line 354.
+Package pdftex.def Info: figs/seg_all.pdf used on input line 386.
 (pdftex.def)             Requested size: 469.75502pt x 597.87521pt.
 
 
-LaTeX Warning: Float too large for page by 0.94519pt on input line 357.
+LaTeX Warning: Float too large for page by 0.94519pt on input line 389.
 
 
 
 pdfTeX warning: pdflatex.exe (file M:/docs/manuscripts/sgdepth_manu/figs/wbid_d
 oc.pdf): PDF inclusion: found PDF version <1.6>, but at most version <1.5> allo
 wed
-<figs/wbid_doc.pdf, id=360, 614.295pt x 614.295pt>
+<figs/wbid_doc.pdf, id=365, 614.295pt x 614.295pt>
 File: figs/wbid_doc.pdf Graphic file (type pdf)
  <use figs/wbid_doc.pdf>
-Package pdftex.def Info: figs/wbid_doc.pdf used on input line 361.
+Package pdftex.def Info: figs/wbid_doc.pdf used on input line 393.
 (pdftex.def)             Requested size: 469.75502pt x 469.75604pt.
 
-<figs/buff_ex.pdf, id=361, page=1, 433.62pt x 433.62pt>
+<figs/buff_ex.pdf, id=366, page=1, 433.62pt x 433.62pt>
 File: figs/buff_ex.pdf Graphic file (type pdf)
 
 <use figs/buff_ex.pdf, page 1>
-Package pdftex.def Info: figs/buff_ex.pdf, page1 used on input line 375.
+Package pdftex.def Info: figs/buff_ex.pdf, page1 used on input line 407.
 (pdftex.def)             Requested size: 234.8775pt x 234.87912pt.
 
-<figs/buff_ex.pdf, id=362, page=2, 433.62pt x 433.62pt>
+<figs/buff_ex.pdf, id=367, page=2, 433.62pt x 433.62pt>
 File: figs/buff_ex.pdf Graphic file (type pdf)
 
 <use figs/buff_ex.pdf, page 2>
-Package pdftex.def Info: figs/buff_ex.pdf, page2 used on input line 379.
+Package pdftex.def Info: figs/buff_ex.pdf, page2 used on input line 411.
 (pdftex.def)             Requested size: 234.8775pt x 234.87912pt.
 
-Overfull \hbox (12.00002pt too wide) in paragraph at lines 375--380
+Overfull \hbox (12.00002pt too wide) in paragraph at lines 407--412
  [][][][] 
  []
 
-<figs/buff_ex.pdf, id=363, page=3, 433.62pt x 433.62pt>
+<figs/buff_ex.pdf, id=368, page=3, 433.62pt x 433.62pt>
 File: figs/buff_ex.pdf Graphic file (type pdf)
 
 <use figs/buff_ex.pdf, page 3>
-Package pdftex.def Info: figs/buff_ex.pdf, page3 used on input line 384.
+Package pdftex.def Info: figs/buff_ex.pdf, page3 used on input line 416.
 (pdftex.def)             Requested size: 234.8775pt x 234.87912pt.
 
-<figs/buff_ex.pdf, id=364, page=4, 433.62pt x 433.62pt>
+<figs/buff_ex.pdf, id=369, page=4, 433.62pt x 433.62pt>
 File: figs/buff_ex.pdf Graphic file (type pdf)
 
 <use figs/buff_ex.pdf, page 4>
-Package pdftex.def Info: figs/buff_ex.pdf, page4 used on input line 387.
+Package pdftex.def Info: figs/buff_ex.pdf, page4 used on input line 419.
 (pdftex.def)             Requested size: 234.8775pt x 234.87912pt.
 
-Overfull \hbox (12.0pt too wide) in paragraph at lines 384--388
+Overfull \hbox (12.0pt too wide) in paragraph at lines 416--420
  [][][][] 
  []
 
-<figs/est_ex.pdf, id=375, page=1, 614.295pt x 325.215pt>
+<figs/est_ex.pdf, id=380, page=1, 614.295pt x 325.215pt>
 File: figs/est_ex.pdf Graphic file (type pdf)
 
 <use figs/est_ex.pdf, page 1>
-Package pdftex.def Info: figs/est_ex.pdf, page1 used on input line 401.
+Package pdftex.def Info: figs/est_ex.pdf, page1 used on input line 433.
 (pdftex.def)             Requested size: 234.8775pt x 124.34718pt.
 
-<figs/est_ex.pdf, id=376, page=2, 614.295pt x 325.215pt>
+<figs/est_ex.pdf, id=381, page=2, 614.295pt x 325.215pt>
 File: figs/est_ex.pdf Graphic file (type pdf)
 
 <use figs/est_ex.pdf, page 2>
-Package pdftex.def Info: figs/est_ex.pdf, page2 used on input line 406.
+Package pdftex.def Info: figs/est_ex.pdf, page2 used on input line 438.
 (pdftex.def)             Requested size: 234.8775pt x 124.34718pt.
 
-<figs/est_ex.pdf, id=377, page=3, 614.295pt x 325.215pt>
+<figs/est_ex.pdf, id=382, page=3, 614.295pt x 325.215pt>
 File: figs/est_ex.pdf Graphic file (type pdf)
 
 <use figs/est_ex.pdf, page 3>
-Package pdftex.def Info: figs/est_ex.pdf, page3 used on input line 411.
+Package pdftex.def Info: figs/est_ex.pdf, page3 used on input line 443.
 (pdftex.def)             Requested size: 234.8775pt x 124.34718pt.
- <figs/all_ests.pdf, id=386, 505.89pt x 650.43pt>
+ <figs/all_ests.pdf, id=391, 505.89pt x 650.43pt>
 File: figs/all_ests.pdf Graphic file (type pdf)
 
 <use figs/all_ests.pdf>
-Package pdftex.def Info: figs/all_ests.pdf used on input line 420.
+Package pdftex.def Info: figs/all_ests.pdf used on input line 452.
 (pdftex.def)             Requested size: 446.26582pt x 573.77956pt.
 
 
-LaTeX Warning: Float too large for page by 5.84953pt on input line 423.
+LaTeX Warning: Float too large for page by 5.84953pt on input line 455.
 
-<figs/all_sens.pdf, id=387, 505.89pt x 505.89pt>
+<figs/all_sens.pdf, id=392, 505.89pt x 505.89pt>
 File: figs/all_sens.pdf Graphic file (type pdf)
  <use figs/all_sens.pdf>
-Package pdftex.def Info: figs/all_sens.pdf used on input line 429.
+Package pdftex.def Info: figs/all_sens.pdf used on input line 461.
 (pdftex.def)             Requested size: 446.26582pt x 446.27298pt.
 
-<figs/light_tb.pdf, id=392, 505.89pt x 433.62pt>
+<figs/light_tb.pdf, id=397, 505.89pt x 433.62pt>
 File: figs/light_tb.pdf Graphic file (type pdf)
  <use figs/light_tb.pdf>
-Package pdftex.def Info: figs/light_tb.pdf used on input line 438.
+Package pdftex.def Info: figs/light_tb.pdf used on input line 470.
 (pdftex.def)             Requested size: 446.26582pt x 382.5197pt.
 
-<figs/light_irl.pdf, id=395, 542.025pt x 542.025pt>
+<figs/light_irl.pdf, id=400, 542.025pt x 542.025pt>
 File: figs/light_irl.pdf Graphic file (type pdf)
  <use figs/light_irl.pdf>
-Package pdftex.def Info: figs/light_irl.pdf used on input line 447.
+Package pdftex.def Info: figs/light_irl.pdf used on input line 479.
 (pdftex.def)             Requested size: 469.75502pt x 469.77148pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 453.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 485.
 
 [26 <M:/docs/manuscripts/sgdepth_manu/figs/seg_all.pdf>] [27 <M:/docs/manuscrip
 ts/sgdepth_manu/figs/wbid_doc.pdf>] [28 <M:/docs/manuscripts/sgdepth_manu/figs/
@@ -832,22 +832,22 @@ st_ex.pdf>] [30 <M:/docs/manuscripts/sgdepth_manu/figs/all_ests.pdf>] [31 <M:/d
 ocs/manuscripts/sgdepth_manu/figs/all_sens.pdf>] [32 <M:/docs/manuscripts/sgdep
 th_manu/figs/light_tb.pdf>] [33 <M:/docs/manuscripts/sgdepth_manu/figs/light_ir
 l.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 453.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 485.
  (M:\docs\manuscripts\sgdepth_manu\sgdepth_manu.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 453.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 453.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 485.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 485.
 Package rerunfilecheck Info: File `sgdepth_manu.out' has not changed.
 (rerunfilecheck)             Checksum: 79062D32D7A837BCC9423FB7F9399B17;926.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 453.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 485.
  ) 
 Here is how much of TeX's memory you used:
- 11965 strings out of 493921
- 189126 string characters out of 3147282
- 305711 words of memory out of 3000000
- 14943 multiletter control sequences out of 15000+200000
- 32414 words of font info for 74 fonts, out of 3000000 for 9000
+ 11976 strings out of 493921
+ 189303 string characters out of 3147282
+ 311711 words of memory out of 3000000
+ 14952 multiletter control sequences out of 15000+200000
+ 34098 words of font info for 76 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 44i,11n,47p,1936b,577s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 44i,12n,48p,1936b,577s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Program File
 s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files/MiKTeX
  2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/font
@@ -859,9 +859,9 @@ rogram Files/MiKTeX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/M
 iKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/times/utmbi8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/u
 tmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on sgdepth_manu.pdf (33 pages, 4428657 bytes).
+Output written on sgdepth_manu.pdf (33 pages, 4432274 bytes).
 PDF statistics:
- 738 PDF objects out of 1000 (max. 8388607)
- 113 named destinations out of 1000 (max. 500000)
+ 743 PDF objects out of 1000 (max. 8388607)
+ 114 named destinations out of 1000 (max. 500000)
  154 words of extra memory for PDF output out of 10000 (max. 10000000)
 

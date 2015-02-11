@@ -207,7 +207,7 @@ The relationship between seagrass depth limits and secchi measurements were expl
 I_{z} = I_{O} \cdot \exp\left(-K_{d} \cdot Z\right)
 \end{equation}
 \noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{d}$). \citet{Duarte91} indicate that minimum light requirements for seagrass are on average 11\% of surface irradiance.  Light requirements may also be species-specific and variable by latitude such that value may range from less than 5\% to greater than 30\% \citep{Dennison93}.  Light requirements of seagrass at a specific location can be estimated by rearranging \cref{eqn:lambeer}:
-\begin{equation}
+\begin{equation} \label{eqn:perclight}
 \% light = \exp\left(-K_{d} \cdot DOC_{max}\right)
 \end{equation}
 \noindent where the percent light requirements of seagrass at $DOC_{max}$ are empirically related to light extinction. A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $c = K_{d} \cdot Z_{d}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{d}$ can be replaced with the conversion factor and the equation is rearranged to describe $DOC_{max}$ as a function of secchi depth $Z_{d}$:
@@ -237,15 +237,17 @@ Uncertainty for estimates of $DOC_{max}$ indicated that confidence intervals wer
 
 \subsection{Evaluation of seagrass light requirements}
 
-\cref{fig:light_tb}
 
-\cref{fig:light_irl}
+
+Estimates of seagrass light requirements for the entire areas of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for 81 locations in Tampa Bay and 134 locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean light requirements were significantly different between 
 
 \section{Discussion}
 
 % note that outliers were removed for sensitivity (99th percentile) and all estimates
 
 % Describe why estimates were unavailable in particular areas of each segment
+
+% ability to create significantly different estimates for each segment - depends on slope, radius size
 
 % Acknowledge that comparisons with segment wide estimate are specific to grid spacing and radii tha twere used, thus the comparison is only useful for illustrating the presence of heterogeneity within segments, as well as variation between segments.  Absolute values will vary with different spacing and radii. 
 
@@ -344,6 +346,36 @@ Secchi (se)&  0.07&  0.19&  0.01&  0.01\tabularnewline
 \end{table}
 
 
+% summary of light requirements analysis
+%latex.default(tab, file = "", rowlabel = "Bay segment\\textsuperscript{\\textit{a}}",     rgroup = c("Indian River Lagoon", "Tampa Bay"), n.rgroup = c(8,         4), insert.bottom = foot.val, caption = cap.val, colheads = col_heads,     caption.loc = "top", rowname = rows, label = "tab:secc_summ")%
+\begin{table}[!tbp]
+\caption{Summary of water clarity data and estimated light requirements for all bay segments of the Indian River Lagoon and Tampa Bay.  Water clarity data were obtained from secchi observations in the Florida \acl{IWR} database for all dates within each  bay.  Minimum year, maximum year, sample size ($n$), and mean values (m) of secchi data by segment are shown. Mean $DOC_{max}$ and estimated \% light requirements for each segment are based on data in \cref{fig:light_irl,fig:light_tb}.\label{tab:secc_summ}} 
+\begin{center}
+\begin{tabular}{lllrlll}
+\hline\hline
+\multicolumn{1}{l}{Bay segment\textsuperscript{\textit{a}}}&\multicolumn{1}{c}{Min year}&\multicolumn{1}{c}{Max year}&\multicolumn{1}{c}{$n$}&\multicolumn{1}{c}{Secchi}&\multicolumn{1}{c}{$DOC_{max}$}&\multicolumn{1}{c}{\% light}\tabularnewline
+\hline
+{\bfseries Indian River Lagoon}&&&&&&\tabularnewline
+~~BR&1973&2009&$1786$&1.10&1.55&0.10\tabularnewline
+~~LCIRL&1977&2009&$1735$&1.04&1.38&0.12\tabularnewline
+~~LIRL&1976&2005&$ 244$&0.90&1.65&0.06\tabularnewline
+~~LML&1979&2009&$ 414$&1.01&1.24&0.12\tabularnewline
+~~LSL&1973&2005&$ 163$&0.97&3.16&0.01\tabularnewline
+~~UCIRL&1973&2009&$2301$&1.30&1.30&0.12\tabularnewline
+~~UIRL&1973&2009&$1269$&1.34&1.12&0.18\tabularnewline
+~~UML&1973&2009&$ 544$&1.04&2.36&0.02\tabularnewline
+\hline
+{\bfseries Tampa Bay}&&&&&&\tabularnewline
+~~HB&1972&2003&$3963$&1.08&1.11&0.14\tabularnewline
+~~LTB&1972&2009&$3880$&2.42&2.28&0.19\tabularnewline
+~~MTB&1972&2009&$4901$&1.84&1.78&0.19\tabularnewline
+~~OTB&1972&2003&$5383$&1.43&1.17&0.22\tabularnewline
+\hline
+\end{tabular}\end{center}
+
+\textsuperscript{\textit{a}}\footnotesize BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.\end{table}
+
+
 \clearpage
 
 %%%%%%
@@ -431,7 +463,7 @@ Secchi (se)&  0.07&  0.19&  0.01&  0.01\tabularnewline
 \label{fig:all_sens}
 \end{figure}
 
-% estimated light reuqirements for Tampa Bay
+% estimated light requirements for Tampa Bay
 
 \begin{figure}
 \centering

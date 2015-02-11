@@ -163,7 +163,7 @@ The relationship between seagrass depth limits and secchi measurements were expl
 I_{z} = I_{O} \cdot \exp\left(-K_{d} \cdot Z\right)
 \end{equation}
 \noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{d}$). \citet{Duarte91} indicate that minimum light requirements for seagrass are on average 11\% of surface irradiance.  Light requirements may also be species-specific and variable by latitude such that value may range from less than 5\% to greater than 30\% \citep{Dennison93}.  Light requirements of seagrass at a specific location can be estimated by rearranging \cref{eqn:lambeer}:
-\begin{equation}
+\begin{equation} \label{eqn:perclight}
 \% light = \exp\left(-K_{d} \cdot DOC_{max}\right)
 \end{equation}
 \noindent where the percent light requirements of seagrass at $DOC_{max}$ are empirically related to light extinction. A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $c = K_{d} \cdot Z_{d}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{d}$ can be replaced with the conversion factor and the equation is rearranged to describe $DOC_{max}$ as a function of secchi depth $Z_{d}$:
@@ -261,9 +261,14 @@ Uncertainty for estimates of $DOC_{max}$ indicated that confidence intervals wer
 
 \subsection{Evaluation of seagrass light requirements}
 
-\cref{fig:light_tb}
+<<echo = F>>=
+data(tb_light)
+data(irl_light)
+tb_light <- data.frame(tb_light)
+irl_light <- data.frame(irl_light)
+@
 
-\cref{fig:light_irl}
+Estimates of seagrass light requirements for the entire areas of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for \Sexpr{nrow(tb_light)} locations in Tampa Bay and \Sexpr{nrow(irl_light)} locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean light requirements were significantly different between 
 
 \section{Discussion}
 
@@ -585,6 +590,120 @@ latex(
   caption.loc = 'top',
   rowname = segs,
   label = 'tab:sens_summ'
+  )
+
+@
+
+% summary of light requirements analysis
+<<eval = T, echo = F>>=
+
+# ##
+# # load data
+# 
+# # load results from figure chunks
+# data(tb_light)
+# data(irl_light)
+# 
+# # segment shapefiles
+# data(tb_seg)
+# data(irl_seg)
+#  
+# # all secchi data
+# data(secc_all)
+# 
+# ##
+# # prep data
+# 
+# # clip secchi by tampa bay and irl segments
+# # clip secchi data by segments
+# sel_tb <- !is.na(secc_all %over% tb_seg)[, 1]
+# sel_irl <- !is.na(secc_all %over% irl_seg)[, 1]
+# sel_all <- apply(cbind(sel_tb, sel_irl), 1, any)
+# secc_segs <- secc_all[sel_all, ]
+# 
+# # create bay column, only populate for TB
+# # IRL will populate  in segment assignments
+# secc_segs$bay <- 'TB'
+# 
+# # get segment for each point, TB
+# for(seg in as.character(tb_seg$seg)){
+#   
+#   to_sel <- tb_seg[tb_seg$seg %in% seg, ]
+#   sel <- !is.na(secc_segs %over% to_sel)[, 1]
+#   secc_segs[sel, 'seg'] <- as.character(seg)
+#   
+# }
+# 
+# # get segment for each point, IRL
+# levels(irl_seg$Segment) <- c('BR', 'LCIRL', 'LHR', 'LIRL', 'LML', 'LSL', 'UCIRL', 'UIRL', 'UML')
+# for(seg in as.character(irl_seg$Segment)){
+#   
+#   to_sel <- irl_seg[irl_seg$Segment %in% seg, ]
+#   sel <- !is.na(secc_segs %over% to_sel)[, 1]
+#   secc_segs[sel, 'seg'] <- as.character(seg)
+#   secc_segs$bay[sel] <- 'IRL'
+#   
+# }
+# 
+# ##
+# # summarize secchi
+# secc_summ <- data.frame(secc_segs) %>% 
+#   group_by(bay, seg) %>% 
+#   summarize(
+#     min_date = min(Date), 
+#     max_date = max(Date),
+#     num_obs = length(as.numeric(SD)),
+#     mean_sd = mean(as.numeric(SD))
+#   )
+# 
+# # summarize light requirements
+# irl_summ <- data.frame(irl_light) %>% 
+#   group_by(seg) %>% 
+#   summarize(
+#     mean_zmax = mean(zmax_all), 
+#     mean_light = mean(light)
+#   )
+# 
+# tb_summ <- data.frame(tb_light) %>% 
+#   group_by(seg) %>% 
+#   summarize(
+#     mean_zmax = mean(zmax_all), 
+#     mean_light = mean(light)
+#   )
+# 
+# # combine all, remove LHR segment (crap data)
+# secc_summ <- left_join(secc_summ, rbind_all(list(tb_summ, irl_summ)), by = 'seg') %>% 
+#   filter(seg != 'LHR')
+# 
+# save(secc_summ, file = 'data/secc_summ.RData')
+
+data(secc_summ)
+
+# prep for table
+tab <- data.frame(secc_summ)
+tab$min_date <- strftime(tab$min_date, '%Y')
+tab$max_date <- strftime(tab$max_date, '%Y')
+rows <- as.character(tab$seg)
+tab <- tab[, -c(1:2)]
+tab[, 4:6] <- formtab_fun(tab[, 4:6])
+
+cap.val<-'Summary of water clarity data and estimated light requirements for all bay segments of the Indian River Lagoon and Tampa Bay.  Water clarity data were obtained from secchi observations in the Florida \\acl{IWR} database for all dates within each  bay.  Minimum year, maximum year, sample size ($n$), and mean values (m) of secchi data by segment are shown. Mean $DOC_{max}$ and estimated \\% light requirements for each segment are based on data in \\cref{fig:light_irl,fig:light_tb}.'
+
+foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
+col_heads <- c('Min year', 'Max year', '$n$', 'Secchi', '$DOC_{max}$', '\\% light')
+
+latex( 
+  tab,
+  file = '',
+  rowlabel = 'Bay segment\\textsuperscript{\\textit{a}}',
+  rgroup = c('Indian River Lagoon', 'Tampa Bay'), 
+  n.rgroup = c(8, 4),
+  insert.bottom = foot.val,
+  caption = cap.val,
+  colheads = col_heads,
+  caption.loc = 'top',
+  rowname = rows,
+  label = 'tab:secc_summ'
   )
 
 @
@@ -1055,7 +1174,7 @@ dev.off()
 \label{fig:all_sens}
 \end{figure}
 
-% estimated light reuqirements for Tampa Bay
+% estimated light requirements for Tampa Bay
 <<light_tb, echo = F, results = 'hide'>>=
 
 # source('R/funcs.r')

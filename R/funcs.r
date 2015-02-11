@@ -44,6 +44,11 @@ form_fun <- function(x, rnd_val = 2, dig_val = 2, nsm_val = 2) {
   format(round(to_form, rnd_val), digits = dig_val, nsmall = nsm_val)
   }
 
+# similar as above but for numeric values in tables
+formtab_fun <- function(x, rnd_val = 2, dig_val = 2, nsm_val = 2) {
+  format(round(x, rnd_val), digits = dig_val, nsmall = nsm_val)
+  }
+
 ######
 # get logistic model from input
 # dat_in is data frame of empirical estimates of seagrass occupancy by depth

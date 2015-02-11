@@ -16,6 +16,8 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `secc_seg.RData` Secchi data for each segment, created in manuscript code cunk
 
+`secc_sum.RData` Summary of secchi observations by bay and segment from IWR40 database, also includes light requirement summaries from `irl_light.RData` and `tb_light.RData`
+
 `seg_summ.RData` Summarized data for table of segment characteristics
 
 `sgpts_irl_2009.rds` All seagrass depth points for Indian River Lagoon (all segments)
