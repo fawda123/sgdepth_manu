@@ -262,13 +262,32 @@ Uncertainty for estimates of $DOC_{max}$ indicated that confidence intervals wer
 \subsection{Evaluation of seagrass light requirements}
 
 <<echo = F>>=
-data(tb_light)
+# load data
 data(irl_light)
-tb_light <- data.frame(tb_light)
-irl_light <- data.frame(irl_light)
+data(tb_light)
+irl <- data.frame(irl_light)
+tb <- data.frame(tb_light)
+
+# light between bays
+light_btw <- t.test(tb$light, irl$light)
+
+# light within bays
+wtn_tb <- summary(lm(light ~ seg, data = tb))$fstatistic
+wtn_tb <- c(wtn_tb, pf(wtn_tb[1], wtn_tb[2], wtn_tb[3],lower.tail=F))
+names(wtn_tb) <- c('Fval', 'df1', 'df2', 'pval')
+wtn_irl <- summary(lm(light ~ seg, data = irl))$fstatistic
+wtn_irl <- c(wtn_irl, pf(wtn_irl[1], wtn_irl[2], wtn_irl[3],lower.tail=F))
+names(wtn_irl) <- c('Fval', 'df1', 'df2', 'pval')
+
+# tukey comps
+tuk_tb <- aov(light ~ seg, data = tb)
+tuk_tb <- TukeyHSD(tuk_tb)$seg[, 'p adj']
+tuk_irl <- aov(light ~ seg, data = irl)
+tuk_irl <- TukeyHSD(tuk_irl)$seg[, 'p adj']
+
 @
 
-Estimates of seagrass light requirements for the entire areas of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for \Sexpr{nrow(tb_light)} locations in Tampa Bay and \Sexpr{nrow(irl_light)} locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean light requirements were significantly different between 
+Estimates of seagrass light requirements for all segments of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{tab:secc_summ,fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for \Sexpr{nrow(tb_light)} locations in Tampa Bay and \Sexpr{nrow(irl_light)} locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean secchi depth for all recorded observations was \Sexpr{mean(tb$SD)} m ($n=$ \Sexpr{nrow(tb)}) for Tampa Bay and \Sexpr{mean(irl$SD)} m ($n=$ \Sexpr{nrow(irl)}) for Indian River Lagoon.  Mean light requirements were significantly different between the bays (two-sided t-test, $t=$ \Sexpr{light_btw$statistic}, $df=$ \Sexpr{light_btw$parameter}, $p < 0.001$) with a mean requirement of \Sexpr{mean(tb$light)}\% for Tampa Bay and \Sexpr{mean(irl$light)}\% for Indian River Lagoon.  Within each bay, light requirements were significantly different between segments (ANOVA, $F =$ \Sexpr{form_fun(wtn_tb['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_tb['df1']}, \Sexpr{wtn_tb['df2']}, $p = $ \Sexpr{form_fun(wtn_tb['pval'])} for Tampa Bay, $F =$ \Sexpr{form_fun(wtn_irl['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_irl['df1']}, \Sexpr{wtn_irl['df2']}, $p = $ \Sexpr{form_fun(wtn_irl['pval'], 3, 3, 3)} for Indian River Lagoon).  However, post-hoc evaluation of all pair-wise comparisons of mean light requirements indicated that significant differences were only observed between a few segments within each bay.  Significant differences in Tampa Bay were observed between Old Tampa Bay and Hillsborough Bay (Tukey multiple comparisons, $p =$ \Sexpr{form_fun(tuk_tb['OTB-HB'], 3, 3, 3)}).  Significant differences in the Indian River Lagoon were observed between the Upper Indian River Lagoon and Banana River ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-BR'], 3, 3, 3)}), the Upper Indian River Lagoon and Lower Indian River Lagoon ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LIRL'], 3, 3, 3)}), and Upper Indian River Lagoon and Lower St. Lucie ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LSL'], 3, 3, 3)}) segments.  In general, spatial variation of light requirements in Tampa Bay suggested that seagrasses were less light-limited (i.e., lower percent light requirements at $DOC_{max}$) in Hillsborough Bay and western areas of Lower Tampa Bay near the Gulf of Mexico (\cref{fig:light_tb}).  Seagrassess in the Indian River Lagoon were generally less light-limited towards the south and in the Banana River segment (\cref{fig:light_irl}).
 
 \section{Discussion}
 
@@ -652,7 +671,8 @@ latex(
 #   summarize(
 #     min_date = min(Date), 
 #     max_date = max(Date),
-#     num_obs = length(as.numeric(SD)),
+#     n_secchi = length(as.numeric(SD)),
+#     n_locs = length(unique(Station_ID)),
 #     mean_sd = mean(as.numeric(SD))
 #   )
 # 
@@ -677,6 +697,9 @@ latex(
 # 
 # save(secc_summ, file = 'data/secc_summ.RData')
 
+# load data
+# note that the secchi summaries are based on all secchi for each bay
+# irl, tb summaries are based on removal of extremes
 data(secc_summ)
 
 # prep for table
@@ -685,12 +708,12 @@ tab$min_date <- strftime(tab$min_date, '%Y')
 tab$max_date <- strftime(tab$max_date, '%Y')
 rows <- as.character(tab$seg)
 tab <- tab[, -c(1:2)]
-tab[, 4:6] <- formtab_fun(tab[, 4:6])
+tab[, c(5:7)] <- formtab_fun(tab[, c(5:7)])
 
-cap.val<-'Summary of water clarity data and estimated light requirements for all bay segments of the Indian River Lagoon and Tampa Bay.  Water clarity data were obtained from secchi observations in the Florida \\acl{IWR} database for all dates within each  bay.  Minimum year, maximum year, sample size ($n$), and mean values (m) of secchi data by segment are shown. Mean $DOC_{max}$ and estimated \\% light requirements for each segment are based on data in \\cref{fig:light_irl,fig:light_tb}.'
+cap.val<-'Summary of water clarity data and estimated light requirements for all bay segments of the Indian River Lagoon and Tampa Bay.  Water clarity data were obtained from secchi observations in the Florida \\acl{IWR} database for all dates and locations in each  bay.  Values are minimum and maximum years of secchi data, sample size of secchi data ($n_{Secchi}$), sample size of seagrass depth estimates ($n_{DOC}$) at each unique secchi location, mean values (m) of secchi data, mean $DOC_{max}$, and estimated \\% light requirements for each segment.  Summaries are based primarily on data in \\cref{fig:light_irl,fig:light_tb}.'
 
 foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
-col_heads <- c('Min year', 'Max year', '$n$', 'Secchi', '$DOC_{max}$', '\\% light')
+col_heads <- c('Min year', 'Max year', '$n_{Secchi}$', '$n_{DOC}$', 'Secchi', '$DOC_{max}$', '\\% light')
 
 latex( 
   tab,
@@ -1193,7 +1216,7 @@ dev.off()
 # dat <- na.omit(proc$ave_dat)
 # dat <- dplyr::filter(dat, SD <3)
 # dat <- dplyr::mutate(dat, 
-#   light = exp(-zmax_all * 1.7/SD),
+#   light = 100 * exp(-zmax_all * 1.7/SD),
 #   seg = NA
 #   )
 # 
@@ -1245,9 +1268,9 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous(labels = fmt()) + 
   ylab('Latitude') +
-  scale_size(name = 'Light requirements', range = scls, breaks = leg_brks, 
+  scale_size(name = '% light requirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = 'Light requirements', 
+  scale_colour_gradientn(name = '% light requirements', 
     colours = c('blue', 'lightblue', 'green'),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1265,7 +1288,7 @@ dat$seg <- factor(dat$seg, levels = meds$seg[order(meds$`median(light)`)])
 
 p2 <- ggplot(data.frame(dat), aes(x = seg, y = light)) + 
   geom_boxplot(fill = fill_col) + 
-  ylab('Light requirements') +
+  ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.y = element_blank()) + 
   coord_flip()
@@ -1300,7 +1323,7 @@ dev.off()
 # dat <- na.omit(proc$ave_dat)
 # # dat <- dplyr::filter(dat, SD <3)
 # dat <- dplyr::mutate(dat, 
-#   light = exp(-zmax_all * 1.7/SD),
+#   light = 100 * exp(-zmax_all * 1.7/SD),
 #   seg = NA
 #   )
 # 
@@ -1358,9 +1381,9 @@ p1 <- ggplot(fortify(irl_seg), aes(long, lat)) +
   scale_y_continuous(labels = fmt()) +
   xlab('Longitude') +
   ylab('Latitude') +
-  scale_size(name = 'Light requirements', range = scls, breaks = leg_brks, 
+  scale_size(name = '% light requirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = 'Light requirements', 
+  scale_colour_gradientn(name = '% light requirements', 
     colours = c('blue', 'lightblue', 'green'),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1379,7 +1402,7 @@ dat$seg <- factor(dat$seg, levels = meds$seg[order(meds$`median(light)`)])
 p2 <- ggplot(dat, aes(x = seg, y = light)) + 
   geom_boxplot(fill = fill_col) + 
   # geom_hline(yintercept = 0.2, linetype = 'dashed') +
-  ylab('Light requirements') +
+  ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.y = element_blank()) + 
   coord_flip()
