@@ -75,7 +75,7 @@ source('R/funcs.r')
 \renewcommand\refname{References \vspace{12pt}}
 
 \begin{singlespace}
-\title{{\bf {\Large A reproducible and empirical approach for estimating spatially-referenced depths of seagrass colonization}}}
+\title{{\bf {\Large Improved estimates of seagrass light requirements using reproducible and spatially-referenced depths of colonization}}}
 \author{
   {\bf {\normalsize Marcus W. Beck$^1$, James D. Hagy III$^2$}}
   \\\\{\textit {\normalsize $^1$ORISE Research Participation Program}}
@@ -136,9 +136,9 @@ A curve is fit to the sampled depth points using non-linear regression to charac
 \end{equation}
 where the proportion of points occupied by seagrass at each depth is defined by a logistic curve with an asymptote $\alpha$, a midpoint inflection $\beta$, and a scale parameter $\gamma$.  Starting values $\alpha$, $\beta$, and $\gamma$ were estimated empirically from the observed data.  
 
-Finally, a simple linear curve is fit through the inflection point ($\beta$) of the logistic curve to estimate the three measures of depth of colonization (\cref{fig:est_ex3}).  The inflection point is considered the depth at which seagrass are decreasing at a maximum rate and is used as the slope of the linear curve.  Three measures describing seagrass growth characteristics are obtained. The maximum depth of seagrass colonization, $DOC_{max}$, is the x-axis intercept of the linear curve.  The minimum depth of seagrass growth, $DOC_{min}$, is the location where the linear curve intercepts the asymptote of the logistic growth curve.  This depth can be considered the start of the decline in seagrass coverage with increasing depth.  The median depth of seagrass colonization, $DOC_{med}$, is the depth halfway between $DOC_{min}$ and $DOC_{max}$.  $DOC_{med}$ was typically the inflection point of the logistic growth curve.  Functionally, each measure has specific ecological significance.  The median and maximum depth estimates describe the growth limitations of seagrasses as a function of water clarity, whereas minimum depth of growth was often where the highest percentage of seagrass coverage was observed in the sample.  Median and maximum depth estimates differ in that the former describes the median depth of the deep water edge, whereas the latter describes a nominal characterization of maximum depth independent of outliers.
+Finally, a simple linear curve is fit through the inflection point ($\beta$) of the logistic curve to estimate the three measures of depth of colonization (\cref{fig:est_ex3}).  The inflection point is considered the depth at which seagrass are decreasing at a maximum rate and is used as the slope of the linear curve.  Three measures describing seagrass growth characteristics are obtained. The maximum depth of seagrass colonization, $Z_{max}$, is the x-axis intercept of the linear curve.  The minimum depth of seagrass growth, $Z_{min}$, is the location where the linear curve intercepts the asymptote of the logistic growth curve.  This depth can be considered the start of the decline in seagrass coverage with increasing depth.  The median depth of seagrass colonization, $Z_{med}$, is the depth halfway between $Z_{min}$ and $Z_{max}$.  $Z_{med}$ was typically the inflection point of the logistic growth curve.  Functionally, each measure has specific ecological significance.  The median and maximum depth estimates describe the growth limitations of seagrasses as a function of water clarity, whereas minimum depth of growth was often where the highest percentage of seagrass coverage was observed in the sample.  Median and maximum depth estimates differ in that the former describes the median depth of the deep water edge, whereas the latter describes a nominal characterization of maximum depth independent of outliers.
 
-Estimates for each of the three \ac{doc} measures are obtained only if specific criteria are met.  These criteria were implemented as a safety measure that ensures a sufficient amount and appropriate quality of data were used.  First, estimates were provided only if a sufficient number of seagrass depth points were present within the radius of the grid point to estimate a logistic growth curve.  This criteria applies to the sample size as well as the number of points with seagrass in the sample.  The curve could not be estimated for small samples or if an insufficient number of points contained seagrass regardless of sample size.  Second, estimates were provided only if an inflection point was present on the logistic curve within the range of the sampled depth data.  This criteria applied under two scenarios where the curve was estimated but a trend was not adequately described by the sampled data.  That is, a curve could be estimated that described only the initial decrease in points occupied as a function of depth but the observed points do not occur at depths deeper than the predicted inflection point.  The opposite scenario occurred when a curve was estimated but only the deeper locations beyond the inflection point were present in the sample.  Finally, the estimate for $DOC_{min}$ was set to zero depth if the linear curve through the inflection point intercepted the asymptote at x-axis values less than zero.  The estimate for $DOC_{med}$ was also shifted to the depth value halfway between $DOC_{min}$ and $DOC_{max}$ if $DOC_{min}$ was fixed at zero.  
+Estimates for each of the three \ac{doc} measures are obtained only if specific criteria are met.  These criteria were implemented as a safety measure that ensures a sufficient amount and appropriate quality of data were used.  First, estimates were provided only if a sufficient number of seagrass depth points were present within the radius of the grid point to estimate a logistic growth curve.  This criteria applies to the sample size as well as the number of points with seagrass in the sample.  The curve could not be estimated for small samples or if an insufficient number of points contained seagrass regardless of sample size.  Second, estimates were provided only if an inflection point was present on the logistic curve within the range of the sampled depth data.  This criteria applied under two scenarios where the curve was estimated but a trend was not adequately described by the sampled data.  That is, a curve could be estimated that described only the initial decrease in points occupied as a function of depth but the observed points do not occur at depths deeper than the predicted inflection point.  The opposite scenario occurred when a curve was estimated but only the deeper locations beyond the inflection point were present in the sample.  Finally, the estimate for $Z_{min}$ was set to zero depth if the linear curve through the inflection point intercepted the asymptote at x-axis values less than zero.  The estimate for $Z_{med}$ was also shifted to the depth value halfway between $Z_{min}$ and $Z_{max}$ if $Z_{min}$ was fixed at zero.  
 
 All estimates were obtained using custom-made functions in program R that were based on the \texttt{nls} and \texttt{SSlogis} functions to fit nonlinear least squares using a self-starting logistic growth model \citep{Bates92,RDCT14}.  All seagrass depth shapefiles were imported and processed in R using functions in the \texttt{rgeos} and \texttt{sp} packages \citep{Bivand08,Bivand14}.  
 
@@ -152,7 +152,7 @@ x \sim N(\mu, \Sigma)
 \end{equation}
 \noindent where $x$ is a predictor variable used in \cref{eqn:prop} (depth) that follows a multivariate normal distribution with mean $\mu$, and variance-covariance matrix $\Sigma$.  The mean values are set at the depth value corresponding to the inflection point on the logistic curve and the predicted model parameters (i.e., $\alpha$, $\beta$, and $\gamma$), whereas $\Sigma$ is the variance-covariance matrix of the model parameters.  A large number of samples ($n = 10000$) were drawn from the distribution to characterize the uncertainty of the depth value at the inflection point.  The 2.5\textsuperscript{th} and 97.5\textsuperscript{th} quantile values of the sample were considered bounds on the 95\% confidence interval.
 
-The uncertainty associated with the \ac{doc} estimates were based on the upper and lower limits of the estimated inflection point on the logistic growth curve.  This approach was used because uncertainty in the inflection point is directly related to uncertainty in each of the \ac{doc} estimates that are based on the linear curve fit through the inflection point.   Specifically, linear curves were fit through the upper and lower estimates of the depth value at the inflection point to identify upper and lower limits for the estimates of $DOC_{min}$, $DOC_{med}$, and $DOC_{max}$.  These values were compared with the initial estimates from the linear curve that was fit through the inflection point on the predicted logistic curve (i.e., \cref{fig:est_ex3}).  This approach provided an indication of uncertainty for individual estimates for the chosen radius.  Uncertainty estimates were obtained for each \ac{doc} estimate for the grids in each segment.
+The uncertainty associated with the \ac{doc} estimates were based on the upper and lower limits of the estimated inflection point on the logistic growth curve.  This approach was used because uncertainty in the inflection point is directly related to uncertainty in each of the \ac{doc} estimates that are based on the linear curve fit through the inflection point.   Specifically, linear curves were fit through the upper and lower estimates of the depth value at the inflection point to identify upper and lower limits for the estimates of $Z_{min}$, $Z_{med}$, and $Z_{max}$.  These values were compared with the initial estimates from the linear curve that was fit through the inflection point on the predicted logistic curve (i.e., \cref{fig:est_ex3}).  This approach provided an indication of uncertainty for individual estimates for the chosen radius.  Uncertainty estimates were obtained for each \ac{doc} estimate for the grids in each segment.
 
 \subsection{Developing a spatially coherent relationship of water clarity with depth of colonization}
 
@@ -164,13 +164,13 @@ I_{z} = I_{O} \cdot \exp\left(-K_{d} \cdot Z\right)
 \end{equation}
 \noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{d}$). \citet{Duarte91} indicate that minimum light requirements for seagrass are on average 11\% of surface irradiance.  Light requirements may also be species-specific and variable by latitude such that value may range from less than 5\% to greater than 30\% \citep{Dennison93}.  Light requirements of seagrass at a specific location can be estimated by rearranging \cref{eqn:lambeer}:
 \begin{equation} \label{eqn:perclight}
-\% light = \exp\left(-K_{d} \cdot DOC_{max}\right)
+\% light = \exp\left(-K_{d} \cdot Z_{max}\right)
 \end{equation}
-\noindent where the percent light requirements of seagrass at $DOC_{max}$ are empirically related to light extinction. A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $c = K_{d} \cdot Z_{d}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{d}$ can be replaced with the conversion factor and the equation is rearranged to describe $DOC_{max}$ as a function of secchi depth $Z_{d}$:
+\noindent where the percent light requirements of seagrass at $Z_{max}$ are empirically related to light extinction. A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $c = K_{d} \cdot Z_{d}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{d}$ can be replaced with the conversion factor and the equation is rearranged to describe $Z_{max}$ as a function of secchi depth $Z_{d}$:
 \begin{equation} \label{eqn:sgreg}
-DOC_{max} = \frac{-\log\left(0.20\right)}{1.7} \cdot Z_{d}
+Z_{max} = \frac{-\log\left(0.20\right)}{1.7} \cdot Z_{d}
 \end{equation}
-\noindent A regression of seagrass depth estimates against secchi measurements is expected to have a slope corresponding to the constant in \cref{eqn:sgreg}.  For the current analysis, 20\% light requirements were assumed to be an approximate median requirement for seagrasses in Florida.  Scatter in the regression through these points can be considered biologically meaningful, such that points below the curve are locations where seagrasses are observed at maximum depth with less irradiance than expected given \cref{eqn:sgreg}, whereas points above the curve are those where seagrasses are growing deeper than expected. The geographic coordinates for each secchi measurement in Tampa Bay and the Indian River Lagoon were used as locations for estimating $DOC_{max}$.  These estimates were compared with the averaged secchi estimates to identify light requirements at each location.  However, the relationship is expected to vary depending on the specific radius around each sample point for estimating $DOC_{max}$.  An appropriate radius was chosen that minimized the difference between the empirically estimated slope and that in \cref{eqn:sgreg}.   The estimated light requirements of each point were plotted using the cartesian coordinates of each secchi observation to evaluate spatial variation in seagrass growth as a function of light-limitation.  Light requirements were also summarized by individual segments in each bay to identify spatial trends for relevent management units.  
+\noindent A regression of seagrass depth estimates against secchi measurements is expected to have a slope corresponding to the constant in \cref{eqn:sgreg}.  For the current analysis, 20\% light requirements were assumed to be an approximate median requirement for seagrasses in Florida.  Scatter in the regression through these points can be considered biologically meaningful, such that points below the curve are locations where seagrasses are observed at maximum depth with less irradiance than expected given \cref{eqn:sgreg}, whereas points above the curve are those where seagrasses are growing deeper than expected. The geographic coordinates for each secchi measurement in Tampa Bay and the Indian River Lagoon were used as locations for estimating $Z_{max}$.  These estimates were compared with the averaged secchi estimates to identify light requirements at each location.  However, the relationship is expected to vary depending on the specific radius around each sample point for estimating $Z_{max}$.  An appropriate radius was chosen that minimized the difference between the empirically estimated slope and that in \cref{eqn:sgreg}.   The estimated light requirements of each point were plotted using the cartesian coordinates of each secchi observation to evaluate spatial variation in seagrass growth as a function of light-limitation.  Light requirements were also summarized by individual segments in each bay to identify spatial trends for relevent management units.  
 
 \section{Results}
 
@@ -214,15 +214,15 @@ data(ests_seg)
 data(ests_out)
 
 # big bend doc max diff
-bb_ests <- mean(ests_out[ests_out$seg == '820', 'doc_max'])
+bb_ests <- mean(ests_out[ests_out$seg == '820', 'z_max'])
 
 # irl estimates
-irl_maxdocmin <- max(ests_out[ests_out$seg == '1502', c('doc_min')])
-irl_meandocmax <- mean(ests_out[ests_out$seg == '1502', c('doc_max')])
-irl_maxdocmax <- max(ests_out[ests_out$seg == '1502', c('doc_max')])
+irl_maxdocmin <- max(ests_out[ests_out$seg == '1502', c('z_min')])
+irl_meandocmax <- mean(ests_out[ests_out$seg == '1502', c('z_max')])
+irl_maxdocmax <- max(ests_out[ests_out$seg == '1502', c('z_max')])
 @
 
-Estimates of seagrass \ac{doc} using a segment-wide approach that did not consider spatially explicit locations indicated that seagrasses generally did not grow deeper than three meters in any of the segments (\cref{tab:est_summ}).  Maximum and median depth of colonization were deepest for the Big Bend segment (\Sexpr{ests_seg[ests_seg$seg == '820', 'doc_max']} and \Sexpr{ests_seg[ests_seg$seg == '820', 'doc_med']} m, respectively) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'doc_max']} and \Sexpr{ests_seg[ests_seg$seg == '902', 'doc_med']} m), whereas the minimum depth of colonization was deepest for Choctowhatchee Bay (\Sexpr{ests_seg[ests_seg$seg == '303', 'doc_min']} m) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'doc_min']} m).  Averages of all grid-based estimates for each segment were different than the segment wide estimates, which suggests potential bias associated with using a whole segment as a relevant spatial unit for estimating depth of colonization.  In most cases, the averages of all grid-based estimates were less than the whole segment estimates, suggesting the latter provided an over-estimate of seagrass growth limits.  For example, the average of all grid estimates for $DOC_{max}$ in the Big Bend region suggested seagrasses grew to approximately \Sexpr{bb_ests} m, which was \Sexpr{ests_seg[ests_seg$seg == '820', 'doc_max'] - bb_ests} m less than the whole segment estimate.  This reduction is likely related to improved resolution of seagrass depth limits near the outflow of the Steinhatchee river.  Although reductions were not as severe for the average grid estimates for the remaining segments, considerable within-segment variation was observed depending on grid location.  For example, the deepest estimate for $DOC_{min}$ (\Sexpr{irl_maxdocmin} m) in the Indian River Lagoon exceeded the average of all grid locations for $DOC_{max}$ (\Sexpr{irl_meandocmax} m).  $DOC_{min}$ also had minimum values of zero meters for the Big Bend and Old Tampa Bay segments, suggesting that seagrasses declined continously from the surface for several locations.   
+Estimates of seagrass \ac{doc} using a segment-wide approach that did not consider spatially explicit locations indicated that seagrasses generally did not grow deeper than three meters in any of the segments (\cref{tab:est_summ}).  Maximum and median depth of colonization were deepest for the Big Bend segment (\Sexpr{ests_seg[ests_seg$seg == '820', 'z_max']} and \Sexpr{ests_seg[ests_seg$seg == '820', 'z_med']} m, respectively) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'z_max']} and \Sexpr{ests_seg[ests_seg$seg == '902', 'z_med']} m), whereas the minimum depth of colonization was deepest for Choctowhatchee Bay (\Sexpr{ests_seg[ests_seg$seg == '303', 'z_min']} m) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'z_min']} m).  Averages of all grid-based estimates for each segment were different than the segment wide estimates, which suggests potential bias associated with using a whole segment as a relevant spatial unit for estimating depth of colonization.  In most cases, the averages of all grid-based estimates were less than the whole segment estimates, suggesting the latter provided an over-estimate of seagrass growth limits.  For example, the average of all grid estimates for $Z_{max}$ in the Big Bend region suggested seagrasses grew to approximately \Sexpr{bb_ests} m, which was \Sexpr{ests_seg[ests_seg$seg == '820', 'z_max'] - bb_ests} m less than the whole segment estimate.  This reduction is likely related to improved resolution of seagrass depth limits near the outflow of the Steinhatchee river.  Although reductions were not as severe for the average grid estimates for the remaining segments, considerable within-segment variation was observed depending on grid location.  For example, the deepest estimate for $Z_{min}$ (\Sexpr{irl_maxdocmin} m) in the Indian River Lagoon exceeded the average of all grid locations for $Z_{max}$ (\Sexpr{irl_meandocmax} m).  $Z_{min}$ also had minimum values of zero meters for the Big Bend and Old Tampa Bay segments, suggesting that seagrasses declined continously from the surface for several locations.   
 
 Visual interpretations of seagrass depth estimates using the grid-based approach provided further information on the distribution of seagrasses in each segment (\cref{fig:all_ests}).  Spatial heterogeneity in depth limits was particularly apparent for the Big Bend and Indian River Lagoon segments.  As expected, depth estimates indicated that seagrasses grew deeper at locations far from the outflow of the SteinHatchee River in the Big Bend segment.  Similarly, seagrasses were limited to shallower depths at the north end of the Indian River Lagoon segment near the Merrit Island National Wildlife Refuge. Seagrases were estimated to grow at maximum depths up to \Sexpr{irl_maxdocmax} m on the eastern portion of the Indian River Lagoon segment.  Spatial heterogeneity was less distinct for the remaining segments.  Seagrasses in Old Tampa Bay grew deeper in the northeast portion of the segment and declined to shallower depths near the inflow at the northern edge.  Spatial variation in the Choctowatchee Bay segment was not apparent, although the maximum \ac{doc} estimate was observed in the northeast portion of the segment.  \ac{doc} values were not available for all grid locations givne the limitations imposed in the estimation method.  \ac{doc} could not be estimated in locations where seagrasses were sparse or absent, nor where seagrasses were present but the sampled points did not exhibit a sufficient decline with depth.  The latter scenario was most common in Old Tampa Bay and Choctawhatchee Bay where seagrasses were unevenly distributed or confined to shallow areas near the shore.  The former scenario was most common in the Big Bend segment where seagrasses were abundant but locations near the shore were inestimable given that seagrasses did not decline appreciably within the depths that were sampled.   
 
@@ -242,11 +242,11 @@ maxs <- dplyr::group_by(ests_out, seg) %>%
 
 # percent non-overlapping
 # 'overlapped' indicates percent non-different between depth measures
-# 'grzero' indicates percent of grid ests where doc_max was greater than zero
+# 'grzero' indicates percent of grid ests where z_max was greater than zero
 # interval is non-symmetric but this does not affect overlap
 nonsigs <- dplyr::mutate(ests_out, halved = confint/2) %>% 
   mutate(
-    overlapped = (doc_max - halved) < (doc_med + halved),
+    overlapped = (z_max - halved) < (z_med + halved),
     ltzero = lower_max < 0
   ) %>% 
   group_by(seg) %>% 
@@ -257,7 +257,7 @@ nonsigs <- dplyr::mutate(ests_out, halved = confint/2) %>%
   as.data.frame(.)
 
 @
-Uncertainty for estimates of $DOC_{max}$ indicated that confidence intervals were generally acceptable (i.e., greater than zero), although the ability to discriminate between the three depth estimates varied by segment (\cref{fig:all_sens,tab:sens_summ}).  Mean uncertainty for all estimates in each segment measured as the width of a 95\% confidence interval was \Sexpr{mean(ests_out$confint, na.rm = T)} m.  Greater uncertainty was observed for Choctowhatchee Bay (mean width of all confidence intervals was \Sexpr{means[means$seg == '303', 'means']} m) and Old Tampa Bay (\Sexpr{means[means$seg == '902', 'means']} m), compared to the Big Bend (\Sexpr{means[means$seg == '820', 'means']} m) and Indian River Lagoon (\Sexpr{means[means$seg == '1502', 'means']} m) segments.  The largest confidence interval for each segment was \Sexpr{maxs[maxs$seg == '902', 'maxs']} m for Old Tampa Bay, \Sexpr{maxs[maxs$seg == '303', 'maxs']} m for Choctawhatchee Bay, \Sexpr{maxs[maxs$seg == '820', 'maxs']} m for the Big Bend, and \Sexpr{maxs[maxs$seg == '1502', 'maxs']} m for the Indian River Lagoon segments.  However, most confidence intervals for the remaining grid locations were much smaller than the maximum in each segment.  A comparison of overlapping confidence interals for $DOC_{min}$, $DOC_{med}$, and $DOC_{max}$ at each grid location indicated that not every measure was unique.  Specifically, only \Sexpr{100 - nonsigs[nonsigs$seg == '303', 'overlapped']}\% of grid points in Choctawhatchee Bay and \Sexpr{100 - nonsigs[nonsigs$seg == '902', 'overlapped']}\% in Old Tampa Bay had significantly different estimates, whereas \Sexpr{100 - nonsigs[nonsigs$seg == '1502', 'overlapped']}\% of grid points in the Indian River Lagoon and \Sexpr{100 - nonsigs[nonsigs$seg == '820', 'overlapped']}\% of grid points in the Big Bend segments had estimates that were significantly different.  By contrast, all grid estimates in Choctawhatchee Bay and Indian River Lagoon had $DOC_{max}$ estimates that were significantly greater than zero, whereas all but \Sexpr{nonsigs[nonsigs$seg == '902', 'ltzero']}\% of grid points in Old Tampa Bay and \Sexpr{nonsigs[nonsigs$seg == '820', 'ltzero']}\% of grid points in the Big Bend segment had $DOC_{max}$ estimates significantly greater than zero. 
+Uncertainty for estimates of $Z_{max}$ indicated that confidence intervals were generally acceptable (i.e., greater than zero), although the ability to discriminate between the three depth estimates varied by segment (\cref{fig:all_sens,tab:sens_summ}).  Mean uncertainty for all estimates in each segment measured as the width of a 95\% confidence interval was \Sexpr{mean(ests_out$confint, na.rm = T)} m.  Greater uncertainty was observed for Choctowhatchee Bay (mean width of all confidence intervals was \Sexpr{means[means$seg == '303', 'means']} m) and Old Tampa Bay (\Sexpr{means[means$seg == '902', 'means']} m), compared to the Big Bend (\Sexpr{means[means$seg == '820', 'means']} m) and Indian River Lagoon (\Sexpr{means[means$seg == '1502', 'means']} m) segments.  The largest confidence interval for each segment was \Sexpr{maxs[maxs$seg == '902', 'maxs']} m for Old Tampa Bay, \Sexpr{maxs[maxs$seg == '303', 'maxs']} m for Choctawhatchee Bay, \Sexpr{maxs[maxs$seg == '820', 'maxs']} m for the Big Bend, and \Sexpr{maxs[maxs$seg == '1502', 'maxs']} m for the Indian River Lagoon segments.  However, most confidence intervals for the remaining grid locations were much smaller than the maximum in each segment.  A comparison of overlapping confidence interals for $Z_{min}$, $Z_{med}$, and $Z_{max}$ at each grid location indicated that not every measure was unique.  Specifically, only \Sexpr{100 - nonsigs[nonsigs$seg == '303', 'overlapped']}\% of grid points in Choctawhatchee Bay and \Sexpr{100 - nonsigs[nonsigs$seg == '902', 'overlapped']}\% in Old Tampa Bay had significantly different estimates, whereas \Sexpr{100 - nonsigs[nonsigs$seg == '1502', 'overlapped']}\% of grid points in the Indian River Lagoon and \Sexpr{100 - nonsigs[nonsigs$seg == '820', 'overlapped']}\% of grid points in the Big Bend segments had estimates that were significantly different.  By contrast, all grid estimates in Choctawhatchee Bay and Indian River Lagoon had $Z_{max}$ estimates that were significantly greater than zero, whereas all but \Sexpr{nonsigs[nonsigs$seg == '902', 'ltzero']}\% of grid points in Old Tampa Bay and \Sexpr{nonsigs[nonsigs$seg == '820', 'ltzero']}\% of grid points in the Big Bend segment had $Z_{max}$ estimates significantly greater than zero. 
 
 \subsection{Evaluation of seagrass light requirements}
 
@@ -287,7 +287,7 @@ tuk_irl <- TukeyHSD(tuk_irl)$seg[, 'p adj']
 
 @
 
-Estimates of seagrass light requirements for all segments of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{tab:secc_summ,fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for \Sexpr{nrow(tb_light)} locations in Tampa Bay and \Sexpr{nrow(irl_light)} locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean secchi depth for all recorded observations was \Sexpr{mean(tb$SD)} m ($n=$ \Sexpr{nrow(tb)}) for Tampa Bay and \Sexpr{mean(irl$SD)} m ($n=$ \Sexpr{nrow(irl)}) for Indian River Lagoon.  Mean light requirements were significantly different between the bays (two-sided t-test, $t=$ \Sexpr{light_btw$statistic}, $df=$ \Sexpr{light_btw$parameter}, $p < 0.001$) with a mean requirement of \Sexpr{mean(tb$light)}\% for Tampa Bay and \Sexpr{mean(irl$light)}\% for Indian River Lagoon.  Within each bay, light requirements were significantly different between segments (ANOVA, $F =$ \Sexpr{form_fun(wtn_tb['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_tb['df1']}, \Sexpr{wtn_tb['df2']}, $p = $ \Sexpr{form_fun(wtn_tb['pval'])} for Tampa Bay, $F =$ \Sexpr{form_fun(wtn_irl['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_irl['df1']}, \Sexpr{wtn_irl['df2']}, $p = $ \Sexpr{form_fun(wtn_irl['pval'], 3, 3, 3)} for Indian River Lagoon).  However, post-hoc evaluation of all pair-wise comparisons of mean light requirements indicated that significant differences were only observed between a few segments within each bay.  Significant differences in Tampa Bay were observed between Old Tampa Bay and Hillsborough Bay (Tukey multiple comparisons, $p =$ \Sexpr{form_fun(tuk_tb['OTB-HB'], 3, 3, 3)}).  Significant differences in the Indian River Lagoon were observed between the Upper Indian River Lagoon and Banana River ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-BR'], 3, 3, 3)}), the Upper Indian River Lagoon and Lower Indian River Lagoon ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LIRL'], 3, 3, 3)}), and Upper Indian River Lagoon and Lower St. Lucie ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LSL'], 3, 3, 3)}) segments.  In general, spatial variation of light requirements in Tampa Bay suggested that seagrasses were less light-limited (i.e., lower percent light requirements at $DOC_{max}$) in Hillsborough Bay and western areas of Lower Tampa Bay near the Gulf of Mexico (\cref{fig:light_tb}).  Seagrassess in the Indian River Lagoon were generally less light-limited towards the south and in the Banana River segment (\cref{fig:light_irl}).
+Estimates of seagrass light requirements for all segments of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{tab:secc_summ,fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for \Sexpr{nrow(tb_light)} locations in Tampa Bay and \Sexpr{nrow(irl_light)} locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean secchi depth for all recorded observations was \Sexpr{mean(tb$SD)} m ($n=$ \Sexpr{nrow(tb)}) for Tampa Bay and \Sexpr{mean(irl$SD)} m ($n=$ \Sexpr{nrow(irl)}) for Indian River Lagoon.  Mean light requirements were significantly different between the bays (two-sided t-test, $t=$ \Sexpr{light_btw$statistic}, $df=$ \Sexpr{light_btw$parameter}, $p < 0.001$) with a mean requirement of \Sexpr{mean(tb$light)}\% for Tampa Bay and \Sexpr{mean(irl$light)}\% for Indian River Lagoon.  Within each bay, light requirements were significantly different between segments (ANOVA, $F =$ \Sexpr{form_fun(wtn_tb['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_tb['df1']}, \Sexpr{wtn_tb['df2']}, $p = $ \Sexpr{form_fun(wtn_tb['pval'])} for Tampa Bay, $F =$ \Sexpr{form_fun(wtn_irl['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_irl['df1']}, \Sexpr{wtn_irl['df2']}, $p = $ \Sexpr{form_fun(wtn_irl['pval'], 3, 3, 3)} for Indian River Lagoon).  However, post-hoc evaluation of all pair-wise comparisons of mean light requirements indicated that significant differences were only observed between a few segments within each bay.  Significant differences in Tampa Bay were observed between Old Tampa Bay and Hillsborough Bay (Tukey multiple comparisons, $p =$ \Sexpr{form_fun(tuk_tb['OTB-HB'], 3, 3, 3)}).  Significant differences in the Indian River Lagoon were observed between the Upper Indian River Lagoon and Banana River ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-BR'], 3, 3, 3)}), the Upper Indian River Lagoon and Lower Indian River Lagoon ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LIRL'], 3, 3, 3)}), and Upper Indian River Lagoon and Lower St. Lucie ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LSL'], 3, 3, 3)}) segments.  In general, spatial variation of light requirements in Tampa Bay suggested that seagrasses were less light-limited (i.e., lower percent light requirements at $Z_{max}$) in Hillsborough Bay and western areas of Lower Tampa Bay near the Gulf of Mexico (\cref{fig:light_tb}).  Seagrassess in the Indian River Lagoon were generally less light-limited towards the south and in the Banana River segment (\cref{fig:light_irl}).
 
 \section{Discussion}
 
@@ -511,16 +511,16 @@ load('data/shps.RData')
 # names(ests_out)[names(ests_out) %in% c('Var1', 'Var2')] <- c('long', 'lat')
 # 
 # # get ci size, these are all the same for each measure
-# # get lower bound of doc_max for eval of those greater than zero
-# ests_out$confint <- with(ests_out, h_doc_min - l_doc_min)
-# ests_out$lower_max <- ests_out$l_doc_max
+# # get lower bound of z_max for eval of those greater than zero
+# ests_out$confint <- with(ests_out, h_z_min - l_z_min)
+# ests_out$lower_max <- ests_out$l_z_max
 # ests_out <- ests_out[, !grepl('^h_|^l_', names(ests_out))]
 # 
 # # remove outliers from ests based on 99%
-# ests <- ests_out[, c('doc_min', 'doc_med', 'doc_max')]
+# ests <- ests_out[, c('z_min', 'z_med', 'z_max')]
 # filt_val <- quantile(unlist(c(ests)), 0.99)
 # ests[ests > filt_val] <- NA
-# ests_out[, c('doc_min', 'doc_med', 'doc_max')] <- ests
+# ests_out[, c('z_min', 'z_med', 'z_max')] <- ests
 # ests_out <- na.omit(ests_out)
 # 
 # save(ests_out, file = 'data/ests_out.RData')
@@ -530,7 +530,7 @@ load(file = 'data/ests_seg.RData')
 load(file = 'data/ests_out.RData')
 
 # summarize spatail ests
-ests_out <- melt(ests_out, measure.var = c('doc_min', 'doc_med', 'doc_max'))
+ests_out <- melt(ests_out, measure.var = c('z_min', 'z_med', 'z_max'))
 ests_out <- ddply(ests_out, .variable = c('seg', 'variable'),   
   .fun = function(x) {
     c(mean_val = mean(x$value),
@@ -541,17 +541,17 @@ ests_out <- ddply(ests_out, .variable = c('seg', 'variable'),
   })
 
 # merge with segment wide ests
-ests_seg <- melt(ests_seg, measure.var = c('doc_min', 'doc_med', 'doc_max'))
+ests_seg <- melt(ests_seg, measure.var = c('z_min', 'z_med', 'z_max'))
 to_tab <- merge(ests_seg[, c('seg', 'variable', 'value')], ests_out, by = c('seg', 'variable'))
-to_tab$variable <- factor(to_tab$variable, levels = c('doc_min', 'doc_med', 'doc_max'))
+to_tab$variable <- factor(to_tab$variable, levels = c('z_min', 'z_med', 'z_max'))
 to_tab <- to_tab[order(to_tab$seg, to_tab$variable), ]
 names(to_tab) <- c('Segment', 'Estimate', 'Whole segment', 'Mean', 'St. Dev.', 'Min', 'Max')
 
 # prep table
 segs <- c('0303', '0820', '0902', '1502')
 estimate <- to_tab$Estimate
-estimate <- factor(estimate, levels = c('doc_min', 'doc_med', 'doc_max'), 
-  labels = c('$DOC_{min}$', '$DOC_{med}$', '$DOC_{max}$'))
+estimate <- factor(estimate, levels = c('z_min', 'z_med', 'z_max'), 
+  labels = c('$Z_{min}$', '$Z_{med}$', '$Z_{max}$'))
 nms <- names(to_tab)[-c(1, 2)]
 tab <- to_tab[, !names(to_tab) %in% c('Segment', 'Estimate')]
 
@@ -598,7 +598,7 @@ nms <- names(tab)
 tab <- data.frame(apply(tab, 2, form_fun), stringsAsFactors = F)
 names(tab) <- nms
 
-cap.val <- "Summary of uncertainty for seagrass depth estimates (m) for each segment using all grid locations in \\cref{fig:all_sens}.  The uncertainty values are equally applicaable to each seagrass depth measure ($DOC_{min}$, $DOC_{med}$, $DOC_{max}$)."
+cap.val <- "Summary of uncertainty for seagrass depth estimates (m) for each segment using all grid locations in \\cref{fig:all_sens}.  The uncertainty values are equally applicaable to each seagrass depth measure ($Z_{min}$, $Z_{med}$, $Z_{max}$)."
 
 latex(
   tab,
@@ -710,10 +710,10 @@ rows <- as.character(tab$seg)
 tab <- tab[, -c(1:2)]
 tab[, c(5:7)] <- formtab_fun(tab[, c(5:7)])
 
-cap.val<-'Summary of water clarity data and estimated light requirements for all bay segments of the Indian River Lagoon and Tampa Bay.  Water clarity data were obtained from secchi observations in the Florida \\acl{IWR} database for all dates and locations in each  bay.  Values are minimum and maximum years of secchi data, sample size of secchi data ($n_{Secchi}$), sample size of seagrass depth estimates ($n_{DOC}$) at each unique secchi location, mean values (m) of secchi data, mean $DOC_{max}$, and estimated \\% light requirements for each segment.  Summaries are based primarily on data in \\cref{fig:light_irl,fig:light_tb}.'
+cap.val<-'Summary of water clarity data and estimated light requirements for all bay segments of the Indian River Lagoon and Tampa Bay.  Water clarity data were obtained from secchi observations in the Florida \\acl{IWR} database for all dates and locations in each  bay.  Values are minimum and maximum years of secchi data, sample size of secchi data ($n_{Secchi}$), sample size of seagrass depth estimates ($n_{Z}$) at each unique secchi location, mean values (m) of secchi data, mean $Z_{max}$, and estimated \\% light requirements for each segment.  Summaries are based primarily on data in \\cref{fig:light_irl,fig:light_tb}.'
 
 foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
-col_heads <- c('Min year', 'Max year', '$n_{Secchi}$', '$n_{DOC}$', 'Secchi', '$DOC_{max}$', '\\% light')
+col_heads <- c('Min year', 'Max year', '$n_{Secchi}$', '$n_{Z}$', 'Secchi', '$Z_{max}$', '\\% light')
 
 latex( 
   tab,
@@ -1010,7 +1010,7 @@ for(i in 1:length(levs)){
   
   # scale for sizing
   scls <- c(1, 6)
-  scl_vals <- scales::rescale(est_sub[, c('doc_min', 'doc_med', 'doc_max')], to = scls)
+  scl_vals <- scales::rescale(est_sub[, c('z_min', 'z_med', 'z_max')], to = scls)
 
   # scale for colour
   col_vals <- col_fun(scl_vals)
@@ -1027,20 +1027,20 @@ for(i in 1:length(levs)){
     scale_x_continuous(labels = fmt()) + 
     scale_y_continuous(labels = fmt())
   
-  # doc_min
+  # z_min
   pa <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$doc_min.1, 
-      size = pt_plo$doc_min) 
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$z_min.1, 
+      size = pt_plo$z_min) 
 
-  # doc_med
+  # z_med
   pb <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$doc_med.1, 
-      size = pt_plo$doc_med)
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$z_med.1, 
+      size = pt_plo$z_med)
 
-  # doc_max
+  # z_max
   pc <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$doc_max.1, 
-      size = pt_plo$doc_max) 
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$z_max.1, 
+      size = pt_plo$z_max) 
   
   # legend for all three
   leg_plo <- est_sub[, !names(est_sub) %in% c('seg', 'confint')]
@@ -1066,9 +1066,9 @@ for(i in 1:length(levs)){
 }
 
 # labels
-lab1 <- expression(italic(DOC [min]))
-lab2 <- expression(italic(DOC [med]))
-lab3 <- expression(italic(DOC [max]))
+lab1 <- expression(italic(Z [min]))
+lab2 <- expression(italic(Z [med]))
+lab3 <- expression(italic(Z [max]))
 
 # arrange all as grob
 grobwidths <- c(1, 1, 1, 0.3)
@@ -1088,7 +1088,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
-\caption{Spatially-referenced estimates of seagrass depth limits (m) for four coastal segments of Florida.  Estimates include minimum ($DOC_{min}$), median ($DOC_{med}$), and maximum depth of colonization ($DOC_{max}$).  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees.}
+\caption{Spatially-referenced estimates of seagrass depth limits (m) for four coastal segments of Florida.  Estimates include minimum ($Z_{min}$), median ($Z_{med}$), and maximum depth of colonization ($Z_{max}$).  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees.}
 \label{fig:all_ests}
 \end{figure}
 
@@ -1193,7 +1193,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/all_sens.pdf}
-\caption{Size of confidence intervals (m) for \acl{doc} estimates in \cref{fig:all_ests}.  Points are colored and sized based on the difference between the upper and lower bounds of a 95\% confidence interval for all three \ac{doc} estimates ($DOC_{min}$, $DOC_{med}$, $DOC_{max}$). Bounds were obtained using Monte Carlo simulations to estimate uncertainty associated with the inflection point of the estimated logistic curve (\cref{fig:est_ex}) for each sample.}
+\caption{Size of confidence intervals (m) for \acl{doc} estimates in \cref{fig:all_ests}.  Points are colored and sized based on the difference between the upper and lower bounds of a 95\% confidence interval for all three \ac{doc} estimates ($Z_{min}$, $Z_{med}$, $Z_{max}$). Bounds were obtained using Monte Carlo simulations to estimate uncertainty associated with the inflection point of the estimated logistic curve (\cref{fig:est_ex}) for each sample.}
 \label{fig:all_sens}
 \end{figure}
 
