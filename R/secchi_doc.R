@@ -56,6 +56,10 @@ y_lab <- 'Seagrass depth of colonization (m)'
 x_lim <- c(0, 5)
 y_lim <- x_lim
 
+# percent requirements
+reqs <- seq(0.05, 0.45, by= 0.05)
+reqs <- -1 * log(reqs)/1.7
+
 pdf('C:/Users/mbeck/Desktop/TampaBay.pdf', family = 'serif', width = 9, height = 5)
   
 for(i in seq_along(rads)){
@@ -75,13 +79,13 @@ for(i in seq_along(rads)){
     xlim = x_lim, ylim = y_lim)
   abline(ave_mod)
   legend('bottomright', mod_txt(ave_mod), bty = 'n', adj = c(0, 0))
-  plot(zmax_all ~ SD, near_plo, xlab = x_lab, ylab = y_lab, 
-    main = 'Nearest secchi date',
+  plot(zmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
+    main = 'Light requirements', 
     xlim = x_lim, ylim = y_lim)
-  abline(near_mod)
-  legend('bottomright', mod_txt(near_mod), bty = 'n', adj = c(0, 0))
+  sapply(reqs, function(x) abline(a = 0, b = x, lty = 2))
+
+  title('Tampa Bay', outer = T, line = -1)
   
-  title(paste0('Comparison to slope -ln(0.2)/1.7, radius ', round(rads[i], 3)), outer = T, line = -1)
   
 }
 
@@ -145,6 +149,10 @@ y_lab <- 'Seagrass depth of colonization (m)'
 x_lim <- c(0, 3)
 y_lim <- x_lim
 
+# percent requirements
+reqs <- seq(0.05, 0.45, by= 0.05)
+reqs <- -1 * log(reqs)/1.7
+
 pdf('C:/Users/mbeck/Desktop/IRL.pdf', family = 'serif', width = 9, height = 5)
   
 for(i in seq_along(rads)){
@@ -164,13 +172,12 @@ for(i in seq_along(rads)){
     xlim = x_lim, ylim = y_lim)
   abline(ave_mod)
   legend('bottomright', mod_txt(ave_mod), bty = 'n', adj = c(0, 0))
-  plot(zmax_all ~ SD, near_plo, xlab = x_lab, ylab = y_lab, 
-    main = 'Nearest secchi date',
+  plot(zmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
+    main = 'Light requirements', 
     xlim = x_lim, ylim = y_lim)
-  abline(near_mod)
-  legend('bottomright', mod_txt(near_mod), bty = 'n', adj = c(0, 0))
-  
-  title(paste0('Comparison to slope -ln(0.2)/1.7, radius ', round(rads[i], 3)), outer = T, line = -1)
+  sapply(reqs, function(x) abline(a = 0, b = x, lty = 2))
+
+  title('Indian River Lagoon', outer = T, line = -1)
   
 }
 
@@ -241,7 +248,7 @@ to_proc <- list(
   c('1502', '2009')
 )
 
-cl <- makeCluster(4)
+cl <- makeCluster(7)
 registerDoParallel(cl)
 
 res <- foreach(i = seq_along(to_proc)) %dopar% {

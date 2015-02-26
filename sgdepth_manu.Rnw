@@ -310,6 +310,10 @@ Estimates of seagrass light requirements for all segments of Tampa Bay and the I
 
 % qualitative and quantitative advantages of the approach
 
+% factors that influence seagrass growth patterns - not just limited to light (see main paper about this), also Kemp et al. 2004 intro and fig. 1
+
+% why were light requirements higher in some areas (i.e., seagrasses not growing as deep as expected)?  epiphytic contributions (algae, detritus, sediment, etc.) - Kemp et al. 2004 - explain PLW and PLL in this context, if epiphyte load is low PLW = PLL
+
 %%%%%%
 % refs
 \clearpage
@@ -1235,7 +1239,7 @@ dev.off()
 # secc_all <- secc_all[yrs, ]
 # 
 # # process, get ave secchi data results
-# proc <- secc_doc(secc_all, sgpts_2010_tb, tb_seg, radius = 0.1, '2010', trace = T)
+# proc <- secc_doc(secc_all, sgpts_2010_tb, tb_seg, radius = 0.02282, '2010', trace = T)
 # dat <- na.omit(proc$ave_dat)
 # dat <- dplyr::filter(dat, SD <3)
 # dat <- dplyr::mutate(dat, 
@@ -1348,7 +1352,7 @@ dev.off()
 # secc_all <- secc_all[yrs, ]
 # 
 # # process, get ave secchi data results
-# proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.1, '2009', trace = T)
+# proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.01332, '2009', trace = T)
 # dat <- na.omit(proc$ave_dat)
 # # dat <- dplyr::filter(dat, SD <3)
 # dat <- dplyr::mutate(dat, 
