@@ -14,8 +14,15 @@ data(secc_all)
 data(sgpts_2010_tb)
 
 ##
+# subset secc_all to within ten years of sg data
+yrs <- strftime(secc_all$Date, '%Y') %>% 
+  as.numeric
+yrs <- yrs <= 2010 & yrs > 2000
+secc_all <- secc_all[yrs, ]
+
+##
 # run secchi_doc function with data
-rads <- seq(0.01, 0.2, length = 50)
+rads <- seq(0.01, 0.1, length = 50)
 # out_rads <- vector('list', length(rads))
 cl <- makeCluster(7)
 registerDoParallel(cl)
@@ -95,8 +102,15 @@ data(secc_all)
 data(sgpts_2009_irl)
 
 ##
+# subset secc_all to within ten years of sg data
+yrs <- strftime(secc_all$Date, '%Y') %>% 
+  as.numeric
+yrs <- yrs <= 2009 & yrs > 1999
+secc_all <- secc_all[yrs, ]
+
+##
 # run secchi_doc function with data
-rads <- seq(0.01, 0.2, length = 50)
+rads <- seq(0.01, 0.1, length = 50)
 
 cl <- makeCluster(7)
 registerDoParallel(cl)
@@ -162,8 +176,59 @@ for(i in seq_along(rads)){
 
 dev.off()
 
+# radius of 0.02 was chosen, don't know why
+
 ######
-# for individual wbids
+# mean euclidean distance between each points nearest neighbor
+
+rm(list = ls())
+
+# to get nearest neighbor distances
+library(FNN)
+
+# load data
+data(secc_all)
+data(irl_seg)
+data(tb_seg)
+
+## 
+# add yrs
+secc_all$yr <- as.numeric(strftime(secc_all$Date, '%Y'))
+
+##
+# subset tb lat/long, within ten years (2000 to 2010)
+sel <- !is.na(secc_all %over% tb_seg)[, 1]
+sel <- sel & secc_all$yr <= 2010 & secc_all$yr > 2000
+secc <- data.frame(secc_all[sel, ])
+secc <- unique(secc[c('Longitude', 'Latitude')])
+
+# distance between nearest neighbs
+tb_nn <- get.knn(secc, k = 1)
+mean(tb_nn$nn.dist)
+
+# mean of all dists
+mean(dist(secc))
+
+# mean distance between neighboring points is 0.02282
+
+## 
+# subset irl lat/long, within ten years (1999 to 2009)
+sel <- !is.na(secc_all %over% irl_seg)[, 1]
+sel <- sel & secc_all$yr <= 2009 & secc_all$yr > 1999
+secc <- data.frame(secc_all[sel, ])
+secc <- unique(secc[c('Longitude', 'Latitude')])
+
+# distance between nearest neighbs
+irl_nn <- get.knn(secc, k = 1)
+mean(irl_nn$nn.dist)
+
+# mean of all dists
+mean(dist(secc))
+
+# mean distance between neighboring points is 0.01332
+
+######
+# light requirements for individual wbids
 
 # data to use
 data(shps)
@@ -262,3 +327,55 @@ for(val in seq_along(res)){
 }
 
 dev.off()
+
+#######
+# plots of contour lines for light requirements by segment
+
+## 
+# TB
+
+data(tb_light)
+
+to_plo <- data.frame(tb_light)
+
+plot(zmax_all ~ SD, data= to_plo, pch = 16, col = factor(to_plo$seg), xlim = c(0.5, 3), ylim = c(0.5, 3))
+
+# percent requirements
+reqs <- seq(0.05, 0.45, by= 0.05)
+reqs <- -1 * log(reqs)/1.7
+sapply(reqs, function(x) abline(a = 0, b = x))
+
+
+ggplot(to_plo, aes(x = SD, y = zmax_all, colour = seg)) + 
+  geom_point(size = 4) + 
+  theme_classic() + 
+  geom_abline(intercept = 0, slope = reqs, linetype = 'dashed') +
+  # geom_text(aes(label = round(light, 1))) +
+  ylab('Max depth of colonization (m)') +
+  xlab('Secchi ten-year average (m)') +
+  theme(legend.title = element_blank())
+
+##
+# irl
+
+data(irl_light)
+
+to_plo <- data.frame(irl_light)
+
+plot(zmax_all ~ SD, data= to_plo, pch = 16, col = factor(to_plo$seg), xlim = c(0.5, 3), ylim = c(0.5, 3))
+
+# percent requirements
+reqs <- seq(0.05, 0.45, by= 0.05)
+reqs <- -1 * log(reqs)/1.7
+sapply(reqs, function(x) abline(a = 0, b = x))
+
+ggplot(to_plo, aes(x = SD, y = zmax_all, colour = seg)) + 
+  geom_point(size = 4) + 
+  theme_classic() + 
+  geom_abline(intercept = 0, slope = reqs, linetype = 'dashed') +
+  # geom_text(aes(label = round(light, 1))) +
+  ylab('Max depth of colonization (m)') +
+  xlab('Secchi ten-year average (m)') +
+  theme(legend.title = element_blank())
+
+######

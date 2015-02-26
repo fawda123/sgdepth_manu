@@ -80,7 +80,7 @@ logis_est <- function(dat_in, resp = 'sg_prp', new_vals = 500){
     pred <- rep(NA_real_, length = length(new.x))
     asym <- NA_real_
     logis_mod <- NA
-    message('Cannot fit curve to data\n')
+    message('Cannot fit curve to seagrass data\n')
   } else {
 	  pred <- as.numeric(predict(mod, 
 		  newdata = data.frame(Depth = new.x)))
@@ -421,13 +421,14 @@ buff_ext <- function(pts, center, buff = 0.03){
 #' @param rem_miss logical indicating if unestimable points are removed from the output, default \code{TRUE}
 #' @param trace logical indicating if progress is returned in console, default \code{FALSE}
 #' @param out_sens logical indicating if output should include lower and upper estimates of seagrass growth limits
+#' @param ... arguments passed to \code{\link{sens}}
 #' 
 #' @details This function estimates three seagrass depth of colonization values for each point in a sampling grid.  Functions \code{\link{buff_ext} and \code{\link{doc_est}} are used iteratively for each point in the sample grid.
 #' 
 #' @import sp
 #' 
 #' @return 
-doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace = FALSE, out_sens = F){
+doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace = FALSE, out_sens = F, ...){
       
   # get estimates for each point
   maxd <- vector('list', length = length(grid_in))
@@ -446,7 +447,7 @@ doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace =
   	if('try-error' %in% class(ests)){ ests <- rep(NA, 9)
     } else {
       get_ests <- c('z_min', 'z_med', 'z_max')
-      ests <- sens(ests, trace = F)
+      ests <- sens(ests, trace = F, ...)
       lower <- unlist(attr(ests, 'lower_est')[get_ests])
       upper <- unlist(attr(ests, 'upper_est')[get_ests])
       actual <- unlist(attributes(ests)[get_ests])
@@ -497,19 +498,19 @@ g_legend<-function(a.gplot){
 # nsim number of monte carlo simulations for each value in newdata
 # trace logical for counter output
 sens <- function(doc_in, ...) UseMethod('sens')
-sens.doc <- function(doc_in, level = 0.95, nsim = 10000, trace = T, ...){
+sens.doc <- function(doc_in, level = 0.95, nsim = 10000, trace = T, remzero = T, ...){
    
   # get model from doc_in for vcov matrix
   mod <- attr(doc_in, 'logis_mod')
   if(!'nls' %in% class(mod)){
-    warning('No model in object')
+    message('No model in object')
     return(doc_in)
   }
   
   # get linear model from doc_in
   est_fun <- attr(doc_in, 'est_fun')
   if(!'function' %in% class(est_fun)){
-    warning('Inadequate logistic model')
+    message('Inadequate logistic model')
     return(doc_in)
   }
   
@@ -585,6 +586,17 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, trace = T, ...){
   z_med <- upper_shift + attr(doc_in, 'z_med')
   upper_est <- list(upper_shift = upper_shift, z_min = z_min, z_med = z_med, z_max = z_max)
   
+  # replace all estimates with NA if z_max confidence interval includes zero
+  if(remzero & lower_est$z_max <= 0){
+
+    attr(doc_in, 'z_max') <- NA
+    attr(doc_in, 'z_min') <- NA
+    attr(doc_in, 'z_med') <- NA
+    
+    return(doc_in)
+    
+  }
+  
   # output
   # fill lower_est, upper_est attributes
   attr(doc_in, 'lower_est') <- lower_est
@@ -631,6 +643,7 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, radius = 0.2, seg_pts_yr, tra
   
   # get sg doc estimates for each location with secchi data
   maxd <- list()
+  maxd_conf <- list()
   for(i in 1:length(uni_secc)){
     
     if(trace) cat(length(uni_secc) - i, '\t')
@@ -640,15 +653,21 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, radius = 0.2, seg_pts_yr, tra
       buff_pts <- buff_ext(sgpts_shp, eval_pt, buff = radius)
       est_pts <- data.frame(buff_pts)
       doc_single <- doc_est(est_pts)
-      attr(doc_single, 'z_max')
-    })
-  	if('try-error' %in% class(ests)) ests <- NA
-    maxd[[i]] <- ests
+      doc_single <- sens(doc_single)
+      upper_conf <- attr(doc_single, 'upper_est')$upper_shift
+      lower_conf <- attr(doc_single, 'lower_est')$lower_shift
+      bound_conf <- upper_conf - lower_conf
+      z_max <- attr(doc_single, c('z_max'))
+      c(z_max, bound_conf)
+    },  silent = T)
+  	if('try-error' %in% class(ests)) ests <- c(NA, NA)
+    maxd[[i]] <- ests[1]
+    maxd_conf[[i]] <- ests[2]
     
   }
   
   # dataframe of all maximum depth results
-  maxd <- data.frame(uni_secc, zmax_all = do.call('c', maxd))
+  maxd <- data.frame(uni_secc, zmax_all = do.call('c', maxd), maxd_conf = do.call('c', maxd_conf))
   
   # all secchi data, all dates
   all_dat <- merge(data.frame(secc), 

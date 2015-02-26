@@ -8,9 +8,11 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `dep_shps.RData` Bathymetry data shapefiles for each segment
 
-`ests_out.RData` Seagrass DOC estimates for grids in each segment
+`ests_out.RData` Seagrass DoC estimates for grids in each segment
 
-`ests_seg.RData` Seagrass DOC estimates for entire segments (large radius)
+`ests_out_nonsigs.RData` Same as `ests_out.RData` but includes z max values with confidence less than zero.  Only used in code chunk for results. 
+
+`ests_seg.RData` Seagrass DoC estimates for entire segments (large radius)
 
 `secc_all.RData` Secchi data for all of Florida from IWR40 database, created in sg_depth.RProj
 
