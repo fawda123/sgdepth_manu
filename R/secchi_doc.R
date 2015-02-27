@@ -68,18 +68,18 @@ for(i in seq_along(rads)){
 
   ave_plo <- tmp_dat$ave_dat
   ave_plo <- dplyr::filter(ave_plo, SD <= 4)
-  ave_mod <- lm(zmax_all ~ 0 + SD, data = ave_plo)
+  ave_mod <- lm(z_cmax_all ~ 0 + SD, data = ave_plo)
   near_plo <- tmp_dat$near_dat
   near_plo <- dplyr::filter(near_plo, SD <= 4)
-  near_mod <- lm(zmax_all ~ 0 + SD, data = near_plo)
+  near_mod <- lm(z_cmax_all ~ 0 + SD, data = near_plo)
 
   par(mfrow = c(1, 2))
-  plot(zmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
+  plot(z_cmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
     main = 'Averaged secchi all dates', 
     xlim = x_lim, ylim = y_lim)
   abline(ave_mod)
   legend('bottomright', mod_txt(ave_mod), bty = 'n', adj = c(0, 0))
-  plot(zmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
+  plot(z_cmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
     main = 'Light requirements', 
     xlim = x_lim, ylim = y_lim)
   sapply(reqs, function(x) abline(a = 0, b = x, lty = 2))
@@ -161,18 +161,18 @@ for(i in seq_along(rads)){
 
   ave_plo <- tmp_dat$ave_dat
   # ave_plo <- dplyr::filter(ave_plo, SD <= 4)
-  ave_mod <- lm(zmax_all ~ 0 + SD, data = ave_plo)
+  ave_mod <- lm(z_cmax_all ~ 0 + SD, data = ave_plo)
   near_plo <- tmp_dat$near_dat
   # near_plo <- dplyr::filter(near_plo, SD <= 4)
-  near_mod <- lm(zmax_all ~ 0 + SD, data = near_plo)
+  near_mod <- lm(z_cmax_all ~ 0 + SD, data = near_plo)
 
   par(mfrow = c(1, 2))
-  plot(zmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
+  plot(z_cmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
     main = 'Averaged secchi all dates', 
     xlim = x_lim, ylim = y_lim)
   abline(ave_mod)
   legend('bottomright', mod_txt(ave_mod), bty = 'n', adj = c(0, 0))
-  plot(zmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
+  plot(z_cmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
     main = 'Light requirements', 
     xlim = x_lim, ylim = y_lim)
   sapply(reqs, function(x) abline(a = 0, b = x, lty = 2))
@@ -311,18 +311,18 @@ for(val in seq_along(res)){
   
     ave_plo <- tmp_dat$ave_dat
     # ave_plo <- dplyr::filter(ave_plo, SD > 0.5)
-    ave_mod <- lm(zmax_all ~ 0 + SD, data = ave_plo)
+    ave_mod <- lm(z_cmax_all ~ 0 + SD, data = ave_plo)
     near_plo <- tmp_dat$near_dat
     # near_plo <- dplyr::filter(near_plo, SD > 0.5)
-    near_mod <- lm(zmax_all ~ 0 + SD, data = near_plo)
+    near_mod <- lm(z_cmax_all ~ 0 + SD, data = near_plo)
   
     par(mfrow = c(1, 2))
-    plot(zmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
+    plot(z_cmax_all ~ SD, ave_plo, xlab = x_lab, ylab = y_lab, 
       main = 'Averaged secchi all dates', 
       xlim = x_lim, ylim = y_lim)
     abline(ave_mod)
     legend('bottomright', mod_txt(ave_mod), bty = 'n', adj = c(0, 0))
-    plot(zmax_all ~ SD, near_plo, xlab = x_lab, ylab = y_lab, 
+    plot(z_cmax_all ~ SD, near_plo, xlab = x_lab, ylab = y_lab, 
       main = 'Nearest secchi date',
       xlim = x_lim, ylim = y_lim)
     abline(near_mod)
@@ -345,7 +345,7 @@ data(tb_light)
 
 to_plo <- data.frame(tb_light)
 
-plot(zmax_all ~ SD, data= to_plo, pch = 16, col = factor(to_plo$seg), xlim = c(0.5, 3), ylim = c(0.5, 3))
+plot(z_cmax_all ~ SD, data= to_plo, pch = 16, col = factor(to_plo$seg), xlim = c(0.5, 3), ylim = c(0.5, 3))
 
 # percent requirements
 reqs <- seq(0.05, 0.45, by= 0.05)
@@ -353,7 +353,7 @@ reqs <- -1 * log(reqs)/1.7
 sapply(reqs, function(x) abline(a = 0, b = x))
 
 
-ggplot(to_plo, aes(x = SD, y = zmax_all, colour = seg)) + 
+ggplot(to_plo, aes(x = SD, y = z_cmax_all, colour = seg)) + 
   geom_point(size = 4) + 
   theme_classic() + 
   geom_abline(intercept = 0, slope = reqs, linetype = 'dashed') +
@@ -369,14 +369,14 @@ data(irl_light)
 
 to_plo <- data.frame(irl_light)
 
-plot(zmax_all ~ SD, data= to_plo, pch = 16, col = factor(to_plo$seg), xlim = c(0.5, 3), ylim = c(0.5, 3))
+plot(z_cmax_all ~ SD, data = to_plo, pch = 16, col = factor(to_plo$seg), xlim = c(0.5, 3), ylim = c(0.5, 3))
 
 # percent requirements
 reqs <- seq(0.05, 0.45, by= 0.05)
 reqs <- -1 * log(reqs)/1.7
 sapply(reqs, function(x) abline(a = 0, b = x))
 
-ggplot(to_plo, aes(x = SD, y = zmax_all, colour = seg)) + 
+ggplot(to_plo, aes(x = SD, y = z_cmax_all, colour = seg)) + 
   geom_point(size = 4) + 
   theme_classic() + 
   geom_abline(intercept = 0, slope = reqs, linetype = 'dashed') +

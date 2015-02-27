@@ -8,11 +8,11 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `dep_shps.RData` Bathymetry data shapefiles for each segment
 
-`ests_out.RData` Seagrass DoC estimates for grids in each segment
+`ests_out.RData` Seagrass depth of colonization estimates for grids in each segment
 
-`ests_out_nonsigs.RData` Same as `ests_out.RData` but includes z max values with confidence less than zero.  Only used in code chunk for results. 
+`ests_out_nonsigs.RData` Same as `ests_out.RData` but includes zcmax values with confidence less than zero.  Only used in code chunk for results. 
 
-`ests_seg.RData` Seagrass DoC estimates for entire segments (large radius)
+`ests_seg.RData` Seagrass depth of colonization estimates for entire segments (large radius)
 
 `secc_all.RData` Secchi data for all of Florida from IWR40 database, created in sg_depth.RProj
 
@@ -22,14 +22,14 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `seg_summ.RData` Summarized data for table of segment characteristics
 
-`sgpts_irl_2009.rds` All seagrass depth points for Indian River Lagoon (all segments)
+`sgpts_irl_2009.RData` All seagrass depth points for Indian River Lagoon (all segments)
 
-`sgpts_tb_2010.rds` All seagrass depth points for Tampa Bay (all segments)
+`sgpts_tb_2010.RData` All seagrass depth points for Tampa Bay (all segments)
 
 `sg_shps.RData` Shapefiles of seagrass coverage polygons for each segment
 
 `shps.RData` Multiple shapefiles for each segment, including all segment polygons, individual segment polygons, and seagrass depth points for each segment
 
-`irl_seg.rds` Shapefile polygon of Indian River Lagoon, all segments
+`irl_seg.RData` Shapefile polygon of Indian River Lagoon, all segments
 
-`tb_seg.rds` Shapefile polygon of Tampa Bay, all segments
+`tb_seg.RData` Shapefile polygon of Tampa Bay, all segments
