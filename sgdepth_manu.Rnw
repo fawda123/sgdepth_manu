@@ -108,25 +108,33 @@ Overall, these methods are expected to inform the development of water quality c
 
 \section{Methods}
 
-Development of a spatially-resolved approach to estimate seagrass \ac{doc} relied extensively on data and partially on methods described in \citetalias{HagyIR}.  The following is a summary of locations and data sources, methods and rationale for incorporating spatial information in seagrass \ac{doc} estimates, and evaluation of the approach including relationships with water clarity.   
+Development of a spatially-resolved approach to estimate seagrass \ac{doc} relied extensively on data and partially on methods described in \citetalias{HagyIR}.  The following is a summary of data sources, methods and rationale for improving spatial resolution in seagrass \ac{doc} estimates, and evaluation of the approach including relationships with water clarity.   
 
-\subsection{Locations and data sources}
+\subsection{Data sources}
 
-Four unique locations were chosen for the analysis: Choctowatchee Bay (Panhandle), Big Bend region (northeast Gulf of Mexico), Tampa Bay (central Gulf Coast of Florida), and Indian River Lagoon (east coast) (\cref{tab:seg_summ,fig:seg_all}).  These locations represent different geographic regions in the state, in addition to having available data and observed gradients in water clarity that contribute to hetereogeneity in seagrass growth patterns.  For example, the Big Bend region was chosen based on location near an outflow of the Steinhatchee River where higher concentrations of dissolved organic matter are observed.  Seagrasses near the outflow were observed to grow at shallower depths as compared to locations far from the river source.  Coastal regions and estuaries in Florida are partitioned as distinct spatial units based on a segmentation scheme developed by US \ac{EPA} for the development of numeric nutrient criteria.  One segment from each geographic location was used to describe the approach for estimating seagrass \ac{doc} and to evaluate variation in growth patterns.  The segments included portions of Choctawatchee Bay (segment 303), the big bend region (820), Old Tampa Bay (902), and Indian River Lagoon (1502). Each segment was a smaller unit within a larger estuary or coastal region.   
+\subsubsection{Study sites}
 
-Data used to estimate seagrass \ac{doc} were primarily obtained from publically available \ac{GIS} products.  At the most generic level, spatial data describing seagrass aerial coverage combined with co-located bathymetric depth information were used to estimate \ac{doc}.  These data products are available in coastal regions of Florida through the US Geological Survey, Florida Department of Environmental Protection, and watershed management districts.  Data are generally more available in larger estuaries that are of specific management concern.  For example, seagrass coverage data are available from 1950 (Tampa Bay) to present day (multiple estuaries), with more recent products available at annual or  biennial intervals.  Seagrass coverage maps are less frequent in areas with lower population densities (e.g., Big Bend region) or where seagrass is naturally absent (northeast Florida).  Seagrass maps were produced using photo-interpretations of aerial images to categorize coverage as absent, discontinuous (patchy), or continuous.  For this analysis, we considered seagrass coverage as being only present (continuous and patchy) or absent since the former did not represent unequivocal categories between regions. 
+Four locations in Florida were chosen for the analysis: Choctawhatchee Bay (Panhandle), Big Bend region (northeast Gulf of Mexico), Tampa Bay (central Gulf Coast of Florida), and Indian River Lagoon (east coast) (\cref{tab:seg_summ,fig:seg_all}).  These locations represent different geographic regions in the state, in addition to having available data and observed gradients in water clarity that contribute to hetereogeneity in seagrass growth patterns.  For example, the Big Bend region was chosen based on location near an outflow of the Steinhatchee River where higher concentrations of dissolved organic matter are observed.  Seagrasses near the outflow were observed to grow at shallower depths as compared to locations far from the river source.  Coastal regions and estuaries in Florida are partitioned as distinct spatial units based on a segmentation scheme developed by US \ac{EPA} for the development of numeric nutrient criteria.  One segment from each geographic location was used to estimate seagrass \ac{doc} and to evaluate variation in growth patterns.  The segments included portions of Choctawhatchee Bay (segment 303), the big bend region (820), Old Tampa Bay (902), and Indian River Lagoon (1502) (\cref{fig:seg_all}).   
 
-Seagrass coverage maps were combined with bathymetric depth layers to characterize location and depth of growth in each location.  Bathymetric depth layers for each location were obtained from the National Oceanic and Atmospheric Administration's (\acsu{NOAA}) National Geophysical Data Center as either \acp{DEM} or raw sounding data from hydroacoustic surveys.  Tampa Bay data provided by the Tampa Bay National Estuary Program are described in \citet{Tyler07}. Bathymetric data for the Indian River Lagoon were obtained from the St. John's Water Management District \citep{CPE97}.  \ac{NOAA} products were referenced to mean lower low water, whereas Tampa Bay data were referenced to the \ac{NAVD88} and the Indian River Lagoon data were referenced to mean sea level.  Depth layers were combined with seagrass coverage layers using standard union techniques for raster and vector layers in ArcMap 10.1 \citep{ESRI12}.  To reduce computation time, depth layers were first masked using a 1 km buffer of the seagrass coverage layer.  The final layer used for analysis was a point layer with attributes describing location (latitude, longitude, segment), depth (m), and seagrass (present, absent).  All spatial data were referenced to the North American Datum of 1983 as geographic coordinates.  Depth values in each seagrass layer were further adjusted from the relevant vertical reference datum to local \ac{MSL} using the \ac{NOAA} VDatum tool (\url{http://vdatum.noaa.gov/}).
+\subsubsection{Seagrass coverage and bathymetry} \label{sec:data_srcs}
+
+Spatial data describing seagrass aerial coverage combined with co-located bathymetric depth information were used to estimate \ac{doc}.  These geospatial data products are pubically available in coastal regions of Florida through the US Geological Survey, Florida Department of Environmental Protection, Florida Fish and Wildlife Conservation Commission, and watershed management districts.  Seagrass coverage maps were obtained for recent years in each of the study sites described above (\cref{tab:seg_summ}).  Coverage maps were produced using photo-interpretations of aerial images to categorize seagrass as absent, discontinuous (patchy), or continuous.  For this analysis, we considered seagrass as only present (continuous and patchy) or absent since differences between continuous and patchy coverage were often inconsistent between data sources. 
+
+Seagrass coverage maps were combined with bathymetric depth layers to characterize location and depth of growth in each location.  Bathymetric depth layers for each location were obtained from the National Oceanic and Atmospheric Administration's (\acsu{NOAA}) National Geophysical Data Center (\url{http://www.ngdc.noaa.gov/}) as either \acp{DEM} or raw sounding data from hydroacoustic surveys.  Tampa Bay data provided by the Tampa Bay National Estuary Program are described in \citet{Tyler07}. Bathymetric data for the Indian River Lagoon were obtained from the St. John's Water Management District \citep{CPE97}.  \ac{NOAA} products were referenced to mean lower low water, whereas Tampa Bay data were referenced to the \ac{NAVD88} and the Indian River Lagoon data were referenced to mean sea level.  Depth layers were combined with seagrass coverage layers using standard union techniques for raster and vector layers in ArcMap 10.1 \citep{ESRI12}.  To reduce computation time, depth layers were first masked using a 1 km buffer of the seagrass coverage layer.  The final layer used for analysis was a point layer with attributes describing location (latitude, longitude, segment), depth (m), and seagrass (present, absent).  All spatial data were referenced to the North American Datum of 1983 as geographic coordinates.  Depth values in each seagrass layer were further adjusted from the relevant vertical reference datum to local \ac{MSL} using the \ac{NOAA} VDatum tool (\url{http://vdatum.noaa.gov/}).
+
+\subsubsection{Water clarity}
+
+Seagrass light requirements can be estimated by evaluating spatial relationships between depth of colonization and water clarity.  Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations documented in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. Secchi data for Florida coastal waters were obtained from update 40 of the \ac{IWR} database for all of Tampa Bay (2010 coverage) and the Indian River Lagoon (2009 coverage) given the spatial extent of secchi observations for the two locations relative to the Big Bend and Choctawhatchee segments.  Secchi data within the previous ten years of the seagrass coverage data were evaluated to capture water quality trends from the most recent decade (i.e., 1999--2009 for the Indian River Lagoon and 2000--2010 for Tampa Bay).  Secchi data were screened to exclude observations that were flagged indicating that the value was lower than the maximum depth of the observation point.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.  Secchi observations that were measured at the same geographic location were averaged across all dates.  This approach was preferred given that seagrass depth patterns are more representative of long-term trends in water clarity as opposed to individual secchi measures that may be highly variable \citep{Dennison87,Dennison93}.
 
 \subsection{Segment-based estimates of seagrass depth of colonization}
 
-\citetalias{HagyIR} describe an approach to estimate seagrass \ac{doc} for individual coastal segments.  The approach described herein is theoretically similar to the initial method, although the latter technique has a spatial resolution that uses segments as the smallest measurable unit.  Seagrass depth data described above are used to estimate maximum ($Z_{cMax}$) and median ($Z_{c50\%}$) seagrass \ac{doc}, where the maximum depth is defined as the deepest depth at which a ``significant'' coverage of seagrasses occured in a segment and the median depth is defined as the median depth occurring at the deep water edge. The seagrass depth points are grouped into bins and the proportion of points within each depth bin that contain seagrass are quantified.  Both seagrass \ac{doc} estimates are obtained from a plot of proportion of points occupied at each depth bin.  In general, the plot is characterized by a decreasing trend such that the proportion of occupied points by depth bin decreases and eventually flattens with increasing depth.  A regression is fit on this descending portion of the curve such that the intercept point on the x-axis is considered the maximum depth of colonization.  The median portion of this curve is considered the median depth of the deepwater edge of seagrass.   
+\citetalias{HagyIR} describe an approach to estimate seagrass \ac{doc} as a segment-wide median.  Seagrass depth data described above can be used to estimate maximum ($Z_{cMax}$) and median ($Z_{c50\%}$) seagrass \ac{doc}, where the maximum depth is defined as the deepest depth at which a ``significant'' coverage of mappable seagrasses occured in a segment and the median depth is defined as the median depth occurring at the deep water edge. The seagrass depth points are grouped into bins and the proportion of points within each depth bin that contain seagrass are quantified.  Both seagrass \ac{doc} estimates are obtained from a plot of proportion of points occupied at each depth bin.  In general, the plot is characterized by a decreasing trend such that the proportion of occupied points by depth bin decreases and eventually flattens with increasing depth.  A regression is fit on this descending portion of the curve such that the intercept point on the x-axis is considered the maximum depth of colonization.  The median portion of this curve is considered the median depth of the deepwater edge of seagrass.   
 
-Considerable spatial heterogeneity in the observed seagrass growth patterns suggests that a segment-wide estimate of seagrass \ac{doc} may be inadequate for fully characterizing growth patterns, particularly for the examples in the current analysis. \Cref{fig:wbid_doc} illustrates spatial variation in seagrass distribution  for a location in the Big Bend region of Florida.  Using methods in \citetalias{HagyIR}, the estimate for median seagrass \ac{doc} for the segment is over- and under-estimated for different locations.  In particular, \ac{doc} is greatly over-estimated at the outflow of the Steinhatchee River where high concentrations of dissolved organic matter reduce water clarity and naturally limit seagrass growth.  This example suggests that estimates of \ac{doc} may be needed at finer spatial scales to provide a more robust determination of restoration targets and nutrient criteria.  Although the current example is immediately relevant for the Big Bend region of Florida, the remaining examples discussed throughout also provide a justification for a more comprehensive assessment of seagrass growth patterns.  
+A segment-wide average of seagrass \ac{doc}, although unbiased, may potentially reduce the ability to relate patterns in \ac{doc} to relevant water quality variables. Considerable spatial heterogeneity in the observed seagrass growth patterns suggests that a segment-wide estimate of seagrass \ac{doc} may not fully describe variation at relevant spatial scales. \Cref{fig:buff_ex1} illustrates variation in seagrass distribution for a location in the Big Bend region of Florida.  Using methods in \citetalias{HagyIR}, the segment-wide estimate for maximum depth of seagrass colonization (shown as a red contour line) does not adequately describe within-segment variation in depth limits.  \ac{doc} is greatly over-estimated at the outflow of the Steinhatchee River where high concentrations of dissolved organic matter reduce water clarity and naturally limit seagrass growth.  This example suggests that it may be useful to have improved spatial resolution in estimates of \ac{doc}, particularly when site-specific characteristics may require a more detailed description of seagrass growth patterns.  Although the current example is immediately relevant for the Big Bend region of Florida, the remaining examples discussed throughout also provide a justification for a more comprehensive assessment of seagrass growth patterns.  
 
-\subsection{Estimating seagrass depth of colonization using spatial information}
+\subsection{Estimating seagrass depth of colonization for finite and arbitrary areas}
 
-The approach used to estimate seagrass \ac{doc} with spatial information has several key differences that make it distinct from the original method.  As before, seagrass \ac{doc} estimates are based on empirical measures of the frequency occurrence of seagrass with increasing depth.  The first difference is that maximum \ac{doc} is estimated using a logistic growth curve fit through the data, as compared to a simple linear regression in the previous example.  Second, a third measure describing the minimum depth of colonization was defined, in addition to median and maximum depth of growth.  The third and most important difference is that the estimates are assigned to discrete cartesian locations, using either a grid of points or as a single location of interest. Methods and implications of these differences are described below.                                   
+The approach used to estimate seagrass \ac{doc} with improved spatial resolution has several key differences that make it distinct from the original method.  As before, seagrass \ac{doc} estimates are based on empirical measures of the frequency occurrence of seagrass with increasing depth.  The first difference is that maximum \ac{doc} is estimated using a logistic growth curve fit through the data, as compared to a simple linear regression in the previous example.  Second, a third measure describing the minimum depth of colonization was defined, in addition to median and maximum depth of growth.  The third and most important difference is that the estimates are assigned to discrete cartesian locations, using either a grid of points or as a single location of interest. The area around each point within which seagrass depth data are used to estimate \ac{doc} is based on a fixed, arbitrary radius that can be increased or decreased depending on the question of interest.  Methods and implications of these differences are described below.                                   
 
 The spatially-resolved approach for estimating \ac{doc} begins by creating a grid of points within the segment where the same process for estimating \ac{doc} is used for each point.  Alternatively, a single location of interest can be chosen rather than a grid-based design.  Seagrass depth data (i.e., merged bathymetric and seagrass coverage data) that are located within a set radius from the chosen locations are selected for estimating seagrass \ac{doc} values (\cref{fig:buff_ex}). The estimate for each location is quantified from a plot of the proportion of bathymetric soundings that contain seagrass at each depth bin (\cref{fig:est_ex1}).  Although the chosen radius for selecting depth points is problem-specific, the minimum radius must sample a sufficient number of points for estimating \ac{doc}.  In general, an appropriate radius will produce a plot that indicates a decrease in the proportion of points that are occupied by seagrass with increasing depth. An appropriate radius is also one that creates a sample area around each point that has minimal overlap with the seagrass depth data sampled by adjacent points.     
 
@@ -155,8 +163,6 @@ x \sim N(\mu, \Sigma)
 The uncertainty associated with the \ac{doc} estimates were based on the upper and lower limits of the estimated inflection point on the logistic growth curve.  This approach was used because uncertainty in the inflection point is directly related to uncertainty in each of the \ac{doc} estimates that are based on the linear curve fit through the inflection point.   Specifically, linear curves were fit through the upper and lower estimates of the depth value at the inflection point to identify upper and lower limits for the estimates of $Z_{c,\,min}$, $Z_{c,\,med}$, and $Z_{c,\,max}$.  These values were compared with the initial estimates from the linear curve that was fit through the inflection point on the predicted logistic curve (i.e., \cref{fig:est_ex3}).  This approach provided an indication of uncertainty for individual estimates for the chosen radius.  Uncertainty estimates were obtained for each \ac{doc} estimate for the grids in each segment.
 
 \subsection{Developing a spatially coherent relationship of water clarity with depth of colonization}
-
-Information describing seagrass light requirements can be obtained from the maximum depth estimates by evaluating spatial relationships with water clarity.  In particular, increased resolution of seagrass depth estimates compared with measures of water clarity can potentially improve the ability to empirically describe light requirements and areas where seagrasses are growing at depths deeper or shallower than expected. Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations documented in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. Secchi data for Florida coastal waters were obtained from update 40 of the \ac{IWR} database for all of Tampa Bay (2010 coverage) and the Indian River Lagoon (2009 coverage) given the spatial extent of secchi observations for the two locations.  Secchi data within the previous ten years of the seagrass coverage data were evaluated to capture water quality trends from the most recent decade (i.e., 1999--2009 for the Indian River Lagoon and 2000--2010 for Tampa Bay).  Secchi data were screened to exclude observations that were flagged indicating that the value was lower than the maximum depth of the observation point.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.  Secchi observations that were measured at the same geographic location were averaged across all dates.  This approach was preferred given that seagrass depth patterns are more representative of long-term trends in water clarity as opposed to individual secchi measures that may be highly variable \citep{Dennison87,Dennison93}.
 
 The relationship between seagrass depth limits and secchi measurements were explored using established light requirements and attenuation equations.  The traditional Lambert-Beer equation describes the exponential decrease of light availability with depth:
 \begin{equation} \label{eqn:lambeer}
@@ -206,7 +212,7 @@ secchis <- as.numeric(secchis)
 names(secchis) <- names(seg_summ)
 @
 
-Each of the four segments varied by several key characteristics that potentially explain within-segment variation of seagrass growth patterns (\cref{tab:seg_summ}).  Mean surface area was \Sexpr{mean(areas)} square kilometers, with area decreasing for the Big Bend (\Sexpr{areas['Big Bend']} km), Indian River Lagooon (\Sexpr{areas['Indian River Lagoon']} km), Old Tampa Bay (\Sexpr{areas['Old Tampa Bay']} km), and Choctawhatchee Bay (\Sexpr{areas['Choctawhatchee Bay']} km) segments.  Seagrass coverage as a percentage of total surface area varied considerably by segment.  Seagrasses covered a majority of the surface area for the Big Bend segment (\Sexpr{sgperc['Big Bend']} \%), whereas coverage was much less for Indian River Lagoon (\Sexpr{sgperc['Indian River Lagoon']} \%), Old Tampa Bay (\Sexpr{sgperc['Old Tampa Bay']} \%), and Choctawhatchee Bay (\Sexpr{sgperc['Choctawhatchee Bay']} \%).  Visual examination of the seagrass coverage maps for the respective year of each segment suggested that seagrasses were not uniformly distributed (\cref{fig:seg_all}).  Seagrasses in the Choctawatchee Bay segments were generally sparse with the exception of a large patch located to the west of the inlet connection with the Gulf of Mexico.  Seagrasses in the Big Bend segment were located throughout the segment with noticeable declines near the outflow of the Steinhatchee River, whereas seagrasses in Old Tampa Bay and the Indian River Lagoon segment were generally confined to shallow areas near the shore. Seagrass coverage showed a partial decline toward the northern ends of both Old Tampa Bay and the Indian River Lagoon segments.  Mean depth was less than 5 meters for each segment, excluding Choctawhatchee Bay which was slightly deeper than the other segments on average (\Sexpr{depths['Choctawhatchee Bay']} m).  Maximum depths were considerably deeper for Choctawhatchee Bay (\Sexpr{mdepths['Choctawhatchee Bay']} m) and Old Tampa Bay (\Sexpr{mdepths['Old Tampa Bay']} m), as compared to the Big Bend (\Sexpr{mdepths['Big Bend']} m) and Indian River Lagoon (\Sexpr{depths['Indian River Lagoon']} m) segments.  Water clarity as indicated by average secchi depths was similar between the segments (\Sexpr{mean(secchis)} m), although Choctowhatchee Bay had a slightly higher average (\Sexpr{secchis['Choctawhatchee Bay']} m).     
+Each of the four segments varied by several key characteristics that potentially explain within-segment variation of seagrass growth patterns (\cref{tab:seg_summ}).  Mean surface area was \Sexpr{mean(areas)} square kilometers, with area decreasing for the Big Bend (\Sexpr{areas['Big Bend']} km), Indian River Lagooon (\Sexpr{areas['Indian River Lagoon']} km), Old Tampa Bay (\Sexpr{areas['Old Tampa Bay']} km), and Choctawhatchee Bay (\Sexpr{areas['Choctawhatchee Bay']} km) segments.  Seagrass coverage as a percentage of total surface area varied considerably by segment.  Seagrasses covered a majority of the surface area for the Big Bend segment (\Sexpr{sgperc['Big Bend']} \%), whereas coverage was much less for Indian River Lagoon (\Sexpr{sgperc['Indian River Lagoon']} \%), Old Tampa Bay (\Sexpr{sgperc['Old Tampa Bay']} \%), and Choctawhatchee Bay (\Sexpr{sgperc['Choctawhatchee Bay']} \%).  Visual examination of the seagrass coverage maps for the respective year of each segment suggested that seagrasses were not uniformly distributed (\cref{fig:seg_all}).  Seagrasses in the Choctawhatchee Bay segments were generally sparse with the exception of a large patch located to the west of the inlet connection with the Gulf of Mexico.  Seagrasses in the Big Bend segment were located throughout the segment with noticeable declines near the outflow of the Steinhatchee River, whereas seagrasses in Old Tampa Bay and the Indian River Lagoon segment were generally confined to shallow areas near the shore. Seagrass coverage showed a partial decline toward the northern ends of both Old Tampa Bay and the Indian River Lagoon segments.  Mean depth was less than 5 meters for each segment, excluding Choctawhatchee Bay which was slightly deeper than the other segments on average (\Sexpr{depths['Choctawhatchee Bay']} m).  Maximum depths were considerably deeper for Choctawhatchee Bay (\Sexpr{mdepths['Choctawhatchee Bay']} m) and Old Tampa Bay (\Sexpr{mdepths['Old Tampa Bay']} m), as compared to the Big Bend (\Sexpr{mdepths['Big Bend']} m) and Indian River Lagoon (\Sexpr{depths['Indian River Lagoon']} m) segments.  Water clarity as indicated by average secchi depths was similar between the segments (\Sexpr{mean(secchis)} m), although Choctawhatchee Bay had a slightly higher average (\Sexpr{secchis['Choctawhatchee Bay']} m).     
 
 % seagrass estimates from table
 <<echo = F>>=
@@ -222,9 +228,9 @@ irl_meandocmax <- mean(ests_out[ests_out$seg == '1502', c('z_cmax')])
 irl_maxdocmax <- max(ests_out[ests_out$seg == '1502', c('z_cmax')])
 @
 
-Estimates of seagrass \ac{doc} using a segment-wide approach that did not consider spatially explicit locations indicated that seagrasses generally did not grow deeper than three meters in any of the segments (\cref{tab:est_summ}).  Maximum and median depth of colonization were deepest for the Big Bend segment (\Sexpr{ests_seg[ests_seg$seg == '820', 'z_cmax']} and \Sexpr{ests_seg[ests_seg$seg == '820', 'z_cmed']} m, respectively) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'z_cmax']} and \Sexpr{ests_seg[ests_seg$seg == '902', 'z_cmed']} m), whereas the minimum depth of colonization was deepest for Choctowhatchee Bay (\Sexpr{ests_seg[ests_seg$seg == '303', 'z_cmin']} m) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'z_cmin']} m).  Averages of all grid-based estimates for each segment were different than the segment wide estimates, which suggests potential bias associated with using a whole segment as a relevant spatial unit for estimating depth of colonization.  In most cases, the averages of all grid-based estimates were less than the whole segment estimates, suggesting the latter provided an over-estimate of seagrass growth limits.  For example, the average of all grid estimates for $Z_{c,\,max}$ in the Big Bend region suggested seagrasses grew to approximately \Sexpr{bb_ests} m, which was \Sexpr{ests_seg[ests_seg$seg == '820', 'z_cmax'] - bb_ests} m less than the whole segment estimate.  This reduction is likely related to improved resolution of seagrass depth limits near the outflow of the Steinhatchee river.  Although reductions were not as severe for the average grid estimates for the remaining segments, considerable within-segment variation was observed depending on grid location.  For example, the deepest estimate for $Z_{c,\,min}$ (\Sexpr{irl_maxdocmin} m) in the Indian River Lagoon exceeded the average of all grid locations for $Z_{c,\,max}$ (\Sexpr{irl_meandocmax} m).  $Z_{c,\,min}$ also had minimum values of zero meters for the Big Bend and Old Tampa Bay segments, suggesting that seagrasses declined continously from the surface for several locations.   
+Estimates of seagrass \ac{doc} using a segment-wide approach that did not consider spatially explicit locations indicated that seagrasses generally did not grow deeper than three meters in any of the segments (\cref{tab:est_summ}).  Maximum and median depth of colonization were deepest for the Big Bend segment (\Sexpr{ests_seg[ests_seg$seg == '820', 'z_cmax']} and \Sexpr{ests_seg[ests_seg$seg == '820', 'z_cmed']} m, respectively) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'z_cmax']} and \Sexpr{ests_seg[ests_seg$seg == '902', 'z_cmed']} m), whereas the minimum depth of colonization was deepest for Choctawhatchee Bay (\Sexpr{ests_seg[ests_seg$seg == '303', 'z_cmin']} m) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'z_cmin']} m).  Averages of all grid-based estimates for each segment were different than the segment wide estimates, which suggests potential bias associated with using a whole segment as a relevant spatial unit for estimating depth of colonization.  In most cases, the averages of all grid-based estimates were less than the whole segment estimates, suggesting the latter provided an over-estimate of seagrass growth limits.  For example, the average of all grid estimates for $Z_{c,\,max}$ in the Big Bend region suggested seagrasses grew to approximately \Sexpr{bb_ests} m, which was \Sexpr{ests_seg[ests_seg$seg == '820', 'z_cmax'] - bb_ests} m less than the whole segment estimate.  This reduction is likely related to improved resolution of seagrass depth limits near the outflow of the Steinhatchee river.  Although reductions were not as severe for the average grid estimates for the remaining segments, considerable within-segment variation was observed depending on grid location.  For example, the deepest estimate for $Z_{c,\,min}$ (\Sexpr{irl_maxdocmin} m) in the Indian River Lagoon exceeded the average of all grid locations for $Z_{c,\,max}$ (\Sexpr{irl_meandocmax} m).  $Z_{c,\,min}$ also had minimum values of zero meters for the Big Bend and Old Tampa Bay segments, suggesting that seagrasses declined continously from the surface for several locations.   
 
-Visual interpretations of seagrass depth estimates using the grid-based approach provided further information on the distribution of seagrasses in each segment (\cref{fig:all_ests}).  Spatial heterogeneity in depth limits was particularly apparent for the Big Bend and Indian River Lagoon segments.  As expected, depth estimates indicated that seagrasses grew deeper at locations far from the outflow of the SteinHatchee River in the Big Bend segment.  Similarly, seagrasses were limited to shallower depths at the north end of the Indian River Lagoon segment near the Merrit Island National Wildlife Refuge. Seagrases were estimated to grow at maximum depths up to \Sexpr{irl_maxdocmax} m on the eastern portion of the Indian River Lagoon segment.  Spatial heterogeneity was less distinct for the remaining segments.  Seagrasses in Old Tampa Bay grew deeper in the northeast portion of the segment and declined to shallower depths near the inflow at the northern edge.  Spatial variation in the Choctowatchee Bay segment was not apparent, although the maximum \ac{doc} estimate was observed in the northeast portion of the segment.  \ac{doc} values were not available for all grid locations givne the limitations imposed in the estimation method.  \ac{doc} could not be estimated in locations where seagrasses were sparse or absent, nor where seagrasses were present but the sampled points did not exhibit a sufficient decline with depth.  The latter scenario was most common in Old Tampa Bay and Choctawhatchee Bay where seagrasses were unevenly distributed or confined to shallow areas near the shore.  The former scenario was most common in the Big Bend segment where seagrasses were abundant but locations near the shore were inestimable given that seagrasses did not decline appreciably within the depths that were sampled.   
+Visual interpretations of seagrass depth estimates using the grid-based approach provided further information on the distribution of seagrasses in each segment (\cref{fig:all_ests}).  Spatial heterogeneity in depth limits was particularly apparent for the Big Bend and Indian River Lagoon segments.  As expected, depth estimates indicated that seagrasses grew deeper at locations far from the outflow of the SteinHatchee River in the Big Bend segment.  Similarly, seagrasses were limited to shallower depths at the north end of the Indian River Lagoon segment near the Merrit Island National Wildlife Refuge. Seagrases were estimated to grow at maximum depths up to \Sexpr{irl_maxdocmax} m on the eastern portion of the Indian River Lagoon segment.  Spatial heterogeneity was less distinct for the remaining segments.  Seagrasses in Old Tampa Bay grew deeper in the northeast portion of the segment and declined to shallower depths near the inflow at the northern edge.  Spatial variation in the Choctawhatchee Bay segment was not apparent, although the maximum \ac{doc} estimate was observed in the northeast portion of the segment.  \ac{doc} values were not available for all grid locations givne the limitations imposed in the estimation method.  \ac{doc} could not be estimated in locations where seagrasses were sparse or absent, nor where seagrasses were present but the sampled points did not exhibit a sufficient decline with depth.  The latter scenario was most common in Old Tampa Bay and Choctawhatchee Bay where seagrasses were unevenly distributed or confined to shallow areas near the shore.  The former scenario was most common in the Big Bend segment where seagrasses were abundant but locations near the shore were inestimable given that seagrasses did not decline appreciably within the depths that were sampled.   
 
 <<echo = F>>=
 data(ests_out)
@@ -264,7 +270,7 @@ nonsigs <- dplyr::mutate(ests_out_nonsigs,
   as.data.frame(.)
 
 @
-Uncertainty for estimates of $Z_{c,\,max}$ indicated that confidence intervals were generally acceptable (i.e., greater than zero), although the ability to discriminate between the three depth estimates varied by segment (\cref{fig:all_sens,tab:sens_summ}).  Mean uncertainty for all estimates in each segment measured as the width of a 95\% confidence interval was \Sexpr{mean(ests_out$confint, na.rm = T)} m.  Greater uncertainty was observed for Choctowhatchee Bay (mean width of all confidence intervals was \Sexpr{means[means$seg == '303', 'means']} m) and Old Tampa Bay (\Sexpr{means[means$seg == '902', 'means']} m), compared to the Big Bend (\Sexpr{means[means$seg == '820', 'means']} m) and Indian River Lagoon (\Sexpr{means[means$seg == '1502', 'means']} m) segments.  The largest confidence interval for each segment was \Sexpr{maxs[maxs$seg == '902', 'maxs']} m for Old Tampa Bay, \Sexpr{maxs[maxs$seg == '303', 'maxs']} m for Choctawhatchee Bay, \Sexpr{maxs[maxs$seg == '820', 'maxs']} m for the Big Bend, and \Sexpr{maxs[maxs$seg == '1502', 'maxs']} m for the Indian River Lagoon segments.  However, most confidence intervals for the remaining grid locations were much smaller than the maximum in each segment.  A comparison of overlapping confidence intersals for $Z_{c,\,min}$, $Z_{c,\,med}$, and $Z_{c,\,max}$ at each grid location indicated that not every measure was unique.  Specifically, only \Sexpr{100 - overlap[overlap$seg == '303', 'overlapped']}\% of grid points in Choctawhatchee Bay and \Sexpr{100 - overlap[overlap$seg == '902', 'overlapped']}\% in Old Tampa Bay had significantly different estimates, whereas \Sexpr{100 - overlap[overlap$seg == '1502', 'overlapped']}\% of grid points in the Indian River Lagoon and \Sexpr{100 - overlap[overlap$seg == '820', 'overlapped']}\% of grid points in the Big Bend segments had estimates that were significantly different.  By contrast, all grid estimates in Choctawhatchee Bay and Indian River Lagoon had $Z_{c,\,max}$ estimates that were significantly greater than zero, whereas all but \Sexpr{nonsigs[nonsigs$seg == '902', 'ltzero']}\% of grid points in Old Tampa Bay and \Sexpr{nonsigs[nonsigs$seg == '820', 'ltzero']}\% of grid points in the Big Bend segment had $Z_{c,\,max}$ estimates significantly greater than zero. 
+Uncertainty for estimates of $Z_{c,\,max}$ indicated that confidence intervals were generally acceptable (i.e., greater than zero), although the ability to discriminate between the three depth estimates varied by segment (\cref{fig:all_sens,tab:sens_summ}).  Mean uncertainty for all estimates in each segment measured as the width of a 95\% confidence interval was \Sexpr{mean(ests_out$confint, na.rm = T)} m.  Greater uncertainty was observed for Choctawhatchee Bay (mean width of all confidence intervals was \Sexpr{means[means$seg == '303', 'means']} m) and Old Tampa Bay (\Sexpr{means[means$seg == '902', 'means']} m), compared to the Big Bend (\Sexpr{means[means$seg == '820', 'means']} m) and Indian River Lagoon (\Sexpr{means[means$seg == '1502', 'means']} m) segments.  The largest confidence interval for each segment was \Sexpr{maxs[maxs$seg == '902', 'maxs']} m for Old Tampa Bay, \Sexpr{maxs[maxs$seg == '303', 'maxs']} m for Choctawhatchee Bay, \Sexpr{maxs[maxs$seg == '820', 'maxs']} m for the Big Bend, and \Sexpr{maxs[maxs$seg == '1502', 'maxs']} m for the Indian River Lagoon segments.  However, most confidence intervals for the remaining grid locations were much smaller than the maximum in each segment.  A comparison of overlapping confidence intersals for $Z_{c,\,min}$, $Z_{c,\,med}$, and $Z_{c,\,max}$ at each grid location indicated that not every measure was unique.  Specifically, only \Sexpr{100 - overlap[overlap$seg == '303', 'overlapped']}\% of grid points in Choctawhatchee Bay and \Sexpr{100 - overlap[overlap$seg == '902', 'overlapped']}\% in Old Tampa Bay had significantly different estimates, whereas \Sexpr{100 - overlap[overlap$seg == '1502', 'overlapped']}\% of grid points in the Indian River Lagoon and \Sexpr{100 - overlap[overlap$seg == '820', 'overlapped']}\% of grid points in the Big Bend segments had estimates that were significantly different.  By contrast, all grid estimates in Choctawhatchee Bay and Indian River Lagoon had $Z_{c,\,max}$ estimates that were significantly greater than zero, whereas all but \Sexpr{nonsigs[nonsigs$seg == '902', 'ltzero']}\% of grid points in Old Tampa Bay and \Sexpr{nonsigs[nonsigs$seg == '820', 'ltzero']}\% of grid points in the Big Bend segment had $Z_{c,\,max}$ estimates significantly greater than zero. 
 
 \subsection{Evaluation of seagrass light requirements}
 
@@ -462,13 +468,16 @@ seg_summ <- seg_summ[, order(names(seg_summ))]
 tab <- seg_summ
 nms <- names(tab)
 tab <- data.frame(apply(tab, 2, form_fun), stringsAsFactors = F)
+tab<- rbind(year = c('2006', '2007', '2010', '2009'), tab)
 names(tab) <- nms
-rows <- c('Latitude', 'Longitude', 'Surface area', 'Seagrass area', 'Depth (mean)', 'Depth (max)', 'Secchi (mean)', 'Secchi (se)')
+rows <- c('Year\\textsuperscript{\\textit{a}}', 'Latitude', 'Longitude', 'Surface area', 'Seagrass area', 'Depth (mean)', 'Depth (max)', 'Secchi (mean)', 'Secchi (se)')
 
 # shorten uirl name
 names(tab) <- gsub('River', 'R.', names(tab))
 
-cap.val <- "Characteristics of coastal segments used to evaluate seagrass \\acl{doc} estimates (see \\cref{fig:seg_all} for spatial distribution).  Area and depth values are meters and square kilometers, respectively.  Secchi measurements (m) were obtained from the Florida Department of Environmental Protection's \\acl{IWR} (\\acs{IWR}), update number 40.  Secchi mean and standard errors are based on all observations within the ten years preceding each seagrass survey."
+cap.val <- "Characteristics of coastal segments used to evaluate seagrass \\acl{doc} estimates (see \\cref{fig:seg_all} for spatial distribution).  Year is the date of the seagrass coverage and bathymetric data.  Latitude and longitude are the geographic centers of each segment.  Area and depth values are meters and square kilometers, respectively.  Secchi measurements (m) were obtained from the Florida Department of Environmental Protection's \\acl{IWR} (\\acs{IWR}), update number 40.  Secchi mean and standard errors are based on all observations within the ten years preceding each seagrass survey."
+
+foot.val <- '\\footnotesize \\textsuperscript{\\textit{a}} Seagrass coverage data sources, see \\cref{sec:data_srcs} for bathymetry data sources:\\scriptsize\\\\Big Bend: \\url{http://atoll.floridamarine.org/Data/metadata/SDE_Current/seagrass_bigbend_2006_poly.htm}\\\\Choctawhatchee Bay: \\url{http://atoll.floridamarine.org/data/metadata/SDE_Current/seagrass_chotawhatchee_2007_poly.htm}\\\\Tampa Bay: \\url{http://www.swfwmd.state.fl.us/data/gis/layer_library/category/swim}\\\\Indian R. Lagoon: \\url{http://www.sjrwmd.com/gisdevelopment/docs/themes.html}'
 
 latex( 
   tab,
@@ -476,6 +485,7 @@ latex(
   rowlabel = '',
   caption = cap.val,
   caption.loc = 'top',
+  insert.bottom = foot.val, 
   rowname = rows,
   label = 'tab:seg_summ'
   )
@@ -669,91 +679,91 @@ latex(
 % summary of light requirements analysis
 <<eval = T, echo = F>>=
 
-##
-# load data
-
-# load results from figure chunks
-data(tb_light)
-data(irl_light)
-
-# segment shapefiles
-data(tb_seg)
-data(irl_seg)
- 
-# all secchi data
-data(secc_all)
-
-##
-# prep data
-
-# add yrs to secc_all
-secc_all$yr <- as.numeric(strftime(secc_all$Date, '%Y'))
-
-# clip secchi by tampa bay and irl segments
-# retain data within ten years of seagrass survey (2010 for TB, 2009 for IRL)
-sel_tb <- !is.na(secc_all %over% tb_seg)[, 1]
-sel_tb <- sel_tb & secc_all$yr > 2000 & secc_all$yr <= 2010
-sel_irl <- !is.na(secc_all %over% irl_seg)[, 1]
-sel_irl <- sel_irl & secc_all$yr > 1999 & secc_all$yr <= 2009
-sel_all <- apply(cbind(sel_tb, sel_irl), 1, any)
-secc_segs <- secc_all[sel_all, ]
-
-# create bay column, only populate for TB
-# IRL will populate  in segment assignments
-secc_segs$bay <- 'TB'
-
-# get segment for each point, TB
-for(seg in as.character(tb_seg$seg)){
-  
-  to_sel <- tb_seg[tb_seg$seg %in% seg, ]
-  sel <- !is.na(secc_segs %over% to_sel)[, 1]
-  secc_segs[sel, 'seg'] <- as.character(seg)
-  
-}
-
-# get segment for each point, IRL
-levels(irl_seg$Segment) <- c('BR', 'LCIRL', 'LHR', 'LIRL', 'LML', 'LSL', 'UCIRL', 'UIRL', 'UML')
-for(seg in as.character(irl_seg$Segment)){
-  
-  to_sel <- irl_seg[irl_seg$Segment %in% seg, ]
-  sel <- !is.na(secc_segs %over% to_sel)[, 1]
-  secc_segs[sel, 'seg'] <- as.character(seg)
-  secc_segs$bay[sel] <- 'IRL'
-  
-}
-
-##
-# summarize secchi
-secc_summ <- data.frame(secc_segs) %>% 
-  group_by(bay, seg) %>% 
-  summarize(
-    min_date = min(Date), 
-    max_date = max(Date),
-    n_secchi = length(as.numeric(SD)),
-    n_locs = length(unique(Station_ID)),
-    mean_sd = mean(as.numeric(SD))
-  )
-
-# summarize light requirements
-irl_summ <- data.frame(irl_light) %>% 
-  group_by(seg) %>% 
-  summarize(
-    mean_z_cmax = mean(z_cmax_all), 
-    mean_light = mean(light)
-  )
-
-tb_summ <- data.frame(tb_light) %>% 
-  group_by(seg) %>% 
-  summarize(
-    mean_z_cmax = mean(z_cmax_all), 
-    mean_light = mean(light)
-  )
-
-# combine all, remove LHR segment (crap data)
-secc_summ <- left_join(secc_summ, rbind_all(list(tb_summ, irl_summ)), by = 'seg') %>% 
-  filter(seg != 'LHR')
-
-save(secc_summ, file = 'data/secc_summ.RData')
+# ##
+# # load data
+# 
+# # load results from figure chunks
+# data(tb_light)
+# data(irl_light)
+# 
+# # segment shapefiles
+# data(tb_seg)
+# data(irl_seg)
+#  
+# # all secchi data
+# data(secc_all)
+# 
+# ##
+# # prep data
+# 
+# # add yrs to secc_all
+# secc_all$yr <- as.numeric(strftime(secc_all$Date, '%Y'))
+# 
+# # clip secchi by tampa bay and irl segments
+# # retain data within ten years of seagrass survey (2010 for TB, 2009 for IRL)
+# sel_tb <- !is.na(secc_all %over% tb_seg)[, 1]
+# sel_tb <- sel_tb & secc_all$yr > 2000 & secc_all$yr <= 2010
+# sel_irl <- !is.na(secc_all %over% irl_seg)[, 1]
+# sel_irl <- sel_irl & secc_all$yr > 1999 & secc_all$yr <= 2009
+# sel_all <- apply(cbind(sel_tb, sel_irl), 1, any)
+# secc_segs <- secc_all[sel_all, ]
+# 
+# # create bay column, only populate for TB
+# # IRL will populate  in segment assignments
+# secc_segs$bay <- 'TB'
+# 
+# # get segment for each point, TB
+# for(seg in as.character(tb_seg$seg)){
+#   
+#   to_sel <- tb_seg[tb_seg$seg %in% seg, ]
+#   sel <- !is.na(secc_segs %over% to_sel)[, 1]
+#   secc_segs[sel, 'seg'] <- as.character(seg)
+#   
+# }
+# 
+# # get segment for each point, IRL
+# levels(irl_seg$Segment) <- c('BR', 'LCIRL', 'LHR', 'LIRL', 'LML', 'LSL', 'UCIRL', 'UIRL', 'UML')
+# for(seg in as.character(irl_seg$Segment)){
+#   
+#   to_sel <- irl_seg[irl_seg$Segment %in% seg, ]
+#   sel <- !is.na(secc_segs %over% to_sel)[, 1]
+#   secc_segs[sel, 'seg'] <- as.character(seg)
+#   secc_segs$bay[sel] <- 'IRL'
+#   
+# }
+# 
+# ##
+# # summarize secchi
+# secc_summ <- data.frame(secc_segs) %>% 
+#   group_by(bay, seg) %>% 
+#   summarize(
+#     min_date = min(Date), 
+#     max_date = max(Date),
+#     n_secchi = length(as.numeric(SD)),
+#     n_locs = length(unique(Station_ID)),
+#     mean_sd = mean(as.numeric(SD))
+#   )
+# 
+# # summarize light requirements
+# irl_summ <- data.frame(irl_light) %>% 
+#   group_by(seg) %>% 
+#   summarize(
+#     mean_z_cmax = mean(z_cmax_all), 
+#     mean_light = mean(light)
+#   )
+# 
+# tb_summ <- data.frame(tb_light) %>% 
+#   group_by(seg) %>% 
+#   summarize(
+#     mean_z_cmax = mean(z_cmax_all), 
+#     mean_light = mean(light)
+#   )
+# 
+# # combine all, remove LHR segment (crap data)
+# secc_summ <- left_join(secc_summ, rbind_all(list(tb_summ, irl_summ)), by = 'seg') %>% 
+#   filter(seg != 'LHR')
+# 
+# save(secc_summ, file = 'data/secc_summ.RData')
 
 # load data
 # note that the secchi summaries are based on all secchi for each bay
@@ -801,18 +811,12 @@ latex(
 \label{fig:seg_all}
 \end{figure}
 
-% example of depth of col ests for wbid - big bend 820
-\begin{figure}
-\centerline{\includegraphics[width = \textwidth]{figs/wbid_doc.pdf}}
-\caption{Example of over- and under-estimates for seagrass depth of colonization for a segment in the Big Bend region, Florida.  Layers include a seagrass coverage layer, bathymetric depth points, bathymetric digital elevation model, and spatial extents for the segment and Florida.  The top-left figure indicates over-estimation and the bottom-left indicates under-estimation.  Bathymetric points are color-coded by the median depth of colonization estimate for seagrass using data from the whole segment (2.6 m).}
-\label{fig:wbid_doc}
-\end{figure}
-
 % example of buffer points for depth of col
-<<buff_ex, cache = T, echo = F, eval = T, message = F, results = 'hide'>>=
+<<buff_ex, cache = T, fig = F, echo = F, eval = T, message = F, results = 'hide'>>=
+########
 
-# reset digits 
-options(digits = 2)
+# reset digits
+options(digits = 4)
 
 # load data, buff_ex_dat was created from various shapefiles
 data(buff_ex_dat)
@@ -820,88 +824,139 @@ seg <- buff_ex_dat[['seg']] # 820 segment polygon
 state <- buff_ex_dat[['state']] # florida state polygon
 sgpoly <- buff_ex_dat[['sgpoly']] # 820 segment seagrass polygon
 sgrass <- buff_ex_dat[['sgrass']] # 820 segment seagrass depth point
+depths <- buff_ex_dat[['depths']] # 820 segment bathymetry dem, for contour lines
 rm('buff_ex_dat')
 
-sgrass <- sgrass[sample(1:length(sgrass), 1000), ]
-
+# get a subsample of seagrass depth points for plotting
 set.seed(4321)
-est_pts <- grid_est(seg, spacing = 0.02)
-test_pt <- est_pts[27, ]
 
+est_pts <- grid_est(seg, spacing = 0.02)
+sgrass <- sgrass[sample(1:length(sgrass), 1000), ]
+test_pt <- est_pts[27, ]
 buff_pts <- buff_ext(sgrass, test_pt, buff = 0.02)
 
 # format buff_pts and sgrass for plotting
 buff_pts <- data.frame(buff_pts)
-levels(buff_pts$Seagrass) <- c('Present', 'Present', 'Absent')
+levels(buff_pts$Seagrass) <- c('Seagrass present', 'Seagrass present', 'Seagrass absent')
 buff_pts$Seagrass <- as.character(buff_pts$Seagrass)
 sgrass <- data.frame(sgrass)
-levels(sgrass$Seagrass) <- c('Present', 'Present', 'Absent')
+levels(sgrass$Seagrass) <- c('Seagrass present', 'Seagrass present', 'Seagrass absent')
 sgrass$Seagrass <- as.character(sgrass$Seagrass)
 
-p1 <- ggplot(seg, aes_string('long', 'lat')) + 
-  geom_polygon(fill = 'white') +
-  geom_path(color = 'black') +
+# segment wide est for zcmax (all cats) for 820 from Hagy is 3.855
+# get contour lines from bathymetry layer, one for whole segment and one for limit
+to_cont <- seq(1, 15, by = 2)
+im <- as.image.SpatialGridDataFrame(depths)
+conts <- contourLines(im, levels = -1 * to_cont)
+conts <- ContourLines2SLDF(conts)
+zc_conts <- contourLines(im, levels = -3.855)
+zc_conts <- ContourLines2SLDF(zc_conts)
+
+# seagrass and depth contours
+p1 <- ggplot(state, aes(long, lat, group = group)) + 
+  geom_polygon(fill = 'lightgrey') +
+  geom_polygon(data = seg, fill = 'white', col = 'black') + 
+  geom_polygon(data = sgpoly, aes(group = group, fill = 'Seagrass coverage'), 
+    alpha = 0.7) + 
+  geom_polygon(data = state, aes(group = group), 
+    fill = 'grey') + 
+  geom_path(data = conts, 
+    aes(group = group, linetype = 'dashed')
+    ) + 
+  geom_path(data = zc_conts, 
+    aes(group = group, colour = 'Estimated depth\nlimit for segment'), 
+    size = 2
+    ) +
+  scale_fill_manual(values = 'royalblue') + 
+  scale_colour_manual(
+    values = 'red'
+    ) +
+  scale_linetype_manual(labels = '2 m depth contours', values = 'dashed') +
   theme_classic() +
   coord_equal() +
   xlab('Longitude') +
   ylab('Latitude') +
-  geom_point(
-    data = sgrass,
-    aes_string('coords.x1', 'coords.x2', colour = 'Depth' , pch = 'Seagrass'), size = 4, alpha = 0.5
+  coord_map(
+    xlim = c(-83.65, -83.35),
+    ylim = c(29.4, 29.8)
+  ) +
+  theme(axis.text = element_text(size = 10),
+    axis.title = element_text(size = 20), 
+    legend.title = element_blank()
   ) + 
-  scale_x_continuous(limits = c(-83.65, -83.35)) +
-  scale_y_continuous(limits = c(29.4, 29.8)) + 
-  scale_colour_gradientn('Depth (m)', colours = c('blue', 'lightblue')) +
-  scale_shape_manual('Seagrass', values = c(2, 16)) +
-  theme(text = element_text(size=20))
+  guides(fill = guide_legend(order = 1), 
+    linetype = guide_legend(order = 2), 
+    colour = guide_legend(order = 3)
+  )
 
 p1leg <- g_legend(p1)
 p1 <- p1 + theme(legend.position = 'none')
-  
+
 p2 <- ggplot(seg, aes(long, lat)) + 
   geom_polygon(fill = 'white') +
   geom_path(color = 'black') +
-  theme_classic() +
-  coord_equal() +
+  geom_polygon(data = state, aes(group = group), fill = 'lightgrey') + 
   xlab('Longitude') +
   ylab('Latitude') +
   geom_point(
+    data = data.frame(sgrass), 
+    aes(x = coords_x1, y = coords_x2, shape = Seagrass), col = 'royalblue'
+    ) +
+  geom_point(
     data = data.frame(est_pts), 
-    aes(Var1, Var2), size = 3, pch = 1,
+    aes(Var1, Var2), size = 3, pch = 21, col = 'black', bg = 'white'
   ) +  
   geom_point(
     data = data.frame(est_pts), 
-    aes(Var1, Var2), size = 17, pch = 1, colour = 'grey',
-  )  +
-  scale_x_continuous(limits = c(-83.65, -83.35)) +
-  scale_y_continuous(limits = c(29.4, 29.8)) + 
-  theme(text = element_text(size=20), 
-    legend.position = 'none')
+    aes(Var1, Var2), size = 17, pch = 1, colour = 'grey60'
+  ) +
+  scale_shape_manual('', values = c(2, 16)) +
+  coord_equal() +
+  coord_map(
+    xlim = c(-83.65, -83.35),
+    ylim = c(29.4, 29.8)
+    ) + 
+  theme_classic() +
+  theme(axis.text = element_text(size = 10),
+    axis.title = element_text(size = 20)
+    )
+
+p2leg <- g_legend(p2)
+p2 <- p2 + theme(legend.position = 'none')
 
 p3 <- ggplot(seg, aes(long, lat)) + 
   geom_polygon(fill = 'white') +
   geom_path(color = 'black') +
+  geom_polygon(data = state, aes(group = group), fill = 'lightgrey') +
   theme_classic() +
   coord_equal() +
   xlab('Longitude') +
-	ylab('Latitude') +
-  scale_x_continuous(limits = c(-83.65, -83.35)) +
-  scale_y_continuous(limits = c(29.4, 29.8)) +
-  geom_point(
-          data = data.frame(est_pts), 
-          aes(Var1, Var2), colour = 'black', size = 3, pch = 1,
-        ) +
+  ylab('Latitude') +
+  coord_map(
+    xlim = c(-83.65, -83.35),
+    ylim = c(29.4, 29.8)
+    ) +
   geom_point(
     data = buff_pts,
-    aes(coords.x1, coords.x2, colour = Depth, pch = Seagrass), alpha = 0.5, size = 4
+    aes(coords.x1, coords.x2, pch = Seagrass), 
+    colour = 'royalblue'
   ) + 
   geom_point(
-    data = data.frame(test_pt),
-    aes(Var1, Var2), colour = 'red', size = 5, pch = 16,
+    data = data.frame(est_pts), 
+    aes(Var1, Var2), colour = 'black', bg = 'white', size = 3, pch = 21
   ) +
-  scale_colour_gradientn('Depth (m)', colours = c('blue', 'lightblue')) +
-  scale_shape_manual('Seagrass', values = c(2, 16)) +
-  theme(text = element_text(size=20), legend.position = 'none')
+  geom_point(
+    data = data.frame(test_pt),
+    aes(Var1, Var2), colour = 'red', size = 5, pch = 16
+  ) +
+  geom_point(
+    data = data.frame(test_pt),
+    aes(Var1, Var2), size = 17, pch = 1, colour = 'grey60'
+  ) +
+  scale_shape_manual('', values = c(2, 16)) +
+  theme(axis.text = element_text(size = 10),
+    axis.title = element_text(size = 20), 
+    legend.position = 'none')
 
 pleg <- ggplot(seg, aes(long, lat)) + 
   geom_polygon(fill = 'white') +
@@ -913,9 +968,9 @@ pleg <- ggplot(seg, aes(long, lat)) +
   scale_x_continuous(limits = c(-83.65, -83.35)) +
   scale_y_continuous(limits = c(29.4, 29.8)) +
   geom_point(
-          data = data.frame(est_pts), 
-          aes(Var1, Var2, colour = 'grid', size = 'grid', pch = 'grid'),
-        ) +
+    data = data.frame(est_pts), 
+    aes(Var1, Var2, colour = 'grid', size = 'grid', pch = 'grid'),
+  ) +
   geom_point(
     data = data.frame(test_pt),
     aes(Var1, Var2, colour = 'test', size = 'test', pch = 'test'),
@@ -924,10 +979,12 @@ pleg <- ggplot(seg, aes(long, lat)) +
     data = data.frame(est_pts), 
     aes(Var1, Var2, size = 'rad', pch = 'rad', colour = 'rad'),
   )  +
-  scale_colour_manual('Points', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c('black', 'red', 'grey')) +
-  scale_size_manual('Points', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c(3, 4, 10)) +
-  scale_shape_manual('Points', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c(1, 16, 1)) +
-  theme(text = element_text(size=20))
+  scale_colour_manual('', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c('black', 'red', 'grey60')) +
+  scale_size_manual('', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c(3, 4, 10)) +
+  scale_shape_manual('', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c(1, 16, 1)) +
+theme(axis.text = element_text(size = 20),
+  axis.title = element_text(size = 20)
+  )
 
 pleg <- g_legend(pleg)
 
@@ -935,15 +992,16 @@ pdf('figs/buff_ex.pdf', height = 6, width = 6, family = 'serif')
 print(p1)
 print(p2)
 print(p3)
-grid.arrange(p1leg, pleg, ncol = 1, heights = c(1, 0.7))
+grid.arrange(p1leg, p2leg, pleg, ncol = 1)
 dev.off()
-    
+   
+options(digits = 2)
 @
 
 % example of buffer points for depth of col
 \begin{figure}
 \centering
-\subfloat[][Seagrass depth points for the segment]{
+\subfloat[][Seagrass coverage and bathymetry for the segment]{
 \includegraphics[width=0.5\textwidth, page = 1]{figs/buff_ex.pdf}
 \label{fig:buff_ex1}
 }
@@ -952,14 +1010,14 @@ dev.off()
 \label{fig:buff_ex2}
 }
 
-\subfloat[][Sampled observations for a test point]{
+\subfloat[][Sampled seagrass data for a test point]{
 \includegraphics[width=0.5\textwidth, page = 3]{figs/buff_ex.pdf}
 \label{fig:buff_ex3}
 }
 \subfloat{
 \includegraphics[width = 0.5\textwidth, page = 4]{figs/buff_ex.pdf}
 }
-\caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  \Cref{fig:buff_ex1} shows the seagrass depth points that are used for sampling, \cref{fig:buff_ex2} shows a grid of locations and sampling radii for estimating seagrass \ac{doc}, and \cref{fig:buff_ex3} shows an example of sampled seagrass depth points for a location.  Estimates in \cref{fig:est_ex} were obtained from the sampled location in \cref{fig:buff_ex3}.}
+\caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  \Cref{fig:buff_ex1} shows the seagrass coverage and depth contours at 2 meter intervals, including the whole segment estimate for depth of colonization. \cref{fig:buff_ex2} shows a grid of sampling locations with sampling radii for estimating \ac{doc} and seagrass depth points derived from bathymetry and seagrass coverage layers.  \cref{fig:buff_ex3} shows an example of sampled seagrass depth points for a test location.  Estimates in \cref{fig:est_ex} were obtained from the test location in \cref{fig:buff_ex3}.}
 \label{fig:buff_ex}
 \end{figure}
 
@@ -1263,7 +1321,7 @@ dev.off()
 
 % estimated light requirements for Tampa Bay
 <<light_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
-
+# 
 # source('R/funcs.r')
 # 
 # # tb polygon segment
@@ -1282,7 +1340,7 @@ dev.off()
 # secc_all <- secc_all[yrs, ]
 # 
 # # process, get ave secchi data results
-# proc <- secc_doc(secc_all, sgpts_2010_tb, tb_seg, radius = 0.02282, '2010', trace = T)
+# proc <- secc_doc(secc_all, sgpts_2010_tb, tb_seg, radius = 0.1, '2010', trace = T)
 # dat <- na.omit(proc$ave_dat)
 # dat <- dplyr::filter(dat, SD <3)
 # dat <- dplyr::mutate(dat, 
@@ -1341,7 +1399,7 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   scale_size(name = '% light requirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
   scale_colour_gradientn(name = '% light requirements', 
-    colours = c('blue', 'lightblue', 'green'),
+    colours = c('green', 'darkgreen', 'brown'),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
   guides(colour = guide_legend(), size = guide_legend()) +
@@ -1395,7 +1453,7 @@ dev.off()
 # secc_all <- secc_all[yrs, ]
 # 
 # # process, get ave secchi data results
-# proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.01332, '2009', trace = T)
+# proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.1, '2009', trace = T)
 # dat <- na.omit(proc$ave_dat)
 # # dat <- dplyr::filter(dat, SD <3)
 # dat <- dplyr::mutate(dat, 
@@ -1460,7 +1518,7 @@ p1 <- ggplot(fortify(irl_seg), aes(long, lat)) +
   scale_size(name = '% light requirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
   scale_colour_gradientn(name = '% light requirements', 
-    colours = c('blue', 'lightblue', 'green'),
+    colours = c('green', 'darkgreen', 'brown'),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
   guides(colour = guide_legend(), size = guide_legend()) +

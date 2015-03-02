@@ -4,7 +4,7 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 # Data
 
-`buff_ex_dat.RData` Shapefile data for buff_ex figure, includes four shapefiles
+`buff_ex_dat.RData` Shapefile data for buff_ex figure as list, includes five shapefiles
 
 `dep_shps.RData` Bathymetry data shapefiles for each segment
 

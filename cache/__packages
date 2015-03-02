@@ -12,10 +12,12 @@ Hmisc
 iterators
 knitr
 lattice
+mapproj
 maps
 maptools
 MASS
 plyr
+raster
 RColorBrewer
 reshape2
 rgdal
