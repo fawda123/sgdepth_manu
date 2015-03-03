@@ -683,96 +683,96 @@ latex(
 % summary of light requirements analysis
 <<eval = T, echo = F>>=
 
-##
-# load data
-
-# load results from figure chunks
-data(tb_light)
-data(irl_light)
-
-# segment shapefiles
-data(tb_seg)
-data(irl_seg)
- 
-# all secchi data
-data(secc_all)
-
-##
-# prep data
-
-# add yrs to secc_all
-secc_all$yr <- as.numeric(strftime(secc_all$Date, '%Y'))
-
-# remove stations with less than five observations
-rems <- table(secc_all$Station_ID)
-rems <- names(rems)[rems < 5]
-secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
-
-# clip secchi by tampa bay and irl segments
-# retain data within ten years of seagrass survey (2010 for TB, 2009 for IRL)
-sel_tb <- !is.na(secc_all %over% tb_seg)[, 1]
-sel_tb <- sel_tb & secc_all$yr > 2000 & secc_all$yr <= 2010
-sel_irl <- !is.na(secc_all %over% irl_seg)[, 1]
-sel_irl <- sel_irl & secc_all$yr > 1999 & secc_all$yr <= 2009
-sel_all <- apply(cbind(sel_tb, sel_irl), 1, any)
-secc_segs <- secc_all[sel_all, ]
-
-# create bay column, only populate for TB
-# IRL will populate  in segment assignments
-secc_segs$bay <- 'TB'
-
-# get segment for each point, TB
-for(seg in as.character(tb_seg$seg)){
-  
-  to_sel <- tb_seg[tb_seg$seg %in% seg, ]
-  sel <- !is.na(secc_segs %over% to_sel)[, 1]
-  secc_segs[sel, 'seg'] <- as.character(seg)
-  
-}
-
-# get segment for each point, IRL
-for(seg in as.character(irl_seg$seg)){
-  
-  to_sel <- irl_seg[irl_seg$seg%in% seg, ]
-  sel <- !is.na(secc_segs %over% to_sel)[, 1]
-  secc_segs[sel, 'seg'] <- as.character(seg)
-  secc_segs$bay[sel] <- 'IRL'
-  
-}
-
-##
-# summarize secchi
-secc_summ <- data.frame(secc_segs) %>% 
-  group_by(bay, seg) %>% 
-  summarize(
-    min_date = min(Date), 
-    max_date = max(Date),
-    n_secchi = length(as.numeric(SD)),
-    mean_sd = mean(as.numeric(SD))
-  )
-
-# summarize light requirements
-irl_summ <- data.frame(irl_light) %>% 
-  group_by(seg) %>% 
-  summarize(
-    n_locs = length(Station_ID), 
-    mean_z_cmax = mean(z_cmax_all), 
-    mean_light = mean(light)
-  )
-
-tb_summ <- data.frame(tb_light) %>% 
-  group_by(seg) %>% 
-  summarize(
-    n_locs = length(Station_ID), 
-    mean_z_cmax = mean(z_cmax_all), 
-    mean_light = mean(light)
-  )
-
-# combine all, remove LHR segment (crap data)
-secc_summ <- left_join(secc_summ, rbind_all(list(tb_summ, irl_summ)), by = 'seg') %>% 
-  filter(seg != 'LHR')
-
-save(secc_summ, file = 'data/secc_summ.RData')
+# ##
+# # load data
+# 
+# # load results from figure chunks
+# data(tb_light)
+# data(irl_light)
+# 
+# # segment shapefiles
+# data(tb_seg)
+# data(irl_seg)
+#  
+# # all secchi data
+# data(secc_all)
+# 
+# ##
+# # prep data
+# 
+# # add yrs to secc_all
+# secc_all$yr <- as.numeric(strftime(secc_all$Date, '%Y'))
+# 
+# # remove stations with less than five observations
+# rems <- table(secc_all$Station_ID)
+# rems <- names(rems)[rems < 5]
+# secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
+# 
+# # clip secchi by tampa bay and irl segments
+# # retain data within ten years of seagrass survey (2010 for TB, 2009 for IRL)
+# sel_tb <- !is.na(secc_all %over% tb_seg)[, 1]
+# sel_tb <- sel_tb & secc_all$yr > 2000 & secc_all$yr <= 2010
+# sel_irl <- !is.na(secc_all %over% irl_seg)[, 1]
+# sel_irl <- sel_irl & secc_all$yr > 1999 & secc_all$yr <= 2009
+# sel_all <- apply(cbind(sel_tb, sel_irl), 1, any)
+# secc_segs <- secc_all[sel_all, ]
+# 
+# # create bay column, only populate for TB
+# # IRL will populate  in segment assignments
+# secc_segs$bay <- 'TB'
+# 
+# # get segment for each point, TB
+# for(seg in as.character(tb_seg$seg)){
+#   
+#   to_sel <- tb_seg[tb_seg$seg %in% seg, ]
+#   sel <- !is.na(secc_segs %over% to_sel)[, 1]
+#   secc_segs[sel, 'seg'] <- as.character(seg)
+#   
+# }
+# 
+# # get segment for each point, IRL
+# for(seg in as.character(irl_seg$seg)){
+#   
+#   to_sel <- irl_seg[irl_seg$seg%in% seg, ]
+#   sel <- !is.na(secc_segs %over% to_sel)[, 1]
+#   secc_segs[sel, 'seg'] <- as.character(seg)
+#   secc_segs$bay[sel] <- 'IRL'
+#   
+# }
+# 
+# ##
+# # summarize secchi
+# secc_summ <- data.frame(secc_segs) %>% 
+#   group_by(bay, seg) %>% 
+#   summarize(
+#     min_date = min(Date), 
+#     max_date = max(Date),
+#     n_secchi = length(as.numeric(SD)),
+#     mean_sd = mean(as.numeric(SD))
+#   )
+# 
+# # summarize light requirements
+# irl_summ <- data.frame(irl_light) %>% 
+#   group_by(seg) %>% 
+#   summarize(
+#     n_locs = length(Station_ID), 
+#     mean_z_cmax = mean(z_cmax_all), 
+#     mean_light = mean(light)
+#   )
+# 
+# tb_summ <- data.frame(tb_light) %>% 
+#   group_by(seg) %>% 
+#   summarize(
+#     n_locs = length(Station_ID), 
+#     mean_z_cmax = mean(z_cmax_all), 
+#     mean_light = mean(light)
+#   )
+# 
+# # combine all, remove LHR segment (crap data)
+# secc_summ <- left_join(secc_summ, rbind_all(list(tb_summ, irl_summ)), by = 'seg') %>% 
+#   filter(seg != 'LHR')
+# 
+# save(secc_summ, file = 'data/secc_summ.RData')
 
 # load data
 # note that the secchi summaries are based on all secchi for each bay

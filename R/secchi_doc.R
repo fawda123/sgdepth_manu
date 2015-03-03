@@ -372,17 +372,33 @@ to_plo <- data.frame(irl_light)
 plot(z_cmax_all ~ SD, data = to_plo, pch = 16, col = factor(to_plo$seg), xlim = c(0.5, 3), ylim = c(0.5, 3))
 
 # percent requirements
-reqs <- seq(0.05, 0.45, by= 0.05)
-reqs <- -1 * log(reqs)/1.7
-sapply(reqs, function(x) abline(a = 0, b = x))
+reqs <- c(seq(0.01, 0.04, by = 0.01), seq(0.05, 0.35, by= 0.05))
 
-ggplot(to_plo, aes(x = SD, y = z_cmax_all, colour = seg)) + 
+p1 <- ggplot(to_plo, aes(x = SD, y = z_cmax_all, colour = seg)) + 
   geom_point(size = 4) + 
   theme_classic() + 
-  geom_abline(intercept = 0, slope = reqs, linetype = 'dashed') +
+  geom_abline(intercept = 0, slope = -1 * log(reqs)/1.7, linetype = 'dashed') +
   # geom_text(aes(label = round(light, 1))) +
   ylab('Max depth of colonization (m)') +
   xlab('Secchi ten-year average (m)') +
   theme(legend.title = element_blank())
 
-######
+p2 <- ggplot(to_plo, aes(x = SD, y = light, colour = seg)) + 
+  geom_point(size = 4) + 
+  theme_classic() + 
+  geom_hline(yintercept = 100*reqs, linetype = 'dashed') +
+  # geom_text(aes(label = round(light, 1))) +
+  ylab('% light requirements') +
+  xlab('Secchi ten-year average (m)') +
+  theme(legend.title = element_blank())
+
+p3 <- ggplot(to_plo, aes(x = z_cmax_all, y = light, colour = seg)) + 
+  geom_point(size = 4) + 
+  theme_classic() + 
+  geom_hline(yintercept = 100*reqs, linetype = 'dashed') +
+  # geom_text(aes(label = round(light, 1))) +
+  xlab('Max depth of colonization (m)') +
+  ylab('Secchi ten-year average (m)') +
+  theme(legend.title = element_blank())
+
+grid.arrange(p1, p2, p3, ncol = 3)

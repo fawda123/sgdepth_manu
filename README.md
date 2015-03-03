@@ -14,22 +14,24 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `ests_seg.RData` Seagrass depth of colonization estimates for entire segments (large radius)
 
-`secc_all.RData` Secchi data for all of Florida from IWR40 database, created in sg_depth.RProj
+`irl_light.RData` Seagrass light requirements for Indian River Lagoon, slightly modified output from `secchi_doc` function, created in `light_irl` chunk
 
-`secc_seg.RData` Secchi data for each segment, created in manuscript code cunk
+`irl_seg.RData` Shapefile polygon of Indian River Lagoon, all segments
+
+`secc_all.RData` Secchi data for all of Florida from IWR40 database, created in sg_depth.RProj
 
 `secc_sum.RData` Summary of secchi observations by bay and segment from IWR40 database, also includes light requirement summaries from `irl_light.RData` and `tb_light.RData`
 
 `seg_summ.RData` Summarized data for table of segment characteristics
 
+`sg_shps.RData` Shapefiles of seagrass coverage polygons for each segment
+
 `sgpts_irl_2009.RData` All seagrass depth points for Indian River Lagoon (all segments)
 
 `sgpts_tb_2010.RData` All seagrass depth points for Tampa Bay (all segments)
 
-`sg_shps.RData` Shapefiles of seagrass coverage polygons for each segment
-
 `shps.RData` Multiple shapefiles for each segment, including all segment polygons, individual segment polygons, and seagrass depth points for each segment
 
-`irl_seg.RData` Shapefile polygon of Indian River Lagoon, all segments
+`tb_light.RData` Seagrass light requirements for Tampa Bay, slightly modified output from `secchi_doc` function, created in `light_tb` chunk
 
 `tb_seg.RData` Shapefile polygon of Tampa Bay, all segments
