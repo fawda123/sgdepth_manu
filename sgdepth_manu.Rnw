@@ -124,11 +124,11 @@ Seagrass coverage maps were combined with bathymetric depth layers to characteri
 
 \subsubsection{Water clarity}
 
-Seagrass light requirements can be estimated by evaluating spatial relationships between depth of colonization and water clarity.  Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations documented in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. Secchi data for Florida coastal waters were obtained from update 40 of the \ac{IWR} database for all of Tampa Bay (2010 coverage) and the Indian River Lagoon (2009 coverage) given the spatial extent of secchi observations for the two locations relative to the Big Bend and Choctawhatchee segments.  Secchi data within the previous ten years of the seagrass coverage data were evaluated to capture water quality trends from the most recent decade (i.e., 1999--2009 for the Indian River Lagoon and 2000--2010 for Tampa Bay).  Secchi data were screened to exclude observations that were flagged indicating that the value was lower than the maximum depth of the observation point.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.  Secchi observations that were measured at the same geographic location were averaged across all dates.  This approach was preferred given that seagrass depth patterns are more representative of long-term trends in water clarity as opposed to individual secchi measures that may be highly variable \citep{Dennison87,Dennison93}.
+Seagrass light requirements can be estimated by evaluating spatial relationships between depth of colonization and water clarity.  Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations documented in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. Secchi data (as depth in meters, $Z_{secchi}$) for Florida coastal waters were obtained from update 40 of the \ac{IWR} database for all of Tampa Bay (2010 coverage) and the Indian River Lagoon (2009 coverage) given the spatial extent of secchi observations for the two locations relative to the Big Bend and Choctawhatchee segments.  Secchi data within the previous ten years of the seagrass coverage data were evaluated to capture water quality trends from the most recent decade (i.e., 1999--2009 for the Indian River Lagoon and 2000--2010 for Tampa Bay).  Stations with less than five observations and observations that were flagged indicating that the value was lower than the maximum depth of the observation point were removed.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.  Secchi observations that were measured at the same geographic location were averaged across all dates.  This approach was preferred given that seagrass depth patterns are more representative of long-term trends in water clarity as opposed to individual secchi measures that may be highly variable \citep{Dennison87,Dennison93}.
 
 \subsection{Segment-based estimates of seagrass depth of colonization}
 
-\citetalias{HagyIR} describe an approach to estimate seagrass \ac{doc} as a segment-wide median.  Seagrass depth data described above can be used to estimate maximum ($Z_{cMax}$) and median ($Z_{c50\%}$) seagrass \ac{doc}, where the maximum depth is defined as the deepest depth at which a ``significant'' coverage of mappable seagrasses occured in a segment and the median depth is defined as the median depth occurring at the deep water edge. The seagrass depth points are grouped into bins and the proportion of points within each depth bin that contain seagrass are quantified.  Both seagrass \ac{doc} estimates are obtained from a plot of proportion of points occupied at each depth bin.  In general, the plot is characterized by a decreasing trend such that the proportion of occupied points by depth bin decreases and eventually flattens with increasing depth.  A regression is fit on this descending portion of the curve such that the intercept point on the x-axis is considered the maximum depth of colonization.  The median portion of this curve is considered the median depth of the deepwater edge of seagrass.   
+\citetalias{HagyIR} describe an approach to estimate seagrass \ac{doc} as a segment-wide median.  Seagrass depth data described above can be used to estimate maximum ($Z_{c,\,max}$) and median ($Z_{c,\,med}$) seagrass \ac{doc}, where the maximum depth is defined as the deepest depth at which a ``significant'' coverage of mappable seagrasses occured in a segment and the median depth is defined as the median depth occurring at the deep water edge. The seagrass depth points are grouped into bins and the proportion of points within each depth bin that contain seagrass are quantified.  Both seagrass \ac{doc} estimates are obtained from a plot of proportion of points occupied at each depth bin.  In general, the plot is characterized by a decreasing trend such that the proportion of occupied points by depth bin decreases and eventually flattens with increasing depth.  A regression is fit on this descending portion of the curve such that the intercept point on the x-axis is considered the maximum depth of colonization.  The median portion of this curve is considered the median depth of the deepwater edge of seagrass.   
 
 A segment-wide average of seagrass \ac{doc}, although unbiased, may potentially reduce the ability to relate patterns in \ac{doc} to relevant water quality variables. Considerable spatial heterogeneity in the observed seagrass growth patterns suggests that a segment-wide estimate of seagrass \ac{doc} may not fully describe variation at relevant spatial scales. \Cref{fig:buff_ex1} illustrates variation in seagrass distribution for a location in the Big Bend region of Florida.  Using methods in \citetalias{HagyIR}, the segment-wide estimate for maximum depth of seagrass colonization (shown as a red contour line) does not adequately describe within-segment variation in depth limits.  \ac{doc} is greatly over-estimated at the outflow of the Steinhatchee River where high concentrations of dissolved organic matter reduce water clarity and naturally limit seagrass growth.  This example suggests that it may be useful to have improved spatial resolution in estimates of \ac{doc}, particularly when site-specific characteristics may require a more detailed description of seagrass growth patterns.  Although the current example is immediately relevant for the Big Bend region of Florida, the remaining examples discussed throughout also provide a justification for a more comprehensive assessment of seagrass growth patterns.  
 
@@ -140,9 +140,9 @@ The spatially-resolved approach for estimating \ac{doc} begins by creating a gri
 
 A curve is fit to the sampled depth points using non-linear regression to characterize the reduction in seagrass as a function of depth (\cref{fig:est_ex2}).  Specifically, a decreasing logistic growth curve is used with the assumption that seagrass decline with increasing depth is monotonic and asymptotic at the maximum depth of colonization. The curve is fit by minimizing the residual sums-of-squares with the Gauss-Newton algorithm \citep{Bates92} and user-supplied starting parameters that are an approximate estimate of the curve characteristics.  The model has the following form:
 \begin{equation} \label{eqn:prop}
- Proportion = \frac{\alpha}{1 + \mathrm{e}^{{\left(\beta - Depth\right)/\gamma}}}
+ Proportion = \frac{\alpha}{1 + \mathrm{e}^{{\left(\beta - Z\right)/\gamma}}}
 \end{equation}
-where the proportion of points occupied by seagrass at each depth is defined by a logistic curve with an asymptote $\alpha$, a midpoint inflection $\beta$, and a scale parameter $\gamma$.  Starting values $\alpha$, $\beta$, and $\gamma$ were estimated empirically from the observed data.  
+where the proportion of points occupied by seagrass at each depth, $Z$, is defined by a logistic curve with an asymptote $\alpha$, a midpoint inflection $\beta$, and a scale parameter $\gamma$.  Starting values $\alpha$, $\beta$, and $\gamma$ were estimated empirically from the observed data.  
 
 Finally, a simple linear curve is fit through the inflection point ($\beta$) of the logistic curve to estimate the three measures of depth of colonization (\cref{fig:est_ex3}).  The inflection point is considered the depth at which seagrass are decreasing at a maximum rate and is used as the slope of the linear curve.  Three measures describing seagrass growth characteristics are obtained. The maximum depth of seagrass colonization, $Z_{c,\,max}$, is the x-axis intercept of the linear curve.  The minimum depth of seagrass growth, $Z_{c,\,min}$, is the location where the linear curve intercepts the asymptote of the logistic growth curve.  This depth can be considered the start of the decline in seagrass coverage with increasing depth.  The median depth of seagrass colonization, $Z_{c,\,med}$, is the depth halfway between $Z_{c,\,min}$ and $Z_{c,\,max}$.  $Z_{c,\,med}$ was typically the inflection point of the logistic growth curve.  Functionally, each measure has specific ecological significance.  The median and maximum depth estimates describe the growth limitations of seagrasses as a function of water clarity, whereas minimum depth of growth was often where the highest percentage of seagrass coverage was observed in the sample.  Median and maximum depth estimates differ in that the former describes the median depth of the deep water edge, whereas the latter describes a nominal characterization of maximum depth independent of outliers.
 
@@ -166,15 +166,15 @@ The uncertainty associated with the \ac{doc} estimates were based on the upper a
 
 The relationship between seagrass depth limits and secchi measurements were explored using established light requirements and attenuation equations.  The traditional Lambert-Beer equation describes the exponential decrease of light availability with depth:
 \begin{equation} \label{eqn:lambeer}
-I_{z} = I_{O} \cdot \exp\left(-K_{d} \cdot Z\right)
+I_{z} = I_{O} \cdot \exp\left(-K_{Z} \cdot Z\right)
 \end{equation}
-\noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{d}$). \citet{Duarte91} indicate that minimum light requirements for seagrass are on average 11\% of surface irradiance.  Light requirements may also be species-specific and variable by latitude such that value may range from less than 5\% to greater than 30\% \citep{Dennison93}.  Light requirements of seagrass at a specific location can be estimated by rearranging \cref{eqn:lambeer}:
+\noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{Z}$). \citet{Duarte91} indicate that minimum light requirements for seagrass are on average 11\% of surface irradiance.  Light requirements may also be species-specific and variable by latitude such that value may range from less than 5\% to greater than 30\% \citep{Dennison93}.  Light requirements of seagrass at a specific location can be estimated by rearranging \cref{eqn:lambeer}:
 \begin{equation} \label{eqn:perclight}
-\% light = \exp\left(-K_{d} \cdot Z_{c,\,max}\right)
+\% light = \exp\left(-K_{Z} \cdot Z_{c,\,max}\right)
 \end{equation}
-\noindent where the percent light requirements of seagrass at $Z_{c,\,max}$ are empirically related to light extinction. A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{d}$, such that such that $c = K_{d} \cdot Z_{d}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{d}$ can be replaced with the conversion factor and the equation is rearranged to describe $Z_{c,\,max}$ as a function of secchi depth $Z_{d}$:
+\noindent where the percent light requirements of seagrass at $Z_{c,\,max}$ are empirically related to light extinction. A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{secchi}$, such that such that $c = K_{Z} \cdot Z_{secchi}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{Z}$ can be replaced with the conversion factor and the equation is rearranged to describe $Z_{c,\,max}$ as a function of secchi depth $Z_{secchi}$:
 \begin{equation} \label{eqn:sgreg}
-Z_{c,\,max} = \frac{-\log\left(0.20\right)}{1.7} \cdot Z_{d}
+Z_{c,\,max} = \frac{-\log\left(0.20\right)}{1.7} \cdot Z_{secchi}
 \end{equation}
 \noindent A regression of seagrass depth estimates against secchi measurements is expected to have a slope corresponding to the constant in \cref{eqn:sgreg}.  For the current analysis, 20\% light requirements were assumed to be an approximate median requirement for seagrasses in Florida.  Scatter in the regression through these points can be considered biologically meaningful, such that points below the curve are locations where seagrasses are observed at maximum depth with less irradiance than expected given \cref{eqn:sgreg}, whereas points above the curve are those where seagrasses are growing deeper than expected. The geographic coordinates for each secchi measurement in Tampa Bay and the Indian River Lagoon were used as locations for estimating $Z_{c,\,max}$.  These estimates were compared with the averaged secchi estimates to identify light requirements at each location.  However, the relationship is expected to vary depending on the specific radius around each sample point for estimating $Z_{c,\,max}$.  An appropriate radius was chosen that minimized the difference between the empirically estimated slope and that in \cref{eqn:sgreg}.   The estimated light requirements of each point were also plotted using the cartesian coordinates of each secchi observation to evaluate spatial variation in seagrass growth as a function of light-limitation.  Light requirements were also summarized by individual segments in each bay to identify spatial trends for relevent management units.  
 
@@ -230,7 +230,7 @@ irl_maxdocmax <- max(ests_out[ests_out$seg == '1502', c('z_cmax')])
 
 Estimates of seagrass \ac{doc} using a segment-wide approach that did not consider spatially explicit locations indicated that seagrasses generally did not grow deeper than three meters in any of the segments (\cref{tab:est_summ}).  Maximum and median depth of colonization were deepest for the Big Bend segment (\Sexpr{ests_seg[ests_seg$seg == '820', 'z_cmax']} and \Sexpr{ests_seg[ests_seg$seg == '820', 'z_cmed']} m, respectively) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'z_cmax']} and \Sexpr{ests_seg[ests_seg$seg == '902', 'z_cmed']} m), whereas the minimum depth of colonization was deepest for Choctawhatchee Bay (\Sexpr{ests_seg[ests_seg$seg == '303', 'z_cmin']} m) and shallowest for Old Tampa Bay (\Sexpr{ests_seg[ests_seg$seg == '902', 'z_cmin']} m).  Averages of all grid-based estimates for each segment were different than the segment wide estimates, which suggests potential bias associated with using a whole segment as a relevant spatial unit for estimating depth of colonization.  In most cases, the averages of all grid-based estimates were less than the whole segment estimates, suggesting the latter provided an over-estimate of seagrass growth limits.  For example, the average of all grid estimates for $Z_{c,\,max}$ in the Big Bend region suggested seagrasses grew to approximately \Sexpr{bb_ests} m, which was \Sexpr{ests_seg[ests_seg$seg == '820', 'z_cmax'] - bb_ests} m less than the whole segment estimate.  This reduction is likely related to improved resolution of seagrass depth limits near the outflow of the Steinhatchee river.  Although reductions were not as severe for the average grid estimates for the remaining segments, considerable within-segment variation was observed depending on grid location.  For example, the deepest estimate for $Z_{c,\,min}$ (\Sexpr{irl_maxdocmin} m) in the Indian River Lagoon exceeded the average of all grid locations for $Z_{c,\,max}$ (\Sexpr{irl_meandocmax} m).  $Z_{c,\,min}$ also had minimum values of zero meters for the Big Bend and Old Tampa Bay segments, suggesting that seagrasses declined continously from the surface for several locations.   
 
-Visual interpretations of seagrass depth estimates using the grid-based approach provided further information on the distribution of seagrasses in each segment (\cref{fig:all_ests}).  Spatial heterogeneity in depth limits was particularly apparent for the Big Bend and Indian River Lagoon segments.  As expected, depth estimates indicated that seagrasses grew deeper at locations far from the outflow of the SteinHatchee River in the Big Bend segment.  Similarly, seagrasses were limited to shallower depths at the north end of the Indian River Lagoon segment near the Merrit Island National Wildlife Refuge. Seagrases were estimated to grow at maximum depths up to \Sexpr{irl_maxdocmax} m on the eastern portion of the Indian River Lagoon segment.  Spatial heterogeneity was less distinct for the remaining segments.  Seagrasses in Old Tampa Bay grew deeper in the northeast portion of the segment and declined to shallower depths near the inflow at the northern edge.  Spatial variation in the Choctawhatchee Bay segment was not apparent, although the maximum \ac{doc} estimate was observed in the northeast portion of the segment.  \ac{doc} values were not available for all grid locations givne the limitations imposed in the estimation method.  \ac{doc} could not be estimated in locations where seagrasses were sparse or absent, nor where seagrasses were present but the sampled points did not exhibit a sufficient decline with depth.  The latter scenario was most common in Old Tampa Bay and Choctawhatchee Bay where seagrasses were unevenly distributed or confined to shallow areas near the shore.  The former scenario was most common in the Big Bend segment where seagrasses were abundant but locations near the shore were inestimable given that seagrasses did not decline appreciably within the depths that were sampled.   
+Visual interpretations of seagrass depth estimates using the grid-based approach provided further information on the distribution of seagrasses in each segment (\cref{fig:all_ests}).  Spatial heterogeneity in depth limits was particularly apparent for the Big Bend and Indian River Lagoon segments.  As expected, depth estimates indicated that seagrasses grew deeper at locations far from the outflow of the Steinhatchee River in the Big Bend segment.  Similarly, seagrasses were limited to shallower depths at the north end of the Indian River Lagoon segment near the Merrit Island National Wildlife Refuge. Seagrases were estimated to grow at maximum depths up to \Sexpr{irl_maxdocmax} m on the eastern portion of the Indian River Lagoon segment.  Spatial heterogeneity was less distinct for the remaining segments.  Seagrasses in Old Tampa Bay grew deeper in the northeast portion of the segment and declined to shallower depths near the inflow at the northern edge.  Spatial variation in the Choctawhatchee Bay segment was not apparent, although the maximum \ac{doc} estimate was observed in the northeast portion of the segment.  \ac{doc} values were not available for all grid locations givne the limitations imposed in the estimation method.  \ac{doc} could not be estimated in locations where seagrasses were sparse or absent, nor where seagrasses were present but the sampled points did not exhibit a sufficient decline with depth.  The latter scenario was most common in Old Tampa Bay and Choctawhatchee Bay where seagrasses were unevenly distributed or confined to shallow areas near the shore.  The former scenario was most common in the Big Bend segment where seagrasses were abundant but locations near the shore were inestimable given that seagrasses did not decline appreciably within the depths that were sampled.   
 
 <<echo = F>>=
 data(ests_out)
@@ -300,7 +300,9 @@ tuk_irl <- TukeyHSD(tuk_irl)$seg[, 'p adj']
 
 @
 
-Estimates of seagrass light requirements for all segments of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{tab:secc_summ,fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for \Sexpr{nrow(tb_light)} locations in Tampa Bay and \Sexpr{nrow(irl_light)} locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean secchi depth for all recorded observations was \Sexpr{mean(tb$SD)} m ($n=$ \Sexpr{nrow(tb)}) for Tampa Bay and \Sexpr{mean(irl$SD)} m ($n=$ \Sexpr{nrow(irl)}) for Indian River Lagoon.  Mean light requirements were significantly different between the bays (two-sided t-test, $t=$ \Sexpr{light_btw$statistic}, $df=$ \Sexpr{light_btw$parameter}, $p < 0.001$) with a mean requirement of \Sexpr{mean(tb$light)}\% for Tampa Bay and \Sexpr{mean(irl$light)}\% for Indian River Lagoon.  Within each bay, light requirements were significantly different between segments (ANOVA, $F =$ \Sexpr{form_fun(wtn_tb['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_tb['df1']}, \Sexpr{wtn_tb['df2']}, $p = $ \Sexpr{form_fun(wtn_tb['pval'])} for Tampa Bay, $F =$ \Sexpr{form_fun(wtn_irl['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_irl['df1']}, \Sexpr{wtn_irl['df2']}, $p = $ \Sexpr{form_fun(wtn_irl['pval'], 3, 3, 3)} for Indian River Lagoon).  However, post-hoc evaluation of all pair-wise comparisons of mean light requirements indicated that significant differences were only observed between a few segments within each bay.  Significant differences in Tampa Bay were observed between Old Tampa Bay and Hillsborough Bay (Tukey multiple comparisons, $p =$ \Sexpr{form_fun(tuk_tb['OTB-HB'], 3, 3, 3)}).  Significant differences in the Indian River Lagoon were observed between the Upper Indian River Lagoon and Banana River ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-BR'], 3, 3, 3)}), the Upper Indian River Lagoon and Lower Indian River Lagoon ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LIRL'], 3, 3, 3)}), and Upper Indian River Lagoon and Lower St. Lucie ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LSL'], 3, 3, 3)}) segments.  In general, spatial variation of light requirements in Tampa Bay suggested that seagrasses were less light-limited (i.e., lower percent light requirements at $Z_{c,\,max}$) in Hillsborough Bay and western areas of Lower Tampa Bay near the Gulf of Mexico (\cref{fig:light_tb}).  Seagrassess in the Indian River Lagoon were generally less light-limited towards the south and in the Banana River segment (\cref{fig:light_irl}).
+% add some stuff about secchi here
+
+Estimates of seagrass depth limits and corresponding light requirements for all segments of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{tab:secc_summ,fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for \Sexpr{nrow(tb_light)} locations in Tampa Bay and \Sexpr{nrow(irl_light)} locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean secchi depth for all recorded observations was \Sexpr{mean(tb$SD)} m ($n=$ \Sexpr{nrow(tb)}) for Tampa Bay and \Sexpr{mean(irl$SD)} m ($n=$ \Sexpr{nrow(irl)}) for Indian River Lagoon.  Mean light requirements were significantly different between the bays (two-sided t-test, $t=$ \Sexpr{light_btw$statistic}, $df=$ \Sexpr{light_btw$parameter}, $p < 0.001$) with a mean requirement of \Sexpr{mean(tb$light)}\% for Tampa Bay and \Sexpr{mean(irl$light)}\% for Indian River Lagoon.  Within each bay, light requirements were significantly different between segments (ANOVA, $F =$ \Sexpr{form_fun(wtn_tb['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_tb['df1']}, \Sexpr{wtn_tb['df2']}, $p = $ \Sexpr{form_fun(wtn_tb['pval'])} for Tampa Bay, $F =$ \Sexpr{form_fun(wtn_irl['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_irl['df1']}, \Sexpr{wtn_irl['df2']}, $p = $ \Sexpr{form_fun(wtn_irl['pval'], 3, 3, 3)} for Indian River Lagoon).  However, post-hoc evaluation of all pair-wise comparisons of mean light requirements indicated that significant differences were only observed between a few segments within each bay.  Significant differences in Tampa Bay were observed between Old Tampa Bay and Hillsborough Bay (Tukey multiple comparisons, $p =$ \Sexpr{form_fun(tuk_tb['OTB-HB'], 3, 3, 3)}).  Significant differences in the Indian River Lagoon were observed between the Upper Indian River Lagoon and Banana River ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-BR'], 3, 3, 3)}), the Upper Indian River Lagoon and Lower Indian River Lagoon ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LIRL'], 3, 3, 3)}), and Upper Indian River Lagoon and Lower St. Lucie ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LSL'], 3, 3, 3)}) segments.  In general, spatial variation of light requirements in Tampa Bay suggested that seagrasses were less light-limited (i.e., lower percent light requirements at $Z_{c,\,max}$) in Hillsborough Bay and western areas of Lower Tampa Bay near the Gulf of Mexico (\cref{fig:light_tb}).  Seagrassess in the Indian River Lagoon were generally less light-limited towards the south and in the Banana River segment (\cref{fig:light_irl}).
 
 \section{Discussion}
 
@@ -681,91 +683,96 @@ latex(
 % summary of light requirements analysis
 <<eval = T, echo = F>>=
 
-# ##
-# # load data
-# 
-# # load results from figure chunks
-# data(tb_light)
-# data(irl_light)
-# 
-# # segment shapefiles
-# data(tb_seg)
-# data(irl_seg)
-#  
-# # all secchi data
-# data(secc_all)
-# 
-# ##
-# # prep data
-# 
-# # add yrs to secc_all
-# secc_all$yr <- as.numeric(strftime(secc_all$Date, '%Y'))
-# 
-# # clip secchi by tampa bay and irl segments
-# # retain data within ten years of seagrass survey (2010 for TB, 2009 for IRL)
-# sel_tb <- !is.na(secc_all %over% tb_seg)[, 1]
-# sel_tb <- sel_tb & secc_all$yr > 2000 & secc_all$yr <= 2010
-# sel_irl <- !is.na(secc_all %over% irl_seg)[, 1]
-# sel_irl <- sel_irl & secc_all$yr > 1999 & secc_all$yr <= 2009
-# sel_all <- apply(cbind(sel_tb, sel_irl), 1, any)
-# secc_segs <- secc_all[sel_all, ]
-# 
-# # create bay column, only populate for TB
-# # IRL will populate  in segment assignments
-# secc_segs$bay <- 'TB'
-# 
-# # get segment for each point, TB
-# for(seg in as.character(tb_seg$seg)){
-#   
-#   to_sel <- tb_seg[tb_seg$seg %in% seg, ]
-#   sel <- !is.na(secc_segs %over% to_sel)[, 1]
-#   secc_segs[sel, 'seg'] <- as.character(seg)
-#   
-# }
-# 
-# # get segment for each point, IRL
-# levels(irl_seg$Segment) <- c('BR', 'LCIRL', 'LHR', 'LIRL', 'LML', 'LSL', 'UCIRL', 'UIRL', 'UML')
-# for(seg in as.character(irl_seg$Segment)){
-#   
-#   to_sel <- irl_seg[irl_seg$Segment %in% seg, ]
-#   sel <- !is.na(secc_segs %over% to_sel)[, 1]
-#   secc_segs[sel, 'seg'] <- as.character(seg)
-#   secc_segs$bay[sel] <- 'IRL'
-#   
-# }
-# 
-# ##
-# # summarize secchi
-# secc_summ <- data.frame(secc_segs) %>% 
-#   group_by(bay, seg) %>% 
-#   summarize(
-#     min_date = min(Date), 
-#     max_date = max(Date),
-#     n_secchi = length(as.numeric(SD)),
-#     n_locs = length(unique(Station_ID)),
-#     mean_sd = mean(as.numeric(SD))
-#   )
-# 
-# # summarize light requirements
-# irl_summ <- data.frame(irl_light) %>% 
-#   group_by(seg) %>% 
-#   summarize(
-#     mean_z_cmax = mean(z_cmax_all), 
-#     mean_light = mean(light)
-#   )
-# 
-# tb_summ <- data.frame(tb_light) %>% 
-#   group_by(seg) %>% 
-#   summarize(
-#     mean_z_cmax = mean(z_cmax_all), 
-#     mean_light = mean(light)
-#   )
-# 
-# # combine all, remove LHR segment (crap data)
-# secc_summ <- left_join(secc_summ, rbind_all(list(tb_summ, irl_summ)), by = 'seg') %>% 
-#   filter(seg != 'LHR')
-# 
-# save(secc_summ, file = 'data/secc_summ.RData')
+##
+# load data
+
+# load results from figure chunks
+data(tb_light)
+data(irl_light)
+
+# segment shapefiles
+data(tb_seg)
+data(irl_seg)
+ 
+# all secchi data
+data(secc_all)
+
+##
+# prep data
+
+# add yrs to secc_all
+secc_all$yr <- as.numeric(strftime(secc_all$Date, '%Y'))
+
+# remove stations with less than five observations
+rems <- table(secc_all$Station_ID)
+rems <- names(rems)[rems < 5]
+secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
+
+# clip secchi by tampa bay and irl segments
+# retain data within ten years of seagrass survey (2010 for TB, 2009 for IRL)
+sel_tb <- !is.na(secc_all %over% tb_seg)[, 1]
+sel_tb <- sel_tb & secc_all$yr > 2000 & secc_all$yr <= 2010
+sel_irl <- !is.na(secc_all %over% irl_seg)[, 1]
+sel_irl <- sel_irl & secc_all$yr > 1999 & secc_all$yr <= 2009
+sel_all <- apply(cbind(sel_tb, sel_irl), 1, any)
+secc_segs <- secc_all[sel_all, ]
+
+# create bay column, only populate for TB
+# IRL will populate  in segment assignments
+secc_segs$bay <- 'TB'
+
+# get segment for each point, TB
+for(seg in as.character(tb_seg$seg)){
+  
+  to_sel <- tb_seg[tb_seg$seg %in% seg, ]
+  sel <- !is.na(secc_segs %over% to_sel)[, 1]
+  secc_segs[sel, 'seg'] <- as.character(seg)
+  
+}
+
+# get segment for each point, IRL
+for(seg in as.character(irl_seg$seg)){
+  
+  to_sel <- irl_seg[irl_seg$seg%in% seg, ]
+  sel <- !is.na(secc_segs %over% to_sel)[, 1]
+  secc_segs[sel, 'seg'] <- as.character(seg)
+  secc_segs$bay[sel] <- 'IRL'
+  
+}
+
+##
+# summarize secchi
+secc_summ <- data.frame(secc_segs) %>% 
+  group_by(bay, seg) %>% 
+  summarize(
+    min_date = min(Date), 
+    max_date = max(Date),
+    n_secchi = length(as.numeric(SD)),
+    mean_sd = mean(as.numeric(SD))
+  )
+
+# summarize light requirements
+irl_summ <- data.frame(irl_light) %>% 
+  group_by(seg) %>% 
+  summarize(
+    n_locs = length(Station_ID), 
+    mean_z_cmax = mean(z_cmax_all), 
+    mean_light = mean(light)
+  )
+
+tb_summ <- data.frame(tb_light) %>% 
+  group_by(seg) %>% 
+  summarize(
+    n_locs = length(Station_ID), 
+    mean_z_cmax = mean(z_cmax_all), 
+    mean_light = mean(light)
+  )
+
+# combine all, remove LHR segment (crap data)
+secc_summ <- left_join(secc_summ, rbind_all(list(tb_summ, irl_summ)), by = 'seg') %>% 
+  filter(seg != 'LHR')
+
+save(secc_summ, file = 'data/secc_summ.RData')
 
 # load data
 # note that the secchi summaries are based on all secchi for each bay
@@ -778,12 +785,12 @@ tab$min_date <- strftime(tab$min_date, '%Y')
 tab$max_date <- strftime(tab$max_date, '%Y')
 rows <- as.character(tab$seg)
 tab <- tab[, -c(1:2)]
-tab[, c(5:7)] <- formtab_fun(tab[, c(5:7)])
+tab[, c(4, 6:7)] <- formtab_fun(tab[, c(4, 6:7)])
 
-cap.val<-'Summary of water clarity data and estimated light requirements for all bay segments of the Indian River Lagoon and Tampa Bay.  Water clarity data were obtained from secchi observations in the Florida \\acl{IWR} database for all available locations and dates within ten years of the seagrass survey in each bay.  Values are minimum and maximum years of secchi data, sample size of secchi data ($n_{Secchi}$), sample size of seagrass depth estimates ($n_{Z}$) at each unique secchi location, mean values (m) of secchi data, mean $Z_{c,\\,max}$, and estimated \\% light requirements for each segment.  Summaries are based primarily on data in \\cref{fig:light_irl,fig:light_tb}.'
+cap.val<-'Summary of water clarity data ($Z_{secchi}$), depth of colonization ($Z_{c,\\,max}$), and estimated light requirements for bay segments with available data for the Indian River Lagoon and Tampa Bay.  Water clarity data were obtained from secchi observations in the Florida \\acl{IWR} database for all available locations and dates within ten years of the seagrass survey in each bay.  Values are minimum and maximum years of secchi data, sample size of secchi data ($n_{Z_{secchi}}$), mean values (m) of secchi data, sample size of seagrass depth estimates ($n_{Z_{c,\\,max}}$) at each unique secchi location, mean $Z_{c,\\,max}$, and estimated \\% light requirements for each segment.  See \\cref{fig:light_irl,fig:light_tb} for spatial distribution of the results.'
 
 foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
-col_heads <- c('Min year', 'Max year', '$n_{Secchi}$', '$n_{Z}$', 'Secchi', '$Z_{c,\\,max}$', '\\% light')
+col_heads <- c('Min year', 'Max year', '$n_{Z_{secchi}}$', '$Z_{secchi}$', '$n_{Z_{c,\\,max}}$', '$Z_{c,\\,max}$', '\\% light')
 
 latex( 
   tab,
@@ -1327,7 +1334,7 @@ dev.off()
 
 % estimated light requirements for Tampa Bay
 <<light_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
-# 
+
 # source('R/funcs.r')
 # 
 # # tb polygon segment
@@ -1345,28 +1352,14 @@ dev.off()
 # yrs <- yrs <= 2010 & yrs > 2000
 # secc_all <- secc_all[yrs, ]
 # 
+# # remove stations with less than five observations
+# rems <- table(secc_all$Station_ID)
+# rems <- names(rems)[rems < 5]
+# secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
+# 
 # # process, get ave secchi data results
-# proc <- secc_doc(secc_all, sgpts_2010_tb, tb_seg, radius = 0.1, '2010', trace = T)
+# proc <- secc_doc(secc_all, sgpts_2010_tb, tb_seg, radius = 0.15, seg_pts_yr = '2010', trace = T)
 # dat <- na.omit(proc$ave_dat)
-# dat <- dplyr::filter(dat, SD <3)
-# dat <- dplyr::mutate(dat, 
-#   light = 100 * exp(-z_cmax_all * 1.7/SD),
-#   seg = NA
-#   )
-# 
-# # convert to spatialpointsdataframe
-# coords <- dat[, c('Longitude', 'Latitude')]
-# dat <- dat[, !names(dat) %in% c('Longitude', 'Latitude')]
-# coordinates(dat) <- coords
-# 
-# # get segment for each point
-# for(seg in as.character(tb_seg$seg)){
-#   
-#   to_sel <- tb_seg[tb_seg$seg %in% seg, ]
-#   sel <- !is.na(dat %over% to_sel)[, 1]
-#   dat[sel, 'seg'] <- as.character(seg)
-#   
-# }
 # 
 # tb_light <- dat
 # save(tb_light, file = 'data/tb_light.RData')
@@ -1500,30 +1493,14 @@ dev.off()
 # yrs <- yrs <= 2009 & yrs > 1999
 # secc_all <- secc_all[yrs, ]
 # 
+# # remove stations with less than five observations
+# rems <- table(secc_all$Station_ID)
+# rems <- names(rems)[rems < 5]
+# secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
+# 
 # # process, get ave secchi data results
-# proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.1, '2009', trace = T)
+# proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, seg_pts_yr = '2009', trace = T)
 # dat <- na.omit(proc$ave_dat)
-# # dat <- dplyr::filter(dat, SD <3)
-# dat <- dplyr::mutate(dat, 
-#   light = 100 * exp(-z_cmax_all * 1.7/SD),
-#   seg = NA
-#   )
-# 
-# # convert to spatialpointsdataframe
-# coords <- dat[, c('Longitude', 'Latitude')]
-# dat <- dat[, !names(dat) %in% c('Longitude', 'Latitude')]
-# coordinates(dat) <- coords
-# 
-# levels(irl_seg$Segment) <- c('BR', 'LCIRL', 'LHR', 'LIRL', 'LML', 'LSL', 'UCIRL', 'UIRL', 'UML')
-# 
-# # get segment for each point
-# for(seg in as.character(irl_seg$Segment)){
-#   
-#   to_sel <- irl_seg[irl_seg$Segment %in% seg, ]
-#   sel <- !is.na(dat %over% to_sel)[, 1]
-#   dat[sel, 'seg'] <- as.character(seg)
-#   
-# }
 # 
 # irl_light <- dat
 # save(irl_light, file = 'data/irl_light.RData')
@@ -1534,10 +1511,9 @@ options(digits = 7)
 data(irl_light)
 
 data(irl_seg)
-levels(irl_seg$Segment) <- c('BR', 'LCIRL', 'LHR', 'LIRL', 'LML', 'LSL', 'UCIRL', 'UIRL', 'UML')
 
 # centroids for labels, offset
-labs <- data.frame(rgeos::gCentroid(irl_seg, byid = T, id = irl_seg$Segment))
+labs <- data.frame(rgeos::gCentroid(irl_seg, byid = T, id = irl_seg$seg))
 labs$x <- labs$x - 0.3
 labs$seg <- rownames(labs)
 labs <- labs[!labs$seg %in% 'LHR', ]
