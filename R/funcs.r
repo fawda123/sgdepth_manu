@@ -715,5 +715,5 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, radius = 0.2, seg_pts_yr, tra
 ######
 # formet of label precision in ggplot axes
 fmt <- function(){
-  function(x) format(x,nsmall = 2,scientific = FALSE)
+    function(x) format(x,nsmall = 2,scientific = FALSE)
 }

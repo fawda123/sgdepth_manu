@@ -119,7 +119,7 @@
 \renewcommand\refname{References \vspace{12pt}}
 
 \begin{singlespace}
-\title{{\bf {\Large Seagrass light requirements using an algorithm for spatially-resolved depth of colonization}}}
+\title{{\bf {\Large Seagrass light requirements using an algorithm to spatially resolve depth of colonization}}}
 \author{
   {\bf {\normalsize Marcus W. Beck$^1$, James D. Hagy III$^2$}}
   \\\\{\textit {\normalsize $^1$ORISE Research Participation Program}}
@@ -152,7 +152,7 @@ Overall, these methods are expected to inform the development of water quality c
 
 \section{Methods}
 
-Development of a spatially-resolved approach to estimate seagrass \ac{doc} relied extensively on data and partially on methods described in \citetalias{HagyIR}.  The following is a summary of data sources, methods, and rationale for improving spatial resolution in seagrass \ac{doc} estimates, and evaluation of the approach including relationships with water clarity.   
+Development of a spatially-resolved approach to estimate seagrass \ac{doc} relied extensively on data and partially on methods described in \citetalias{HagyIR}.  The following is a summary of data sources, methods and rationale for improving spatial resolution in seagrass \ac{doc} estimates, and evaluation of the approach including relationships with water clarity.   
 
 \subsection{Data sources}
 
@@ -176,9 +176,9 @@ Seagrass light requirements can be estimated by evaluating spatial relationships
 
 A segment-wide average of seagrass \ac{doc}, although unbiased, may potentially reduce the ability to relate patterns in \ac{doc} to relevant water quality variables. Considerable spatial heterogeneity in the observed seagrass growth patterns suggests that a segment-wide estimate of seagrass \ac{doc} may not fully describe variation at relevant spatial scales. \Cref{fig:buff_ex1} illustrates variation in seagrass distribution for a location in the Big Bend region of Florida.  Using methods in \citetalias{HagyIR}, the segment-wide estimate for maximum depth of seagrass colonization (shown as a red contour line) does not adequately describe within-segment variation in depth limits.  \ac{doc} is greatly over-estimated at the outflow of the Steinhatchee River where high concentrations of dissolved organic matter reduce water clarity and naturally limit seagrass growth.  This example suggests that it may be useful to have improved spatial resolution in estimates of \ac{doc}, particularly when site-specific characteristics may require a more detailed description of seagrass growth patterns.  Although the current example is immediately relevant for the Big Bend region of Florida, the remaining examples discussed throughout also provide a justification for a more comprehensive assessment of seagrass growth patterns.  
 
-\subsection{Estimating seagrass depth of colonization for finite areas}
+\subsection{Estimating seagrass depth of colonization for finite and arbitrary areas}
 
-The approach used to estimate seagrass \ac{doc} with improved spatial resolution has several key differences that make it distinct from the original method.  As before, seagrass \ac{doc} estimates are based on empirical measures of the frequency occurrence of seagrass with increasing depth.  The first difference is that maximum \ac{doc} is estimated using a logistic growth curve fit through the data, as compared to a simple linear regression in the previous example.  Second, a third measure describing the minimum depth of colonization was defined, in addition to median and maximum depth of growth.  The third and most important difference is that the estimates are assigned to discrete cartesian locations, using either a grid of points or as a single location of interest. Methods and implications of these differences are described below.                                   
+The approach used to estimate seagrass \ac{doc} with improved spatial resolution has several key differences that make it distinct from the original method.  As before, seagrass \ac{doc} estimates are based on empirical measures of the frequency occurrence of seagrass with increasing depth.  The first difference is that maximum \ac{doc} is estimated using a logistic growth curve fit through the data, as compared to a simple linear regression in the previous example.  Second, a third measure describing the minimum depth of colonization was defined, in addition to median and maximum depth of growth.  The third and most important difference is that the estimates are assigned to discrete cartesian locations, using either a grid of points or as a single location of interest. The area around each point within which seagrass depth data are used to estimate \ac{doc} is based on a fixed, arbitrary radius that can be increased or decreased depending on the question of interest.  Methods and implications of these differences are described below.                                   
 
 The spatially-resolved approach for estimating \ac{doc} begins by creating a grid of points within the segment where the same process for estimating \ac{doc} is used for each point.  Alternatively, a single location of interest can be chosen rather than a grid-based design.  Seagrass depth data (i.e., merged bathymetric and seagrass coverage data) that are located within a set radius from the chosen locations are selected for estimating seagrass \ac{doc} values (\cref{fig:buff_ex}). The estimate for each location is quantified from a plot of the proportion of bathymetric soundings that contain seagrass at each depth bin (\cref{fig:est_ex1}).  Although the chosen radius for selecting depth points is problem-specific, the minimum radius must sample a sufficient number of points for estimating \ac{doc}.  In general, an appropriate radius will produce a plot that indicates a decrease in the proportion of points that are occupied by seagrass with increasing depth. An appropriate radius is also one that creates a sample area around each point that has minimal overlap with the seagrass depth data sampled by adjacent points.     
 
@@ -264,6 +264,8 @@ Estimates of seagrass light requirements for all segments of Tampa Bay and the I
 % factors that influence seagrass growth patterns - not just limited to light (see main paper about this), also Kemp et al. 2004 intro and fig. 1
 
 % why were light requirements higher in some areas (i.e., seagrasses not growing as deep as expected)?  epiphytic contributions (algae, detritus, sediment, etc.) - Kemp et al. 2004 - explain PLW and PLL in this context, if epiphyte load is low PLW = PLL
+
+% generic products available from Hagy, method can be applied to these products
 
 %%%%%%
 % refs
@@ -405,20 +407,20 @@ UIRL&0.09&0.06&0.01&0.30\tabularnewline
 \begin{figure}
 \centering
 \subfloat[][Seagrass coverage and bathymetry for the segment]{
-\includegraphics[width=0.5\textwidth, page = 1]{figs/buff_ex.pdf}
+\includegraphics[width=0.5\textwidth,page=1]{figs/buff_ex.pdf}
 \label{fig:buff_ex1}
 }
 \subfloat[][Grid of locations and sample areas for estimates]{
-\includegraphics[width=0.5\textwidth, page = 2]{figs/buff_ex.pdf}
+\includegraphics[width=0.5\textwidth,page=2]{figs/buff_ex.pdf}
 \label{fig:buff_ex2}
 }
 
 \subfloat[][Sampled seagrass data for a test point]{
-\includegraphics[width=0.5\textwidth, page = 3]{figs/buff_ex.pdf}
+\includegraphics[width=0.5\textwidth,page=3]{figs/buff_ex.pdf}
 \label{fig:buff_ex3}
 }
 \subfloat{
-\includegraphics[width = 0.5\textwidth, page = 4]{figs/buff_ex.pdf}
+\includegraphics[width=0.5\textwidth,page=4]{figs/buff_ex.pdf}
 }
 \caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  \Cref{fig:buff_ex1} shows the seagrass coverage and depth contours at 2 meter intervals, including the whole segment estimate for depth of colonization. \cref{fig:buff_ex2} shows a grid of sampling locations with sampling radii for estimating \ac{doc} and seagrass depth points derived from bathymetry and seagrass coverage layers.  \cref{fig:buff_ex3} shows an example of sampled seagrass depth points for a test location.  Estimates in \cref{fig:est_ex} were obtained from the test location in \cref{fig:buff_ex3}.}
 \label{fig:buff_ex}
@@ -471,7 +473,7 @@ UIRL&0.09&0.06&0.01&0.30\tabularnewline
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/light_tb.pdf}
-\caption{Estimated light requirements of seagrass for multiple locations in Tampa Bay, Florida.  Map locations are georeferenced observations of water clarity from secchi measurements in the Florida \acl{IWR} database, update 40.  Data are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range.  Light requirements are based on daily average secchi values for each location using all observations for Tampa Bay, estimated maximum depth of colonization using a radius of 0.7 decimal degrees for each secchi location to sample seagrass depth points for 2010 coverage data, and empirical relationships described by \cref{eqn:lambeer}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Map locations are georeferenced observations of water clarity from secchi measurements in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range.  Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.02 decimal degrees for each secchi location to sample seagrass depth points. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb}
 \end{figure}
 
@@ -479,8 +481,8 @@ UIRL&0.09&0.06&0.01&0.30\tabularnewline
 
 \begin{figure}
 \centering
-\includegraphics[width = \textwidth]{figs/light_irl.pdf}
-\caption{Estimated light requirements of seagrass for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity from secchi measurements in the Florida \acl{IWR} database, update 40.  Data are also summarized by bay segment as boxplots as in \cref{fig:light_tb}. Light requirements are based on daily average secchi values for each location using all observations for Tampa Bay, estimated maximum depth of colonization using a radius of 0.02 decimal degrees for each secchi location to sample seagrass depth points for 2009 coverage data, and empirical relationships described by \cref{eqn:lambeer}. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
+\includegraphics[width = 0.8\textwidth]{figs/light_irl.pdf}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_tb}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.02 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
 \label{fig:light_irl}
 \end{figure}
 

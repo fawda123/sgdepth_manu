@@ -75,7 +75,7 @@ source('R/funcs.r')
 \renewcommand\refname{References \vspace{12pt}}
 
 \begin{singlespace}
-\title{{\bf {\Large Seagrass light requirements using an algorithm for spatially-resolved depth of colonization}}}
+\title{{\bf {\Large Seagrass light requirements using an algorithm to spatially resolve depth of colonization}}}
 \author{
   {\bf {\normalsize Marcus W. Beck$^1$, James D. Hagy III$^2$}}
   \\\\{\textit {\normalsize $^1$ORISE Research Participation Program}}
@@ -319,6 +319,8 @@ Estimates of seagrass light requirements for all segments of Tampa Bay and the I
 % factors that influence seagrass growth patterns - not just limited to light (see main paper about this), also Kemp et al. 2004 intro and fig. 1
 
 % why were light requirements higher in some areas (i.e., seagrasses not growing as deep as expected)?  epiphytic contributions (algae, detritus, sediment, etc.) - Kemp et al. 2004 - explain PLW and PLL in this context, if epiphyte load is low PLW = PLL
+
+% generic products available from Hagy, method can be applied to these products
 
 %%%%%%
 % refs
@@ -812,7 +814,7 @@ latex(
 \end{figure}
 
 % example of buffer points for depth of col
-<<buff_ex, cache = T, fig = F, echo = F, eval = T, message = F, results = 'hide'>>=
+<<buff_ex, cache = T, fig = F, echo = F, eval = T, message = F, results = 'hide', include = F>>=
 ########
 
 # reset digits
@@ -882,6 +884,7 @@ p1 <- ggplot(state, aes(long, lat, group = group)) +
   ) +
   theme(axis.text = element_text(size = 10),
     axis.title = element_text(size = 20), 
+    legend.text = element_text(size = 20),
     legend.title = element_blank()
   ) + 
   guides(fill = guide_legend(order = 1), 
@@ -918,6 +921,7 @@ p2 <- ggplot(seg, aes(long, lat)) +
     ) + 
   theme_classic() +
   theme(axis.text = element_text(size = 10),
+    legend.text = element_text(size = 20),
     axis.title = element_text(size = 20)
     )
 
@@ -955,6 +959,7 @@ p3 <- ggplot(seg, aes(long, lat)) +
   ) +
   scale_shape_manual('', values = c(2, 16)) +
   theme(axis.text = element_text(size = 10),
+    legend.text = element_text(size = 20), 
     axis.title = element_text(size = 20), 
     legend.position = 'none')
 
@@ -983,15 +988,16 @@ pleg <- ggplot(seg, aes(long, lat)) +
   scale_size_manual('', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c(3, 4, 10)) +
   scale_shape_manual('', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c(1, 16, 1)) +
 theme(axis.text = element_text(size = 20),
+  legend.text = element_text(size = 20),
   axis.title = element_text(size = 20)
   )
 
 pleg <- g_legend(pleg)
 
 pdf('figs/buff_ex.pdf', height = 6, width = 6, family = 'serif')
-print(p1)
-print(p2)
-print(p3)
+p1
+p2
+p3
 grid.arrange(p1leg, p2leg, pleg, ncol = 1)
 dev.off()
    
@@ -1002,20 +1008,20 @@ options(digits = 2)
 \begin{figure}
 \centering
 \subfloat[][Seagrass coverage and bathymetry for the segment]{
-\includegraphics[width=0.5\textwidth, page = 1]{figs/buff_ex.pdf}
+\includegraphics[width=0.5\textwidth,page=1]{figs/buff_ex.pdf}
 \label{fig:buff_ex1}
 }
 \subfloat[][Grid of locations and sample areas for estimates]{
-\includegraphics[width=0.5\textwidth, page = 2]{figs/buff_ex.pdf}
+\includegraphics[width=0.5\textwidth,page=2]{figs/buff_ex.pdf}
 \label{fig:buff_ex2}
 }
 
 \subfloat[][Sampled seagrass data for a test point]{
-\includegraphics[width=0.5\textwidth, page = 3]{figs/buff_ex.pdf}
+\includegraphics[width=0.5\textwidth,page=3]{figs/buff_ex.pdf}
 \label{fig:buff_ex3}
 }
 \subfloat{
-\includegraphics[width = 0.5\textwidth, page = 4]{figs/buff_ex.pdf}
+\includegraphics[width=0.5\textwidth,page=4]{figs/buff_ex.pdf}
 }
 \caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  \Cref{fig:buff_ex1} shows the seagrass coverage and depth contours at 2 meter intervals, including the whole segment estimate for depth of colonization. \cref{fig:buff_ex2} shows a grid of sampling locations with sampling radii for estimating \ac{doc} and seagrass depth points derived from bathymetry and seagrass coverage layers.  \cref{fig:buff_ex3} shows an example of sampled seagrass depth points for a test location.  Estimates in \cref{fig:est_ex} were obtained from the test location in \cref{fig:buff_ex3}.}
 \label{fig:buff_ex}
@@ -1365,6 +1371,9 @@ dev.off()
 # tb_light <- dat
 # save(tb_light, file = 'data/tb_light.RData')
 
+# reset digits to default
+options(digits = 7)
+
 data(tb_light)
 data(tb_seg)
 
@@ -1379,13 +1388,57 @@ dat <- data.frame(tb_light)
 # outs <- quantile(dat$light, c(0.05, 0.95))
 # dat <- dat[dat$light > outs[1] & dat$light < outs[2],]
 
-# legend formatting
+# color ramp for all graphs
+pt_cols <- c('blue', 'lightblue', 'brown')
+
+# legend formatting, z_cmax
+scls <- c(2, 9)
+scl_vals <- scales::rescale(dat[, c('z_cmax_all'), drop = F], to = scls)
+leg_brks <- seq(min(dat$z_cmax_all, na.rm =  T), max(dat$z_cmax_all, na.rm = T), length = 4)
+leg_labs <- form_fun(leg_brks, 2, 2, 2)
+
+# map, z_cmax
+p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = z_cmax_all, size = z_cmax_all), fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  theme_classic() +
+  coord_equal() +
+  scale_x_continuous(labels = fmt()) + 
+  xlab('Longitude') +
+  scale_y_continuous(labels = fmt()) + 
+  ylab('Latitude') +
+  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, breaks = leg_brks, 
+    labels = leg_labs) + 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, max'])), 
+    colours = rev(pt_cols),
+    breaks = leg_brks, labels = leg_labs) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  guides(colour = guide_legend(), size = guide_legend())
+
+p1leg <- g_legend(p1)
+p1 <- p1 + theme(legend.position = 'none')
+
+# boxplots by seg, z_cmax
+# reorder seg labels
+segs <- c('LTB', 'MTB', 'HB', 'OTB')
+dat$seg <- factor(dat$seg, levels = segs) 
+p2 <- ggplot(dat, aes(x = seg, y = z_cmax_all)) + 
+  geom_boxplot(fill = fill_col) + 
+  ylab(bquote(italic('Z' ['c, max']))) +
+  theme_classic() +
+  theme(axis.title.y = element_blank()) + 
+  coord_flip()
+
+# legend formatting, light requirements
 scls <- c(2, 9)
 scl_vals <- scales::rescale(dat[, c('light'), drop = F], to = scls)
 leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 4)
 leg_labs <- form_fun(leg_brks, 2, 2, 2)
   
-p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
+# map, light requirements
+p3 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
     colour = light, size = light), fill = 'black', alpha = 0.8) +
@@ -1396,39 +1449,34 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous(labels = fmt()) + 
   ylab('Latitude') +
-  scale_size(name = '% light requirements', range = scls, breaks = leg_brks, 
+  scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = '% light requirements', 
-    colours = c('green', 'darkgreen', 'brown'),
+  scale_colour_gradientn(name = '% light\nrequirements', 
+    colours = pt_cols,
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend()) +
-  theme(
-    legend.position = c(1, 0),
-    legend.justification = c(1, 0))
+  guides(colour = guide_legend(), size = guide_legend())
 
-# get meds
-meds <- data.frame(dat) %>% 
-  group_by(seg) %>% 
-  summarize(median(light))
-dat$seg <- factor(dat$seg)
-dat$seg <- factor(dat$seg, levels = meds$seg[order(meds$`median(light)`)])
+p3leg <- g_legend(p3)
+p3 <- p3 + theme(legend.position = 'none')
 
-p2 <- ggplot(data.frame(dat), aes(x = seg, y = light)) + 
+# boxplots, light requirements
+p4 <- ggplot(dat, aes(x = seg, y = light)) + 
   geom_boxplot(fill = fill_col) + 
   ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.y = element_blank()) + 
   coord_flip()
 
-pdf('figs/light_tb.pdf', height = 6, width = 7, family = 'serif')
-grid.arrange(p1, p2, nrow = 1, widths = c(1, 0.5))
+pdf('figs/light_tb.pdf', height = 7.5, width = 7, family = 'serif')
+grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
+  widths = c(1, 0.3, 0.75))
 dev.off()
 @
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/light_tb.pdf}
-\caption{Estimated light requirements of seagrass for multiple locations in Tampa Bay, Florida.  Map locations are georeferenced observations of water clarity from secchi measurements in the Florida \acl{IWR} database, update 40.  Data are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range.  Light requirements are based on daily average secchi values for each location using all observations for Tampa Bay, estimated maximum depth of colonization using a radius of 0.7 decimal degrees for each secchi location to sample seagrass depth points for 2010 coverage data, and empirical relationships described by \cref{eqn:lambeer}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Map locations are georeferenced observations of water clarity from secchi measurements in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range.  Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.02 decimal degrees for each secchi location to sample seagrass depth points. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb}
 \end{figure}
 
@@ -1480,6 +1528,9 @@ dev.off()
 # irl_light <- dat
 # save(irl_light, file = 'data/irl_light.RData')
 
+# reset digits to default
+options(digits = 7)
+
 data(irl_light)
 
 data(irl_seg)
@@ -1487,7 +1538,7 @@ levels(irl_seg$Segment) <- c('BR', 'LCIRL', 'LHR', 'LIRL', 'LML', 'LSL', 'UCIRL'
 
 # centroids for labels, offset
 labs <- data.frame(rgeos::gCentroid(irl_seg, byid = T, id = irl_seg$Segment))
-labs$x <- labs$x - 0.2
+labs$x <- labs$x - 0.3
 labs$seg <- rownames(labs)
 labs <- labs[!labs$seg %in% 'LHR', ]
 
@@ -1498,57 +1549,97 @@ dat <- data.frame(irl_light)
 # outs <- quantile(dat$light, c(0.05, 0.95))
 # dat <- dat[dat$light > outs[1] & dat$light < outs[2],]
 
-# legend formatting
-scls <- c(1, 6)
+# color ramp for all graphs
+pt_cols <- c('blue', 'lightblue', 'brown')
+
+# legend formatting, z_cmax
+scls <- c(2, 9)
+scl_vals <- scales::rescale(dat[, c('z_cmax_all'), drop = F], to = scls)
+leg_brks <- seq(min(dat$z_cmax_all, na.rm =  T), max(dat$z_cmax_all, na.rm = T), length = 4)
+leg_labs <- form_fun(leg_brks, 2, 2, 2)
+
+# map, z_cmax
+p1 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = z_cmax_all, size = z_cmax_all), fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  theme_classic() +
+  coord_equal() +
+  scale_x_continuous(limits = c(-81.3, -80)) + 
+  xlab('Longitude') +
+  scale_y_continuous() + 
+  ylab('Latitude') +
+  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, breaks = leg_brks, 
+    labels = leg_labs) + 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, max'])), 
+    colours = rev(pt_cols),
+    breaks = leg_brks, labels = leg_labs) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  guides(colour = guide_legend(), size = guide_legend())
+
+p1leg <- g_legend(p1)
+p1 <- p1 + theme(legend.position = 'none')
+
+# boxplots by seg, z_cmax
+# reorder seg labels
+segs <- c('LSL', 'LIRL', 'LCIRL', 'UCIRL', 'BR', 'UIRL', 'LML', 'UML')
+dat$seg <- factor(dat$seg, levels = segs) 
+p2 <- ggplot(dat, aes(x = seg, y = z_cmax_all)) + 
+  geom_boxplot(fill = fill_col) + 
+  ylab(bquote(italic('Z' ['c, max']))) +
+  theme_classic() +
+  theme(axis.title.y = element_blank()) + 
+  coord_flip()
+
+# legend formatting, light requirements
+scls <- c(2, 9)
 scl_vals <- scales::rescale(dat[, c('light'), drop = F], to = scls)
 leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 4)
 leg_labs <- form_fun(leg_brks, 2, 2, 2)
-
-p1 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
+  
+# map, light requirements
+p3 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
     colour = light, size = light), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
   coord_equal() +
-  scale_x_continuous(limits = c(-81.2, -80), labels = fmt()) +
-  scale_y_continuous(labels = fmt()) +
+  scale_x_continuous(limits = c(-81.3, -80)) + 
   xlab('Longitude') +
+  scale_y_continuous() + 
   ylab('Latitude') +
-  scale_size(name = '% light requirements', range = scls, breaks = leg_brks, 
+  scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = '% light requirements', 
-    colours = c('green', 'darkgreen', 'brown'),
+  scale_colour_gradientn(name = '% light\nrequirements', 
+    colours = pt_cols,
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend()) +
-  theme(
-    legend.position = c(1, 1),
-    legend.justification = c(1, 1))
+  guides(colour = guide_legend(), size = guide_legend())
 
-# get meds
-meds <- data.frame(dat) %>% 
-  group_by(seg) %>% 
-  summarize(median(light))
-dat$seg <- factor(dat$seg)
-dat$seg <- factor(dat$seg, levels = meds$seg[order(meds$`median(light)`)])
+p3leg <- g_legend(p3)
+p3 <- p3 + theme(legend.position = 'none')
 
-p2 <- ggplot(dat, aes(x = seg, y = light)) + 
+# boxplots, light requirements
+p4 <- ggplot(dat, aes(x = seg, y = light)) + 
   geom_boxplot(fill = fill_col) + 
-  # geom_hline(yintercept = 0.2, linetype = 'dashed') +
   ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.y = element_blank()) + 
   coord_flip()
 
-pdf('figs/light_irl.pdf', height = 7.5, width = 7.5, family = 'serif')
-grid.arrange(p1, p2, nrow = 1, widths = c(1, 0.5))
+pdf('figs/light_irl.pdf', height = 8.5, width = 6.5, family = 'serif')
+grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
+  widths = c(1, 0.3, 0.75))
 dev.off()
+
+options(digits = 1)
 @
 \begin{figure}
 \centering
-\includegraphics[width = \textwidth]{figs/light_irl.pdf}
-\caption{Estimated light requirements of seagrass for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity from secchi measurements in the Florida \acl{IWR} database, update 40.  Data are also summarized by bay segment as boxplots as in \cref{fig:light_tb}. Light requirements are based on daily average secchi values for each location using all observations for Tampa Bay, estimated maximum depth of colonization using a radius of 0.02 decimal degrees for each secchi location to sample seagrass depth points for 2009 coverage data, and empirical relationships described by \cref{eqn:lambeer}. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
+\includegraphics[width = 0.8\textwidth]{figs/light_irl.pdf}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_tb}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.02 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
 \label{fig:light_irl}
 \end{figure}
 
