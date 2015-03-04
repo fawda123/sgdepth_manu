@@ -196,6 +196,11 @@ Tyler D, Zawada DG, Nayegandhi A, Brock JC, Crane MP, Yates KK, Smith KEL.
 \newblock Technical Report EPA-822-R-98-002, Office of Water, Office of
   Research and Development, US Environmental Protection Agency, Washington, DC.
 
+\bibitem[Venables and Ripley, 2002]{Venables02}
+Venables WN, Ripley BD. 2002.
+\newblock Modern Applied Statistics with {S}.
+\newblock Springer, New York, New York, fourth edition.
+
 \bibitem[{WFD}, 2000]{WFD00}
 {WFD}. 2000.
 \newblock Water framework directive, 2000/60/ec. european communities official

@@ -398,7 +398,7 @@ p3 <- ggplot(to_plo, aes(x = z_cmax_all, y = light, colour = seg)) +
   geom_hline(yintercept = 100*reqs, linetype = 'dashed') +
   # geom_text(aes(label = round(light, 1))) +
   xlab('Max depth of colonization (m)') +
-  ylab('Secchi ten-year average (m)') +
+  ylab('% light requirements') +
   theme(legend.title = element_blank())
 
 grid.arrange(p1, p2, p3, ncol = 3)
