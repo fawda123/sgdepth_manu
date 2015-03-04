@@ -1,5 +1,11 @@
 \begin{thebibliography}{}
 
+\bibitem[Barko et~al., 1982]{Barko82}
+Barko JW, Hardin DG, Matthews MS. 1982.
+\newblock Growth and morphology of submersed freshwater macrophytes in relation
+  to light and temperature.
+\newblock Canadian Journal of Botany, 60(6):877--887.
+
 \bibitem[Bates and Chambers, 1992]{Bates92}
 Bates DM, Chambers JM. 1992.
 \newblock Nonlinear models.
@@ -19,15 +25,8 @@ Bivand RS, Pebesma EJ, G\'{o}mez-Rubio V. 2008.
 \bibitem[Choice et~al., 2014]{Choice14}
 Choice ZD, Frazer TK, Jacoby CA. 2014.
 \newblock Light requirements of seagrasses determined from historical records
-  of light attenuatoin along the {G}ulf coast of peninsular {F}lorida.
+  of light attenuation along the {G}ulf coast of peninsular {F}lorida.
 \newblock Marine Pollution Bulletin, 81(1):94--102.
-
-\bibitem[Cloern, 1996]{Cloern96}
-Cloern JE. 1996.
-\newblock Phytoplankton bloom dynamics in coastal ecosystems: {A} review with
-  some general lessons from sustained investigation of {S}an {F}rancisco {B}ay,
-  {C}alifornia.
-\newblock Review of Geophysics, 34(2):127--168.
 
 \bibitem[{Coastal Planning and Engineering}, 1997]{CPE97}
 {Coastal Planning and Engineering}. 1997.
@@ -48,11 +47,6 @@ Dennison WC, Orth RJ, Moore KA, Stevenson JC, Carter V, Kollar S, Bergstrom PW,
 \newblock Assessing water quality with submersed aquatic vegetation.
 \newblock BioScience, 43(2):86--94.
 
-\bibitem[Diaz and Rosenberg, 2008]{Diaz08}
-Diaz RJ, Rosenberg R. 2008.
-\newblock Spreading dead zones and consequences for marine ecosystems.
-\newblock Science, 321:926--929.
-
 \bibitem[Duarte, 1991]{Duarte91}
 Duarte CM. 1991.
 \newblock Seagrass depth limits.
@@ -64,23 +58,10 @@ Duarte CM. 1995.
   regimes.
 \newblock Ophelia, 41:87--112.
 
-\bibitem[Duarte et~al., 2009]{Duarte09}
-Duarte CM, Conley DJ, Carstensen J, S\'{a}nchez-Camacho M. 2009.
-\newblock Return to \textit{Neverland}: Shifting baseline affect eutrophication
-  restoration targets.
-\newblock Estuaries and Coasts, 32(1):29--36.
-
 \bibitem[{Environmental Systems Research Institute}, 2012]{ESRI12}
 {Environmental Systems Research Institute}. 2012.
 \newblock {ArcGIS v10.1}.
 \newblock {ESRI}, Redlands, California.
-
-\bibitem[Greening and Janicki, 2006]{Greening06}
-Greening H, Janicki A. 2006.
-\newblock Toward reversal of eutrophic conditions in a subtrophical estuary:
-  Water quality and seagrass response to nitrogen loading reductions in {T}ampa
-  {B}ay, {F}lorida, {USA}.
-\newblock Environmental Management, 38(2):163--178.
 
 \bibitem[Hagy, view]{HagyIR}
 Hagy JD. {In review}.
@@ -91,6 +72,12 @@ Hale JA, Frazer TK, Tomasko DA, Hall MO. 2004.
 \newblock Changes in the distribution of seagrass species along {F}lorida's
   central gulf coast: {I}verson and {B}ittaker revisited.
 \newblock Estuaries, 27(1):36--43.
+
+\bibitem[Hall et~al., 1990]{Hall90}
+Hall MO, Durako MJ, Fourqurean JW, Zieman JC. 1990.
+\newblock Decadal changes in seagrass distribution and abundance in {F}lorida
+  {B}ay.
+\newblock Estuaries, 22(2B):445--459.
 
 \bibitem[Hilborn and Mangel, 1997]{Hilborn97}
 Hilborn R, Mangel M. 1997.
@@ -127,11 +114,13 @@ Jones CG, Lawton JH, Shachak M. 1994.
 \newblock Organisms as ecosystem engineers.
 \newblock OIKOS, 69(3):373--386.
 
-\bibitem[Just\'{i}c et~al., 1987]{Justic87}
-Just\'{i}c D, Legov\'{i}c T, Rottini-Sandrini L. 1987.
-\newblock Trends in oxygen content 1911--1984 and occurrence of benthic
-  mortality in the northern {A}driatic {S}ea.
-\newblock Estuarine, Coastal and Shelf Science, 25(4):435--445.
+\bibitem[Kemp et~al., 2004]{Kemp04}
+Kemp WC, Batiuk R, Bartleson R, Bergstrom P, Carter V, Gallegos CL, Hunley W,
+  Karrh L, Koch EW, Landwehr JM, Moore KA, Murray L, Naylor M, Rybicki NB,
+  Stevenson JC, Wilcox DJ. 2004.
+\newblock Habitat requirements for submerged aquatic vegetation in {C}hesapeake
+  {B}ay: Water quality, light regime, and physical-chemical factors.
+\newblock Estuaries, 27(3):363--377.
 
 \bibitem[Kenworthy and Fonseca, 1996]{Kenworthy96}
 Kenworthy WJ, Fonseca MS. 1996.
@@ -145,12 +134,6 @@ Koch EW. 2001.
 \newblock Beyond light: Physical, geological, and geochemical parameters as
   possible submersed aquatic vegetation habitat requirements.
 \newblock Estuaries, 24(1):1--17.
-
-\bibitem[Nixon, 1995]{Nixon95}
-Nixon SW. 1995.
-\newblock Coastal marine eutrophication: A definition, social causes, and
-  future concerns.
-\newblock Ophelia, 41:199--219.
 
 \bibitem[Poole and Atkins, 1929]{Poole29}
 Poole HH, Atkins WRG. 1929.
@@ -177,12 +160,6 @@ Steward JS, Virnstein RW, Morris LJ, Lowe EF. 2005.
   {R}iver {L}agoon system, {F}lorida.
 \newblock Estuaries, 28(6):923--935.
 
-\bibitem[Tewfik et~al., 2007]{Tewfik07}
-Tewfik A, Rasmussen JB, McCann KS. 2007.
-\newblock Simplification of seagrass food webs across a gradient of nutrient
-  enrichment.
-\newblock Canadian Journal of Fisheries and Aquatic Sciences, 64(7):956--967.
-
 \bibitem[Tyler et~al., 2007]{Tyler07}
 Tyler D, Zawada DG, Nayegandhi A, Brock JC, Crane MP, Yates KK, Smith KEL.
   2007.
@@ -190,23 +167,10 @@ Tyler D, Zawada DG, Nayegandhi A, Brock JC, Crane MP, Yates KK, Smith KEL.
 \newblock Technical Report Open-File Report 2007-1051 (revised), US Geological
   Survey, US Department of the Interior, St. Petersburg, Florida.
 
-\bibitem[{USEPA (US Environmental Protection Agency)}, 1998]{USEPA98}
-{USEPA (US Environmental Protection Agency)}. 1998.
-\newblock National strategy for the development of regional nutrient criteria.
-\newblock Technical Report EPA-822-R-98-002, Office of Water, Office of
-  Research and Development, US Environmental Protection Agency, Washington, DC.
-
 \bibitem[Venables and Ripley, 2002]{Venables02}
 Venables WN, Ripley BD. 2002.
 \newblock Modern Applied Statistics with {S}.
 \newblock Springer, New York, New York, fourth edition.
-
-\bibitem[{WFD}, 2000]{WFD00}
-{WFD}. 2000.
-\newblock Water framework directive, 2000/60/ec. european communities official
-  journal l327 22.12.2000, p. 73.
-\newblock
-  \url{http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=celex:32000L0060}.
 
 \bibitem[Williams and Heck, 2001]{williams01}
 Williams SL, Heck KL. 2001.
