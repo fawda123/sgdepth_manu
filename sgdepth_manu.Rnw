@@ -1332,6 +1332,35 @@ dev.off()
 % estimated light requirements for Tampa Bay
 <<light_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
 
+
+# data(tb_sats_rast)
+# 
+# # create sampling grid
+# source('R/funcs.r')
+# data(tb_seg)
+# tb_grd <- grid_est(tb_seg, 0.02)
+# sp::plot(tb_grd, pch = 16)
+# 
+# samp_vals <- raster::extract(sat_rast, tb_grd, sp = T) %>% 
+#   data.frame  
+# names(samp_vals) <- c('secchi', 'lon', 'lat')
+# 
+# library(ggplot2)
+# library(RColorBrewer)
+# ggplot(samp_vals, aes(x = lon, y = lat, colour = secchi, size = secchi)) + 
+#   geom_point() +
+#   coord_equal()
+# 
+# ggplot(data.frame(sats_ave), aes(x = lon, y = lat, colour = sats_ave, fill = sats_ave)) +
+#   geom_tile() + 
+#   coord_equal() +
+#   scale_colour_gradientn(colours = rev(brewer.pal(11, 'Spectral'))) +
+#   scale_fill_gradientn(colours = rev(brewer.pal(11, 'Spectral'))) +
+#   scale_x_continuous(expand = c(0,0)) + 
+#   scale_y_continuous(expand = c(0,0)) +
+#   theme_bw()
+
+
 # source('R/funcs.r')
 # 
 # # tb polygon segment

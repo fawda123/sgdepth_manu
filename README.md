@@ -34,4 +34,6 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `tb_light.RData` Seagrass light requirements for Tampa Bay, slightly modified output from `secchi_doc` function, created in `light_tb` chunk
 
+`tb_sats_rast.RData` Raster Tampa Bay water clarity data estimated from satellite and averaged across multiple years, processed in sg_depth.RProj
+
 `tb_seg.RData` Shapefile polygon of Tampa Bay, all segments
