@@ -124,7 +124,7 @@ Bathymetric depth layers for each location were obtained from the National Ocean
 
 \subsubsection{Water clarity}
 
-Seagrass light requirements can be estimated by evaluating spatial relationships between depth of colonization and water clarity.  Secchi measurements provide a precise estimate of water clarity and have been obtained at numerous locations documented in the Florida Department of Environmental Protection's Impaired \ac{IWR} database. Secchi data (as depth in meters, $Z_{secchi}$) for Florida coastal waters were obtained from update 40 of the \ac{IWR} database for all of Tampa Bay (2010 coverage) and the Indian River Lagoon (2009 coverage) given the spatial extent of secchi observations for the two locations relative to the Big Bend and Choctawhatchee segments.  Secchi data within the previous ten years of the seagrass coverage data were evaluated to capture water quality trends from the most recent decade (i.e., 1999--2009 for the Indian River Lagoon and 2000--2010 for Tampa Bay).  Stations with less than five observations and observations that were flagged indicating that the value was lower than the maximum depth of the observation point were removed.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening.  Secchi observations that were measured at the same geographic location were averaged across all dates.  This approach was preferred given that seagrass depth patterns are more representative of long-term trends in water clarity as opposed to individual secchi measures that may be highly variable \citep{Dennison87,Dennison93}.
+Seagrass light requirements can be estimated by evaluating spatial relationships between depth of colonization and water clarity.  These relationships were explored using \ac{doc} esimates for the whole of Tampa Bay and the Indian River Lagoon based on large gradients in water clarity along longitudinal axes in each bay. Satellite images were used to create a gridded map of water clarity based on a previously-developed algorithm to derive water clarity from surface reflectance \citep{Chen07}.  This approach was preferred given the annual availability and the extent of coverage of remote sensing data.  Daily MODIS (Aqua level-2) data from Jan 2003 to December 2010 that covered the spatial extent of Tampa Bay were downloaded from the NASA website (\url{http://oceancolor.gsfc.nasa.gov/}). These images were reprocessed using the SeaWiFS Data Analysis System software (SeaDAS, Version 7.0). We used the clarity algorithm proposed by \citet{Chen07} to derive monthly mean and annual mean water clarity for Tampa Bay. Secchi data (meters, $Z_{secchi}$) were also obtained from update 40 of the \ac{IWR} database for all of the Indian River Lagoon (2009 coverage). Satellite estimates of water clarity were unobtainable in the Indian River Lagoon because of significant light scattering from bottom reflectance.  Secchi data within the previous ten years of the seagrass coverage data were evaluated to capture water quality trends from the most recent decade (i.e., 1999--2009 for the Indian River Lagoon).  Stations with less than five observations and observations that were flagged indicating that the value was lower than the maximum depth of the observation point were removed.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening. 
 
 \subsection{Flexible estimation of seagrass depth of colonization for finite areas}
 
@@ -172,7 +172,7 @@ I_{z} = I_{O} \cdot \exp\left(-K_{Z} \cdot Z\right)
 \end{equation}
 \noindent Variation in seagrass light requirements by location can be considered biologically meaningful. 
 
-The geographic coordinates for each secchi measurement in all of Tampa Bay and the Indian River Lagoon were used as locations for estimating $Z_{c,\,max}$.  These estimates were compared with the averaged secchi estimates for the prior ten years to identify seagrass light requirements at each location (i.e., 2000--2010 for Tampa Bay, 1999--2009 for Indian River Lagoon).  However, the relationship may vary depending on the specific radius around each sample point for estimating $Z_{c,\,max}$.  A sufficiently large radius was chosen that was approximately an order of magnitude larger than that used for the individual segments given that $Z_{c,\,max}$ estimates were to be compared for whole bays rather than within segments.  The estimated maximum depth values and light requirements of each point were plotted by location to evaluate spatial variation in seagrass growth as a function of light-limitation.
+An evenly-spaced grid of sampling points was created for the spatial extent of Tampa Bay to estimate light requirements for seagrasses. Grid spacing was set at 0.01 decimal degrees as before. These points were used to sample the raster grid of satellite-derived water clarity and the seagrass depth points to  estimate $Z_{c,\,max}$.  Similarly, the geographic coordinates for each available secchi measurement in the Indian River Lagoon were used as locations for estimating $Z_{c,\,max}$.  These estimates were compared with the averaged water clarity or secchi data for all preceding years to identify seagrass light requirements at each location (i.e., 2003--2010 for Tampa Bay and 1999--2009 for Indian River Lagoon).  However, the relationship may vary depending on the specific radius around each sample point for estimating $Z_{c,\,max}$.  A sufficiently large radius was chosen that was an order of magnitude larger than that used for the individual segments given that $Z_{c,\,max}$ estimates were to be compared for whole bays rather than within segments.  The estimated maximum depth values and light requirements of each point were plotted by location to evaluate spatial variation in seagrass growth as a function of light-limitation.
 
 \section{Results}
 
@@ -495,9 +495,9 @@ latex(
 % comparisons with segment wide ests
 <<eval = T, echo = F>>=
 
-##
-# get doc ests for whole seg
-
+# ##
+# # get doc ests for whole seg
+# 
 # load('data/shps.RData')
 # 
 # segs <- c('303', '820', '902', '1502')
@@ -523,7 +523,7 @@ latex(
 # 
 # save(ests_seg, file = 'data/ests_seg.RData')
 # 
-# get estimates for grids
+# # get estimates for grids
 # ests_out <- vector('list', length = length(segs))
 # names(ests_out) <- segs
 # 
@@ -532,7 +532,7 @@ latex(
 #   seg_shp <- shps[[paste0('seg_', gsub('^.*_', '', seg), '.shp')]]
 #   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
 #   
-#   grid_spc <- 0.02
+#   grid_spc <- 0.01
 #   rad <- 0.02
 #   grid_seed <- 4321
 #   set.seed(grid_seed)
@@ -752,7 +752,7 @@ latex(
 #   group_by(seg) %>% 
 #   summarize(
 #     n_locs = length(Station_ID), 
-#     mean_z_cmax = mean(z_cmax_all), 
+#     mean_z_cmax = mean(z_c_all), 
 #     mean_light = mean(light)
 #   )
 # 
@@ -760,7 +760,7 @@ latex(
 #   group_by(seg) %>% 
 #   summarize(
 #     n_locs = length(Station_ID), 
-#     mean_z_cmax = mean(z_cmax_all), 
+#     mean_z_cmax = mean(z_c_all), 
 #     mean_light = mean(light)
 #   )
 # 
@@ -1105,7 +1105,7 @@ data(ests_out)
 # make plots
 
 # color function
-col_fun <- function(x, cols = c('purple', 'blue', 'lightblue')){
+col_fun <- function(x, cols = c('blue', 'lightblue', 'yellow', 'brown')){
   vals_in <- scales::rescale(x, c(0, 1))
   dim_vals <- dim(vals_in)
   nms <- names(vals_in)
@@ -1157,19 +1157,22 @@ for(i in 1:length(levs)){
     scale_y_continuous(labels = fmt())
   
   # z_cmin
+  
+  pt_sz <- 2
+  
   pa <- p_seg +
     geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$z_cmin.1, 
-      size = pt_plo$z_cmin) 
+      size = pt_sz) 
 
   # z_cmed
   pb <- p_seg +
     geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$z_cmed.1, 
-      size = pt_plo$z_cmed)
+      size = pt_sz)
 
   # z_cmax
   pc <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$z_cmax.1, 
-      size = pt_plo$z_cmax) 
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$z_cmax.1,
+      size = pt_sz) 
   
   # legend for all three
   leg_plo <- est_sub[, !names(est_sub) %in% c('seg', 'confint')]
@@ -1179,9 +1182,8 @@ for(i in 1:length(levs)){
   leg_labs <- form_fun(leg_brks, 1, 1, 1)
   
   pleg <- p_seg +
-    geom_point(data = leg_plo, aes(x = jitter(long), y = jitter(lat), colour = value, 
-      size = value)) +
-    scale_size_continuous(name = levs[i], range = scls, breaks = leg_brks, labels = leg_labs) +
+    geom_point(data = leg_plo, 
+      aes(x = jitter(long), y = jitter(lat), colour = value)) +
     scale_colour_gradientn(name = levs[i], colours = eval(formals(col_fun)$cols),
       breaks = leg_brks, labels = leg_labs) +
     guides(colour = guide_legend(), size = guide_legend())
@@ -1233,7 +1235,7 @@ data(ests_out)
 # make plots
 
 # color function
-col_fun <- function(x, cols = c('purple', 'blue', 'lightblue')){
+col_fun <- function(x, cols = c('blue', 'lightblue', 'yellow', 'brown')){
   vals_in <- scales::rescale(x, c(0, 1))
   dim_vals <- dim(vals_in)
   nms <- names(vals_in)
@@ -1285,18 +1287,18 @@ for(i in 1:length(levs)){
     scale_y_continuous(labels = fmt())
   
   # add sens points
+  pt_sz = 2
+  
   p <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$confint.1, 
-      size = pt_plo$confint) 
+    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$confint.1,
+      size = pt_sz) 
   
   # legend
   leg_brks <- seq(min(est_sub$confint, na.rm =  T), max(est_sub$confint, na.rm = T), length = 4)
   leg_labs <- form_fun(leg_brks, 2, 2, 2)
   
   pleg <- p_seg +
-    geom_point(data = est_sub, aes(x = jitter(long), y = jitter(lat), colour = confint, 
-      size = confint)) +
-    scale_size_continuous(name = levs[i], range = scls, breaks = leg_brks, labels = leg_labs) +
+    geom_point(data = est_sub, aes(x = jitter(long), y = jitter(lat), colour = confint)) +
     scale_colour_gradientn(name = levs[i], colours = eval(formals(col_fun)$cols),
       breaks = leg_brks, labels = leg_labs) +
     guides(colour = guide_legend(), size = guide_legend())
@@ -1329,62 +1331,81 @@ dev.off()
 \label{fig:all_sens}
 \end{figure}
 
+% satellite estimates of water clarity for Tampa Bay
+<<clarity_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
+options(digits = 7) 
+
+# load data
+data(tb_seg)
+data(tb_sats)
+sats_melt <- reshape2::melt(tb_sats[['sats_all']], id.var = c('lat', 'lon'))
+
+# color ramp
+cols <- rev(c('blue', 'lightblue', 'yellow', 'brown'))
+
+# prep data
+to_plo <- sats_melt
+to_plo$variable <- factor(to_plo$variable, labels = c('Average', seq(2003, 2010)))
+seg_plo <- fortify(tb_seg)
+
+# make plot
+p <- ggplot(data = seg_plo) +
+  geom_polygon(aes(x = long, y = lat, group = id), 
+    colour = 'black', fill = colors()[245]) +
+  geom_tile(data = subset(to_plo, !is.na(value)), 
+    aes(x = lon, y = lat, fill = value, colour = value)
+  ) +
+  geom_polygon(aes(x = long, y = lat, group = id), 
+    colour = 'black', fill = NA) +
+  coord_equal() +
+  facet_wrap(~ variable) + 
+  scale_colour_gradientn('Clarity (m)', colours = cols) +
+  scale_fill_gradientn('Clarity (m)', colours = cols) +
+  scale_x_continuous(expand = c(0,0)) + 
+  scale_y_continuous(expand = c(0,0)) +
+  theme_classic() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(), 
+    axis.title.x = element_blank(), 
+    axis.title.y = element_blank(),
+    axis.text.x = element_text(size = 8), 
+    axis.text.y = element_text(size = 8)
+    )
+
+pdf('figs/clarity_tb.pdf', height = 7.5, width = 7, family = 'serif')
+p
+dev.off()
+@
+\begin{figure}
+\centering
+\includegraphics[width = \textwidth]{figs/clarity_tb.pdf}
+\caption{Satellite estimated water clarity for Tampa Bay based on empirical relationships between \textit{in situ} secchi observations and surface reflectance.  Each facet is an annual average of water clarity for available years of satellite data. The first facet is an average of all years.  See \cref{fig:light_tb} for segment identification.}
+\label{fig:clarity_tb}
+\end{figure}
+
 % estimated light requirements for Tampa Bay
 <<light_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
 
-
-# data(tb_sats_rast)
-# 
-# # create sampling grid
-# source('R/funcs.r')
-# data(tb_seg)
-# tb_grd <- grid_est(tb_seg, 0.02)
-# sp::plot(tb_grd, pch = 16)
-# 
-# samp_vals <- raster::extract(sat_rast, tb_grd, sp = T) %>% 
-#   data.frame  
-# names(samp_vals) <- c('secchi', 'lon', 'lat')
-# 
-# library(ggplot2)
-# library(RColorBrewer)
-# ggplot(samp_vals, aes(x = lon, y = lat, colour = secchi, size = secchi)) + 
-#   geom_point() +
-#   coord_equal()
-# 
-# ggplot(data.frame(sats_ave), aes(x = lon, y = lat, colour = sats_ave, fill = sats_ave)) +
-#   geom_tile() + 
-#   coord_equal() +
-#   scale_colour_gradientn(colours = rev(brewer.pal(11, 'Spectral'))) +
-#   scale_fill_gradientn(colours = rev(brewer.pal(11, 'Spectral'))) +
-#   scale_x_continuous(expand = c(0,0)) + 
-#   scale_y_continuous(expand = c(0,0)) +
-#   theme_bw()
-
-
 # source('R/funcs.r')
 # 
-# # tb polygon segment
+# # load data
+# data(tb_sats)
 # data(tb_seg)
-# 
-# # tb secchi data
-# data(secc_all)
-# 
-# # tb seagrass points
 # data(sgpts_2010_tb)
+# ave_rast <- tb_sats[['ave_rast']]
 # 
-# # select only years within last ten of seagrass survey
-# yrs <- strftime(secc_all$Date, '%Y') %>% 
-#   as.numeric
-# yrs <- yrs <= 2010 & yrs > 2000
-# secc_all <- secc_all[yrs, ]
+# # create sampling grid, 0.01 dec degree spacing
+# tb_grd <- grid_est(tb_seg, 0.01)
 # 
-# # remove stations with less than five observations
-# rems <- table(secc_all$Station_ID)
-# rems <- names(rems)[rems < 5]
-# secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
+# # sample the satellit clarity raster
+# samp_vals <- raster::extract(ave_rast, tb_grd, sp = T) %>% 
+#   data.frame  
+# names(samp_vals) <- c('SD', 'Longitude', 'Latitude')
+# coordinates(samp_vals) <- c('Longitude', 'Latitude')
 # 
-# # process, get ave secchi data results
-# proc <- secc_doc(secc_all, sgpts_2010_tb, tb_seg, radius = 0.15, seg_pts_yr = '2010', trace = T)
+# # process for seagrass depth limits and light requirements
+# proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, seg_pts_yr = '2010', trace = T)
 # dat <- na.omit(proc$ave_dat)
 # 
 # tb_light <- dat
@@ -1408,19 +1429,19 @@ dat <- data.frame(tb_light)
 # dat <- dat[dat$light > outs[1] & dat$light < outs[2],]
 
 # color ramp for all graphs
-pt_cols <- c('blue', 'lightblue', 'brown')
+pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
 
 # legend formatting, z_cmax
 scls <- c(2, 9)
-scl_vals <- scales::rescale(dat[, c('z_cmax_all'), drop = F], to = scls)
-leg_brks <- seq(min(dat$z_cmax_all, na.rm =  T), max(dat$z_cmax_all, na.rm = T), length = 4)
+scl_vals <- scales::rescale(dat[, c('z_c_all'), drop = F], to = scls)
+leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
 leg_labs <- form_fun(leg_brks, 2, 2, 2)
 
 # map, z_cmax
 p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
-    colour = z_cmax_all, size = z_cmax_all), fill = 'black', alpha = 0.8) +
+    colour = z_c_all), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
   coord_equal() +
@@ -1428,7 +1449,8 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous(labels = fmt()) + 
   ylab('Latitude') +
-  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, breaks = leg_brks, 
+  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, 
+    breaks = leg_brks, 
     labels = leg_labs) + 
   scale_colour_gradientn(name = bquote(italic('Z' ['c, max'])), 
     colours = rev(pt_cols),
@@ -1443,7 +1465,7 @@ p1 <- p1 + theme(legend.position = 'none')
 # reorder seg labels
 segs <- c('LTB', 'MTB', 'HB', 'OTB')
 dat$seg <- factor(dat$seg, levels = segs) 
-p2 <- ggplot(dat, aes(x = seg, y = z_cmax_all)) + 
+p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
   geom_boxplot(fill = fill_col) + 
   ylab(bquote(italic('Z' ['c, max']))) +
   theme_classic() +
@@ -1453,14 +1475,14 @@ p2 <- ggplot(dat, aes(x = seg, y = z_cmax_all)) +
 # legend formatting, light requirements
 scls <- c(2, 9)
 scl_vals <- scales::rescale(dat[, c('light'), drop = F], to = scls)
-leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 4)
+leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 6)
 leg_labs <- form_fun(leg_brks, 2, 2, 2)
   
 # map, light requirements
 p3 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
-    colour = light, size = light), fill = 'black', alpha = 0.8) +
+    colour = light), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
   coord_equal() +
@@ -1495,7 +1517,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/light_tb.pdf}
-\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Map locations are georeferenced observations of water clarity from secchi measurements in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range.  Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.02 decimal degrees for each secchi location to sample seagrass depth points. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb}
 \end{figure}
 
@@ -1552,19 +1574,19 @@ dat <- data.frame(irl_light)
 # dat <- dat[dat$light > outs[1] & dat$light < outs[2],]
 
 # color ramp for all graphs
-pt_cols <- c('blue', 'lightblue', 'brown')
+pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
 
 # legend formatting, z_cmax
 scls <- c(2, 9)
-scl_vals <- scales::rescale(dat[, c('z_cmax_all'), drop = F], to = scls)
-leg_brks <- seq(min(dat$z_cmax_all, na.rm =  T), max(dat$z_cmax_all, na.rm = T), length = 4)
+scl_vals <- scales::rescale(dat[, c('z_c_all'), drop = F], to = scls)
+leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
 leg_labs <- form_fun(leg_brks, 2, 2, 2)
 
 # map, z_cmax
 p1 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
-    colour = z_cmax_all, size = z_cmax_all), fill = 'black', alpha = 0.8) +
+    colour = z_c_all), size = 3, fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
   coord_equal() +
@@ -1587,7 +1609,7 @@ p1 <- p1 + theme(legend.position = 'none')
 # reorder seg labels
 segs <- c('LSL', 'LIRL', 'LCIRL', 'UCIRL', 'BR', 'UIRL', 'LML', 'UML')
 dat$seg <- factor(dat$seg, levels = segs) 
-p2 <- ggplot(dat, aes(x = seg, y = z_cmax_all)) + 
+p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
   geom_boxplot(fill = fill_col) + 
   ylab(bquote(italic('Z' ['c, max']))) +
   theme_classic() +
@@ -1597,14 +1619,14 @@ p2 <- ggplot(dat, aes(x = seg, y = z_cmax_all)) +
 # legend formatting, light requirements
 scls <- c(2, 9)
 scl_vals <- scales::rescale(dat[, c('light'), drop = F], to = scls)
-leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 4)
+leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 6)
 leg_labs <- form_fun(leg_brks, 2, 2, 2)
   
 # map, light requirements
 p3 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
-    colour = light, size = light), fill = 'black', alpha = 0.8) +
+    colour = light), size = 3, fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
   coord_equal() +

@@ -614,6 +614,7 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, trace = T, remzero = T,
 #' @param sgpts_shp SpatialPointsDataFrame of seagrass depth points to sample
 #' @param seg_shp SpatialPlygonsDataFrame of segment polygon data, must column named as `segment' indicating the corresponding water body id for eahc segment
 #' @param kz numeric value indicating conversion factor for the product of secchi depth and light extinction coefficient
+#' @param z_est chr indicating which seagrass colonization depth to evaluate
 #' @param radius sampling radius for estimating seagrass depth of colonization in decimal degress
 #' @param seg_pts_yr numeric indicating year of seagrass coverage data
 #' @param trace logical indicating if progress is returned to console
@@ -621,12 +622,13 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, trace = T, remzero = T,
 #' @import dplyr
 #' 
 #' @return A four-element list where the first is a SpatialPolygonsDataFrame of the segment, the second is a data frame of all dates of all secchi data for the segment and the spatially-referenced depth of colonization estimate, the third is a summarized version of the second element for all unique locations with secchi data averaged across dates, and the third is depth of colonization data matched to the nearest date of the secchi data for the seagrass coverage.  The third and fourth elements include light requirements and segment names for each location.  
-secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kz = 1.7, radius = 0.2, seg_pts_yr, trace = F){
+secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kz = 1.7, z_est = 'z_cmax', radius = 0.2, seg_pts_yr, trace = F){
     
   if('character' %in% class(seg_pts_yr)) seg_pts_yr <- as.numeric(seg_pts_yr)
   if('factor' %in% class(seg_pts_yr)) stop('seg_pts_yr cannot be a factor')
   if(!'seg' %in% names(seg_shp)) stop('seg_shp input does not have seg column')
-  
+  stopifnot(z_est %in% c('z_cmin', 'z_cmed', 'z_cmax'))
+
   # clip secchi by seg
   # clip secchi data by segments
   sel <- !is.na(secc_dat %over% seg_shp)[, 1]
@@ -634,6 +636,10 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kz = 1.7, radius = 0.2, seg_p
   
   # stop if no secchi data in segment
   if(nrow(secc) == 0) stop('No secchi data for segment')
+  
+  # add unique id if not present
+  if(!grepl('Station_ID', names(secc)))
+    secc$Station_ID <- seq(1:nrow(secc))
   
   # get unique locations of secchi data
   uni_secc <- data.frame(secc)[, c('Station_ID', 'Longitude', 'Latitude')]
@@ -661,8 +667,8 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kz = 1.7, radius = 0.2, seg_p
       upper_conf <- attr(doc_single, 'upper_est')$upper_shift
       lower_conf <- attr(doc_single, 'lower_est')$lower_shift
       bound_conf <- upper_conf - lower_conf
-      z_cmax <- attr(doc_single, c('z_cmax'))
-      c(z_cmax, bound_conf)
+      z_c <- attr(doc_single, z_est)
+      c(z_c, bound_conf)
     },  silent = T)
   	if('try-error' %in% class(ests)) ests <- c(NA, NA)
     maxd[[i]] <- ests[1]
@@ -671,29 +677,15 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kz = 1.7, radius = 0.2, seg_p
   }
   
   # dataframe of all maximum depth results
-  maxd <- data.frame(uni_secc, z_cmax_all = do.call('c', maxd), maxd_conf = do.call('c', maxd_conf))
+  maxd <- data.frame(uni_secc, z_c_all = do.call('c', maxd), maxd_conf = do.call('c', maxd_conf))
   
   # all secchi data, all dates
   all_dat <- merge(data.frame(secc), 
     maxd[, !names(maxd) %in% c('Longitude', 'Latitude')],
     by = 'Station_ID')
   
-  # matched seagrass year data with closest secchi date
-  near_dat <- split(all_dat, all_dat$Station_ID)
-  near_dat <- llply(
-    near_dat, 
-    .fun = function(x){
-    
-      x <- x[which.max(x$Date), ]
-      x$diff <- seg_pts_yr - as.numeric(strftime(x$Date, '%Y'))
-      x$SD <- as.numeric(as.character(x$SD))
-      x
-    
-  })
-  near_dat <- do.call('rbind', near_dat)
-  row.names(near_dat) <- 1:nrow(near_dat)
-  
-  # get average secchi by date
+  # get average secchi by station 
+  # by date if multiple dates, otherwise same as all_dat)
   ave_secc <- ddply(
     data.frame(secc),
     .variable = 'Station_ID',
@@ -704,30 +696,21 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kz = 1.7, radius = 0.2, seg_p
 
   # get light requirements for ave dat and near dat
   ave_dat <- mutate(ave_dat, 
-    light = 100 * exp(-z_cmax_all * kz/SD),
-    seg = NA
-    )
-  near_dat <- mutate(near_dat, 
-    light = 100 * exp(-z_cmax_all * kz/SD),
+    light = 100 * exp(-z_c_all * kz/SD),
     seg = NA
     )
 
-  # convert ave dat and near dat to spatialpointsdataframe
+  # convert ave dat to spatialpointsdataframe
   coords <- ave_dat[, c('Longitude', 'Latitude')]
   ave_dat <- ave_dat[, !names(ave_dat) %in% c('Longitude', 'Latitude')]
   coordinates(ave_dat) <- coords
-  coords <- near_dat[, c('Longitude', 'Latitude')]
-  near_dat <- near_dat[, !names(near_dat) %in% c('Longitude', 'Latitude')]
-  coordinates(near_dat) <- coords
-  
+
   # get segment locations for each station
   for(seg in as.character(seg_shp$seg)){
     
     to_sel <- seg_shp[seg_shp$seg %in% seg, ]
     ave_sel <- !is.na(ave_dat %over% to_sel)[, 1]
-    near_sel <- !is.na(near_dat %over% to_sel)[, 1]
     ave_dat[ave_sel, 'seg'] <- as.character(seg)
-    near_dat[near_sel, 'seg'] <- as.character(seg)
     
   }
     
@@ -735,8 +718,7 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kz = 1.7, radius = 0.2, seg_p
   out <- list(
     seg_shp = seg_shp,
     all_dat = all_dat, 
-    ave_dat = data.frame(ave_dat, stringsAsFactors = F),
-    near_dat = data.frame(near_dat, stringsAsFactors = F)
+    ave_dat = data.frame(ave_dat, stringsAsFactors = F)
   )
   
   if(trace) cat('\n')

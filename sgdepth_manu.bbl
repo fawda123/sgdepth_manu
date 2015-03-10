@@ -22,6 +22,11 @@ Bivand RS, Pebesma EJ, G\'{o}mez-Rubio V. 2008.
 \newblock Applied Spatial Data Analysis with {R}.
 \newblock Springer, New York, New York.
 
+\bibitem[Chen et~al., 2007]{Chen07}
+Chen Z, Muller-Karger FE, Hu C. 2007.
+\newblock Remote sensing of water clarity in {T}ampa {B}ay.
+\newblock Remote Sensing of Environment, 109(2):249--259.
+
 \bibitem[Choice et~al., 2014]{Choice14}
 Choice ZD, Frazer TK, Jacoby CA. 2014.
 \newblock Light requirements of seagrasses determined from historical records
@@ -34,12 +39,6 @@ Choice ZD, Frazer TK, Jacoby CA. 2014.
   {S}t. {J}ohn's {R}iver {W}ater {M}anagement {D}istrict.
 \newblock Technical Report Contract 95W142, Coastal Planning and Engineering,
   Palatka, Florida.
-
-\bibitem[Dennison, 1987]{Dennison87}
-Dennison WC. 1987.
-\newblock Effects of light on seagrass photosynthesis, growth and depth
-  distribution.
-\newblock Aquatic Botany, 27(1):15--26.
 
 \bibitem[Dennison et~al., 1993]{Dennison93}
 Dennison WC, Orth RJ, Moore KA, Stevenson JC, Carter V, Kollar S, Bergstrom PW,
