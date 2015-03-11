@@ -57,6 +57,12 @@ Duarte CM. 1995.
   regimes.
 \newblock Ophelia, 41:87--112.
 
+\bibitem[Elsdon and Connell, 2009]{Elsdon09}
+Elsdon TS, Connell SD. 2009.
+\newblock Spatial and temporal monitoring of coastal water quality: refeining
+  the way we consider, gather, and interpret patterns.
+\newblock Aquatic Biology, 5(2):157--166.
+
 \bibitem[{Environmental Systems Research Institute}, 2012]{ESRI12}
 {Environmental Systems Research Institute}. 2012.
 \newblock {ArcGIS v10.1}.
@@ -140,6 +146,13 @@ Koch EW. 2001.
   possible submersed aquatic vegetation habitat requirements.
 \newblock Estuaries, 24(1):1--17.
 
+\bibitem[Lottig et~al., 2014]{Lottig14}
+Lottig NR, Wagner T, Henry EN, Cheruvelil KS, Webster KE, Downing JA, Stow CA.
+  2014.
+\newblock Long-term citizen-collected data reveal geographical patterns and
+  temporal trends in water clarity.
+\newblock PLoS ONE, 9(4):e95769.
+
 \bibitem[Poole and Atkins, 1929]{Poole29}
 Poole HH, Atkins WRG. 1929.
 \newblock Photo-electric measurements of submarine illumination throughout the
@@ -172,15 +185,33 @@ Tyler D, Zawada DG, Nayegandhi A, Brock JC, Crane MP, Yates KK, Smith KEL.
 \newblock Technical Report Open-File Report 2007-1051 (revised), US Geological
   Survey, US Department of the Interior, St. Petersburg, Florida.
 
+\bibitem[{USEPA (US Environmental Protection Agency)}, 2006]{USEPA06}
+{USEPA (US Environmental Protection Agency)}. 2006.
+\newblock Volunteer estuary monitoring: A methods manual, second edition.
+\newblock Technical Report EPA-842-B-06-003, Washington, DC.
+
 \bibitem[Venables and Ripley, 2002]{Venables02}
 Venables WN, Ripley BD. 2002.
 \newblock Modern Applied Statistics with {S}.
 \newblock Springer, New York, New York, fourth edition.
+
+\bibitem[Wagner et~al., 2008]{Wagner08}
+Wagner T, Soranno PA, Cheruvelil KS, Renwick WH, Webster KE, Vaux P, Abbitt RJ.
+  2008.
+\newblock Quantifying sample biases of inland lake sampling programs in
+  relation to lake surface area and land use/cover.
+\newblock Environmental Monitoring and Assessment, 141(1-3):131--147.
 
 \bibitem[Williams and Heck, 2001]{williams01}
 Williams SL, Heck KL. 2001.
 \newblock Seagrass community ecology.
 \newblock In: Bertness MD, Gaines SD, Hay ME, editors, Marine Community
   Ecology. Sinauer Associates, Sunderland, Massachusetts.
+
+\bibitem[Woodruff et~al., 1999]{Woodruff99}
+Woodruff DL, Stumpf RP, Scope JA, Paerl HW. 1999.
+\newblock Remote estimation of water clarity in optically complex estuarine
+  waters.
+\newblock Remote Sensing of Environment, 68(1):41--52.
 
 \end{thebibliography}
