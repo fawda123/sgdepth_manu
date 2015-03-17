@@ -73,14 +73,28 @@ for(i in names(tmp)){
 data(sgpts_2010_tb)
 write.table(data.frame(sgpts_2010_tb), 'C:/Users/mbeck/Desktop/sgpts_2010_tb.txt', sep =',', quote = F, row.names = F)
 
+# all Choctawhatchee Bay
+
+data(sgpts_2007_choc)
+write.table(data.frame(sgpts_2007_choc), 'C:/Users/mbeck/Desktop/sgpts_2007_choc.txt', sep =',', quote = F, row.names = F)
+
+
 ##
 # then process...
+#
+# open vdatum.jar from M:/GIS/vdatum
+#
+# specify horizontal and vertical datum of source and target file
+# specify columns of height, long, and lat data (0 is first column)
+# specify output file, then convert
 
 ##
 # import results and save to original object
 
 rm(list = ls())
 
+##
+# only use this if processing segs 820, 303, 902
 # path with results
 res_path <- 'C:/Users/mbeck/Desktop/result/'
 
@@ -117,7 +131,21 @@ sgpts_2010_tb <- out_ls[['sgpts_2010_tb.txt']]
 save(sgpts_2010_tb, file = 'data/sgpts_2010_tb.RData')
 
 
-  
+##
+# use this if processing individual files different from above
+res_path <- 'C:/Users/mbeck/Desktop/result/'
+fl <- 'sgpts_2007_choc.txt'
+tmp <- read.table(paste0(res_path, fl), header = T, sep = ',', na.strings = '-999999')
+names(tmp) <- c('Depth', 'Seagrass', 'coords.x1', 'coords.x2')
+cat(sum(is.na(tmp$Depth)), '\t')
+cat(nrow(tmp), '\n')
+tmp <- tmp[!is.na(tmp$Depth), ]
+tmp[tmp$Depth < 0, 'Depth'] <- 0
+coordinates(tmp) <- c('coords.x1', 'coords.x2')
+
+sgpts_2007_choc <- tmp
+save(sgpts_2007_choc, file = 'data/sgpts_2007_choc.RData')
+
   
   
   

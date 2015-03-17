@@ -2,6 +2,7 @@
 cat('Sea is the essence of grass...\n')
 
 # packages to use
+library(raster)
 library(maptools)
 library(knitr)
 library(reshape2) 

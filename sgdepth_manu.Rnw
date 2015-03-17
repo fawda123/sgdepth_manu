@@ -125,9 +125,9 @@ Spatial data describing seagrass aerial coverage combined with co-located bathym
 
 Bathymetric depth layers for each location were obtained from the National Oceanic and Atmospheric Administration's (\acsu{NOAA}) National Geophysical Data Center (\url{http://www.ngdc.noaa.gov/}) as either \acp{DEM} or raw sounding data from hydroacoustic surveys.  Tampa Bay data provided by the Tampa Bay National Estuary Program are described in \citet{Tyler07}. Bathymetric data for the Indian River Lagoon were obtained from the St. John's Water Management District \citep{CPE97}.  \ac{NOAA} products were referenced to mean lower low water, whereas Tampa Bay data were referenced to the \ac{NAVD88} and the Indian River Lagoon data were referenced to mean sea level.  Depth layers were combined with seagrass coverage layers using standard union techniques for raster and vector layers in ArcMap 10.1 \citep{ESRI12}.  To reduce computation time, depth layers were first masked using a 1 km buffer of the seagrass coverage layer.  Raster bathymetric layers were converted to vector point layers to combine with seagrass coverage maps, described below.  All spatial data were referenced to the North American Datum of 1983 as geographic coordinates.  Depth values in each seagrass layer were further adjusted from the relevant vertical reference datum to local \ac{MSL} using the \ac{NOAA} VDatum tool (\url{http://vdatum.noaa.gov/}).
 
-\subsubsection{Water clarity}
+\subsubsection{Water clarity and light attenuation}
 
-Seagrass light requirements can be estimated by evaluating spatial relationships between depth of colonization and water clarity.  These relationships were explored using \ac{doc} esimates for the whole of Tampa Bay and the Indian River Lagoon based on large gradients in water clarity along longitudinal axes in each bay (cites). Satellite images were used to create a gridded map of water clarity based on a previously-developed algorithm to derive water clarity from surface reflectance \citep{Chen07}.  This approach was preferred for Tampa Bay given the annual availability and the extent of coverage of remote sensing data.  Daily MODIS (Aqua level-2) data from January 2003 to December 2010 that covered the spatial extent of Tampa Bay were downloaded from the NASA website (\url{http://oceancolor.gsfc.nasa.gov/}). These images were reprocessed using the SeaWiFS Data Analysis System software (SeaDAS, Version 7.0). We used the clarity algorithm proposed by \citet{Chen07} to derive monthly mean and annual mean water clarity for Tampa Bay. Secchi data (meters, $Z_{secchi}$) were also obtained from update 40 of the \ac{IWR} database for all of the Indian River Lagoon (2009 coverage). Satellite estimates of water clarity were unobtainable in the Indian River Lagoon because of significant light scattering from bottom reflectance and limited resolution for extended narrow segments along the north-south axis.  Secchi data within the previous ten years of the seagrass coverage data were evaluated to capture water quality trends from the most recent decade (i.e., 1999--2009 for the Indian River Lagoon).  Stations with less than five observations and observations that were flagged indicating that the value was lower than the maximum depth of the observation point were removed.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening. 
+Seagrass light requirements can be estimated by evaluating spatial relationships between depth of colonization and water clarity.  These relationships were explored using \ac{doc} estimates for the whole of Tampa Bay and the Indian River Lagoon based on large gradients in water clarity along longitudinal axes in each bay (cites). Satellite images were used to create a gridded map of water clarity based on a previously-developed algorithm to derive light attenuation (or light extinction coefficient $K_Z$) from surface reflectance \citep{Chen07}.  This approach was preferred for Tampa Bay given the annual availability and the extent of coverage of remote sensing data.  Daily MODIS (Aqua level-2) data from January 2003 to December 2010 that covered the spatial extent of Tampa Bay were downloaded from the NASA website (\url{http://oceancolor.gsfc.nasa.gov/}). These images were reprocessed using the SeaWiFS Data Analysis System software (SeaDAS, Version 7.0). We used the clarity algorithm proposed by \citet{Chen07} to derive monthly mean and annual mean light attenuation coefficients for Tampa Bay. Secchi data (meters, $Z_{secchi}$) were also obtained from update 40 of the \ac{IWR} database for all of the Indian River Lagoon (2009 coverage). Satellite estimates of water clarity were unobtainable in the Indian River Lagoon because of significant light scattering from bottom reflectance and limited resolution for extended narrow segments along the north-south axis.  Secchi data within the previous ten years of the seagrass coverage data were evaluated to capture water quality trends from the most recent decade (i.e., 1999--2009 for the Indian River Lagoon).  Stations with less than five observations and observations that were flagged indicating that the value was lower than the maximum depth of the observation point were removed.  Secchi data were also compared with bathymetric data to verify unflagged values were not missed by initial screening. 
 
 \subsection{Flexible estimation of seagrass depth of colonization for finite areas}
 
@@ -269,7 +269,7 @@ nonsigs <- dplyr::mutate(ests_out_nonsigs,
   as.data.frame(.)
 
 @
-Uncertainty for estimates of $Z_{c,\,max}$ indicated that confidence intervals were generally acceptable (i.e., greater than zero), although the ability to discriminate between the three depth estimates varied by segment (\cref{fig:all_sens,tab:sens_summ}).  Mean uncertainty for all estimates in each segment measured as the width of a 95\% confidence interval was \Sexpr{mean(ests_out$confint, na.rm = T)} m.  Greater uncertainty was observed for Choctawhatchee Bay (mean width of all confidence intervals was \Sexpr{means[means$seg == '303', 'means']} m) and Old Tampa Bay (\Sexpr{means[means$seg == '902', 'means']} m), compared to the Big Bend (\Sexpr{means[means$seg == '820', 'means']} m) and Indian River Lagoon (\Sexpr{means[means$seg == '1502', 'means']} m) segments.  The largest confidence interval for each segment was \Sexpr{maxs[maxs$seg == '902', 'maxs']} m for Old Tampa Bay, \Sexpr{maxs[maxs$seg == '303', 'maxs']} m for Choctawhatchee Bay, \Sexpr{maxs[maxs$seg == '820', 'maxs']} m for the Big Bend, and \Sexpr{maxs[maxs$seg == '1502', 'maxs']} m for the Indian River Lagoon segments.  However, most confidence intervals for the remaining grid locations were much smaller than the maximum in each segment.  A comparison of overlapping confidence intersals for $Z_{c,\,min}$, $Z_{c,\,med}$, and $Z_{c,\,max}$ at each grid location indicated that not every measure was unique.  Specifically, only \Sexpr{100 - overlap[overlap$seg == '303', 'overlapped']}\% of grid points in Choctawhatchee Bay and \Sexpr{100 - overlap[overlap$seg == '902', 'overlapped']}\% in Old Tampa Bay had significantly different estimates, whereas \Sexpr{100 - overlap[overlap$seg == '1502', 'overlapped']}\% of grid points in the Indian River Lagoon and \Sexpr{100 - overlap[overlap$seg == '820', 'overlapped']}\% of grid points in the Big Bend segments had estimates that were significantly different.  By contrast, all grid estimates in Choctawhatchee Bay and Indian River Lagoon had $Z_{c,\,max}$ estimates that were significantly greater than zero, whereas all but \Sexpr{nonsigs[nonsigs$seg == '902', 'ltzero']}\% of grid points in Old Tampa Bay and \Sexpr{nonsigs[nonsigs$seg == '820', 'ltzero']}\% of grid points in the Big Bend segment had $Z_{c,\,max}$ estimates significantly greater than zero. 
+Uncertainty for estimates of $Z_{c,\,max}$ indicated that confidence intervals were generally acceptable (i.e., greater than zero), although the ability to discriminate between the three depth estimates varied by segment (\cref{fig:all_sens,tab:sens_summ}).  Mean uncertainty for all estimates in each segment measured as the width of a 95\% confidence interval was \Sexpr{mean(ests_out$confint, na.rm = T)} m.  Greater uncertainty was observed for Choctawhatchee Bay (mean width of all confidence intervals was \Sexpr{means[means$seg == '303', 'means']} m) and Old Tampa Bay (\Sexpr{means[means$seg == '902', 'means']} m), compared to the Big Bend (\Sexpr{means[means$seg == '820', 'means']} m) and Indian River Lagoon (\Sexpr{means[means$seg == '1502', 'means']} m) segments.  The largest confidence interval for each segment was \Sexpr{maxs[maxs$seg == '902', 'maxs']} m for Old Tampa Bay, \Sexpr{maxs[maxs$seg == '303', 'maxs']} m for Choctawhatchee Bay, \Sexpr{maxs[maxs$seg == '820', 'maxs']} m for the Big Bend, and \Sexpr{maxs[maxs$seg == '1502', 'maxs']} m for the Indian River Lagoon segments.  However, most confidence intervals for the remaining grid locations were much smaller than the maximum in each segment.  A comparison of overlapping confidence intervals for $Z_{c,\,min}$, $Z_{c,\,med}$, and $Z_{c,\,max}$ at each grid location indicated that not every measure was unique.  Specifically, only \Sexpr{100 - overlap[overlap$seg == '303', 'overlapped']}\% of grid points in Choctawhatchee Bay and \Sexpr{100 - overlap[overlap$seg == '902', 'overlapped']}\% in Old Tampa Bay had significantly different estimates, whereas \Sexpr{100 - overlap[overlap$seg == '1502', 'overlapped']}\% of grid points in the Indian River Lagoon and \Sexpr{100 - overlap[overlap$seg == '820', 'overlapped']}\% of grid points in the Big Bend segments had estimates that were significantly different.  By contrast, all grid estimates in Choctawhatchee Bay and Indian River Lagoon had $Z_{c,\,max}$ estimates that were significantly greater than zero, whereas all but \Sexpr{nonsigs[nonsigs$seg == '902', 'ltzero']}\% of grid points in Old Tampa Bay and \Sexpr{nonsigs[nonsigs$seg == '820', 'ltzero']}\% of grid points in the Big Bend segment had $Z_{c,\,max}$ estimates significantly greater than zero. 
 
 \subsection{Evaluation of seagrass light requirements}
 
@@ -1335,21 +1335,24 @@ dev.off()
 \end{figure}
 
 % satellite estimates of water clarity for Tampa Bay
-<<clarity_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
+<<choc_tb, echo = F, eval = F, cache = T, results = 'hide'>>=
 options(digits = 7) 
 
 # load data
-data(tb_seg)
-data(tb_sats)
-sats_melt <- reshape2::melt(tb_sats[['sats_all']], id.var = c('lat', 'lon'))
+data(choc_seg)
+data(cb_sats)
+sats_melt <- reshape2::melt(cb_sats[['sats_all']], id.var = c('lat', 'lon'))
 
 # color ramp
-cols <- rev(c('blue', 'lightblue', 'yellow', 'brown'))
+cols <- c('blue', 'lightblue', 'yellow', 'brown')
 
 # prep data
 to_plo <- sats_melt
-to_plo$variable <- factor(to_plo$variable, labels = c('Average', seq(2003, 2010)))
-seg_plo <- fortify(tb_seg)
+to_plo$variable <- factor(to_plo$variable, labels = c('Average', seq(2003, 2007)))
+seg_plo <- fortify(choc_seg)
+
+# leg lab
+leg_lab <- bquote(italic(K [Z]) ~ .('(') ~ italic(m^-1) ~ .(')')) 
 
 # make plot
 p <- ggplot(data = seg_plo) +
@@ -1361,9 +1364,9 @@ p <- ggplot(data = seg_plo) +
   geom_polygon(aes(x = long, y = lat, group = id), 
     colour = 'black', fill = NA) +
   coord_equal() +
-  facet_wrap(~ variable) + 
-  scale_colour_gradientn('Clarity (m)', colours = cols) +
-  scale_fill_gradientn('Clarity (m)', colours = cols) +
+  facet_wrap(~ variable, ncol = 2) + 
+  scale_colour_gradientn(leg_lab, colours = cols) +
+  scale_fill_gradientn(leg_lab, colours = cols) +
   scale_x_continuous(expand = c(0,0)) + 
   scale_y_continuous(expand = c(0,0)) +
   theme_classic() +
@@ -1376,15 +1379,205 @@ p <- ggplot(data = seg_plo) +
     axis.text.y = element_text(size = 8)
     )
 
-pdf('figs/clarity_tb.pdf', height = 7.5, width = 7, family = 'serif')
+pdf('figs/kz_choc.pdf', height = 8, width = 8, family = 'serif')
 p
 dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = \textwidth]{figs/clarity_tb.pdf}
+\includegraphics[width = \textwidth]{figs/kz_cb.pdf}
+\caption{Satellite estimated water clarity for Choctawhatchee Bay based on empirical relationships between \textit{in situ} secchi observations and surface reflectance.  Each facet is an annual average of water clarity for available years of satellite data. The first facet is an average of all years.  See \cref{fig:light_cb} for segment identification.}
+\label{fig:kz_cb}
+\end{figure}
+
+
+% satellite estimates of water clarity for Tampa Bay
+<<kz_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
+options(digits = 7) 
+
+# load data
+data(tb_seg)
+data(tb_sats)
+sats_melt <- reshape2::melt(tb_sats[['sats_all']], id.var = c('lat', 'lon'))
+
+# color ramp
+cols <- c('blue', 'lightblue', 'yellow', 'brown')
+
+# prep data
+to_plo <- sats_melt
+to_plo$variable <- factor(to_plo$variable, labels = c('Average', seq(2003, 2010)))
+seg_plo <- fortify(tb_seg)
+
+# leg lab
+leg_lab <- bquote(italic(K [Z]) ~ .('(') ~ italic(m^-1) ~ .(')')) 
+
+# make plot
+p <- ggplot(data = seg_plo) +
+  geom_polygon(aes(x = long, y = lat, group = id), 
+    colour = 'black', fill = colors()[245]) +
+  geom_tile(data = subset(to_plo, !is.na(value)), 
+    aes(x = lon, y = lat, fill = value, colour = value)
+  ) +
+  geom_polygon(aes(x = long, y = lat, group = id), 
+    colour = 'black', fill = NA) +
+  coord_equal() +
+  facet_wrap(~ variable) + 
+  scale_colour_gradientn(leg_lab, colours = cols) +
+  scale_fill_gradientn(leg_lab, colours = cols) +
+  scale_x_continuous(expand = c(0,0)) + 
+  scale_y_continuous(expand = c(0,0)) +
+  theme_classic() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(), 
+    axis.title.x = element_blank(), 
+    axis.title.y = element_blank(),
+    axis.text.x = element_text(size = 8), 
+    axis.text.y = element_text(size = 8)
+    )
+
+pdf('figs/kz_tb.pdf', height = 7.5, width = 7, family = 'serif')
+p
+dev.off()
+@
+\begin{figure}
+\centering
+\includegraphics[width = \textwidth]{figs/kz_tb.pdf}
 \caption{Satellite estimated water clarity for Tampa Bay based on empirical relationships between \textit{in situ} secchi observations and surface reflectance.  Each facet is an annual average of water clarity for available years of satellite data. The first facet is an average of all years.  See \cref{fig:light_tb} for segment identification.}
-\label{fig:clarity_tb}
+\label{fig:kz_tb}
+\end{figure}
+
+% estimated light requirements for Tampa Bay
+<<light_choc, echo = F, eval = T, cache = T, results = 'hide'>>=
+
+source('R/funcs.r')
+
+# load data
+data(cb_sats)
+data(choc_seg)
+data(sgpts_2007_choc)
+ave_rast <- cb_sats[['ave_rast']]
+
+# create sampling grid, 0.01 dec degree spacing
+choc_grd <- grid_est(choc_seg, 0.01)
+
+# sample the satellit clarity raster
+samp_vals <- raster::extract(ave_rast, choc_grd, sp = T) %>% 
+  data.frame  
+names(samp_vals) <- c('KZ', 'Longitude', 'Latitude')
+coordinates(samp_vals) <- c('Longitude', 'Latitude')
+
+# process for seagrass depth limits and light requirements
+proc <- kz_doc(samp_vals, sgpts_2007_choc, choc_seg, radius = 0.2, trace = T)
+dat <- na.omit(proc)
+
+choc_light <- dat
+save(choc_light, file = 'data/choc_light.RData')
+
+# reset digits to default
+options(digits = 7)
+
+data(choc_light)
+data(choc_seg)
+
+# centroids for labels
+labs <- data.frame(rgeos::gCentroid(choc_seg, byid = T))
+labs$seg <- choc_seg$seg
+
+fill_col <- colors()[245]
+
+# format data, remove outliers
+dat <- data.frame(choc_light)
+
+# color ramp for all graphs
+pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
+
+# legend formatting, z_cmax
+scls <- c(2, 9)
+scl_vals <- scales::rescale(dat[, c('z_c_all'), drop = F], to = scls)
+leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
+leg_labs <- form_fun(leg_brks, 2, 2, 2)
+
+# map, z_cmax
+p1 <- ggplot(fortify(choc_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = z_c_all), fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  theme_classic() +
+  coord_equal() +
+  scale_x_continuous(labels = fmt()) + 
+  xlab('Longitude') +
+  scale_y_continuous(labels = fmt()) + 
+  ylab('Latitude') +
+  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, 
+    breaks = leg_brks, 
+    labels = leg_labs) + 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, max'])), 
+    colours = rev(pt_cols),
+    breaks = leg_brks, labels = leg_labs) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  guides(colour = guide_legend(), size = guide_legend())
+
+p1leg <- g_legend(p1)
+p1 <- p1 + theme(legend.position = 'none')
+
+# boxplots by seg, z_cmax
+# reorder seg labels
+p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
+  geom_boxplot(fill = fill_col) + 
+  ylab(bquote(italic('Z' ['c, max']))) +
+  theme_classic() +
+  theme(axis.title.y = element_blank()) + 
+  coord_flip()
+
+# legend formatting, light requirements
+scls <- c(2, 9)
+scl_vals <- scales::rescale(dat[, c('light'), drop = F], to = scls)
+leg_brks <- seq(min(dat$light, na.rm =  T), max(dat$light, na.rm = T), length = 6)
+leg_labs <- form_fun(leg_brks, 2, 2, 2)
+  
+# map, light requirements
+p3 <- ggplot(fortify(choc_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+    colour = light), fill = 'black', alpha = 0.8) +
+  geom_text(data = labs, aes(label = seg, x = x, y = y)) +
+  theme_classic() +
+  coord_equal() +
+  scale_x_continuous(labels = fmt()) + 
+  xlab('Longitude') +
+  scale_y_continuous(labels = fmt()) + 
+  ylab('Latitude') +
+  scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
+    labels = leg_labs) + 
+  scale_colour_gradientn(name = '% light\nrequirements', 
+    colours = pt_cols,
+    breaks = leg_brks, labels = leg_labs) +
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  guides(colour = guide_legend(), size = guide_legend())
+
+p3leg <- g_legend(p3)
+p3 <- p3 + theme(legend.position = 'none')
+
+# boxplots, light requirements
+p4 <- ggplot(dat, aes(x = seg, y = light)) + 
+  geom_boxplot(fill = fill_col) + 
+  ylab('% light requirements') +
+  theme_classic() +
+  theme(axis.title.y = element_blank()) + 
+  coord_flip()
+
+pdf('figs/light_choc.pdf', height = 7, width = 12, family = 'serif')
+grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
+  widths = c(1, 0.2, 0.2))
+dev.off()
+@
+\begin{figure}
+\centering
+\includegraphics[width = 0.95\textwidth]{figs/light_tb.pdf}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\label{fig:light_tb}
 \end{figure}
 
 % estimated light requirements for Tampa Bay
@@ -1404,12 +1597,12 @@ dev.off()
 # # sample the satellit clarity raster
 # samp_vals <- raster::extract(ave_rast, tb_grd, sp = T) %>% 
 #   data.frame  
-# names(samp_vals) <- c('SD', 'Longitude', 'Latitude')
+# names(samp_vals) <- c('KZ', 'Longitude', 'Latitude')
 # coordinates(samp_vals) <- c('Longitude', 'Latitude')
 # 
 # # process for seagrass depth limits and light requirements
-# proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, seg_pts_yr = '2010', trace = T)
-# dat <- na.omit(proc$ave_dat)
+# proc <- kz_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, trace = T)
+# dat <- na.omit(proc)
 # 
 # tb_light <- dat
 # save(tb_light, file = 'data/tb_light.RData')

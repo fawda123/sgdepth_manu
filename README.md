@@ -6,6 +6,10 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `buff_ex_dat.RData` Shapefile data for buff_ex figure as list, includes five shapefiles
 
+`cb_sats.RData` Two element list including raster image of all averaged clarity data and data frame of each year of clarity data from satellite images for Choctawhatchee Bay 2003-2007, processed in sg_depth.RProj
+
+`choc_seg.RData` WBIDs for Choctawhatchee Bay that included seagrass depht points as polygon shapefile.
+
 `dep_shps.RData` Bathymetry data shapefiles for each segment
 
 `ests_out.RData` Seagrass depth of colonization estimates for grids in each segment
@@ -26,14 +30,16 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `sg_shps.RData` Shapefiles of seagrass coverage polygons for each segment
 
-`sgpts_irl_2009.RData` All seagrass depth points for Indian River Lagoon (all segments)
+`sgpts_2009_irl.RData` All seagrass depth points for Choctawhatchee Bay (all segments)
 
-`sgpts_tb_2010.RData` All seagrass depth points for Tampa Bay (all segments)
+`sgpts_2009_irl.RData` All seagrass depth points for Indian River Lagoon (all segments)
+
+`sgpts_2010_tb.RData` All seagrass depth points for Tampa Bay (all segments)
 
 `shps.RData` Multiple shapefiles for each segment, including all segment polygons, individual segment polygons, and seagrass depth points for each segment
 
 `tb_light.RData` Seagrass light requirements for Tampa Bay, slightly modified output from `secchi_doc` function, created in `light_tb` chunk
 
-`tb_sats.RData` Two element list including raster image of all averaged clarity data and data frame of each year of clarity data from satellite images, processed in sg_depth.RProj
+`tb_sats.RData` Two element list including raster image of all averaged clarity data and data frame of each year of clarity data from satellite images for Tampa Bay 2003-2010, processed in sg_depth.RProj
 
 `tb_seg.RData` Shapefile polygon of Tampa Bay, all segments

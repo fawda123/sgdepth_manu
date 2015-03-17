@@ -402,3 +402,172 @@ p3 <- ggplot(to_plo, aes(x = z_cmax_all, y = light, colour = seg)) +
   theme(legend.title = element_blank())
 
 grid.arrange(p1, p2, p3, ncol = 3)
+
+######
+# validation of kd satellite data
+# Tampa Bay, by years
+
+library(magrittr)
+library(dplyr)
+library(raster)
+library(maptools)
+
+# segment
+data(tb_seg)
+
+# secchi
+data(secc_all)
+
+# satellite
+data(tb_sats)
+
+# clip secchi by seg
+# avg by station and yr, for only years with kd data
+sel <- !is.na(secc_all %over% tb_seg)[, 1]
+secc <- secc_all[sel, ]
+secc <- mutate(data.frame(secc), 
+    yr = as.numeric(format(Date, '%Y')), SD = as.numeric(SD)
+  ) %>% 
+  filter(yr <= 2010 & yr >= 2003) & yr != 2005 %>% 
+  group_by(Station_ID, yr, Longitude, Latitude) %>% 
+  summarise(mean_SD = mean(SD, na.rm = T)) %>% 
+  data.frame
+
+# all satellite data
+sats_all <- tb_sats$sats_all
+
+# sample kd satellite surface
+outs <- NULL
+for(yr_sel in unique(secc$yr)){
+  
+  cat(yr_sel, '\t')
+  
+  # get correct secchi yrs
+  yr_secc <- filter(secc, yr == yr_sel)
+  
+  if(nrow(yr_secc) == 0) next
+  
+  coordinates(yr_secc) <- c('Longitude', 'Latitude')
+  
+  # get correct satellite yrs
+  sel_vec <- grepl(paste0('_', yr_sel, '$|lon|lat'), names(sats_all))
+  yr_sats <- sats_all[, sel_vec]
+  sp::coordinates(yr_sats) <- c('lon', 'lat')
+  
+  # rasterize
+  # set up raster template
+  rast <- raster::raster()
+  extent(rast) <- extent(yr_sats)
+  ncol(rast) <- length(unique(yr_sats$lon))
+  nrow(rast) <- length(unique(yr_sats$lat))
+
+  sel_vec <- grepl(paste0('_', yr_sel, '$'), names(yr_sats))
+  z_field <- data.frame(yr_sats)[, sel_vec]
+  yr_sats <- rasterize(yr_sats, rast, z_field, fun = mean) 
+  
+  # extract kz values using secci locations for the year
+  samp_vals <- raster::extract(yr_sats, yr_secc, sp = T) %>% 
+    data.frame  %>% 
+    na.omit
+  
+  names(samp_vals)[grepl('^kz_', names(samp_vals))] <- 'kz'
+  
+  # append output
+  outs <- rbind(outs, samp_vals)
+  
+}
+
+ggplot(outs, aes(x = kz, y = mean_SD, colour = factor(yr))) +
+  geom_point(size = 4)
+
+mod <- lm(mean_SD ~ kz, outs)
+summary(mod)
+
+##
+# this looks at average comparisons
+
+library(magrittr)
+library(dplyr)
+library(raster)
+library(maptools)
+
+# segment
+data(tb_seg)
+
+# secchi
+data(secc_all)
+
+# satellite
+data(tb_sats)
+
+sats_all <- tb_sats$sats_all
+sats_ave <- sats_all[, c('lon', 'lat', 'kz_ave')]
+sp::coordinates(sats_ave) <- c('lon', 'lat')
+
+# set up raster template
+rast <- raster()
+extent(rast) <- extent(sats_ave)
+ncol(rast) <- length(unique(sats_ave$lon))
+nrow(rast) <-length(unique(sats_ave$lat))
+
+sat_rast <- rasterize(sats_ave, rast, sats_ave$kz_ave, fun = mean) 
+
+# clip secchi by seg
+# avg by station, for only years with kd data
+sel <- !is.na(secc_all %over% tb_seg)[, 1]
+secc <- secc_all[sel, ]
+secc <- mutate(data.frame(secc), 
+    yr = as.numeric(format(Date, '%Y')), SD = as.numeric(SD)
+  ) %>% 
+  filter(yr <= 2010 & yr >= 2003) %>% 
+  group_by(Station_ID, Longitude, Latitude) %>% 
+  summarise(mean_SD = mean(SD, na.rm = T)) %>% 
+  data.frame
+  
+coordinates(secc) <- c('Longitude', 'Latitude')
+
+# extract
+ave_rast <- tb_sats$ave_rast
+samp_vals <- raster::extract(ave_rast, secc, sp = T) %>% 
+  data.frame  
+
+plot(layer ~ mean_SD, samp_vals)
+mod <- lm(layer ~ 0 + recip, samp_vals)
+
+######
+# compare
+
+library(magrittr) 
+  
+files <- list.files('M:/docs/sg_depth/data/satellite/Tampa_Bay/',
+  pattern = '^2004', full.names = TRUE)
+
+# get files
+sats <- vector('list', length = length(files))
+names(sats) <- files
+for(fl in files){
+  
+  cat(fl, '\n')
+  
+  # import 
+  tmp <- readLines(fl) %>% 
+    strsplit(' .') %>% 
+    unlist
+  tmp <- tmp[nchar(tmp) > 0] %>% 
+    as.numeric
+  
+  sats[[fl]] <- tmp
+  
+}
+names(sats) <- gsub('\\.txt$', '', basename(names(sats)))
+
+
+sats <- do.call('cbind', sats)
+
+test <- 1.4/sats[, '2004_clarity']
+
+par(mfrow = c(2, 1))
+plot(sats[, '2004_kd'], sats[, '2004_clarity'])
+plot(sats[, '2004_kd'], test)
+abline(0, 1)
+

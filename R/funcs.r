@@ -613,7 +613,7 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, trace = T, remzero = T,
 #' @param secc_dat SpatialPointsDataFrame of secchi data, can be from any location 
 #' @param sgpts_shp SpatialPointsDataFrame of seagrass depth points to sample
 #' @param seg_shp SpatialPlygonsDataFrame of segment polygon data, must column named as `segment' indicating the corresponding water body id for eahc segment
-#' @param kz numeric value indicating conversion factor for the product of secchi depth and light extinction coefficient
+#' @param kzconv numeric value indicating conversion factor for the product of secchi depth and light extinction coefficient
 #' @param z_est chr indicating which seagrass colonization depth to evaluate
 #' @param radius sampling radius for estimating seagrass depth of colonization in decimal degress
 #' @param seg_pts_yr numeric indicating year of seagrass coverage data
@@ -622,7 +622,7 @@ sens.doc <- function(doc_in, level = 0.95, nsim = 10000, trace = T, remzero = T,
 #' @import dplyr
 #' 
 #' @return A four-element list where the first is a SpatialPolygonsDataFrame of the segment, the second is a data frame of all dates of all secchi data for the segment and the spatially-referenced depth of colonization estimate, the third is a summarized version of the second element for all unique locations with secchi data averaged across dates, and the third is depth of colonization data matched to the nearest date of the secchi data for the seagrass coverage.  The third and fourth elements include light requirements and segment names for each location.  
-secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kz = 1.7, z_est = 'z_cmax', radius = 0.2, seg_pts_yr, trace = F){
+secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kzconv = 1.7, z_est = 'z_cmax', radius = 0.2, seg_pts_yr, trace = F){
     
   if('character' %in% class(seg_pts_yr)) seg_pts_yr <- as.numeric(seg_pts_yr)
   if('factor' %in% class(seg_pts_yr)) stop('seg_pts_yr cannot be a factor')
@@ -696,7 +696,7 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kz = 1.7, z_est = 'z_cmax', r
 
   # get light requirements for ave dat and near dat
   ave_dat <- mutate(ave_dat, 
-    light = 100 * exp(-z_c_all * kz/SD),
+    light = 100 * exp(-z_c_all * kzconv/SD),
     seg = NA
     )
 
@@ -726,6 +726,116 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kz = 1.7, z_est = 'z_cmax', r
   return(out)
 
 }
+
+######
+#' Get seagrass depth of colonization estimates at Kz locations
+#' 
+#' Get seagrass depth of colonization estimates at locations with light attenuation estimates, seagrass depth points, and segment polygon data.  Light requirements are also returned.  This is almost identical to \code{\link{secc_doc}} because I was lazy.
+#'
+#' @param kz_dat SpatialPointsDataFrame of light attenuation data, can be from any location 
+#' @param sgpts_shp SpatialPointsDataFrame of seagrass depth points to sample
+#' @param seg_shp SpatialPlygonsDataFrame of segment polygon data, must column named as `segment' indicating the corresponding water body id for eahc segment
+#' @param z_est chr indicating which seagrass colonization depth to evaluate
+#' @param radius sampling radius for estimating seagrass depth of colonization in decimal degress
+#' @param trace logical indicating if progress is returned to console
+#' 
+#' @import dplyr
+#' 
+#' @return A \code{\link[base]{data.frame}} with depth of colonization and light requirements at locations with light attenutation data.
+kz_doc <- function(kz_dat, sgpts_shp, seg_shp, z_est = 'z_cmax', radius = 0.2, trace = F){
+    
+  if(!'seg' %in% names(seg_shp)) stop('seg_shp input does not have seg column')
+  stopifnot(z_est %in% c('z_cmin', 'z_cmed', 'z_cmax'))
+
+  # clip kz by seg
+  # clip kz data by segments
+  sel <- !is.na(kz_dat %over% seg_shp)[, 1]
+  kz_dat <- kz_dat[sel, ]
+  
+  # stop if no kz data in segment
+  if(nrow(kz_dat) == 0) stop('No kz data for segment')
+  
+  # add unique id if not present
+  if(!grepl('Station_ID', names(kz_dat)))
+    kz_dat$Station_ID <- seq(1:nrow(kz_dat))
+  
+  # get unique locations of kz data
+  uni_kz_dat <- data.frame(kz_dat)[, c('Station_ID', 'Longitude', 'Latitude')]
+  uni_kz_dat <- unique(uni_kz_dat)
+  uni_kz_dat <- SpatialPointsDataFrame(
+    coords = uni_kz_dat[, c('Longitude', 'Latitude')], 
+    data = uni_kz_dat[, 'Station_ID', drop = F]
+    )
+
+  if(trace) cat('Estimating seagrass depth of colonization for radius', radius, 'at points...\n')
+  
+  # get sg doc estimates for each location with kz data
+  maxd <- list()
+  maxd_conf <- list()
+  for(i in 1:length(uni_kz_dat)){
+    
+    if(trace) cat(length(uni_kz_dat) - i, '\t')
+    
+    eval_pt <- uni_kz_dat[i, ]
+    ests <- try({
+      buff_pts <- buff_ext(sgpts_shp, eval_pt, buff = radius)
+      est_pts <- data.frame(buff_pts)
+      doc_single <- doc_est(est_pts)
+      doc_single <- sens(doc_single)
+      upper_conf <- attr(doc_single, 'upper_est')$upper_shift
+      lower_conf <- attr(doc_single, 'lower_est')$lower_shift
+      bound_conf <- upper_conf - lower_conf
+      z_c <- attr(doc_single, z_est)
+      c(z_c, bound_conf)
+    },  silent = T)
+    if('try-error' %in% class(ests)) ests <- c(NA, NA)
+    maxd[[i]] <- ests[1]
+    maxd_conf[[i]] <- ests[2]
+    
+  }
+  
+  # dataframe of all maximum depth results
+  maxd <- data.frame(uni_kz_dat, z_c_all = do.call('c', maxd), maxd_conf = do.call('c', maxd_conf))
+  
+  # get average kz by station 
+  # by date if multiple dates, otherwise same as all_dat)
+  ave_kz_dat <- ddply(
+    data.frame(kz_dat),
+    .variable = 'Station_ID',
+    .fun = function(x) mean(as.numeric(x$KZ), na.rm = T)
+    )
+  names(ave_kz_dat)[names(ave_kz_dat) %in% 'V1'] <- 'KZ'
+  ave_dat <- merge(data.frame(ave_kz_dat), maxd, by = c('Station_ID'))
+
+  # get light requirements for ave dat and near dat
+  ave_dat <- mutate(ave_dat, 
+    light = 100 * exp(-KZ * z_c_all),
+    seg = NA
+    )
+
+  # convert ave dat to spatialpointsdataframe
+  coords <- ave_dat[, c('Longitude', 'Latitude')]
+  ave_dat <- ave_dat[, !names(ave_dat) %in% c('Longitude', 'Latitude')]
+  coordinates(ave_dat) <- coords
+
+  # get segment locations for each station
+  for(seg in as.character(seg_shp$seg)){
+    
+    to_sel <- seg_shp[seg_shp$seg %in% seg, ]
+    ave_sel <- !is.na(ave_dat %over% to_sel)[, 1]
+    ave_dat[ave_sel, 'seg'] <- as.character(seg)
+    
+  }
+    
+  # output
+  out <- data.frame(ave_dat, stringsAsFactors = F)
+  
+  if(trace) cat('\n')
+  
+  return(out)
+
+}
+
 
 ######
 # formet of label precision in ggplot axes
