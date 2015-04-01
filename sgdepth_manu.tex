@@ -144,7 +144,7 @@ A variety of techniques have been developed for estimating seagrass depth limits
 
 A useful application comparing depth limit measures and water clarity is the estimation of light requirements to evaluate ecologically relevant characterisics of seagrass communities.  Although growth of submersed aquatic plants is generally most limited by light availability \citep{Barko82,Hall90,Dennison93}, substantial variation for a given level of light may be observed in the maximum depth of growth based on differences in light requirements \citep{Dennison93,Choice14}.  In general, seagrasses with low light requirements are expected to grow deeper than seagrasses with high requirements as related to species or regional differences in community attributes.  Significant variation in light requirements in seagrasses along the Gulf Coast of peninsular Florida were attributed to morphological and physiological differences between species and adaptations to regional light regimes \citep{Choice14}.  Minimum light requirements for seagrasses are on average 11\% of surface irradiance \citep{Duarte91}, although values may range from less than 5\% to greater than 30\% at depth \citep{Dennison93}. High light requirements estimated from maximum depth of colonization and water clarity may suggest seagrass growth is limited by additional factors, such as high biomass of epiphytic algal growth that reduces light availability on the leaf surface \citep{Kemp04}. Spatial heterogeneity in light requirements is, therefore, a useful diagnostic tool for evaluating potential factors that limit seagrass growth. 
 
-A potentially limiting factor for estimating seagrass light requirements is the availability of water clarity data that are evenly distributed through space in time, in addition to accurate measures of depth of colonization.  Secchi observations are routine measurements that can provide consistent measures of water clarity \citepalias{USEPA06}, although the distribution of available data may limit the the certainty within which light requirements can be estimated.  Secchi data can be biased by location such that monitoring programs may have unbalanced coverage towards aquatic resources with greater perceived importance relative to those that may have more ecological significance \citep{Wagner08,Lottig14}.  Morever, infrequent field measurements that are limited to discrete time periods are often more descriptive of short-term variability rather than long-term trends in water clarity \citep{Elsdon09}.  Seagrasses growth patterns are integrative of seasonal and inter-annual patterns in water clarity, among other factors, such that estimates of light requirements may be limited if water clarity measurements inadequately describe temporal variation.  Remote sensing products can provide a reasonable estimate of water clarity and could be used to develop a more spatially and temporally coherent description of relevant ecosystem characteristics.  Although algorithms have been developed for coastal waters that relate surface reflectance to \textit{in situ} data \citep{Woodruff99,Chen07}, this information has rarely been used to develop a description of seagrass light requirements at a spatial resolution consistent with most remote sensing products.    
+A potentially limiting factor for estimating seagrass light requirements is the availability of water clarity data that are evenly distributed through space in time, in addition to accurate measures of depth of colonization.  Secchi observations are routine measurements that can provide consistent measures of water clarity \citepalias{USEPA06}, although the distribution of available data may limit the certainty within which light requirements can be estimated.  Secchi data can be biased by location such that monitoring programs may have unbalanced coverage towards aquatic resources with greater perceived importance relative to those that may have more ecological significance \citep{Wagner08,Lottig14}.  Morever, infrequent field measurements that are limited to discrete time periods are often more descriptive of short-term variability rather than long-term trends in water clarity \citep{Elsdon09}.  Seagrasses growth patterns are integrative of seasonal and inter-annual patterns in water clarity, among other factors, such that estimates of light requirements may be limited if water clarity measurements inadequately describe temporal variation.  Remote sensing products can provide a reasonable estimate of water clarity and could be used to develop a more spatially and temporally coherent description of relevant ecosystem characteristics.  Although algorithms have been developed for coastal waters that relate surface reflectance to \textit{in situ} data \citep{Woodruff99,Chen07}, this information has rarely been used to develop a description of seagrass light requirements at a spatial resolution consistent with most remote sensing products.    
 
 Quantitative and flexible methods for estimating seagrass depth limits and light requirements have the potential to greatly improve descriptions of aquatic habitat, thus enabling potentially novel insights into ecological characteristics that limit aquatic systems.  This article describes a method for estimating seagrass depth of colonization using geospatial datasets to create a spatially-resolved and flexible measure.  In particular, an empirical algorthm is described that estimates seagrass depth limits from aerial coverage maps and bathymetric data using an \textit{a priori} defined area of influence. These estimates are combined with measures of water clarity to provide a spatial characterization of light requirements to better understand factors that limit seagrass growth.  The specific objectives are to\begin{inparaenum}[1\upshape)]
 \item describe the method for estimating seagrass depth limits within a relevant spatial context, 
@@ -207,13 +207,13 @@ Spatially-resolved estimates for seagrass \ac{doc} were obtained for each of the
 
 The relationship between the quantified seagrass depth limits and secchi measurements were explored by estimating light requirements from standard attenuation equations.  The traditional Lambert-Beer equation describes the exponential decrease of light availability with depth:
 \begin{equation} \label{eqn:lambeer}
-I_{z} = I_{O} \cdot \exp\left(-K_{Z} \cdot Z\right)
+I_{z} = I_{O} \cdot \exp\left(-K_{d} \cdot Z\right)
 \end{equation}
-\noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{Z}$). Light requirements of seagrass at a specific location can be estimated by rearranging \cref{eqn:lambeer}:
+\noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{d}$). Light requirements of seagrass at a specific location can be estimated by rearranging \cref{eqn:lambeer}:
 \begin{equation} \label{eqn:perclight}
-\% \ light = \exp\left(-K_{Z} \cdot Z_{c,\,max}\right)
+\% \ light = \exp\left(-K_{d} \cdot Z_{c,\,max}\right)
 \end{equation}
-\noindent where the percent light requirements of seagrass at $Z_{c,\,max}$ are empirically related to light extinction. A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{secchi}$, such that such that $c = K_{Z} \cdot Z_{secchi}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{Z}$ can be replaced with the conversion factor and $Z_{secchi}$:
+\noindent where the percent light requirements of seagrass at $Z_{c,\,max}$ are empirically related to light extinction. A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{secchi}$, such that such that $c = K_{d} \cdot Z_{secchi}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{d}$ can be replaced with the conversion factor and $Z_{secchi}$:
 \begin{equation} \label{eqn:cperclight}
 \% \ light = \exp\left(-\left(\frac{1.7}{Z_{secchi}}\right)\cdot Z_{c,\,max}\right)
 \end{equation}
@@ -246,7 +246,7 @@ Uncertainty for estimates of $Z_{c,\,max}$ indicated that confidence intervals w
 
 % add some stuff about secchi here
 
-Estimates of seagrass depth limits and corresponding light requirements for all segments of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{tab:secc_summ,fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for 543 locations in Tampa Bay and 50 locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean secchi depth for all recorded observations was 0.4 m ($n=$ 543) for Tampa Bay and 1 m ($n=$ 50) for Indian River Lagoon.  Mean light requirements were significantly different between the bays (two-sided t-test, $t=$ 41.2, $df=$ 62.4, $p < 0.001$) with a mean requirement of 53.6\% for Tampa Bay and 10.6\% for Indian River Lagoon.  Within each bay, light requirements were significantly different between segments (ANOVA, $F =$ 70.5, $df =$ 3, 539, $p = $ 0.00 for Tampa Bay, $F =$ 5.2, $df =$ 7, 42, $p = $ 0.000 for Indian River Lagoon).  However, post-hoc evaluation of all pair-wise comparisons of mean light requirements indicated that significant differences were only observed between a few segments within each bay.  Significant differences in Tampa Bay were observed between Old Tampa Bay and Hillsborough Bay (Tukey multiple comparisons, $p =$ 0.001).  Significant differences in the Indian River Lagoon were observed between the Upper Indian River Lagoon and Banana River ($p =$ 0.915), the Upper Indian River Lagoon and Lower Indian River Lagoon ($p =$ 0.140), and Upper Indian River Lagoon and Lower St. Lucie ($p =$ 0.103) segments.  In general, spatial variation of light requirements in Tampa Bay suggested that seagrasses were less light-limited (i.e., lower percent light requirements at $Z_{c,\,max}$) in Hillsborough Bay and western areas of Lower Tampa Bay near the Gulf of Mexico (\cref{fig:light_tb}).  Seagrassess in the Indian River Lagoon were generally less light-limited towards the south and in the Banana River segment (\cref{fig:light_irl}).
+Estimates of seagrass depth limits and corresponding light requirements for all segments of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{tab:secc_summ,fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for 566 locations in Tampa Bay and 50 locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean secchi depth for all recorded observations was 2.3 m ($n=$ 566) for Tampa Bay and NA m ($n=$ 50) for Indian River Lagoon.  Mean light requirements were significantly different between the bays (two-sided t-test, $t=$ 19, $df=$ 62.7, $p < 0.001$) with a mean requirement of 30.4\% for Tampa Bay and 10.6\% for Indian River Lagoon.  Within each bay, light requirements were significantly different between segments (ANOVA, $F =$ 84.6, $df =$ 3, 562, $p = $ 0.00 for Tampa Bay, $F =$ 5.2, $df =$ 7, 42, $p = $ 0.000 for Indian River Lagoon).  However, post-hoc evaluation of all pair-wise comparisons of mean light requirements indicated that significant differences were only observed between a few segments within each bay.  Significant differences in Tampa Bay were observed between Old Tampa Bay and Hillsborough Bay (Tukey multiple comparisons, $p =$ 0.003).  Significant differences in the Indian River Lagoon were observed between the Upper Indian River Lagoon and Banana River ($p =$ 0.915), the Upper Indian River Lagoon and Lower Indian River Lagoon ($p =$ 0.140), and Upper Indian River Lagoon and Lower St. Lucie ($p =$ 0.103) segments.  In general, spatial variation of light requirements in Tampa Bay suggested that seagrasses were less light-limited (i.e., lower percent light requirements at $Z_{c,\,max}$) in Hillsborough Bay and western areas of Lower Tampa Bay near the Gulf of Mexico (\cref{fig:light_tb}).  Seagrassess in the Indian River Lagoon were generally less light-limited towards the south and in the Banana River segment (\cref{fig:light_irl}).
 
 \section{Discussion}
 
@@ -369,20 +369,20 @@ UIRL&0.10&0.16&0.00&1.83\tabularnewline
 \multicolumn{1}{l}{Segment\textsuperscript{\textit{a}}}&\multicolumn{1}{c}{Min year}&\multicolumn{1}{c}{Max year}&\multicolumn{1}{c}{$n_{Z_{secchi}}$}&\multicolumn{1}{c}{$Z_{secchi}$}&\multicolumn{1}{c}{$n_{Z_{c,\,max}}$}&\multicolumn{1}{c}{$Z_{c,\,max}$}&\multicolumn{1}{c}{\% light}\tabularnewline
 \hline
 {\bfseries Indian River Lagoon}&&&&&&&\tabularnewline
-~~BR&2000&2009&$ 899$&1.06&$  2$&1.05&19.88\tabularnewline
-~~LCIRL&2000&2009&$ 644$&1.02&$ 12$&1.14&14.24\tabularnewline
-~~LIRL&2000&2005&$ 111$&0.93&$  6$&1.48& 7.38\tabularnewline
-~~LML&2000&2009&$ 217$&1.14&$  4$&0.93&24.52\tabularnewline
-~~LSL&2000&2005&$  52$&0.94&$  3$&1.48& 8.26\tabularnewline
-~~UCIRL&2000&2009&$1148$&1.14&$ 18$&0.89&18.10\tabularnewline
-~~UIRL&2000&2009&$ 593$&1.30&$  1$&0.94&27.21\tabularnewline
-~~UML&2000&2009&$ 258$&1.03&$  4$&0.84&28.80\tabularnewline
+~~BR&2000&2009&$ 899$&1.06&$  2$&1.38&11.96\tabularnewline
+~~LCIRL&2000&2009&$ 644$&1.02&$ 12$&1.41& 9.23\tabularnewline
+~~LIRL&2000&2005&$ 111$&0.93&$  6$&1.84& 4.06\tabularnewline
+~~LML&2000&2009&$ 217$&1.14&$  4$&1.14&17.84\tabularnewline
+~~LSL&2000&2005&$  52$&0.94&$  3$&2.37& 2.02\tabularnewline
+~~UCIRL&2000&2009&$1148$&1.14&$ 18$&1.19&10.84\tabularnewline
+~~UIRL&2000&2009&$ 593$&1.30&$  1$&1.15&20.32\tabularnewline
+~~UML&2000&2009&$ 258$&1.03&$  4$&1.21&19.08\tabularnewline
 \hline
 {\bfseries Tampa Bay}&&&&&&&\tabularnewline
-~~HB&2001&2003&$ 412$&1.25&$ 52$&1.05&39.61\tabularnewline
-~~LTB&2001&2009&$ 807$&2.47&$152$&1.49&36.48\tabularnewline
-~~MTB&2001&2009&$ 570$&2.19&$216$&1.30&38.68\tabularnewline
-~~OTB&2001&2003&$ 671$&1.44&$152$&0.78&51.36\tabularnewline
+~~HB&2001&2003&$ 412$&1.25&$ 48$&1.26&57.23\tabularnewline
+~~LTB&2001&2009&$ 807$&2.47&$155$&2.20&48.28\tabularnewline
+~~MTB&2001&2009&$ 570$&2.19&$212$&1.76&52.89\tabularnewline
+~~OTB&2001&2003&$ 671$&1.44&$137$&1.17&60.06\tabularnewline
 \hline
 \end{tabular}\end{center}
 
@@ -473,19 +473,18 @@ UIRL&0.10&0.16&0.00&1.83\tabularnewline
 
 \begin{figure}
 \centering
-\includegraphics[width = \textwidth]{figs/kz_choc.pdf}
-\caption{Satellite estimated light attenuation for Choctawhatchee Bay based on empirical relationships between \textit{in situ} secchi observations and surface reflectance.  Each facet is an annual average of light attenuation for available years of satellite data up to the year of seagrass coverage used to estimate depth of colonization.  The first facet is an average of all years.  See \cref{fig:light_cb} for segment identification.}
-\label{fig:kz_choc}
+\includegraphics[width = \textwidth]{figs/kd_choc.pdf}
+\caption{Satellite estimated light attenuation for Choctawhatchee Bay based on empirical relationships between \textit{in situ} secchi observations and surface reflectance.  Each facet is an annual average of light attenuation for available years of satellite data up to the year of seagrass coverage used to estimate depth of colonization.  The first facet is an average of all years.  See \cref{fig:light_choc} for segment identification.}
+\label{fig:kd_choc}
 \end{figure}
-
 
 % satellite estimates of water clarity for Tampa Bay
 
 \begin{figure}
 \centering
-\includegraphics[width = \textwidth]{figs/kz_tb.pdf}
+\includegraphics[width = \textwidth]{figs/kd_tb.pdf}
 \caption{Satellite estimated water clarity for Tampa Bay based on empirical relationships between \textit{in situ} secchi observations and surface reflectance.  Each facet is an annual average of water clarity for available years of satellite data. The first facet is an average of all years.  See \cref{fig:light_tb} for segment identification.}
-\label{fig:kz_tb}
+\label{fig:kd_tb}
 \end{figure}
 
 % estimated light requirements for Tampa Bay
@@ -493,7 +492,7 @@ UIRL&0.10&0.16&0.00&1.83\tabularnewline
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/light_choc.pdf}
-\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range.}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
 \label{fig:light_choc}
 \end{figure}
 

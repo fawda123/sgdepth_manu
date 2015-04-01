@@ -100,7 +100,7 @@ A variety of techniques have been developed for estimating seagrass depth limits
 
 A useful application comparing depth limit measures and water clarity is the estimation of light requirements to evaluate ecologically relevant characterisics of seagrass communities.  Although growth of submersed aquatic plants is generally most limited by light availability \citep{Barko82,Hall90,Dennison93}, substantial variation for a given level of light may be observed in the maximum depth of growth based on differences in light requirements \citep{Dennison93,Choice14}.  In general, seagrasses with low light requirements are expected to grow deeper than seagrasses with high requirements as related to species or regional differences in community attributes.  Significant variation in light requirements in seagrasses along the Gulf Coast of peninsular Florida were attributed to morphological and physiological differences between species and adaptations to regional light regimes \citep{Choice14}.  Minimum light requirements for seagrasses are on average 11\% of surface irradiance \citep{Duarte91}, although values may range from less than 5\% to greater than 30\% at depth \citep{Dennison93}. High light requirements estimated from maximum depth of colonization and water clarity may suggest seagrass growth is limited by additional factors, such as high biomass of epiphytic algal growth that reduces light availability on the leaf surface \citep{Kemp04}. Spatial heterogeneity in light requirements is, therefore, a useful diagnostic tool for evaluating potential factors that limit seagrass growth. 
 
-A potentially limiting factor for estimating seagrass light requirements is the availability of water clarity data that are evenly distributed through space in time, in addition to accurate measures of depth of colonization.  Secchi observations are routine measurements that can provide consistent measures of water clarity \citepalias{USEPA06}, although the distribution of available data may limit the the certainty within which light requirements can be estimated.  Secchi data can be biased by location such that monitoring programs may have unbalanced coverage towards aquatic resources with greater perceived importance relative to those that may have more ecological significance \citep{Wagner08,Lottig14}.  Morever, infrequent field measurements that are limited to discrete time periods are often more descriptive of short-term variability rather than long-term trends in water clarity \citep{Elsdon09}.  Seagrasses growth patterns are integrative of seasonal and inter-annual patterns in water clarity, among other factors, such that estimates of light requirements may be limited if water clarity measurements inadequately describe temporal variation.  Remote sensing products can provide a reasonable estimate of water clarity and could be used to develop a more spatially and temporally coherent description of relevant ecosystem characteristics.  Although algorithms have been developed for coastal waters that relate surface reflectance to \textit{in situ} data \citep{Woodruff99,Chen07}, this information has rarely been used to develop a description of seagrass light requirements at a spatial resolution consistent with most remote sensing products.    
+A potentially limiting factor for estimating seagrass light requirements is the availability of water clarity data that are evenly distributed through space in time, in addition to accurate measures of depth of colonization.  Secchi observations are routine measurements that can provide consistent measures of water clarity \citepalias{USEPA06}, although the distribution of available data may limit the certainty within which light requirements can be estimated.  Secchi data can be biased by location such that monitoring programs may have unbalanced coverage towards aquatic resources with greater perceived importance relative to those that may have more ecological significance \citep{Wagner08,Lottig14}.  Morever, infrequent field measurements that are limited to discrete time periods are often more descriptive of short-term variability rather than long-term trends in water clarity \citep{Elsdon09}.  Seagrasses growth patterns are integrative of seasonal and inter-annual patterns in water clarity, among other factors, such that estimates of light requirements may be limited if water clarity measurements inadequately describe temporal variation.  Remote sensing products can provide a reasonable estimate of water clarity and could be used to develop a more spatially and temporally coherent description of relevant ecosystem characteristics.  Although algorithms have been developed for coastal waters that relate surface reflectance to \textit{in situ} data \citep{Woodruff99,Chen07}, this information has rarely been used to develop a description of seagrass light requirements at a spatial resolution consistent with most remote sensing products.    
 
 Quantitative and flexible methods for estimating seagrass depth limits and light requirements have the potential to greatly improve descriptions of aquatic habitat, thus enabling potentially novel insights into ecological characteristics that limit aquatic systems.  This article describes a method for estimating seagrass depth of colonization using geospatial datasets to create a spatially-resolved and flexible measure.  In particular, an empirical algorthm is described that estimates seagrass depth limits from aerial coverage maps and bathymetric data using an \textit{a priori} defined area of influence. These estimates are combined with measures of water clarity to provide a spatial characterization of light requirements to better understand factors that limit seagrass growth.  The specific objectives are to\begin{inparaenum}[1\upshape)]
 \item describe the method for estimating seagrass depth limits within a relevant spatial context, 
@@ -163,13 +163,13 @@ Spatially-resolved estimates for seagrass \ac{doc} were obtained for each of the
 
 The relationship between the quantified seagrass depth limits and secchi measurements were explored by estimating light requirements from standard attenuation equations.  The traditional Lambert-Beer equation describes the exponential decrease of light availability with depth:
 \begin{equation} \label{eqn:lambeer}
-I_{z} = I_{O} \cdot \exp\left(-K_{Z} \cdot Z\right)
+I_{z} = I_{O} \cdot \exp\left(-K_{d} \cdot Z\right)
 \end{equation}
-\noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{Z}$). Light requirements of seagrass at a specific location can be estimated by rearranging \cref{eqn:lambeer}:
+\noindent such that the irradiance of incident light at depth $Z$ ($I_{Z}$) can be estimated from the irradiance at the surface ($I_{O}$) and a light extinction coefficient ($K_{d}$). Light requirements of seagrass at a specific location can be estimated by rearranging \cref{eqn:lambeer}:
 \begin{equation} \label{eqn:perclight}
-\% \ light = \exp\left(-K_{Z} \cdot Z_{c,\,max}\right)
+\% \ light = \exp\left(-K_{d} \cdot Z_{c,\,max}\right)
 \end{equation}
-\noindent where the percent light requirements of seagrass at $Z_{c,\,max}$ are empirically related to light extinction. A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{secchi}$, such that such that $c = K_{Z} \cdot Z_{secchi}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{Z}$ can be replaced with the conversion factor and $Z_{secchi}$:
+\noindent where the percent light requirements of seagrass at $Z_{c,\,max}$ are empirically related to light extinction. A conversion factor is often used to estimate the light extinction coefficient from secchi depth $Z_{secchi}$, such that such that $c = K_{d} \cdot Z_{secchi}$, where $c$ has been estimated as 1.7 \citep{Poole29,Idso74}.  Thus, $K_{d}$ can be replaced with the conversion factor and $Z_{secchi}$:
 \begin{equation} \label{eqn:cperclight}
 \% \ light = \exp\left(-\left(\frac{1.7}{Z_{secchi}}\right)\cdot Z_{c,\,max}\right)
 \end{equation}
@@ -301,7 +301,7 @@ tuk_irl <- TukeyHSD(tuk_irl)$seg[, 'p adj']
 
 % add some stuff about secchi here
 
-Estimates of seagrass depth limits and corresponding light requirements for all segments of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{tab:secc_summ,fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for \Sexpr{nrow(tb_light)} locations in Tampa Bay and \Sexpr{nrow(irl_light)} locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean secchi depth for all recorded observations was \Sexpr{mean(tb$KZ)} m ($n=$ \Sexpr{nrow(tb)}) for Tampa Bay and \Sexpr{mean(irl$SD)} m ($n=$ \Sexpr{nrow(irl)}) for Indian River Lagoon.  Mean light requirements were significantly different between the bays (two-sided t-test, $t=$ \Sexpr{light_btw$statistic}, $df=$ \Sexpr{light_btw$parameter}, $p < 0.001$) with a mean requirement of \Sexpr{mean(tb$light)}\% for Tampa Bay and \Sexpr{mean(irl$light)}\% for Indian River Lagoon.  Within each bay, light requirements were significantly different between segments (ANOVA, $F =$ \Sexpr{form_fun(wtn_tb['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_tb['df1']}, \Sexpr{wtn_tb['df2']}, $p = $ \Sexpr{form_fun(wtn_tb['pval'])} for Tampa Bay, $F =$ \Sexpr{form_fun(wtn_irl['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_irl['df1']}, \Sexpr{wtn_irl['df2']}, $p = $ \Sexpr{form_fun(wtn_irl['pval'], 3, 3, 3)} for Indian River Lagoon).  However, post-hoc evaluation of all pair-wise comparisons of mean light requirements indicated that significant differences were only observed between a few segments within each bay.  Significant differences in Tampa Bay were observed between Old Tampa Bay and Hillsborough Bay (Tukey multiple comparisons, $p =$ \Sexpr{form_fun(tuk_tb['OTB-HB'], 3, 3, 3)}).  Significant differences in the Indian River Lagoon were observed between the Upper Indian River Lagoon and Banana River ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-BR'], 3, 3, 3)}), the Upper Indian River Lagoon and Lower Indian River Lagoon ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LIRL'], 3, 3, 3)}), and Upper Indian River Lagoon and Lower St. Lucie ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LSL'], 3, 3, 3)}) segments.  In general, spatial variation of light requirements in Tampa Bay suggested that seagrasses were less light-limited (i.e., lower percent light requirements at $Z_{c,\,max}$) in Hillsborough Bay and western areas of Lower Tampa Bay near the Gulf of Mexico (\cref{fig:light_tb}).  Seagrassess in the Indian River Lagoon were generally less light-limited towards the south and in the Banana River segment (\cref{fig:light_irl}).
+Estimates of seagrass depth limits and corresponding light requirements for all segments of Tampa Bay and the Indian River Lagoon indicated substantial variation, both between and within the different bays (\cref{tab:secc_summ,fig:light_tb,fig:light_irl}).  Seagrass \ac{doc} estimates were obtained for \Sexpr{nrow(tb_light)} locations in Tampa Bay and \Sexpr{nrow(irl_light)} locations in the Indian River Lagoon where secchi observations were available in the Florida \ac{IWR} database.  Mean secchi depth for all recorded observations was \Sexpr{mean(tb$clarity)} m ($n=$ \Sexpr{nrow(tb)}) for Tampa Bay and \Sexpr{mean(irl$clarity)} m ($n=$ \Sexpr{nrow(irl)}) for Indian River Lagoon.  Mean light requirements were significantly different between the bays (two-sided t-test, $t=$ \Sexpr{light_btw$statistic}, $df=$ \Sexpr{light_btw$parameter}, $p < 0.001$) with a mean requirement of \Sexpr{mean(tb$light)}\% for Tampa Bay and \Sexpr{mean(irl$light)}\% for Indian River Lagoon.  Within each bay, light requirements were significantly different between segments (ANOVA, $F =$ \Sexpr{form_fun(wtn_tb['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_tb['df1']}, \Sexpr{wtn_tb['df2']}, $p = $ \Sexpr{form_fun(wtn_tb['pval'])} for Tampa Bay, $F =$ \Sexpr{form_fun(wtn_irl['Fval'], 1, 1, 1)}, $df =$ \Sexpr{wtn_irl['df1']}, \Sexpr{wtn_irl['df2']}, $p = $ \Sexpr{form_fun(wtn_irl['pval'], 3, 3, 3)} for Indian River Lagoon).  However, post-hoc evaluation of all pair-wise comparisons of mean light requirements indicated that significant differences were only observed between a few segments within each bay.  Significant differences in Tampa Bay were observed between Old Tampa Bay and Hillsborough Bay (Tukey multiple comparisons, $p =$ \Sexpr{form_fun(tuk_tb['OTB-HB'], 3, 3, 3)}).  Significant differences in the Indian River Lagoon were observed between the Upper Indian River Lagoon and Banana River ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-BR'], 3, 3, 3)}), the Upper Indian River Lagoon and Lower Indian River Lagoon ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LIRL'], 3, 3, 3)}), and Upper Indian River Lagoon and Lower St. Lucie ($p =$ \Sexpr{form_fun(tuk_irl['UIRL-LSL'], 3, 3, 3)}) segments.  In general, spatial variation of light requirements in Tampa Bay suggested that seagrasses were less light-limited (i.e., lower percent light requirements at $Z_{c,\,max}$) in Hillsborough Bay and western areas of Lower Tampa Bay near the Gulf of Mexico (\cref{fig:light_tb}).  Seagrassess in the Indian River Lagoon were generally less light-limited towards the south and in the Banana River segment (\cref{fig:light_irl}).
 
 \section{Discussion}
 
@@ -1335,7 +1335,7 @@ dev.off()
 \end{figure}
 
 % satellite estimates of water clarity for Tampa Bay
-<<kz_choc, echo = F, eval = T, cache = T, results = 'hide'>>=
+<<kd_choc, echo = F, eval = T, cache = T, results = 'hide'>>=
 options(digits = 7) 
 
 # load data
@@ -1351,23 +1351,22 @@ cols <- c('blue', 'lightblue', 'yellow', 'brown')
 
 # prep data
 
-
 to_plo <- sats_melt
 to_plo$variable <- factor(to_plo$variable, labels = c('Average', seq(2003, 2007)))
 seg_plo <- fortify(choc_seg)
 
 
 # leg lab
-leg_lab <- expression(paste(italic(K [Z]), ' (', m^-1, ')')) 
+leg_lab <- expression(paste(italic(K [d]), ' (', m^-1, ')')) 
 
 # make plot
 p <- ggplot(data = seg_plo) +
-  geom_polygon(aes(x = long, y = lat, group = id), 
+  geom_polygon(aes(x = long, y = lat, group = group), 
     colour = 'black', fill = colors()[245]) +
   geom_tile(data = subset(to_plo, !is.na(value)), 
     aes(x = lon, y = lat, fill = value, colour = value)
   ) +
-  geom_polygon(aes(x = long, y = lat, group = id), 
+  geom_polygon(aes(x = long, y = lat, group = group), 
     colour = 'black', fill = NA) +
   coord_equal() +
   facet_wrap(~ variable, ncol = 2) + 
@@ -1386,20 +1385,19 @@ p <- ggplot(data = seg_plo) +
     legend.position = 'top'
     )
 
-pdf('figs/kz_choc.pdf', height = 4, width = 6, family = 'serif')
+pdf('figs/kd_choc.pdf', height = 4, width = 6, family = 'serif')
 p
 dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = \textwidth]{figs/kz_choc.pdf}
-\caption{Satellite estimated light attenuation for Choctawhatchee Bay based on empirical relationships between \textit{in situ} secchi observations and surface reflectance.  Each facet is an annual average of light attenuation for available years of satellite data up to the year of seagrass coverage used to estimate depth of colonization.  The first facet is an average of all years.  See \cref{fig:light_cb} for segment identification.}
-\label{fig:kz_choc}
+\includegraphics[width = \textwidth]{figs/kd_choc.pdf}
+\caption{Satellite estimated light attenuation for Choctawhatchee Bay based on empirical relationships between \textit{in situ} secchi observations and surface reflectance.  Each facet is an annual average of light attenuation for available years of satellite data up to the year of seagrass coverage used to estimate depth of colonization.  The first facet is an average of all years.  See \cref{fig:light_choc} for segment identification.}
+\label{fig:kd_choc}
 \end{figure}
 
-
 % satellite estimates of water clarity for Tampa Bay
-<<kz_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
+<<clarity_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
 options(digits = 7) 
 
 # load data
@@ -1416,16 +1414,16 @@ to_plo$variable <- factor(to_plo$variable, labels = c('Average', seq(2006, 2010)
 seg_plo <- fortify(tb_seg)
 
 # leg lab
-leg_lab <- expression(paste(italic(K [Z]), ' (', m^-1, ')')) 
+leg_lab <- 'Clarity (m)'
 
 # make plot
 p <- ggplot(data = seg_plo) +
-  geom_polygon(aes(x = long, y = lat, group = id), 
+  geom_polygon(aes(x = long, y = lat, group = group), 
     colour = 'black', fill = colors()[245]) +
   geom_tile(data = subset(to_plo, !is.na(value)), 
     aes(x = lon, y = lat, fill = value, colour = value)
   ) +
-  geom_polygon(aes(x = long, y = lat, group = id), 
+  geom_polygon(aes(x = long, y = lat, group = group), 
     colour = 'black', fill = NA) +
   coord_equal() +
   facet_wrap(~ variable) + 
@@ -1444,15 +1442,15 @@ p <- ggplot(data = seg_plo) +
     legend.position = 'top'
     )
 
-pdf('figs/kz_tb.pdf', height = 7.5, width = 7, family = 'serif')
+pdf('figs/clarity_tb.pdf', height = 7.5, width = 7, family = 'serif')
 p
 dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = \textwidth]{figs/kz_tb.pdf}
+\includegraphics[width = \textwidth]{figs/kd_tb.pdf}
 \caption{Satellite estimated water clarity for Tampa Bay based on empirical relationships between \textit{in situ} secchi observations and surface reflectance.  Each facet is an annual average of water clarity for available years of satellite data. The first facet is an average of all years.  See \cref{fig:light_tb} for segment identification.}
-\label{fig:kz_tb}
+\label{fig:kd_tb}
 \end{figure}
 
 % estimated light requirements for Tampa Bay
@@ -1472,11 +1470,11 @@ dev.off()
 # # sample the satellit clarity raster
 # samp_vals <- raster::extract(ave_rast, choc_grd, sp = T) %>% 
 #   data.frame  
-# names(samp_vals) <- c('KZ', 'Longitude', 'Latitude')
+# names(samp_vals) <- c('KD', 'Longitude', 'Latitude')
 # coordinates(samp_vals) <- c('Longitude', 'Latitude')
 # 
 # # process for seagrass depth limits and light requirements
-# proc <- kz_doc(samp_vals, sgpts_2007_choc, choc_seg, radius = 0.1, trace = T)
+# proc <- kd_doc(samp_vals, sgpts_2007_choc, choc_seg, radius = 0.1, trace = T)
 # dat <- na.omit(proc)
 # 
 # choc_light <- dat
@@ -1496,6 +1494,7 @@ fill_col <- colors()[245]
 
 # format data, remove outliers
 dat <- data.frame(choc_light)
+dat$seg <- factor(dat$seg, levels = c('WCB', 'CCB', 'ECB'))
 
 # color ramp for all graphs
 pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
@@ -1508,7 +1507,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 
 # map, z_cmax
 p1 <- ggplot(fortify(choc_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
     colour = z_c_all), fill = 'black', alpha = 0.8, size = 3) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
@@ -1533,7 +1532,7 @@ p1 <- p1 + theme(legend.position = 'none')
 # boxplots by seg, z_cmax
 # reorder seg labels
 p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
-  geom_boxplot(fill = fill_col) + 
+  geom_boxplot(fill = fill_col, width = 0.75) + 
   ylab(bquote(italic('Z' ['c, max']))) +
   theme_classic() +
   theme(axis.title.x = element_blank())
@@ -1546,7 +1545,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
   
 # map, light requirements
 p3 <- ggplot(fortify(choc_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
     colour = light), fill = 'black', alpha = 0.8, size = 3) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
@@ -1569,7 +1568,7 @@ p3 <- p3 + theme(legend.position = 'none')
 
 # boxplots, light requirements
 p4 <- ggplot(dat, aes(x = seg, y = light)) + 
-  geom_boxplot(fill = fill_col) + 
+  geom_boxplot(fill = fill_col, width = 0.75) + 
   ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.x = element_blank())
@@ -1600,7 +1599,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/light_choc.pdf}
-\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range.}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
 \label{fig:light_choc}
 \end{figure}
 
@@ -1621,11 +1620,11 @@ dev.off()
 # # sample the satellit clarity raster
 # samp_vals <- raster::extract(ave_rast, tb_grd, sp = T) %>% 
 #   data.frame  
-# names(samp_vals) <- c('KZ', 'Longitude', 'Latitude')
+# names(samp_vals) <- c('clarity', 'Longitude', 'Latitude')
 # coordinates(samp_vals) <- c('Longitude', 'Latitude')
 # 
 # # process for seagrass depth limits and light requirements
-# proc <- kz_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, trace = T)
+# proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, seg_pts_yr = 2010, radius = 0.1, trace = T)
 # dat <- na.omit(proc)
 # 
 # tb_light <- dat
@@ -1659,7 +1658,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 
 # map, z_cmax
 p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
     colour = z_c_all), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
@@ -1700,7 +1699,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
   
 # map, light requirements
 p3 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
     colour = light), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
@@ -1804,7 +1803,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 
 # map, z_cmax
 p1 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
     colour = z_c_all), size = 3, fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
@@ -1844,7 +1843,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
   
 # map, light requirements
 p3 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = fill_col, aes(group = id)) +
+  geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
     colour = light), size = 3, fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
