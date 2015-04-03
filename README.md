@@ -6,7 +6,9 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 `buff_ex_dat.RData` Shapefile data for buff_ex figure as list, includes five shapefiles
 
-`cb_sats.RData` Two element list including raster image of all averaged clarity data and data frame of each year of clarity data from satellite images for Choctawhatchee Bay 2003-2007, processed in sg_depth.RProj
+`choc_sats_crc.RData` Two element list including raster image of all averaged kd data from 2003 - 2007 and data frame of each year of kd from satellite images for Choctawhatchee Bay, processed in sg_depth.RProj. Values are corrected based on empirical model relating in situ and satellit estimates for kd in 2010.  
+
+`choc_sats_unc.RData` Data frame of kd values for Choctawhatchee Bay including all years 2003-2010, lat/lon.  Values are satellite estimates that are uncorrected, processed in sg_depth.RProj
 
 `choc_seg.RData` WBIDs for Choctawhatchee Bay that included seagrass depht points as polygon shapefile.
 

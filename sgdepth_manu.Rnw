@@ -1340,11 +1340,11 @@ options(digits = 7)
 
 # load data
 data(choc_seg)
-data(cb_sats)
+data(choc_sats)
 
 # clip sats_melt
 
-sats_melt <- reshape2::melt(cb_sats[['sats_all']], id.var = c('lat', 'lon'))
+sats_melt <- reshape2::melt(choc_sats[['sats_all']], id.var = c('lat', 'lon'))
 
 # color ramp
 cols <- c('blue', 'lightblue', 'yellow', 'brown')
@@ -1453,16 +1453,16 @@ dev.off()
 \label{fig:kd_tb}
 \end{figure}
 
-% estimated light requirements for Tampa Bay
+% estimated light requirements for Choctawhatchee Bay
 <<light_choc, echo = F, eval = T, cache = T, include = FALSE, results = 'hide'>>=
 
 # source('R/funcs.r')
 # 
 # # load data
-# data(cb_sats)
+# data(choc_sats)
 # data(choc_seg)
 # data(sgpts_2007_choc)
-# ave_rast <- cb_sats[['ave_rast']]
+# ave_rast <- choc_sats[['ave_rast']]
 # 
 # # create sampling grid, 0.01 dec degree spacing
 # choc_grd <- grid_est(choc_seg, 0.01)
