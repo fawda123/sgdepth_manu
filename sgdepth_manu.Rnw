@@ -565,6 +565,9 @@ latex(
 # ests_out_nonsigs <- ests_out
 # ests_out <- ests_out[ests_out$lower_max >= 0, ]
 # 
+# # remove outliers for bb and tb
+# ests_out <- ests_out[!row.names(ests_out) %in% c('820.159', '1502.82'), ]
+# 
 # save(ests_out_nonsigs, file = 'data/ests_out_nonsigs.RData')
 # save(ests_out, file = 'data/ests_out.RData')
 
@@ -1098,6 +1101,8 @@ dev.off()
 % grid examples for each segment
 <<all_ests, echo = F, cache = T, results = 'hide', eval = T>>=
 
+options(digits = 2)
+
 ##
 # load data
 # ests out created in chunk for table 'tab:est_summ'
@@ -1107,20 +1112,10 @@ data(ests_out)
 ##
 # make plots
 
-# color function
-col_fun <- function(x, cols = c('blue', 'lightblue', 'yellow', 'brown')){
-  vals_in <- scales::rescale(x, c(0, 1))
-  dim_vals <- dim(vals_in)
-  nms <- names(vals_in)
-  ramp <- colorRamp(cols)
-  cols <- ramp(unlist(c(vals_in)))
-  col <- rgb(cols, max = 255)
-  out <- matrix(col, ncol = dim_vals[2], nrow = dim_vals[1], byrow = F)
-  out <- data.frame(out, stringsAsFactors = F)
-  names(out) <- nms
-  return(out)
-}
-
+# colors and pt_sz
+col_vals <- c('blue', 'lightblue', 'yellow', 'brown')
+pt_sz <- 2
+  
 # segments for plotting
 all_segs <- shps[grepl('^seg_', names(shps))]
 all_segs <- lapply(all_segs, fortify)
@@ -1133,6 +1128,9 @@ levs <- sort(unique(all_segs$group))
 
 levels(ests_out$seg) <- c('CB', 'BB', 'OTB', 'UIRL')
 
+# remote outliers from confint
+ests_out
+
 # assign plots by segment and doc est
 for(i in 1:length(levs)){
   
@@ -1140,13 +1138,8 @@ for(i in 1:length(levs)){
   seg_sub <- all_segs[all_segs$group %in% levs[i], ]
   est_sub <- ests_out[ests_out$seg %in% levs[i], ]
   
-  # scale for sizing
-  scls <- c(1, 6)
-  scl_vals <- scales::rescale(est_sub[, c('z_cmin', 'z_cmed', 'z_cmax')], to = scls)
-
-  # scale for colour
-  col_vals <- col_fun(scl_vals)
-  pt_plo <- data.frame(est_sub[, c('seg', 'long', 'lat')], scl_vals, col_vals)
+  # points to plot
+  pt_plo <- data.frame(est_sub[, c('seg', 'long', 'lat', 'z_cmax', 'confint')])
   
   # segment base plot
   p_seg <- ggplot(seg_sub, aes(x = long, y = lat)) +
@@ -1159,62 +1152,49 @@ for(i in 1:length(levs)){
     scale_x_continuous(labels = fmt()) + 
     scale_y_continuous(labels = fmt())
   
-  # z_cmin
-  
-  pt_sz <- 2
-  
-  pa <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$z_cmin.1, 
-      size = pt_sz) 
-
-  # z_cmed
-  pb <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$z_cmed.1, 
-      size = pt_sz)
-
   # z_cmax
-  pc <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$z_cmax.1,
-      size = pt_sz) 
+  pa <- p_seg +
+    geom_point(data = pt_plo, aes(x = long, y = lat, colour = z_cmax), 
+      size = pt_sz) +
+    scale_colour_gradientn(colours = col_vals) +
+    theme(legend.title = element_blank())
+
+  # confint
+  pb <- p_seg +
+    geom_point(data = pt_plo, aes(x = long, y = lat, colour = confint), 
+      size = pt_sz) +
+    scale_colour_gradientn(colours = col_vals) +
+    theme(legend.title = element_blank())
+
+  # legends
+  paleg <- g_legend(pa)
+  pbleg <- g_legend(pb)
+  pa <- pa + theme(legend.position = 'none')
+  pb <- pb + theme(legend.position = 'none')
   
-  # legend for all three
-  leg_plo <- est_sub[, !names(est_sub) %in% c('seg', 'confint')]
-  leg_plo <- melt(leg_plo, id.var = c('long', 'lat'))
-  
-  leg_brks <- seq(min(leg_plo$value, na.rm =  T), max(leg_plo$value, na.rm = T), length = 4)
-  leg_labs <- form_fun(leg_brks, 1, 1, 1)
-  
-  pleg <- p_seg +
-    geom_point(data = leg_plo, 
-      aes(x = jitter(long), y = jitter(lat), colour = value)) +
-    scale_colour_gradientn(name = levs[i], colours = eval(formals(col_fun)$cols),
-      breaks = leg_brks, labels = leg_labs) +
-    guides(colour = guide_legend(), size = guide_legend())
-  pleg <- g_legend(pleg)
-   
   # assign to global
   assign(paste0('pa', i), pa)
+  assign(paste0('paleg', i), paleg)
   assign(paste0('pb', i), pb)
-  assign(paste0('pc', i), pc)
-  assign(paste0('pleg', i), pleg)
-}
+  assign(paste0('pbleg', i), pbleg)
+  
+  }
 
 # labels
-lab1 <- expression(italic(Z ['c, min']))
-lab2 <- expression(italic(Z ['c, med']))
-lab3 <- expression(italic(Z ['c, max']))
+lab1 <- expression(italic(Z ['c, max']))
+lab2 <- '95% confidence'
 
 # arrange all as grob
-grobwidths <- c(1, 1, 1, 0.3)
+grobwidths <- c(1, 0.3, 1, 0.3)
 
 pdf('figs/all_ests.pdf', height = 9, width = 7, family = 'serif')
 grid.arrange(
-  arrangeGrob(textGrob(lab1), textGrob(lab2), textGrob(lab3), textGrob(''), ncol = 4, widths = grobwidths), 
-  arrangeGrob(pa1, pb1, pc1, pleg1, ncol = 4, widths = grobwidths),
-  arrangeGrob(pa2, pb2, pc2, pleg2, ncol = 4, widths = grobwidths),
-  arrangeGrob(pa3, pb3, pc3, pleg3, ncol = 4, widths = grobwidths),
-  arrangeGrob(pa4, pb4, pc4, pleg4, ncol = 4, widths = grobwidths),
-  ncol = 1, heights = c(0.1, 0.75,1,1,1.25)
+  arrangeGrob(textGrob(lab1), textGrob(lab2), ncol = 2, widths = sum(grobwidths)/2), 
+  arrangeGrob(pa1, paleg1, pb1, pbleg1, ncol = 4, widths = grobwidths),
+  arrangeGrob(pa2, paleg2, pb2, pbleg2, ncol = 4, widths = grobwidths),
+  arrangeGrob(pa3, paleg3, pb3, pbleg3, ncol = 4, widths = grobwidths),
+  arrangeGrob(pa4, paleg4, pb4, pbleg4, ncol = 4, widths = grobwidths),
+  ncol = 1, heights = c(0.2, 1,1,1,1.25)
 )
 dev.off()
 
@@ -1222,116 +1202,8 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
-\caption{Spatially-resolved estimates of seagrass depth limits (m) for four coastal segments of Florida.  Estimates include minimum ($Z_{c,\,min}$), median ($Z_{c,\,med}$), and maximum depth of colonization ($Z_{c,\,max}$).  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees. BB: Big Bend, CB: Choctawhatchee Bay, OTB: Old Tampa Bay, UIRL: Upper Indian R. Lagoon.}
+\caption{Spatially-resolved estimates of seagrass depth limits (m) for four coastal segments of Florida. Maximum depth of colonization ($Z_{c,\,max}$) estimates are on the left and width of 95\% confidence intervals are on the right.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees. From top to bottom: Big Bend, Choctawhatchee Bay, Old Tampa Bay, Upper Indian R. Lagoon.}
 \label{fig:all_ests}
-\end{figure}
-
-% range of confidence intervals for estimates
-<<all_sens, echo = F, cache = T, results = 'hide', eval = T>>=
-
-##
-# ests out created in chunk for table 'tab:est_summ'
-data(shps)
-data(ests_out)
-
-##
-# make plots
-
-# color function
-col_fun <- function(x, cols = c('blue', 'lightblue', 'yellow', 'brown')){
-  vals_in <- scales::rescale(x, c(0, 1))
-  dim_vals <- dim(vals_in)
-  nms <- names(vals_in)
-  ramp <- colorRamp(cols)
-  cols <- ramp(unlist(c(vals_in)))
-  col <- rgb(cols, max = 255)
-  out <- matrix(col, ncol = dim_vals[2], nrow = dim_vals[1], byrow = F)
-  out <- data.frame(out, stringsAsFactors = F)
-  names(out) <- nms
-  return(out)
-}
-
-# segments for plotting
-all_segs <- shps[grepl('^seg_', names(shps))]
-all_segs <- lapply(all_segs, fortify)
-all_segs <- do.call('rbind', all_segs)
-all_segs$group <- gsub('^seg_|\\.shp\\.[0-9]*$', '', row.names(all_segs))
-all_segs$group <- factor(all_segs$group, levels = c('1502', '303', '820', '902'), 
-  labels = c('UIRL', 'CB', 'BB', 'OTB'))
-all_segs$group <- as.character(all_segs$group)
-levs <- sort(unique(all_segs$group))
-
-levels(ests_out$seg) <- c('CB', 'BB', 'OTB', 'UIRL')
-
-# assign plots by segment and doc est
-for(i in 1:length(levs)){
-  
-  # subset segment shapefiles and ests by segment
-  seg_sub <- all_segs[all_segs$group %in% levs[i], ]
-  est_sub <- ests_out[ests_out$seg %in% levs[i], ]
-  
-  # scale for sizing
-  scls <- c(1, 6)
-  scl_vals <- scales::rescale(est_sub[, c('confint'), drop = F], to = scls)
-
-  # scale for colour
-  col_vals <- col_fun(scl_vals)
-  pt_plo <- data.frame(est_sub[, c('seg', 'long', 'lat')], scl_vals, col_vals)
-  
-  # segment base plot
-  p_seg <- ggplot(seg_sub, aes(x = long, y = lat)) +
-    geom_polygon(fill = NA, colour = 'black') + 
-    coord_fixed() +
-    theme_classic() +
-    theme(axis.title = element_blank(), axis.text = element_text(size = 6), 
-      axis.text.x = element_text(angle = 90, vjust = 0.5),
-      plot.margin=unit(c(0, 0, 0, 0), "cm")) +
-    scale_x_continuous(labels = fmt()) + 
-    scale_y_continuous(labels = fmt())
-  
-  # add sens points
-  pt_sz = 2
-  
-  p <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat), colour = pt_plo$confint.1,
-      size = pt_sz) 
-  
-  # legend
-  leg_brks <- seq(min(est_sub$confint, na.rm =  T), max(est_sub$confint, na.rm = T), length = 4)
-  leg_labs <- form_fun(leg_brks, 2, 2, 2)
-  
-  pleg <- p_seg +
-    geom_point(data = est_sub, aes(x = jitter(long), y = jitter(lat), colour = confint)) +
-    scale_colour_gradientn(name = levs[i], colours = eval(formals(col_fun)$cols),
-      breaks = leg_brks, labels = leg_labs) +
-    guides(colour = guide_legend(), size = guide_legend())
-  pleg <- g_legend(pleg)
-   
-  # assign to global
-  assign(paste0('p', i), p)
-  assign(paste0('pleg', i), pleg)
-}
-
-# labels
-# arrange all as grob
-grobwidths <- c(1, 0.3)
-
-pdf('figs/all_sens.pdf', height = 7, width = 7, family = 'serif')
-grid.arrange(
-  arrangeGrob(p1, pleg1, ncol = 2, widths = grobwidths),
-  arrangeGrob(p2, pleg2, ncol = 2, widths = grobwidths),
-  arrangeGrob(p3, pleg3, ncol = 2, widths = grobwidths),
-  arrangeGrob(p4, pleg4, ncol = 2, widths = grobwidths),
-  ncol = 2, heights = c(1.25, 1)
-)
-dev.off()
-
-@
-\begin{figure}
-\centering
-\includegraphics[width = 0.95\textwidth]{figs/all_sens.pdf}
-\caption{Size of confidence intervals (m) for \acl{doc} estimates in \cref{fig:all_ests}.  Points are colored and sized based on the difference between the upper and lower bounds of a 95\% confidence interval for all three \ac{doc} estimates ($Z_{c,\,min}$, $Z_{c,\,med}$, $Z_{c,\,max}$). Bounds were obtained using Monte Carlo simulations to estimate uncertainty associated with the inflection point of the estimated logistic curve (\cref{fig:est_ex}) for each sample. BB: Big Bend, CB: Choctawhatchee Bay, OTB: Old Tampa Bay, UIRL: Upper Indian R. Lagoon.}
-\label{fig:all_sens}
 \end{figure}
 
 % satellite estimates of water clarity for Tampa Bay
