@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.8.29)  2 APR 2015 15:49
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.8.29)  6 APR 2015 13:33
 entering extended mode
 **sgdepth_manu.tex
 (M:\docs\manuscripts\sgdepth_manu\sgdepth_manu.tex
@@ -817,11 +817,11 @@ File: figs/kd_tb.pdf Graphic file (type pdf)
 Package pdftex.def Info: figs/kd_tb.pdf used on input line 485.
 (pdftex.def)             Requested size: 469.75502pt x 503.31714pt.
 
-<figs/light_choc.pdf, id=412, 505.89pt x 505.89pt>
+<figs/light_choc.pdf, id=412, 578.16pt x 578.16pt>
 File: figs/light_choc.pdf Graphic file (type pdf)
  <use figs/light_choc.pdf>
 Package pdftex.def Info: figs/light_choc.pdf used on input line 494.
-(pdftex.def)             Requested size: 446.26582pt x 446.27298pt.
+(pdftex.def)             Requested size: 446.26582pt x 446.26086pt.
 
 <figs/light_tb.pdf, id=413, 505.89pt x 542.025pt>
 File: figs/light_tb.pdf Graphic file (type pdf)
@@ -877,9 +877,9 @@ eX 2.9/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/ut
 mbi8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Pro
 gram Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on sgdepth_manu.pdf (32 pages, 20331975 bytes).
+Output written on sgdepth_manu.pdf (32 pages, 20387304 bytes).
 PDF statistics:
- 754 PDF objects out of 1000 (max. 8388607)
+ 763 PDF objects out of 1000 (max. 8388607)
  118 named destinations out of 1000 (max. 500000)
  188 words of extra memory for PDF output out of 10000 (max. 10000000)
 
