@@ -4,6 +4,8 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 # Data
 
+`all_light.RData` Summarized max depth of colonization and light requirements for all segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay, created from `choc_light.RData`, `irl_light.RData` and `tb_light.RData`
+
 `buff_ex_dat.RData` Shapefile data for buff_ex figure as list, includes five shapefiles
 
 `choc_sats_crc.RData` Two element list including raster image of all averaged kd data from 2003 - 2007 and data frame of each year of kd from satellite images for Choctawhatchee Bay, processed in sg_depth.RProj. Values are corrected based on empirical model relating in situ and satellit estimates for kd in 2010.  
@@ -25,8 +27,6 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 `irl_seg.RData` Shapefile polygon of Indian River Lagoon, all segments
 
 `secc_all.RData` Secchi data for all of Florida from IWR40 database, created in sg_depth.RProj
-
-`secc_sum.RData` Summary of secchi observations by bay and segment from IWR40 database, also includes light requirement summaries from `irl_light.RData` and `tb_light.RData`
 
 `seg_summ.RData` Summarized data for table of segment characteristics
 

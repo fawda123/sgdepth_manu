@@ -269,7 +269,7 @@ nonsigs <- dplyr::mutate(ests_out_nonsigs,
   as.data.frame(.)
 
 @
-Uncertainty for estimates of $Z_{c,\,max}$ indicated that confidence intervals were generally acceptable (i.e., greater than zero), although the ability to discriminate between the three depth estimates varied by segment (\cref{fig:all_sens,tab:sens_summ}).  Mean uncertainty for all estimates in each segment measured as the width of a 95\% confidence interval was \Sexpr{mean(ests_out$confint, na.rm = T)} m.  Greater uncertainty was observed for Choctawhatchee Bay (mean width of all confidence intervals was \Sexpr{means[means$seg == '303', 'means']} m) and Old Tampa Bay (\Sexpr{means[means$seg == '902', 'means']} m), compared to the Big Bend (\Sexpr{means[means$seg == '820', 'means']} m) and Indian River Lagoon (\Sexpr{means[means$seg == '1502', 'means']} m) segments.  The largest confidence interval for each segment was \Sexpr{maxs[maxs$seg == '902', 'maxs']} m for Old Tampa Bay, \Sexpr{maxs[maxs$seg == '303', 'maxs']} m for Choctawhatchee Bay, \Sexpr{maxs[maxs$seg == '820', 'maxs']} m for the Big Bend, and \Sexpr{maxs[maxs$seg == '1502', 'maxs']} m for the Indian River Lagoon segments.  However, most confidence intervals for the remaining grid locations were much smaller than the maximum in each segment.  A comparison of overlapping confidence intervals for $Z_{c,\,min}$, $Z_{c,\,med}$, and $Z_{c,\,max}$ at each grid location indicated that not every measure was unique.  Specifically, only \Sexpr{100 - overlap[overlap$seg == '303', 'overlapped']}\% of grid points in Choctawhatchee Bay and \Sexpr{100 - overlap[overlap$seg == '902', 'overlapped']}\% in Old Tampa Bay had significantly different estimates, whereas \Sexpr{100 - overlap[overlap$seg == '1502', 'overlapped']}\% of grid points in the Indian River Lagoon and \Sexpr{100 - overlap[overlap$seg == '820', 'overlapped']}\% of grid points in the Big Bend segments had estimates that were significantly different.  By contrast, all grid estimates in Choctawhatchee Bay and Indian River Lagoon had $Z_{c,\,max}$ estimates that were significantly greater than zero, whereas all but \Sexpr{nonsigs[nonsigs$seg == '902', 'ltzero']}\% of grid points in Old Tampa Bay and \Sexpr{nonsigs[nonsigs$seg == '820', 'ltzero']}\% of grid points in the Big Bend segment had $Z_{c,\,max}$ estimates significantly greater than zero. 
+Uncertainty for estimates of $Z_{c,\,max}$ indicated that confidence intervals were generally acceptable (i.e., greater than zero), although the ability to discriminate between the three depth estimates varied by segment (\cref{fig:all_ests,tab:sens_summ}).  Mean uncertainty for all estimates in each segment measured as the width of a 95\% confidence interval was \Sexpr{mean(ests_out$confint, na.rm = T)} m.  Greater uncertainty was observed for Choctawhatchee Bay (mean width of all confidence intervals was \Sexpr{means[means$seg == '303', 'means']} m) and Old Tampa Bay (\Sexpr{means[means$seg == '902', 'means']} m), compared to the Big Bend (\Sexpr{means[means$seg == '820', 'means']} m) and Indian River Lagoon (\Sexpr{means[means$seg == '1502', 'means']} m) segments.  The largest confidence interval for each segment was \Sexpr{maxs[maxs$seg == '902', 'maxs']} m for Old Tampa Bay, \Sexpr{maxs[maxs$seg == '303', 'maxs']} m for Choctawhatchee Bay, \Sexpr{maxs[maxs$seg == '820', 'maxs']} m for the Big Bend, and \Sexpr{maxs[maxs$seg == '1502', 'maxs']} m for the Indian River Lagoon segments.  However, most confidence intervals for the remaining grid locations were much smaller than the maximum in each segment.  A comparison of overlapping confidence intervals for $Z_{c,\,min}$, $Z_{c,\,med}$, and $Z_{c,\,max}$ at each grid location indicated that not every measure was unique.  Specifically, only \Sexpr{100 - overlap[overlap$seg == '303', 'overlapped']}\% of grid points in Choctawhatchee Bay and \Sexpr{100 - overlap[overlap$seg == '902', 'overlapped']}\% in Old Tampa Bay had significantly different estimates, whereas \Sexpr{100 - overlap[overlap$seg == '1502', 'overlapped']}\% of grid points in the Indian River Lagoon and \Sexpr{100 - overlap[overlap$seg == '820', 'overlapped']}\% of grid points in the Big Bend segments had estimates that were significantly different.  By contrast, all grid estimates in Choctawhatchee Bay and Indian River Lagoon had $Z_{c,\,max}$ estimates that were significantly greater than zero, whereas all but \Sexpr{nonsigs[nonsigs$seg == '902', 'ltzero']}\% of grid points in Old Tampa Bay and \Sexpr{nonsigs[nonsigs$seg == '820', 'ltzero']}\% of grid points in the Big Bend segment had $Z_{c,\,max}$ estimates significantly greater than zero. 
 
 \subsection{Evaluation of seagrass light requirements}
 
@@ -656,7 +656,7 @@ nms <- names(tab)
 tab <- data.frame(apply(tab, 2, form_fun), stringsAsFactors = F)
 names(tab) <- nms
 
-cap.val <- "Summary of uncertainty for seagrass depth estimates (m) for each segment using all grid locations in \\cref{fig:all_sens}.  The uncertainty values are equally applicaable to each seagrass depth measure ($Z_{c,\\,min}$, $Z_{c,\\,med}$, $Z_{c,\\,max}$)."
+cap.val <- "Summary of uncertainty for seagrass depth estimates (m) for each segment using all grid locations in \\cref{fig:all_ests}.  The uncertainty values are equally applicable to each seagrass depth measure ($Z_{c,\\,min}$, $Z_{c,\\,med}$, $Z_{c,\\,max}$)."
 
 foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize BB: Big Bend, CB: Choctawhatchee Bay, OTB: Old Tampa Bay, UIRL: Upper Indian River Lagoon.' 
 
@@ -682,7 +682,7 @@ latex(
 
 @
 
-% summary of light requirements analysis
+% summary of light requirements analysis, max depht ests
 <<eval = T, echo = F>>=
 
 # ##
@@ -691,124 +691,103 @@ latex(
 # # load results from figure chunks
 # data(tb_light)
 # data(irl_light)
-# 
-# # segment shapefiles
-# data(tb_seg)
-# data(irl_seg)
-#  
-# # all secchi data
-# data(secc_all)
+# data(choc_light)
 # 
 # ##
 # # prep data
 # 
-# # add yrs to secc_all
-# secc_all$yr <- as.numeric(strftime(secc_all$Date, '%Y'))
+# # add bay column, select relevant columns
+# choc_light <- mutate(choc_light, bay = 'Choctawhatchee Bay') %>% 
+#   select(bay, seg, z_c_all, light)
+# irl_light <- mutate(irl_light, bay = 'Indian River Lagoon')%>% 
+#   select(bay, seg, z_c_all, light)
+# tb_light <- mutate(tb_light, bay = 'Tampa Bay')%>% 
+#   select(bay, seg, z_c_all, light)
 # 
-# # remove stations with less than five observations
-# rems <- table(secc_all$Station_ID)
-# rems <- names(rems)[rems < 5]
-# secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
-# 
-# # clip secchi by tampa bay and irl segments
-# # retain data within ten years of seagrass survey (2010 for TB, 2009 for IRL)
-# sel_tb <- !is.na(secc_all %over% tb_seg)[, 1]
-# sel_tb <- sel_tb & secc_all$yr > 2000 & secc_all$yr <= 2010
-# sel_irl <- !is.na(secc_all %over% irl_seg)[, 1]
-# sel_irl <- sel_irl & secc_all$yr > 1999 & secc_all$yr <= 2009
-# sel_all <- apply(cbind(sel_tb, sel_irl), 1, any)
-# secc_segs <- secc_all[sel_all, ]
-# 
-# # create bay column, only populate for TB
-# # IRL will populate  in segment assignments
-# secc_segs$bay <- 'TB'
-# 
-# # get segment for each point, TB
-# for(seg in as.character(tb_seg$seg)){
-#   
-#   to_sel <- tb_seg[tb_seg$seg %in% seg, ]
-#   sel <- !is.na(secc_segs %over% to_sel)[, 1]
-#   secc_segs[sel, 'seg'] <- as.character(seg)
-#   
-# }
-# 
-# # get segment for each point, IRL
-# for(seg in as.character(irl_seg$seg)){
-#   
-#   to_sel <- irl_seg[irl_seg$seg%in% seg, ]
-#   sel <- !is.na(secc_segs %over% to_sel)[, 1]
-#   secc_segs[sel, 'seg'] <- as.character(seg)
-#   secc_segs$bay[sel] <- 'IRL'
-#   
-# }
-# 
-# ##
-# # summarize secchi
-# secc_summ <- data.frame(secc_segs) %>% 
+# # summarize
+# all_light <- rbind(choc_light, irl_light, tb_light) %>% 
 #   group_by(bay, seg) %>% 
 #   summarize(
-#     min_date = min(Date), 
-#     max_date = max(Date),
-#     n_secchi = length(as.numeric(SD)),
-#     mean_sd = mean(as.numeric(SD))
-#   )
-# 
-# # summarize light requirements
-# irl_summ <- data.frame(irl_light) %>% 
-#   group_by(seg) %>% 
-#   summarize(
-#     n_locs = length(Station_ID), 
+#     n_locs = length(seg), 
 #     mean_z_cmax = mean(z_c_all), 
-#     mean_light = mean(light)
-#   )
+#     sd_z_cmax = sd(z_c_all),
+#     min_z_cmax = min(z_c_all),
+#     max_z_cmax = max(z_c_all),
+#     mean_light = mean(light),
+#     sd_light = sd(light),
+#     min_light = min(light),
+#     max_light = max(light)
+#     )
 # 
-# tb_summ <- data.frame(tb_light) %>% 
-#   group_by(seg) %>% 
-#   summarize(
-#     n_locs = length(Station_ID), 
-#     mean_z_cmax = mean(z_c_all), 
-#     mean_light = mean(light)
-#   )
-# 
-# # combine all, remove LHR segment (crap data)
-# secc_summ <- left_join(secc_summ, rbind_all(list(tb_summ, irl_summ)), by = 'seg') %>% 
-#   filter(seg != 'LHR')
-# 
-# save(secc_summ, file = 'data/secc_summ.RData')
+# save(all_light, file = 'data/all_light.RData')
 
 # load data
-# note that the secchi summaries are based on all secchi for each bay
-# irl, tb summaries are based on removal of extremes
-data(secc_summ)
+data(all_light)
 
 # prep for table
-tab <- data.frame(secc_summ)
-tab$min_date <- strftime(tab$min_date, '%Y')
-tab$max_date <- strftime(tab$max_date, '%Y')
-rows <- as.character(tab$seg)
+tab <- data.frame(all_light)
+tab <- tab[, !grepl('_light$', names(tab))]
+rows <- tab[, 2]
 tab <- tab[, -c(1:2)]
-tab[, c(4, 6:7)] <- formtab_fun(tab[, c(4, 6:7)])
+tab[, 2:5] <- formtab_fun(tab[, 2:5])
+tab[tab == ' NaN'] <-  ' '
 
-cap.val<-'Summary of water clarity data ($Z_{secchi}$), depth of colonization ($Z_{c,\\,max}$), and estimated light requirements for bay segments with available data for the Indian River Lagoon and Tampa Bay.  Water clarity data were obtained from secchi observations in the Florida \\acl{IWR} database for all available locations and dates within ten years of the seagrass survey in each bay.  Values are minimum and maximum years of secchi data, sample size of secchi data ($n_{Z_{secchi}}$), mean values (m) of secchi data, sample size of seagrass depth estimates ($n_{Z_{c,\\,max}}$) at each unique secchi location, mean $Z_{c,\\,max}$, and estimated \\% light requirements for each segment.  See \\cref{fig:light_irl,fig:light_tb} for spatial distribution of the results.'
+cap.val<-'Summary of maximum depth of colonization ($Z_{c,\\,max}$, m) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  See \\cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.'
 
-foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
-col_heads <- c('Min year', 'Max year', '$n_{Z_{secchi}}$', '$Z_{secchi}$', '$n_{Z_{c,\\,max}}$', '$Z_{c,\\,max}$', '\\% light')
+foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize CCB: Central Choctawhatchee Bay, ECB: Eastern Choctawhatchee Bay, WCB: Western Choctawhatchee Bay, BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
+col_heads <- c('$n$', 'Mean', 'St. Dev.', 'Min', 'Max')
 
 latex( 
   tab,
   file = '',
   rowlabel = 'Segment\\textsuperscript{\\textit{a}}',
-  rgroup = c('Indian River Lagoon', 'Tampa Bay'), 
-  n.rgroup = c(8, 4),
+  rgroup = c('Choctawhatchee Bay', 'Indian River Lagoon', 'Tampa Bay'), 
+  n.rgroup = c(3, 7, 4),
   insert.bottom = foot.val,
   caption = cap.val,
   colheads = col_heads,
   caption.loc = 'top',
   rowname = rows,
-  label = 'tab:secc_summ'
+  label = 'tab:zc_summ'
   )
 
 @
+
+% summary of light requirements analysis, light ests
+<<eval = T, echo = F>>=
+
+# load data
+data(all_light)
+
+# prep for table
+tab <- data.frame(all_light)
+tab <- tab[, !grepl('_z_cmax$', names(tab))]
+rows <- tab[, 2]
+tab <- tab[, -c(1:2)]
+tab[, 2:5] <- formtab_fun(tab[, 2:5])
+tab[tab == ' NaN'] <-  ' '
+
+cap.val<-'Summary of estimated light requirements as percentage of surface irradiance for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  See \\cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.'
+
+foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize CCB: Central Choctawhatchee Bay, ECB: Eastern Choctawhatchee Bay, WCB: Western Choctawhatchee Bay, BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
+col_heads <- c('$n$', 'Mean', 'St. Dev.', 'Min', 'Max')
+
+latex( 
+  tab,
+  file = '',
+  rowlabel = 'Segment\\textsuperscript{\\textit{a}}',
+  rgroup = c('Choctawhatchee Bay', 'Indian River Lagoon', 'Tampa Bay'), 
+  n.rgroup = c(3, 7, 4),
+  insert.bottom = foot.val,
+  caption = cap.val,
+  colheads = col_heads,
+  caption.loc = 'top',
+  rowname = rows,
+  label = 'tab:light_summ'
+  )
+
+@
+
 
 \clearpage
 
@@ -1202,7 +1181,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
-\caption{Spatially-resolved estimates of seagrass depth limits (m) for four coastal segments of Florida. Maximum depth of colonization ($Z_{c,\,max}$) estimates are on the left and width of 95\% confidence intervals are on the right.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees. From top to bottom: Big Bend, Choctawhatchee Bay, Old Tampa Bay, Upper Indian R. Lagoon.}
+\caption{Spatially-resolved estimates of seagrass depth limits (m) for four coastal segments of Florida. Maximum depth of colonization ($Z_{c,\,max}$) estimates are on the left and correspondings widths of the 95\% confidence intervals are on the right.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees. From top to bottom: Big Bend, Choctawhatchee Bay, Old Tampa Bay, Upper Indian R. Lagoon.}
 \label{fig:all_ests}
 \end{figure}
 
@@ -1641,6 +1620,9 @@ dev.off()
 # # process, get ave secchi data results
 # proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, seg_pts_yr = '2009', trace = T)
 # dat <- na.omit(proc$ave_dat)
+#
+# #remote bad secchi values and low conf
+# dat <- dat[dat$light > 4 & dat$maxd_conf < 1 , ] 
 # 
 # irl_light <- dat
 # save(irl_light, file = 'data/irl_light.RData')
@@ -1662,7 +1644,6 @@ fill_col <- colors()[245]
 
 # format data, remove outliers
 dat <- data.frame(irl_light)
-dat <- dat[dat$light > 4 & dat$maxd_conf < 1 , ] # bad secchi vals and low conf
 
 # color ramp for all graphs
 pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
