@@ -638,7 +638,7 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kdconv = 1.7, z_est = 'z_cmax
   if(nrow(secc) == 0) stop('No secchi data for segment')
   
   # add unique id if not present
-  if(!grepl('Station_ID', names(secc)))
+  if(!'Station_ID' %in% names(secc))
     secc$Station_ID <- seq(1:nrow(secc))
   
   # get unique locations of secchi data
@@ -684,14 +684,14 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kdconv = 1.7, z_est = 'z_cmax
   ave_secc <- ddply(
     data.frame(secc),
     .variable = 'Station_ID',
-    .fun = function(x) mean(as.numeric(x$clarity), na.rm = T)
+    .fun = function(x) mean(as.numeric(x$SD), na.rm = T)
     )
-  names(ave_secc)[names(ave_secc) %in% 'V1'] <- 'clarity'
+  names(ave_secc)[names(ave_secc) %in% 'V1'] <- 'SD'
   ave_dat <- merge(data.frame(ave_secc), maxd, by = c('Station_ID'))
 
   # get light requirements for ave dat and near dat
   ave_dat <- mutate(ave_dat, 
-    light = 100 * exp(-z_c_all * kdconv/clarity),
+    light = 100 * exp(-z_c_all * kdconv/SD),
     seg = NA
     )
 
