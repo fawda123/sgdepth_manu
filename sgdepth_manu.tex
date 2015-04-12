@@ -126,7 +126,7 @@
 \begin{singlespace}
 \title{{\bf {\Large Quantifying seagrass light requirements using an algorithm to spatially resolve depth of colonization}}}
 \author{
-  {\bf {\normalsize Marcus W. Beck$^1$, James D. Hagy III$^2$}}
+  {\bf {\normalsize Marcus W. Beck$^1$, James D. Hagy III$^2$, Chengfeng Le$^3$}}
   \\\\{\textit {\normalsize $^1$ORISE Research Participation Program}}
   \\{\textit {\normalsize USEPA National Health and Environmental Effects Research Laboratory}}
   \\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
@@ -134,6 +134,10 @@
   \\\\{\textit {\normalsize $^2$USEPA National Health and Environmental Effects Research Laboratory}}
 	\\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
 	\\{\textit {\normalsize Phone: 850-934-2455, Fax: 850-934-2401, Email: \href{mailto:hagy.jim@epa.gov}{hagy.jim@epa.gov}}}
+  \\\\{\textit {\normalsize $^3$ORISE Research Participation Program}}
+  \\{\textit {\normalsize USEPA National Health and Environmental Effects Research Laboratory}}
+  \\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
+  \\{\textit {\normalsize Phone: 850-934-9308, Fax: 850-934-2401, Email: \href{mailto:le.chengfeng@epa.gov}{le.chengfeng@epa.gov}}}
 	}
 \date{}
 \maketitle
@@ -254,7 +258,7 @@ Estimates of water clarity, seagrass depth limits and corresponding light requir
 
 
 
-Seagrass \ac{doc} estimates were obtained for 271 locations in Choctawhatchee Bay, 566 locations in Tampa Bay, and 37 locations in the Indian River Lagoon (\Cref{tab:light_summ,fig:light_choc,fig:light_tb,fig:light_irl}).  Mean $Z_{c,\,max}$ for each bay was 2.5, 1.7, and 1.3 m for Choctawhatchee Bay, Tampa Bay, and Indian River Lagoon, respectively, with all values being significantly different beetween bays (ANOVA, $F=$ 352.8, $df =$ 2, 871, $p < 0.001$, followed by Tukey multiple comparison, $p<0.001$ for all).  Generally, spatial variation in $Z_{c,\,max}$ followed variation in light requirements for broad spatial scales with more seaward segments or areas near inlets having lower light requirements.  Mean light requirements were significantly different between all bays (ANOVA, $F=$ 464.3, $df =$ 2, 871, $p < 0.001$, Tukey $p<0.001$ for all), with a mean requirement of 46.4\% for Choctawhatchee Bay, 30.4\% for Tampa Bay, and 13.4\% for Indian River Lagoon.  Significant differences in light requirements between segments within each bay were also observed (ANOVA, $F =$ 29.8, $df =$ 2, 268, $p < 0.001$ for Choctawhatchee Bay, $F =$ 84.6, $df =$ 3, 562, $p < 0.001$ for Tampa Bay, $F =$ 7.6, $df =$ 6, 30, $p < 0.001$ for Indian River Lagoon).  Post-hoc evaluation of all pair-wise comparisons of mean light requirements between segments within each bay indicated that significant differences varied.  Significant differences were observed between all segments in Choctawhatchee Bay ($p<0.001$ for all), except the central and western segments (\cref{fig:light_choc}).  Similarly, significant differences in Tampa Bay were observed between all segments ($p<0.05$ for all), except Middle Tampa Bay and Old Tampa Bay (\cref{fig:light_tb}).  Finally, for the Indian River Lagoon, significant differences were observed only between the Lower Central Indian River Lagoon and the Upper ($p<0.001$) and Lower Mosquito Lagoons ($p = $ 0.023),  the Lower Indian River Lagoon and the Upper ($p<0.001$) and Lower Mosquito Lagoons ($p =$ 0.013), and the Upper Central Indian River and the Upper Mosquito Lagoon ($p = $0.018) (\cref{fig:light_irl}).
+Seagrass \ac{doc} estimates were obtained for 259 locations in Choctawhatchee Bay, 566 locations in Tampa Bay, and 37 locations in the Indian River Lagoon (\Cref{tab:light_summ,fig:light_choc,fig:light_tb,fig:light_irl}).  Mean $Z_{c,\,max}$ for each bay was 2.5, 1.7, and 1.3 m for Choctawhatchee Bay, Tampa Bay, and Indian River Lagoon, respectively, with all values being significantly different beetween bays (ANOVA, $F=$ 326.9, $df =$ 2, 859, $p < 0.001$, followed by Tukey multiple comparison, $p<0.001$ for all).  Generally, spatial variation in $Z_{c,\,max}$ followed variation in light requirements for broad spatial scales with more seaward segments or areas near inlets having lower light requirements.  Mean light requirements were significantly different between all bays (ANOVA, $F=$ 463.7, $df =$ 2, 859, $p < 0.001$, Tukey $p<0.001$ for all), with a mean requirement of 47.1\% for Choctawhatchee Bay, 30.4\% for Tampa Bay, and 13.4\% for Indian River Lagoon.  Significant differences in light requirements between segments within each bay were also observed (ANOVA, $F =$ 12.1, $df =$ 2, 256, $p < 0.001$ for Choctawhatchee Bay, $F =$ 84.6, $df =$ 3, 562, $p < 0.001$ for Tampa Bay, $F =$ 7.6, $df =$ 6, 30, $p < 0.001$ for Indian River Lagoon).  Post-hoc evaluation of all pair-wise comparisons of mean light requirements between segments within each bay indicated that significant differences varied.  Significant differences were observed between all segments in Choctawhatchee Bay ($p<0.001$ for all), except the central and western segments (\cref{fig:light_choc}).  Similarly, significant differences in Tampa Bay were observed between all segments ($p<0.05$ for all), except Middle Tampa Bay and Old Tampa Bay (\cref{fig:light_tb}).  Finally, for the Indian River Lagoon, significant differences were observed only between the Lower Central Indian River Lagoon and the Upper ($p<0.001$) and Lower Mosquito Lagoons ($p = $ 0.023),  the Lower Indian River Lagoon and the Upper ($p<0.001$) and Lower Mosquito Lagoons ($p =$ 0.013), and the Upper Central Indian River and the Upper Mosquito Lagoon ($p = $0.018) (\cref{fig:light_irl}).
 
 \section{Discussion}
 
@@ -276,6 +280,7 @@ The ability to use existing geospatial datasets, in addition to satellite-derive
 
 Variation in seagrass depth of colonization for each of the case studies was typically most pronounced along mainstem axes of each estuary or as distance from an inlet.  Greater depth of colonization was observed near seaward locations and was also most limited near river inflows.  Although an obvious conclusion would be that depth of colonization is correlated with bottom depth, i.e., seagrasses grow deeper because they can, a more biologically-relevant conclusion is that seagrass depth of colonization follows variation in water clarity.  Shallow areas within an estuary are often near river outflows where discharge is characterized by high sediment load or nutrient concentrations that contribute to light scattering and inreased attenuation.  Seagrasses may also be limited in shallow areas by tidal stress such that a `minimum' depth of colonization can be defined that describes the upper limit related to dessication stress from exposure at low tide.  Coastal regions of Florida, particularly the Gulf Coast, are microtidal with amplitudes generally not exceeding 0.5 meters. ...
 
+% Look up Kemp et al. and Batiuk et al. papers to validate light requirements for epiphyte limitations 
 
 % what it allowed us to see
 
@@ -397,24 +402,24 @@ WCB&0.53&0.37&0.12&1.57\tabularnewline
 \multicolumn{1}{l}{}&\multicolumn{1}{c}{$n$}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
 \hline
 {\bfseries Choctawhatchee Bay}&&&&&&&&&&&\tabularnewline
-~~CCB&$130$&&2.5&0.3&1.0&3.1&&46.7&8.7&23.3&82.6\tabularnewline
-~~ECB&$  5$&&0.8&0.1&0.6&0.9&&71.8&7.7&65.7&85.2\tabularnewline
-~~WCB&$136$&&2.6&0.2&2.1&2.9&&45.3&6.3&24.4&64.4\tabularnewline
+~~CCB&$121$&&2.4&0.4&0.9&3.2&&48.2&10.2&15.6&78.3\tabularnewline
+~~ECB&$  3$&&0.9&0.0&0.8&0.9&&67.8& 2.7&64.8&69.9\tabularnewline
+~~WCB&$135$&&2.6&0.2&2.1&2.9&&45.6& 6.6&24.2&70.9\tabularnewline
 \hline
 {\bfseries Indian River Lagoon}&&&&&&&&&&&\tabularnewline
-~~BR&$  2$&&1.4&0.0&1.4&1.4&&12.0&1.1&11.2&12.8\tabularnewline
-~~LCIRL&$ 11$&&1.4&0.3&1.1&1.7&& 9.7&4.7& 4.5&18.0\tabularnewline
-~~LIRL&$  3$&&1.8&0.0&1.8&1.8&& 6.5&2.0& 4.2& 7.9\tabularnewline
-~~LML&$  4$&&1.1&0.0&1.1&1.2&&17.8&2.3&14.9&19.9\tabularnewline
-~~UCIRL&$ 13$&&1.2&0.1&1.1&1.4&&14.1&4.2& 7.6&19.9\tabularnewline
-~~UIRL&$  1$&&1.2& &1.2&1.2&&20.3& &20.3&20.3\tabularnewline
-~~UML&$  3$&&0.9&0.1&0.8&1.0&&23.3&2.8&20.9&26.4\tabularnewline
+~~BR&$  2$&&1.4&0.0&1.4&1.4&&12.0& 1.1&11.2&12.8\tabularnewline
+~~LCIRL&$ 11$&&1.4&0.3&1.1&1.7&& 9.7& 4.7& 4.5&18.0\tabularnewline
+~~LIRL&$  3$&&1.8&0.0&1.8&1.8&& 6.5& 2.0& 4.2& 7.9\tabularnewline
+~~LML&$  4$&&1.1&0.0&1.1&1.2&&17.8& 2.3&14.9&19.9\tabularnewline
+~~UCIRL&$ 13$&&1.2&0.1&1.1&1.4&&14.1& 4.2& 7.6&19.9\tabularnewline
+~~UIRL&$  1$&&1.2& &1.2&1.2&&20.3& NaN&20.3&20.3\tabularnewline
+~~UML&$  3$&&0.9&0.1&0.8&1.0&&23.3& 2.8&20.9&26.4\tabularnewline
 \hline
 {\bfseries Tampa Bay}&&&&&&&&&&&\tabularnewline
-~~HB&$ 43$&&1.3&0.1&1.2&1.4&&32.7&7.4&14.3&45.1\tabularnewline
-~~LTB&$158$&&2.2&0.4&1.7&3.5&&24.3&6.7& 4.8&40.0\tabularnewline
-~~MTB&$215$&&1.7&0.4&1.2&2.4&&29.8&8.0&12.3&50.0\tabularnewline
-~~OTB&$150$&&1.2&0.1&1.0&1.3&&37.0&5.8&17.3&49.8\tabularnewline
+~~HB&$ 43$&&1.3&0.1&1.2&1.4&&32.7& 7.4&14.3&45.1\tabularnewline
+~~LTB&$158$&&2.2&0.4&1.7&3.5&&24.3& 6.7& 4.8&40.0\tabularnewline
+~~MTB&$215$&&1.7&0.4&1.2&2.4&&29.8& 8.0&12.3&50.0\tabularnewline
+~~OTB&$150$&&1.2&0.1&1.0&1.3&&37.0& 5.8&17.3&49.8\tabularnewline
 \hline
 \end{tabular}\end{center}}
 

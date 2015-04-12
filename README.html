@@ -67,7 +67,11 @@ img {
 </div>
 <div id="data" class="section level1">
 <h1>Data</h1>
+<p><code>all_light.RData</code> Summarized max depth of colonization and light requirements for all segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay, created from <code>choc_light.RData</code>, <code>irl_light.RData</code> and <code>tb_light.RData</code></p>
 <p><code>buff_ex_dat.RData</code> Shapefile data for buff_ex figure as list, includes five shapefiles</p>
+<p><code>choc_sats_crc.RData</code> Two element list including raster image of all averaged kd data from 2003 - 2007 and data frame of each year of kd from satellite images for Choctawhatchee Bay, processed in sg_depth.RProj. Values are corrected based on empirical model relating in situ and satellit estimates for kd in 2010.</p>
+<p><code>choc_sats_unc.RData</code> Data frame of kd values for Choctawhatchee Bay including all years 2003-2010, lat/lon. Values are satellite estimates that are uncorrected, processed in sg_depth.RProj</p>
+<p><code>choc_seg.RData</code> WBIDs for Choctawhatchee Bay that included seagrass depht points as polygon shapefile.</p>
 <p><code>dep_shps.RData</code> Bathymetry data shapefiles for each segment</p>
 <p><code>ests_out.RData</code> Seagrass depth of colonization estimates for grids in each segment</p>
 <p><code>ests_out_nonsigs.RData</code> Same as <code>ests_out.RData</code> but includes zcmax values with confidence less than zero. Only used in code chunk for results.</p>
@@ -75,14 +79,14 @@ img {
 <p><code>irl_light.RData</code> Seagrass light requirements for Indian River Lagoon, slightly modified output from <code>secchi_doc</code> function, created in <code>light_irl</code> chunk</p>
 <p><code>irl_seg.RData</code> Shapefile polygon of Indian River Lagoon, all segments</p>
 <p><code>secc_all.RData</code> Secchi data for all of Florida from IWR40 database, created in sg_depth.RProj</p>
-<p><code>secc_sum.RData</code> Summary of secchi observations by bay and segment from IWR40 database, also includes light requirement summaries from <code>irl_light.RData</code> and <code>tb_light.RData</code></p>
 <p><code>seg_summ.RData</code> Summarized data for table of segment characteristics</p>
 <p><code>sg_shps.RData</code> Shapefiles of seagrass coverage polygons for each segment</p>
-<p><code>sgpts_irl_2009.RData</code> All seagrass depth points for Indian River Lagoon (all segments)</p>
-<p><code>sgpts_tb_2010.RData</code> All seagrass depth points for Tampa Bay (all segments)</p>
+<p><code>sgpts_2009_irl.RData</code> All seagrass depth points for Choctawhatchee Bay (all segments)</p>
+<p><code>sgpts_2009_irl.RData</code> All seagrass depth points for Indian River Lagoon (all segments)</p>
+<p><code>sgpts_2010_tb.RData</code> All seagrass depth points for Tampa Bay (all segments)</p>
 <p><code>shps.RData</code> Multiple shapefiles for each segment, including all segment polygons, individual segment polygons, and seagrass depth points for each segment</p>
 <p><code>tb_light.RData</code> Seagrass light requirements for Tampa Bay, slightly modified output from <code>secchi_doc</code> function, created in <code>light_tb</code> chunk</p>
-<p><code>tb_sats_rast.RData</code> Raster Tampa Bay water clarity data estimated from satellite and averaged across multiple years, processed in sg_depth.RProj</p>
+<p><code>tb_sats.RData</code> Two element list including raster image of all averaged clarity data and data frame of each year of clarity data from satellite images for Tampa Bay 2003-2010, processed in sg_depth.RProj</p>
 <p><code>tb_seg.RData</code> Shapefile polygon of Tampa Bay, all segments</p>
 </div>
 

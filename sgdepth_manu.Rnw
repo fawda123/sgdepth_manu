@@ -82,7 +82,7 @@ source('R/funcs.r')
 \begin{singlespace}
 \title{{\bf {\Large Quantifying seagrass light requirements using an algorithm to spatially resolve depth of colonization}}}
 \author{
-  {\bf {\normalsize Marcus W. Beck$^1$, James D. Hagy III$^2$}}
+  {\bf {\normalsize Marcus W. Beck$^1$, James D. Hagy III$^2$, Chengfeng Le$^3$}}
   \\\\{\textit {\normalsize $^1$ORISE Research Participation Program}}
   \\{\textit {\normalsize USEPA National Health and Environmental Effects Research Laboratory}}
   \\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
@@ -90,6 +90,10 @@ source('R/funcs.r')
   \\\\{\textit {\normalsize $^2$USEPA National Health and Environmental Effects Research Laboratory}}
 	\\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
 	\\{\textit {\normalsize Phone: 850-934-2455, Fax: 850-934-2401, Email: \href{mailto:hagy.jim@epa.gov}{hagy.jim@epa.gov}}}
+  \\\\{\textit {\normalsize $^3$ORISE Research Participation Program}}
+  \\{\textit {\normalsize USEPA National Health and Environmental Effects Research Laboratory}}
+  \\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
+  \\{\textit {\normalsize Phone: 850-934-9308, Fax: 850-934-2401, Email: \href{mailto:le.chengfeng@epa.gov}{le.chengfeng@epa.gov}}}
 	}
 \date{}
 \maketitle
@@ -360,6 +364,7 @@ The ability to use existing geospatial datasets, in addition to satellite-derive
 
 Variation in seagrass depth of colonization for each of the case studies was typically most pronounced along mainstem axes of each estuary or as distance from an inlet.  Greater depth of colonization was observed near seaward locations and was also most limited near river inflows.  Although an obvious conclusion would be that depth of colonization is correlated with bottom depth, i.e., seagrasses grow deeper because they can, a more biologically-relevant conclusion is that seagrass depth of colonization follows variation in water clarity.  Shallow areas within an estuary are often near river outflows where discharge is characterized by high sediment load or nutrient concentrations that contribute to light scattering and inreased attenuation.  Seagrasses may also be limited in shallow areas by tidal stress such that a `minimum' depth of colonization can be defined that describes the upper limit related to dessication stress from exposure at low tide.  Coastal regions of Florida, particularly the Gulf Coast, are microtidal with amplitudes generally not exceeding 0.5 meters. ...
 
+% Look up Kemp et al. and Batiuk et al. papers to validate light requirements for epiphyte limitations 
 
 % what it allowed us to see
 
