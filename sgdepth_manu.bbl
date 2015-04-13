@@ -22,6 +22,13 @@ Bivand RS, Pebesma EJ, G\'{o}mez-Rubio V. 2008.
 \newblock Applied Spatial Data Analysis with {R}.
 \newblock Springer, New York, New York.
 
+\bibitem[Caffrey et~al., 2014]{Caffrey14}
+Caffrey JM, Murrell MC, Amacker KS, Harper J, Phipps S, Woodrey M. 2014.
+\newblock Seasonal and inter-annual patterns in primary production, respiration
+  and net ecosystem metabolism in 3 estuaries in the northeast {G}ulf of
+  {M}exico.
+\newblock Estuaries and Coasts, 37(1):222--241.
+
 \bibitem[Chen et~al., 2007]{Chen07}
 Chen Z, Muller-Karger FE, Hu C. 2007.
 \newblock Remote sensing of water clarity in {T}ampa {B}ay.
@@ -40,11 +47,24 @@ Choice ZD, Frazer TK, Jacoby CA. 2014.
 \newblock Technical Report Contract 95W142, Coastal Planning and Engineering,
   Palatka, Florida.
 
+\bibitem[Dawes and Avery, 2010]{Dawes10}
+Dawes C, Avery W. 2010.
+\newblock Epiphytes of the seagrass {\textit{halodule wrightii}} in
+  {H}illsborough {B}ay, {F}lorida, a 14 year study in an estuary recovering
+  from eutrophication.
+\newblock Florida Scientist, 73(3-4):185--195.
+
 \bibitem[Dennison et~al., 1993]{Dennison93}
 Dennison WC, Orth RJ, Moore KA, Stevenson JC, Carter V, Kollar S, Bergstrom PW,
   Batiuk RA. 1993.
 \newblock Assessing water quality with submersed aquatic vegetation.
 \newblock BioScience, 43(2):86--94.
+
+\bibitem[Dixon and Leverone, 1995]{Dixon95}
+Dixon LK, Leverone JR. 1995.
+\newblock Light requirements of \textit{Thalassia testudinum} in {T}ampa {B}ay,
+  {F}lorida.
+\newblock Technical report, Number 425, Mote Marine Lab, Sarasota, Florida.
 
 \bibitem[Duarte, 1991]{Duarte91}
 Duarte CM. 1991.
@@ -67,6 +87,14 @@ Elsdon TS, Connell SD. 2009.
 {Environmental Systems Research Institute}. 2012.
 \newblock {ArcGIS v10.1}.
 \newblock {ESRI}, Redlands, California.
+
+\bibitem[{Florida Department of Environmental Protection (FLDEP)},
+  2012]{FLDEP12}
+{Florida Department of Environmental Protection (FLDEP)}. 2012.
+\newblock Site-specific information in support of establishing numeric nutrient
+  criteria for {C}hoctawhatchee {B}ay.
+\newblock Technical report, Florida Department of Environmental Protection,
+  Tallahassee, Florida.
 
 \bibitem[Greve and Krause-Jensen, 2005]{Greve05}
 Greve T, Krause-Jensen D. 2005.
