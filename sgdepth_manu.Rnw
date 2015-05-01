@@ -67,6 +67,13 @@ options(replace.assign=TRUE,width=90,digits=1)
 source('R/funcs.r')
 @
 
+% get the version based on commit date
+<<echo = FALSE, cache = FALSE>>=
+raw <- system('git log -1', intern = TRUE)
+raw <- raw[grep('^Date', raw)]
+raw <- paste('Version', raw)
+@
+
 \begin{document}
 
 \raggedbottom
@@ -91,6 +98,8 @@ source('R/funcs.r')
   \\{\textit {\normalsize USEPA National Health and Environmental Effects Research Laboratory}}
   \\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
   \\{\textit {\normalsize Phone: 850-934-9308, Fax: 850-934-2401, Email: \href{mailto:le.chengfeng@epa.gov}{le.chengfeng@epa.gov}}}
+  \vspace{1in} 
+  \\ \Sexpr{raw}
 	}
 \date{}
 \maketitle
