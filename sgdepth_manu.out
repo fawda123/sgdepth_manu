@@ -1,17 +1,15 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
 \BOOKMARK [1][-]{section.2}{Methods}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Data sources}{section.2}% 3
-\BOOKMARK [3][-]{subsubsection.2.1.1}{Study sites}{subsection.2.1}% 4
-\BOOKMARK [3][-]{subsubsection.2.1.2}{Seagrass coverage and bathymetry}{subsection.2.1}% 5
-\BOOKMARK [3][-]{subsubsection.2.1.3}{Water clarity estimates}{subsection.2.1}% 6
-\BOOKMARK [2][-]{subsection.2.2}{Estimation of seagrass depth of colonization}{section.2}% 7
-\BOOKMARK [2][-]{subsection.2.3}{Estimating uncertainty in depth of colonization estimates}{section.2}% 8
-\BOOKMARK [2][-]{subsection.2.4}{Evaluation of spatial heterogeneity of seagrass depth limits}{section.2}% 9
-\BOOKMARK [2][-]{subsection.2.5}{Estimating light requirements}{section.2}% 10
-\BOOKMARK [1][-]{section.3}{Results}{}% 11
-\BOOKMARK [2][-]{subsection.3.1}{Segment characteristics and seagrass depth estimates}{section.3}% 12
-\BOOKMARK [2][-]{subsection.3.2}{Evaluation of seagrass light requirements}{section.3}% 13
-\BOOKMARK [1][-]{section.4}{Discussion}{}% 14
-\BOOKMARK [2][-]{subsection.4.1}{Evaluation of the algorithm}{section.4}% 15
-\BOOKMARK [2][-]{subsection.4.2}{Heterogeneity in growth patterns and light requirements}{section.4}% 16
-\BOOKMARK [2][-]{subsection.4.3}{Conclusions}{section.4}% 17
+\BOOKMARK [2][-]{subsection.2.1}{Study sites and data sources}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Quantifying water clarity}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Estimating seagrass depth of colonization}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Estimating uncertainty}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{Evaluation of spatial heterogeneity of seagrass depth limits}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.6}{Relating depth of colonization and water clarity}{section.2}% 8
+\BOOKMARK [1][-]{section.3}{Results}{}% 9
+\BOOKMARK [2][-]{subsection.3.1}{Segment characteristics and seagrass depth estimates}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.2}{Evaluation of seagrass light requirements}{section.3}% 11
+\BOOKMARK [1][-]{section.4}{Discussion}{}% 12
+\BOOKMARK [2][-]{subsection.4.1}{Evaluation of the algorithm}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.2}{Heterogeneity in growth patterns and light requirements}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.3}{Conclusions}{section.4}% 15
