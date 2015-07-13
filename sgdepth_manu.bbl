@@ -22,8 +22,8 @@ Bivand RS, Pebesma EJ, G\'{o}mez-Rubio V. 2008.
 \newblock Applied Spatial Data Analysis with {R}.
 \newblock Springer, New York, New York.
 
-\bibitem[Caffrey et~al., 2014]{Caffrey14}
-Caffrey JM, Murrell MC, Amacker KS, Harper J, Phipps S, Woodrey M. 2014.
+\bibitem[Caffrey et~al., 2013]{Caffrey14}
+Caffrey JM, Murrell MC, Amacker KS, Harper J, Phipps S, Woodrey M. 2013.
 \newblock Seasonal and inter-annual patterns in primary production, respiration
   and net ecosystem metabolism in 3 estuaries in the northeast {G}ulf of
   {M}exico.
@@ -58,7 +58,7 @@ Dawes C, Avery W. 2010.
 Dennison WC, Orth RJ, Moore KA, Stevenson JC, Carter V, Kollar S, Bergstrom PW,
   Batiuk RA. 1993.
 \newblock Assessing water quality with submersed aquatic vegetation.
-\newblock BioScience, 43(2):86--94.
+\newblock Bioscience, 43(2):86--94.
 
 \bibitem[Dixon and Leverone, 1995]{Dixon95}
 Dixon LK, Leverone JR. 1995.
@@ -83,14 +83,14 @@ Elsdon TS, Connell SD. 2009.
   the way we consider, gather, and interpret patterns.
 \newblock Aquatic Biology, 5(2):157--166.
 
-\bibitem[{Environmental Systems Research Institute}, 2012]{ESRI12}
-{Environmental Systems Research Institute}. 2012.
+\bibitem[{ESRI (Environmental Systems Research Institute)}, 2012]{ESRI12}
+{ESRI (Environmental Systems Research Institute)}. 2012.
 \newblock {ArcGIS v10.1}.
 \newblock {ESRI}, Redlands, California.
 
-\bibitem[{Florida Department of Environmental Protection (FLDEP)},
+\bibitem[{(FLDEP) Florida Department of Environmental Protection},
   2012]{FLDEP12}
-{Florida Department of Environmental Protection (FLDEP)}. 2012.
+{(FLDEP) Florida Department of Environmental Protection}. 2012.
 \newblock Site-specific information in support of establishing numeric nutrient
   criteria for {C}hoctawhatchee {B}ay.
 \newblock Technical report, Florida Department of Environmental Protection,
@@ -101,10 +101,6 @@ Greve T, Krause-Jensen D. 2005.
 \newblock Stability of of eelgrass (\textit{{Z}ostera marine {L}.}) depth
   limits: influence of habitat type.
 \newblock Marine Biology, 147(3):803--812.
-
-\bibitem[Hagy, view]{HagyIR}
-Hagy JD. {In review}.
-\newblock Seagrass depth of colonization in {F}lorida estuaries.
 
 \bibitem[Hale et~al., 2004]{Hale04}
 Hale JA, Frazer TK, Tomasko DA, Hall MO. 2004.
@@ -193,11 +189,17 @@ Poole HH, Atkins WRG. 1929.
 \newblock Journal of the Marine Biological Association of the United Kingdom,
   16:297--324.
 
-\bibitem[{R Development Core Team}, 2014]{RDCT14}
-{R Development Core Team}. 2014.
+\bibitem[{RDCT (R Development Core Team)}, 2014]{RDCT14}
+{RDCT (R Development Core Team)}. 2014.
 \newblock {R: A language and environment for statistical computing, v3.1.2. R
   Foundation for Statistical Computing, Vienna, Austria}.
 \newblock \url{http://www.R-project.org}.
+
+\bibitem[S{\o}ndergaard et~al., 2013]{Sondergaard13}
+S{\o}ndergaard M, Phillips G, Hellsten S, Kolada A, Ecke F, M\"{a}emets H,
+  Mjelde M, Azzella MM, Oggioni A. 2013.
+\newblock Maximum growing depth of submerged macrophytes in {E}uropean lakes.
+\newblock Hydrobiologia, 704(1):165--177.
 
 \bibitem[Spears et~al., 2009]{Spears09}
 Spears BM, Gunn IDM, Carvalho L, Winfield IJ, Dudley B, Murphy K, May L. 2009.
@@ -246,5 +248,11 @@ Woodruff DL, Stumpf RP, Scope JA, Paerl HW. 1999.
 \newblock Remote estimation of water clarity in optically complex estuarine
   waters.
 \newblock Remote Sensing of Environment, 68(1):41--52.
+
+\bibitem[Zhu et~al., 2007]{Zhu07}
+Zhu B, Fitzgerald DG, Hoskins SB, Rudstam LG, Mayer CM, Mills EL. 2007.
+\newblock Quantification of historical changes of submerged aquatic vegetation
+  cover in two bays of {L}ake {O}ntario with three complementary methods.
+\newblock Journal of Great Lakes Research, 33(1):122--135.
 
 \end{thebibliography}
