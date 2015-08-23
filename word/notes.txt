@@ -1,0 +1,21 @@
+They do no accept latex but do accept pdf for initial submissions
+
+The revised version will ultimately have to be a word file
+
+Here are the steps to creating the initial submissions:
+
+- process as sweave to pdf in RStudio as always
+
+- use pandoc from the command line to create a bibliography using a cls zotero file
+
+	C:\Users\mbeck\Desktop\test>pandoc --bibliography=ref_diss.bib --csl=limnology-and-	oceanography.csl -o out.docx swmp_noise.tex
+
+- this creates a word document with a bibliography in the correct format
+
+- note that aliased citations will not be included, will have to add manually
+
+- remove the references (edit blocks) in the original pdf
+
+- add text boxes and paste the bibliography from the word document
+
+After revisions are made - pdf to word doc, then edit by hand 
