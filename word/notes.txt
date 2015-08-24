@@ -1,21 +1,15 @@
-They do no accept latex but do accept pdf for initial submissions
+.doc files (not .docx) are accepted as submission
 
-The revised version will ultimately have to be a word file
-
-Here are the steps to creating the initial submissions:
+Here are the steps to converting my pdf to a word docuemnt
 
 - process as sweave to pdf in RStudio as always
 
-- use pandoc from the command line to create a bibliography using a cls zotero file
+- use pandoc from the command line to create a bibliography using a cls zotero file, note that the estuaries and coasts file from zotera wouldn't work with the manuscript
 
-	C:\Users\mbeck\Desktop\test>pandoc --bibliography=ref_diss.bib --csl=limnology-and-	oceanography.csl -o out.docx swmp_noise.tex
+	M:\docs\manuscripts\sgdepth_manu>pandoc --bibliography=refs.bib --csl=apa.csl -o out.doc sgdepth_manu.tex
 
-- this creates a word document with a bibliography in the correct format
+- this creates a word document with a bibliography in a kind of correct format
 
-- note that aliased citations will not be included, will have to add manually
+- acronyms and aliased citations are removed from the word document, these have to be added manually
 
-- remove the references (edit blocks) in the original pdf
-
-- add text boxes and paste the bibliography from the word document
-
-After revisions are made - pdf to word doc, then edit by hand 
+- edit as needed - all equations edited by hand

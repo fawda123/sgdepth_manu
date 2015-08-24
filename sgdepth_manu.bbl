@@ -79,7 +79,7 @@ Duarte CM. 1995.
 
 \bibitem[Elsdon and Connell, 2009]{Elsdon09}
 Elsdon TS, Connell SD. 2009.
-\newblock Spatial and temporal monitoring of coastal water quality: refeining
+\newblock Spatial and temporal monitoring of coastal water quality: refining
   the way we consider, gather, and interpret patterns.
 \newblock Aquatic Biology, 5(2):157--166.
 
@@ -98,8 +98,8 @@ Elsdon TS, Connell SD. 2009.
 
 \bibitem[Greve and Krause-Jensen, 2005]{Greve05}
 Greve T, Krause-Jensen D. 2005.
-\newblock Stability of of eelgrass (\textit{{Z}ostera marine {L}.}) depth
-  limits: influence of habitat type.
+\newblock Stability of eelgrass (\textit{{Z}ostera marine {L}.}) depth limits:
+  influence of habitat type.
 \newblock Marine Biology, 147(3):803--812.
 
 \bibitem[Hale et~al., 2004]{Hale04}
@@ -140,7 +140,7 @@ Iverson RL, Bittaker HF. 1986.
 \bibitem[Janicki and Wade, 1996]{Janicki96}
 Janicki A, Wade D. 1996.
 \newblock Estimating critical external nitrogen loads for the {T}ampa {B}ay
-  estuary: An empically based approach to setting management targets.
+  estuary: An empirically based approach to setting management targets.
 \newblock Technical Report 06-96, Tampa Bay National Estuary Program, St.
   Petersburg, Florida.
 
@@ -173,14 +173,14 @@ Koch EW. 2001.
 \bibitem[Lee et~al., 2005]{Lee05}
 Lee ZP, Du KP, Arnone R. 2005.
 \newblock A model for the diffuse attenuation of downwelling irradiance.
-\newblock Journal of Geophysical Research, 110(C2):10.
+\newblock Journal of Geophysical Research, 110(C2):1--15.
 
 \bibitem[Lottig et~al., 2014]{Lottig14}
 Lottig NR, Wagner T, Henry EN, Cheruvelil KS, Webster KE, Downing JA, Stow CA.
   2014.
 \newblock Long-term citizen-collected data reveal geographical patterns and
   temporal trends in water clarity.
-\newblock PLoS ONE, 9(4):e95769.
+\newblock PLoS ONE, 9(4):1--8.
 
 \bibitem[Poole and Atkins, 1929]{Poole29}
 Poole HH, Atkins WRG. 1929.
@@ -188,6 +188,12 @@ Poole HH, Atkins WRG. 1929.
   year.
 \newblock Journal of the Marine Biological Association of the United Kingdom,
   16:297--324.
+
+\bibitem[{RDCT (R Development Core Team)}, 2015]{RDCT15}
+{RDCT (R Development Core Team)}. 2015.
+\newblock {R: A language and environment for statistical computing, v3.2.0. R
+  Foundation for Statistical Computing, Vienna, Austria}.
+\newblock \url{http://www.R-project.org}.
 
 \bibitem[S{\o}ndergaard et~al., 2013]{Sondergaard13}
 S{\o}ndergaard M, Phillips G, Hellsten S, Kolada A, Ecke F, M\"{a}emets H,
