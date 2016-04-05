@@ -489,12 +489,10 @@ g_legend<-function(a.gplot){
   return(legend)}
 
 ######
-# get confidence intervals for doc object using MC sims
-# modified from...
-# http://rmazing.wordpress.com/2013/08/14/predictnls-part-1-monte-carlo-simulation-confidence-intervals-for-nls-models/
+# get prediction intervals for doc object
 #
 # doc_in doc input object
-# level percent level of confidence intervals
+# level percent level of prediction intervals
 # nsim number of monte carlo simulations for each value in newdata
 # trace logical for counter output
 sens <- function(doc_in, ...) UseMethod('sens')
@@ -531,22 +529,22 @@ sens.doc <- function(doc_in, level = 0.05, trace = T, remzero = T, ...){
   betavar <- vcovmod['xmid', 'xmid']
   gammavar <- vcovmod['scal', 'scal']
   covar <- vcovmod['xmid', 'scal']
-  slo_unc <- betavar + 4 * gammavar + 4 * covar
-  slo_unc <- 1.96 * sqrt(slo_unc)
+  slo_var <- betavar + 4 * gammavar + 4 * covar
+  slo_pr_int <- qnorm(1 - (level/2)) * sqrt(slo_var)
   
   # lower estimates based on uncertainty
-  z_cmax <- attr(doc_in, 'z_cmax') - slo_unc
-  z_cmin <- attr(doc_in, 'z_cmin') - slo_unc
-  z_cmed <- attr(doc_in, 'z_cmed') - slo_unc
-  lower_est <- list(lower_shift = -1 * slo_unc, z_cmin = z_cmin, z_cmed = z_cmed, z_cmax = z_cmax)
+  z_cmax <- attr(doc_in, 'z_cmax') - slo_pr_int
+  z_cmin <- attr(doc_in, 'z_cmin') - slo_pr_int
+  z_cmed <- attr(doc_in, 'z_cmed') - slo_pr_int
+  lower_est <- list(lower_shift = -1 * slo_pr_int, z_cmin = z_cmin, z_cmed = z_cmed, z_cmax = z_cmax)
     
   # upper estimates based on uncertainty
-  z_cmax <- attr(doc_in, 'z_cmax') + slo_unc
-  z_cmin <- attr(doc_in, 'z_cmin') + slo_unc
-  z_cmed <- attr(doc_in, 'z_cmed') + slo_unc
-  upper_est <- list(upper_shift = slo_unc, z_cmin = z_cmin, z_cmed = z_cmed, z_cmax = z_cmax)
+  z_cmax <- attr(doc_in, 'z_cmax') + slo_pr_int
+  z_cmin <- attr(doc_in, 'z_cmin') + slo_pr_int
+  z_cmed <- attr(doc_in, 'z_cmed') + slo_pr_int
+  upper_est <- list(upper_shift = slo_pr_int, z_cmin = z_cmin, z_cmed = z_cmed, z_cmax = z_cmax)
   
-  # replace all estimates with NA if z_cmax confidence interval includes zero
+  # replace all estimates with NA if z_cmax prediction interval includes zero
   if(remzero & lower_est$z_cmax <= 0){
 
     attr(doc_in, 'z_cmax') <- NA
