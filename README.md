@@ -4,6 +4,8 @@ Materials for manuscript describing seagrass depth of colonization estimates usi
 
 # Data
 
+Most data were created in `R/dat_proc.R`.  Others were created in the sg_depth repo.  
+
 `all_light.RData` Summarized max depth of colonization and light requirements for all segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay, created from `choc_light.RData`, `irl_light.RData` and `tb_light.RData`
 
 `buff_ex_dat.RData` Shapefile data for buff_ex figure as list, includes five shapefiles
