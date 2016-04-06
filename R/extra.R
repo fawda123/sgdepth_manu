@@ -1,104 +1,89 @@
-######
-# here's some nonsense about radii changes on conf intervals and est sd
-
-rm(list = ls())
-
-# tb polygon segment
-data(tb_seg)
-
-# secchi data
-data(secc_all)
-
-# tb seagrass points
-data(sgpts_2010_tb)
-
-##
-# subset secc_all to within ten years of sg data
-yrs <- strftime(secc_all$Date, '%Y') %>% 
-  as.numeric
-yrs <- yrs <= 2010 & yrs > 2000
-secc_all <- secc_all[yrs, ]
-
-##
-# run secchi_doc function with data
-rads <- seq(0.01, 0.1, length = 50)
-
-cl <- makeCluster(7)
-registerDoParallel(cl)
-
-# process
-out_comps <- foreach(rad = seq_along(rads)) %dopar% {
-  
-  # process, remove segment shapefile, add to output
-  tmp <- secc_doc(secc_all, sgpts_2010_tb, tb_seg, radius = rads[rad], '2010', 
-    trace = T)
-  tmp <- na.omit(tmp[['ave_dat']])
-  
-  conf_med <- median(tmp$maxd_conf)
-  zmax_iqr <- median(tmp$zmax_all)
-  
-  c(conf_med, zmax_iqr)
-  
-}
-
-to_plo <- data.frame(do.call('rbind', out_comps))
-to_plo$rads <- rads
-names(to_plo) <- c('radii', 'conf_med', 'zmax_iqr')
-
-plot(scale(conf_med) ~ radii, data = to_plo, type = 'p')
-points(scale(zmax_iqr) ~ radii, data = to_plo, col = 'red')
+# # comparing uncertainty estimates between old and new methods
+# 
+# data(ests_out_old)
+# 
+# datold <- ests_out %>% 
+#   select(seg, confint, lat, long) %>% 
+#   rename(oldint = confint) %>% 
+#   mutate(seg = as.character(seg))
+# 
+# data(ests_out)
+# 
+# datnew <- ests_out %>% 
+#   select(seg, confint, lat, long) %>% 
+#   rename(newint = confint) %>% 
+#   mutate(seg = as.character(seg))
+# 
+# tocomp <- left_join(datold, datnew, by = c('lat', 'long', 'seg'))
+# 
+# p <- ggplot(tocomp, aes(x = oldint, y = newint)) + 
+#   geom_point(size = 3, alpha = 0.7) + 
+#   facet_wrap(~seg) + 
+#   theme_bw() + 
+#   scale_x_continuous('Old', limits = c(0, 3.5)) +
+#   scale_y_continuous('New', limits = c(0, 3.5)) + 
+#   geom_abline(slope = 1, intercept = 0)
+# 
+# pdf('C:/Users/mbeck/Desktop/uncert_comp.pdf', height = 8, width = 8, family = 'serif')
+# print(p)
+# dev.off()
 
 ######
-# secchi boxplots for stations in each segment
-######
-#
+# resampling to evaluate prediction interval
 
-data(secc_all)
-data(irl_seg)
+library(ggplot2)
+library(dplyr)
 
-secc_dat <- secc_all
-seg_shp <- irl_seg
+data(shps)
 
-# clip secchi by seg
-# clip secchi data by segments
-sel <- !is.na(secc_dat %over% seg_shp)[, 1]
-secc <- secc_dat[sel, ]
+# segment and seagrass
+seg <- shps[['seg_820.shp']] # 820 segment polygon
+sgrass <- shps[['sgpts_2006_820.shp']] # 820 segment seagrass depth point
 
-# select only years within last ten of seagrass survey
-yrs <- strftime(secc$Date, '%Y') %>% 
-  as.numeric
-yrs <- yrs <= 2010 & yrs > 2000
-secc <- secc[yrs, ]
+# create sampling grid and test point
+set.seed(4321)
+est_pts <- grid_est(seg, spacing = 0.02)
+test_pt <- est_pts[27, ]
 
-# get unique locations of secchi data
-uni_secc <- data.frame(secc)[, c('Station_ID', 'Longitude', 'Latitude')]
-uni_secc <- unique(uni_secc)
-uni_secc <- SpatialPointsDataFrame(
-  coords = uni_secc[, c('Longitude', 'Latitude')], 
-  data = uni_secc[, 'Station_ID', drop = F]
-  )
+# subset seagrass with buffer around test point
+buff_pts <- buff_ext(sgrass, test_pt, buff = 0.06)
 
-secc$seg <- NA
-for(seg in as.character(irl_seg$Segment)){
+# create doc object with samples buffer points
+dat_in <- data.frame(buff_pts)
+est_vals <- doc_est(dat_in) %>% 
+  sens
+
+# get model covar, parameter estimates
+mod_est <- attr(est_vals, 'logis_mod')
+muvar <- coef(mod_est)
+muvar <- muvar[c('xmid', 'scal')]
+covar <- vcov(mod_est)
+covar <- covar[-1, -1]
+
+# upper/lower 95% prediction interval for the zcmax estimate 
+zc <- attr(est_vals, 'z_cmax')
+lo <- attr(est_vals, 'lower_est')$z_cmax
+hi <- attr(est_vals, 'upper_est')$z_cmax
+
+# simulated data
+resamps <- MASS::mvrnorm(n = 1000, mu = abs(muvar), Sigma = covar, empirical = TRUE)
+zctest <- resamps[, 1] + 2 * resamps[, 2]
+zctest <- data.frame(ests = zctest) 
+zctest$outs <- 'within'
+zctest$outs[with(zctest, ests < lo | ests > hi)] <- 'outside'
+
+# plot 
+p1 <- ggplot(data.frame(zc, lo, hi), aes(x = factor(1), y = zc, ymin = lo, ymax = hi)) + 
+  geom_jitter(data = zctest, aes(x = factor(2), y = ests, colour = outs), height = 0, width = 0.2, alpha = 0.6) +
+  geom_linerange() + 
+  scale_x_discrete(labels = c('Actual', 'Simulated')) + 
+  theme(
+    axis.title.x = element_blank(),
+    legend.position = 'none') + 
+  geom_point(size = 2) + 
+  ggtitle(paste(sum(zctest$outs == 'within')/nrow(zctest), ' of simulated are within\nthe prediction interval'))
   
-  to_sel <- irl_seg[irl_seg$Segment %in% seg, ]
-  sel <- !is.na(secc %over% to_sel)[, 1]
-  secc[sel, 'seg'] <- as.character(seg)
-  
-}
-
-# merge locations
-secc <- dplyr::left_join(data.frame(secc), data.frame(uni_secc), 
-  by = 'Station_ID') %>% 
-  mutate(SD = as.numeric(SD))
-
-# remove stations with only a few obs
-rems <- table(secc$Station_ID)
-rems <- names(rems)[rems < 10]
-secc <- secc[!secc$Station_ID %in% rems, ]
-
-ggplot(secc, aes(x = Station_ID, y = SD)) + 
-  geom_boxplot() +
-  facet_wrap(~ seg, scales = 'free_x')
-
+pdf('C:/Users/mbeck/Desktop/pi_check.pdf', height  = 5, width = 4, family = 'serif')
+print(p1)
+dev.off()
 
