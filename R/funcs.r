@@ -36,7 +36,6 @@ doc <- function(ls_in){
   
 }
 
-
 ######
 # formatting of values in S expressions
 form_fun <- function(x, rnd_val = 2, dig_val = 2, nsm_val = 2) {
@@ -66,9 +65,6 @@ logis_est <- function(dat_in, resp = 'sg_prp', new_vals = 500){
     list(x = as.name(resp)))
 
 	# model
-#   upper_bnds <- c(Asym = 2, xmid = Inf, scal = Inf)
-#   mod <- try({nls(form_in, data = pts, na.action = na.exclude,
-#     upper = upper_bnds, algorithm = 'port')}, silent = T)
 	mod <- try({nls(form_in, data = pts, na.action = na.exclude)}, silent = T)
 	
   # values for prediction
@@ -150,32 +146,54 @@ doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c
   
   # sanity check
   if(!'data.frame' %in% class(dat_in)) dat_in <- data.frame(dat_in)
+  if(any(sign(dat_in[, depth_var]) == -1))
+    stop('Depth values must be positive')
   
-	# order by depth, assumes column is negative
-  dat_in <- dat_in[order(dat_in[, depth_var], decreasing = T), ]
+	# order by depth
+  dat_in <- dat_in[order(dat_in[, depth_var]), ]
 	dat_in$depth <- dat_in[, depth_var]
-  
-  # bin depth values
-  dat_in[, depth_var] <- round(dat_in[, depth_var], 1)
-	
-	# cumulative sum of pts with all seagrass and all points
-	# assumes NA is empty
-	sg_pts <- table(dat_in[dat_in[, sg_var] %in% sg_cat, depth_var])
-  
+
+	# sg_cat to 1	
+	# convert NA to zero
+  dat_in[, sg_var] <- as.character(dat_in[, sg_var])
+	dat_in[dat_in[, sg_var] %in% sg_cat, sg_var] <- '1'
+	dat_in[dat_in[, sg_var] != 1, sg_var] <- '0'
+	dat_in[, sg_var] <- as.numeric(dat_in[, sg_var])
+
   # stop function if no seagrass found
-  if(length(sg_pts) == 0) stop('No seagrass present')
-  
-	sg_pts <- data.frame(Depth = names(sg_pts), sg_pts = as.numeric(sg_pts),
-		row.names = 1:length(sg_pts))
-	dep_pts <- table(dat_in[, depth_var])
-	dep_pts <- data.frame(Depth = names(dep_pts), dep_pts = as.numeric(dep_pts), 
-		row.names = 1:length(dep_pts))
+  if(sum(dat_in[, sg_var]) == 0) stop('No seagrass present')
 	
-	# combine all pts and seagrass pts, depth as numeric
-	pts <- merge(dep_pts, sg_pts, by = 'Depth', all.x = T)
-	pts$Depth <- as.numeric(as.character(pts$Depth))
-	# output
-  pts$sg_prp <- with(pts, sg_pts/dep_pts)
+	###
+  # check bin fits
+	bins <- seq(0.01, 0.2, by = 0.01)
+
+	errs <- rep(NA, length = length(bins))
+	for(bin in seq_along(bins)){
+
+	  depth_rng <- range(dat_in$depth)
+    depth_vals <- seq(0, depth_rng[2], by = bins[bin])
+    binned <- mutate(dat_in, 
+  	    depth_bin = cut(depth, depth_vals)
+  	  ) %>% 
+  	  group_by(depth_bin) %>% 
+  	  summarize(
+  	    sg_prp = sum(Seagrass)/length(Seagrass)
+  	    ) %>% 
+      mutate(
+        Depth = depth_vals[1 + as.numeric(depth_bin)]
+        ) %>% 
+      select(Depth, sg_prp)
+
+    mod <- logis_est(binned, 'sg_prp')$logis_mod
+    
+    if(is.na(mod)) next
+    
+    err <- sum(summary(mod)$residuals^2)
+    errs[bin] <- err
+    
+	}
+	
+	browser() # get min mod?
 	
 	##
 	# estimate a logistic growth function for the data
