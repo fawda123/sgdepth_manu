@@ -1,0 +1,30 @@
+\documentclass{article}
+
+\begin{document}
+
+<<results = 'asis', message = F>>=
+library(nlme)
+library(stargazer)
+
+data(ests_out)
+tmp <- filter(ests_out, seg == '303') %>% 
+  select(z_cmax, long, lat)
+
+modnl <- gls(z_cmax ~ 1, data = tmp)
+mod1 <- gls(z_cmax ~ 1, correlation = corSpher(form = ~ long + lat, nugget = TRUE), 
+  data = tmp)
+mod2 <- gls(z_cmax ~ 1, correlation = corLin(form = ~ long + lat, nugget = TRUE), 
+  data = tmp)
+mod3 <- gls(z_cmax ~ 1, correlation = corRatio(form = ~ long + lat, nugget = TRUE), 
+  data = tmp)
+mod4 <- gls(z_cmax ~ 1, correlation = corGaus(form = ~ long + lat, nugget = TRUE), 
+  data = tmp)
+mod5 <- gls(z_cmax ~ 1, correlation = corExp(form = ~ long + lat, nugget = TRUE), 
+  data = tmp)
+
+# AIC(modnl, mod1, mod2, mod3, mod4, mod5)
+
+stargazer(modnl, mod1, mod2, mod3, mod4, mod5)
+@
+
+\end{document}

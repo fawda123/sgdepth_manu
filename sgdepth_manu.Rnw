@@ -61,7 +61,12 @@ library(knitr)
 # set global chunk options
 opts_chunk$set(fig.path = 'figs/', fig.align='center', fig.show='hold',message=F,echo=F,results='asis',dev='pdf',dev.args=list(family='serif'),fig.pos='!ht',warning=F)
 options(replace.assign=TRUE,width=90,digits=1)
+
 source('R/funcs.r')
+library(tidyr)
+library(dplyr)
+library(purrr)
+library(nlme)
 @
 
 % get the version based on commit date
@@ -250,7 +255,6 @@ names(secchis) <- names(seg_summ)
 @
 
 Each coastal region varied by several characteristics that potentially explain variation of seagrass growth (\cref{tab:seg_summ}).  Mean surface area was \Sexpr{mean(areas)} square kilometers, with area decreasing for the Big Bend (\Sexpr{areas['Big Bend']} km), Upper Indian River Lagoon (\Sexpr{areas['Upper Indian River Lagoon']} km), Old Tampa Bay (\Sexpr{areas['Old Tampa Bay']} km), and Choctawhatchee Bay (\Sexpr{areas['W. Choctawhatchee Bay']} km) segments.  Mean depth was less than 5 meters for each segment, excluding Western Choctawhatchee Bay which was slightly deeper than the other segments (\Sexpr{depths['W. Choctawhatchee Bay']} m).  Maximum depths were considerably deeper for Choctawhatchee Bay (\Sexpr{mdepths['W. Choctawhatchee Bay']} m) and Old Tampa Bay (\Sexpr{mdepths['Old Tampa Bay']} m), as compared to the Big Bend (\Sexpr{mdepths['Big Bend']} m) and Indian River Lagoon (\Sexpr{depths['Upper Indian River Lagoon']} m) segments. Seagrasses covered a majority of the surface area for the Big Bend segment (\Sexpr{sgperc['Big Bend']} \%), whereas coverage was much less for Upper Indian River Lagoon (\Sexpr{sgperc['Upper Indian River Lagoon']} \%), Old Tampa Bay (\Sexpr{sgperc['Old Tampa Bay']} \%), and Western Choctawhatchee Bay (\Sexpr{sgperc['W. Choctawhatchee Bay']} \%).  Visual examination of the seagrass coverage maps for the respective year of each segment indicated that seagrasses were not uniformly distributed (\cref{fig:seg_all}).  Seagrasses in Western Choctawhatchee Bay were sparse with the exception of a large patch located to the west of the inlet connection with the Gulf of Mexico.  Seagrasses in the Big Bend segment were located throughout with noticeable declines near the outflow of the Steinhatchee River, whereas seagrasses in Old Tampa Bay and Upper Indian River Lagoon were generally confined to shallow areas near the shore. Seagrass coverage showed a partial decline toward the northern ends of both Old Tampa Bay and Upper Indian River Lagoon segments.  Water clarity as indicated by average secchi depths was similar between the segments (\Sexpr{mean(secchis)} m), although Choctawhatchee Bay had a slightly higher average (\Sexpr{secchis['W. Choctawhatchee Bay']} m).     
-
 % seagrass estimates from table
 <<echo = F>>=
 data(ests_seg)
@@ -485,38 +489,60 @@ latex(
 load(file = 'data/ests_seg.RData')
 load(file = 'data/ests_out.RData')
 
-# rearrange row orders for alphabetical
-segs <- c('WCB', 'BB', 'OTB', 'UIRL')
-levels(ests_seg$seg) <- segs
-ests_seg$seg <- as.character(ests_seg$seg)
-ests_seg <- ests_seg[order(ests_seg$seg), ]
-levels(ests_out$seg) <- segs
-ests_out$seg <- as.character(ests_out$seg)
-ests_out <- ests_out[order(ests_out$seg), ]
-segs <- sort(segs)
-
-# summarize spatail ests
-ests_out <- melt(ests_out, measure.var = c('z_cmin', 'z_cmed', 'z_cmax'))
-ests_out <- ddply(ests_out, .variable = c('seg', 'variable'),   
-  .fun = function(x) {
-    c(mean_val = mean(x$value),
-    sd_val = sd(x$value),
-    min_val = min(x$value),
-    max_val = max(x$value)
-    )
-  })
+# summarize spatial ests for grid points
+ests_summ <- select(ests_out, -optional, -confint, -lower_max) %>% 
+  gather('var', 'val', z_cmin:z_cmax) %>% 
+  group_by(seg, var) %>% 
+  nest %>% 
+  mutate(summs = map(data, function(x){
+    
+    # model to get average and ste that account for spatial corr
+    mod <- gls(val ~ 1, correlation = corGaus(form = ~ long + lat, nugget = TRUE), data = x) %>% 
+      summary %>% 
+      .$tTable
+    
+    # get all estimates
+    est <- mod[1]
+    est_ste <- mod[2]
+    est_std <- sd(x$val, na.rm = TRUE)
+    est_min <- min(x$val, na.rm = TRUE)
+    est_max <- max(x$val, na.rm = TRUE)
+    
+    # output
+    data.frame(est = est, est_ste = est_ste, est_std = est_std, est_min = est_min, est_max = est_max)
+    
+    })
+  ) %>% 
+  select(-data) %>% 
+  unnest
 
 # merge with segment wide ests
-ests_seg <- melt(ests_seg, measure.var = c('z_cmin', 'z_cmed', 'z_cmax'))
-to_tab <- merge(ests_seg[, c('seg', 'variable', 'value')], ests_out, by = c('seg', 'variable'))
-to_tab$variable <- factor(to_tab$variable, levels = c('z_cmin', 'z_cmed', 'z_cmax'))
-to_tab <- to_tab[order(to_tab$seg, to_tab$variable), ]
-names(to_tab) <- c('Segment', 'Estimate', 'Whole segment', 'Mean', 'St. Dev.', 'Min', 'Max')
+tonm <- grep('min$|med$|max$', names(ests_seg))
+names(ests_seg)[tonm] <- paste0(names(ests_seg)[tonm], '_estwide')
+to_tab <- select(ests_seg, -long, -lat) %>% 
+  gather('var', 'val', -seg) %>% 
+  mutate(var = gsub('z_', '', var)) %>% 
+  separate(var, c('var', 'typ'), sep = '_') %>% 
+  mutate(var = paste0('z_', var)) %>% 
+  spread(typ, val) %>% 
+  left_join(ests_summ, by = c('seg', 'var')) %>% 
+  mutate(
+    seg = factor(as.character(seg), 
+      levels = c('820', '902', '1502', '303'), 
+      labels = c('BB', 'OTB', 'UIRL', 'WCB')
+      ), 
+    var = factor(var, 
+      levels = c('z_cmin', 'z_cmed', 'z_cmax'), 
+      labels = c('$Z_{c,\\,min}$', '$Z_{c,\\,med}$', '$Z_{c,\\,max}$')
+      )
+  ) %>% 
+  arrange(seg, var)
+
+names(to_tab) <- c('Segment', 'Estimate', 'Whole Segment', 'Pred. Int. (+/-)', 'Mean', 'St. Err.', 'St. Dev.', 'Min', 'Max')
 
 # prep table
 estimate <- to_tab$Estimate
-estimate <- factor(estimate, levels = c('z_cmin', 'z_cmed', 'z_cmax'), 
-  labels = c('$Z_{c,\\,min}$', '$Z_{c,\\,med}$', '$Z_{c,\\,max}$'))
+segs <- levels(to_tab$Segment)
 nms <- names(to_tab)[-c(1, 2)]
 tab <- to_tab[, !names(to_tab) %in% c('Segment', 'Estimate')]
 
@@ -525,7 +551,7 @@ names(tab) <- nms
 
 foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize BB: Big Bend, OTB: Old Tampa Bay, UIRL: Upper Indian River Lagoon, WCB: Western Choctawhatchee Bay.' 
 
-cap.val <- "Summary of seagrass depth estimates (m) for each segment using all grid locations in \\cref{fig:all_ests}.  Whole segment estimates were obtained from all seagrass depth data for each segment."
+cap.val <- "Summary of seagrass depth estimates (m) for each segment in \\cref{fig:all_ests}.  Whole segment estimates and prediction intervals were obtained from a single point estimate that included all seagrass depth data for the segment. Mean, standard error, standard deviation, minimum, and maximum values are for multiple grid points within each segment in \\cref{fig:all_ests}.  Mean and standard error estimates were from intercept-only models that included Gaussian correlation structures to account for spatial dependencies between points."
 
 latex(
   tab,
@@ -543,56 +569,7 @@ latex(
 
 @
 
-% summary of sensitivity analysis
-<<eval = T, echo = F>>=
-
-# load data
-data(shps)
-data(ests_out)
-
-# summarize 
-to_tab <- group_by(ests_out, seg) %>% 
-  summarize(
-    `Mean` = mean(confint),
-    `St. Dev` = sd(confint), 
-    `Min` = min(confint), 
-    `Max` = max(confint)
-    )
-
-# prep table
-segs <- c('WCB', 'BB', 'OTB', 'UIRL')
-tab <- select(to_tab, -seg)
-nms <- names(tab)
-tab <- data.frame(apply(tab, 2, form_fun), stringsAsFactors = F)
-names(tab) <- nms
-
-cap.val <- "Summary of uncertainty for seagrass depth estimates (m) for each segment using all grid locations in \\cref{fig:all_ests}.  Summaries are based on the widths of 95\\% prediction intervals.  The uncertainty values are equally applicable to each seagrass depth measure ($Z_{c,\\,min}$, $Z_{c,\\,med}$, $Z_{c,\\,max}$)."
-
-foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize BB: Big Bend, OTB: Old Tampa Bay, UIRL: Upper Indian River Lagoon, WCB: Choctawhatchee Bay.' 
-
-col_heads <- c('Min year', 'Max year', '$n_{Secchi}$', '$n_{Z}$', 'Secchi', '$Z_{c,\\,max}$', '\\% light')
-
-# rearrange row orders for alphabetical
-arr <- order(segs)
-segs <- segs[arr]
-tab <- tab[arr, ]
-
-# output
-latex(
-  tab,
-  file = '',
-  rowlabel = 'Segment\\textsuperscript{\\textit{a}}',
-  caption = cap.val,
-  dcolumn = T,
-  caption.loc = 'top',
-  rowname = segs,
-  insert.bottom = foot.val,
-  label = 'tab:sens_summ'
-  )
-
-@
-
-% summary of light requirements analysis, max depth ests
+% summary of light requirements analysis, med depth ests
 <<eval = T, echo = F>>=
 
 ##
@@ -619,10 +596,10 @@ all_light <- rbind(choc_light, irl_light, tb_light) %>%
   group_by(bay, seg) %>% 
   summarize(
     n_locs = length(seg), 
-    mean_z_cmax = mean(z_c_all), 
-    sd_z_cmax = sd(z_c_all),
-    min_z_cmax = min(z_c_all),
-    max_z_cmax = max(z_c_all),
+    mean_z_cmed = mean(z_c_all), 
+    sd_z_cmed = sd(z_c_all),
+    min_z_cmed = min(z_c_all),
+    max_z_cmed = max(z_c_all),
     mean_light = mean(light),
     sd_light = sd(light),
     min_light = min(light),
@@ -649,7 +626,7 @@ tab <- matrix(tab, nrow = nrowtab, ncol = ncoltab)
 tab <- data.frame(tab)
 names(tab) <- nms
 
-cap.val<-'Summary of maximum depth of colonization ($Z_{c,\\,max}$, m) and light requirements (\\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  See \\cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.'
+cap.val<-'Summary of median depth of colonization ($Z_{c,\\,med}$, m) and light requirements (\\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  See \\cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.'
 
 foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize CCB: Central Choctawhatchee Bay, ECB: Eastern Choctawhatchee Bay, WCB: Western Choctawhatchee Bay, BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
 col_heads <- c('$n$', rep(c('Mean', 'St. Dev.', 'Min', 'Max'), 2))
@@ -663,7 +640,7 @@ latex(
   insert.bottom = foot.val,
   caption = cap.val,
   colheads = col_heads,
-  cgroup = c('', '{\\bf $Z_{c,\\,max}$}', '\\% light'), 
+  cgroup = c('', '{\\bf $Z_{c,\\,med}$}', '\\% light'), 
   n.cgroup = c(1, 4, 4),
   caption.loc = 'top',
   rowname = rows,
@@ -907,63 +884,15 @@ options(digits = 2)
 \end{figure}
 
 % example of estimating seagrass depth of colonization
-<<est_ex, cache = T, echo = F, results = 'hide', eval = T>>=
-
-data(shps)
-
-seg <- shps[['seg_820.shp']] # 820 segment polygon
-sgrass <- shps[['sgpts_2006_820.shp']] # 820 segment seagrass depth point
-# sgrass <- sgrass[sample(1:nrow(sgrass), 2000, replace = F),]
-
-set.seed(4321)
-est_pts <- grid_est(seg, spacing = 0.02)
-test_pt <- est_pts[27, ]
-
-buff_pts <- buff_ext(sgrass, test_pt, buff = 0.02)
-
-doc_in <- data.frame(buff_pts)
-dat <- doc_est(doc_in)
-
-##
-# plots 
-
-# base plot if no estimate is available
-pa <- plot(dat, baseonly = T)
-
-# base plot with logistic curve
-pb <- plot(dat, logisonly = T)
-  
-# complete plot
-pc <- plot(dat)
-
-pdf('figs/est_ex.pdf', height = 4.5, width = 8.5, family = 'serif')
-
-print(pa)
-print(pb)
-print(pc)
-
-dev.off()
-    
-@
 
 % example of depth of col ests for wbid - big bend 820
 \begin{figure}
 \centering
-\subfloat[][Proportion of points with seagrass by depth]{
-\includegraphics[page=1,width=0.5\textwidth]{figs/est_ex.pdf}
-\label{fig:est_ex1}
-}
 
-\subfloat[][Logistic growth curve fit through points]{
-\includegraphics[page=2,width=0.5\textwidth]{figs/est_ex.pdf}
-\label{fig:est_ex2}
-}
+\includegraphics[width=0.85\textwidth]{figs/Fig3_Hagy.pdf}
 
-\subfloat[][Depth estimates]{
-\includegraphics[page=3,width=0.5\textwidth]{figs/est_ex.pdf}
-\label{fig:est_ex3}
 }
-\caption{Methods for estimating seagrass depth of colonization using sampled seagrass depth points around a single location. \Cref{fig:est_ex1} is the proportion of points with seagrass by depth using depth points within the buffer of the test location in \cref{fig:buff_ex}.  \Cref{fig:est_ex2} adds a decreasing logistic growth curve fit through the points.  \Cref{fig:est_ex3} shows three depth estimates based on a linear curve through the inflection point of logistic growth curve, including 95\% prediction intervals based on the lighter green area around the linear curve.}
+\caption{Methods for estimating seagrass depth of colonization using sampled seagrass depth points around a single location. Three depth estimates ($Z_{c,\,min}$, $Z_{c,\,med}$, $Z_{c,\,max}$) are based on a linear curve through the inflection point of a logistic growth curve .  The logistic curve is defined by the parameters $\alpha$, $\beta$, and $\gamma$ and describes the decrease in the proportion of sample points with seagrass as a function of depth below mean tide leavel (MTL).  The top figure shows the estimation method when the linear curve intercepts $\alpha$ at depth greater than zero and the bottom figure shows the estimation method when the linear curve intercepts $\alpha$ at depth less than zero.}
 \label{fig:est_ex}
 \end{figure}
 
@@ -1005,7 +934,7 @@ for(i in 1:length(levs)){
   est_sub <- ests_out[ests_out$seg %in% levs[i], ]
   
   # points to plot
-  pt_plo <- data.frame(est_sub[, c('seg', 'long', 'lat', 'z_cmax', 'confint')])
+  pt_plo <- data.frame(est_sub[, c('seg', 'long', 'lat', 'z_cmax')])
   
   # segment base plot
   p_seg <- ggplot(seg_sub, aes(x = long, y = lat)) +
@@ -1022,46 +951,33 @@ for(i in 1:length(levs)){
   # z_cmax
   pa <- p_seg +
     geom_point(data = pt_plo, aes(x = long, y = lat, colour = z_cmax), 
-      size = pt_sz) +
-    scale_colour_gradientn(colours = col_vals) +
-    theme(legend.title = element_blank())
-
-  # confint
-  pb <- p_seg +
-    geom_point(data = pt_plo, aes(x = long, y = lat, colour = confint), 
-      size = pt_sz) +
+      size = pt_sz, alpha = 0.8) +
     scale_colour_gradientn(colours = col_vals) +
     theme(legend.title = element_blank())
 
   # legends
   paleg <- g_legend(pa)
-  pbleg <- g_legend(pb)
   pa <- pa + theme(legend.position = 'none')
-  pb <- pb + theme(legend.position = 'none')
-  
+
   # assign to global
   assign(paste0('pa', i), pa)
   assign(paste0('paleg', i), paleg)
-  assign(paste0('pb', i), pb)
-  assign(paste0('pbleg', i), pbleg)
-  
+
   }
 
 # labels
-lab1 <- expression(italic(Z ['c, max']))
-lab2 <- '95% prediction'
+# lab1 <- expression(italic(Z ['c, max']), '(m)')
 
 # arrange all as grob
-grobwidths <- c(1, 0.3, 1, 0.3)
+grobwidths <- c(1, 0.3)
 
-pdf('figs/all_ests.pdf', height = 8.5, width = 7, family = 'serif')
+pdf('figs/all_ests.pdf', height = 7, width = 7, family = 'serif')
 grid.arrange(
-arrangeGrob(grid::textGrob(lab1), grid::textGrob(lab2), ncol = 2), #widths = sum(grobwidths)/2), 
-  arrangeGrob(pa1, paleg1, pb1, pbleg1, ncol = 4, widths = grobwidths),
-  arrangeGrob(pa2, paleg2, pb2, pbleg2, ncol = 4, widths = grobwidths),
-  arrangeGrob(pa3, paleg3, pb3, pbleg3, ncol = 4, widths = grobwidths),
-  arrangeGrob(pa4, paleg4, pb4, pbleg4, ncol = 4, widths = grobwidths),
-  ncol = 1, heights = c(0.2, 1,1,1.25,1)
+  arrangeGrob(pa1, paleg1, ncol = 2, widths = grobwidths),
+  arrangeGrob(pa2, paleg2, ncol = 2, widths = grobwidths),
+  arrangeGrob(pa3, paleg3, ncol = 2, widths = grobwidths),
+  arrangeGrob(pa4, paleg4, ncol = 2, widths = grobwidths),
+  ncol = 2, widths = c(0.85, 1)
 )
 dev.off()
 
@@ -1069,7 +985,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
-\caption{Spatially-resolved estimates of seagrass depth limits (m) for four coastal segments of Florida. Maximum depth of colonization ($Z_{c,\,max}$) estimates are on the left and corresponding widths of the 95\% prediction intervals are on the right.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees. From top to bottom: Big Bend, Old Tampa Bay, Upper Indian R. Lagoon, Western Choctawhatchee Bay.}
+\caption{Spatially-resolved estimates of maximum seagrass depth of colonization (m) for four coastal segments of Florida.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees. From left to right, top to bottom: Big Bend, Old Tampa Bay, Upper Indian R. Lagoon, Western Choctawhatchee Bay.}
 \label{fig:all_ests}
 \end{figure}
 
@@ -1221,13 +1137,13 @@ dat <- dat[dat$light < 80, ]
 # color ramp for all graphs
 pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
 
-# legend formatting, z_cmax
+# legend formatting, z_cmed
 scls <- c(2, 9)
 scl_vals <- scales::rescale(dat$z_c_all, to = scls)
 leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
 leg_labs <- form_fun(leg_brks, 2, 2, 2)
 
-# map, z_cmax
+# map, z_cmed
 p1 <- ggplot(fortify(choc_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
@@ -1239,10 +1155,10 @@ p1 <- ggplot(fortify(choc_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous(labels = fmt()) + 
   ylab('Latitude') +
-  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, 
+  scale_size(name = bquote(italic('Z' ['c, med'])), range = scls, 
     breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, max'])), 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, med'])), 
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1254,11 +1170,11 @@ p1 <- p1 + theme(legend.position = 'none',
   axis.line.y = element_line()
   )
 
-# boxplots by seg, z_cmax
+# boxplots by seg, z_cmed
 # reorder seg labels
 p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
   geom_boxplot(fill = fill_col, width = 0.6) + 
-  ylab(bquote(italic('Z' ['c, max']))) +
+  ylab(bquote(italic('Z' ['c, med']))) +
   theme_classic() +
   theme(axis.title.x = element_blank(),
     axis.line.x = element_line(), 
@@ -1334,7 +1250,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/light_choc.pdf}
-\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
+\caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
 \label{fig:light_choc}
 \end{figure}
 
@@ -1361,13 +1277,13 @@ dat <- data.frame(tb_light)
 # color ramp for all graphs
 pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
 
-# legend formatting, z_cmax
+# legend formatting, z_cmed
 scls <- c(2, 9)
 scl_vals <- scales::rescale(dat$z_c_all, to = scls)
 leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
 leg_labs <- form_fun(leg_brks, 2, 2, 2)
 
-# map, z_cmax
+# map, z_cmed
 p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
@@ -1379,10 +1295,10 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous(labels = fmt()) + 
   ylab('Latitude') +
-  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, 
+  scale_size(name = bquote(italic('Z' ['c, med'])), range = scls, 
     breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, max'])), 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, med'])), 
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1394,13 +1310,13 @@ p1 <- p1 + theme(legend.position = 'none',
   axis.line.y = element_line()
   )
 
-# boxplots by seg, z_cmax
+# boxplots by seg, z_cmed
 # reorder seg labels
 segs <- c('LTB', 'MTB', 'HB', 'OTB')
 dat$seg <- factor(dat$seg, levels = segs) 
 p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
   geom_boxplot(fill = fill_col) + 
-  ylab(bquote(italic('Z' ['c, max']))) +
+  ylab(bquote(italic('Z' ['c, med']))) +
   theme_classic() +
   theme(axis.title.y = element_blank(),
     axis.line.x = element_line(), 
@@ -1459,7 +1375,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/light_tb.pdf}
-\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb}
 \end{figure}
 
@@ -1487,13 +1403,13 @@ dat <- data.frame(irl_light)
 # color ramp for all graphs
 pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
 
-# legend formatting, z_cmax
+# legend formatting, z_cmed
 scls <- c(2, 9)
 scl_vals <- scales::rescale(dat$z_c_all, to = scls)
 leg_brks <- seq(min(dat$z_c_all, na.rm =  T), max(dat$z_c_all, na.rm = T), length = 6)
 leg_labs <- form_fun(leg_brks, 2, 2, 2)
 
-# map, z_cmax
+# map, z_cmed
 p1 <- ggplot(fortify(irl_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
   geom_point(data = dat, aes(x = Longitude, y = Latitude, 
@@ -1505,9 +1421,9 @@ p1 <- ggplot(fortify(irl_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous() + 
   ylab('Latitude') +
-  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, breaks = leg_brks, 
+  scale_size(name = bquote(italic('Z' ['c, med'])), range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, max'])), 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, med'])), 
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1519,13 +1435,13 @@ p1 <- p1 + theme(legend.position = 'none',
   axis.line.y = element_line()
   )
 
-# boxplots by seg, z_cmax
+# boxplots by seg, z_cmed
 # reorder seg labels
 segs <- c('LSL', 'LIRL', 'LCIRL', 'UCIRL', 'BR', 'UIRL', 'LML', 'UML')
 dat$seg <- factor(dat$seg, levels = segs) 
 p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
   geom_boxplot(fill = fill_col) + 
-  ylab(bquote(italic('Z' ['c, max']))) +
+  ylab(bquote(italic('Z' ['c, med']))) +
   theme_classic() +
   theme(axis.title.y = element_blank(),
     axis.line.x = element_line(), 
@@ -1586,7 +1502,7 @@ options(digits = 1)
 \begin{figure}
 \centering
 \includegraphics[width = 0.8\textwidth]{figs/light_irl.pdf}
-\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.15 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
+\caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.15 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
 \label{fig:light_irl}
 \end{figure}
 

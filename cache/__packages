@@ -25,3 +25,6 @@ Formula
 Hmisc
 MASS
 dplyr
+tidyr
+purrr
+nlme

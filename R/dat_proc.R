@@ -1,4 +1,6 @@
 source('R/funcs.r')
+library(dplyr)
+library(tidyr)
 
 ######
 # summary of wbid characteristics
@@ -137,6 +139,8 @@ segs <- c('303', '820', '902', '1502')
 ests_seg <- vector('list', length = length(segs))
 names(ests_seg) <- segs
 
+# gets estimate for the whole segment and pred interval (+/- the value)
+# convulated because of doc_est_grd results if out_sens = T
 for(seg in segs){
     
   seg_shp <- shps[[paste0('seg_', gsub('^.*_', '', seg), '.shp')]]
@@ -144,8 +148,18 @@ for(seg in segs){
   
   rad <- 0.25 # sufficient for each seg
   test_loc <- rgeos::gCentroid(seg_shp)
-  ests <- doc_est_grd(test_loc, sgpts_shp, radius = rad, minpts = 1000, maxbin = 0.1)
+  ests <- doc_est_grd(test_loc, sgpts_shp, radius = rad, minpts = 1000, maxbin = 0.1, out_sens = T) %>% 
+    data.frame
 
+  # format to get pred int (+/-)    
+  z_cmin_pm <- ests$h_z_cmin - ests$z_cmin
+  z_cmed_pm <- ests$h_z_cmed - ests$z_cmed
+  z_cmax_pm <- ests$h_z_cmax - ests$z_cmax
+  ests <- ests[c('z_cmin', 'z_cmed', 'z_cmax', 'x', 'y')]
+  ests <- c(ests, z_cmin_pm = z_cmin_pm, z_cmed_pm = z_cmed_pm, z_cmax_pm = z_cmax_pm) %>% 
+    data.frame
+  
+  # add to output
   ests_seg[[seg]] <- data.frame(ests, seg = seg)
   
 }
@@ -293,3 +307,92 @@ dat <- dat[dat$light > 4 & dat$maxd_conf < 1 , ]
 
 irl_light <- dat
 save(irl_light, file = 'data/irl_light.RData')
+
+######
+# Choctawhatchee light using z_cmax
+
+source('R/funcs.r')
+
+# load data
+data(choc_sats_crc)
+data(choc_seg)
+data(sgpts_2007_choc)
+ave_rast <- choc_sats_crc[['ave_rast']]
+
+# create sampling grid, 0.01 dec degree spacing
+choc_grd <- grid_est(choc_seg, 0.005)
+
+# sample the satellit clarity raster
+samp_vals <- raster::extract(ave_rast, choc_grd, df = TRUE)[, -1]
+samp_vals <- na.omit(samp_vals)
+names(samp_vals) <- c('KD', 'Longitude', 'Latitude')
+coordinates(samp_vals) <- c('Longitude', 'Latitude')
+
+# process for seagrass depth limits and light requirements
+proc <- kd_doc(samp_vals, sgpts_2007_choc, choc_seg, radius = 0.04, z_est = 'z_cmax', trace = T)
+dat <- na.omit(proc)
+
+choc_light_zcmax <- dat
+save(choc_light_zcmax, file = 'data/choc_light_zcmax.RData')
+
+######
+# TB light requirements zcmax
+
+source('R/funcs.r')
+
+# load data
+data(tb_sats)
+data(tb_seg)
+data(sgpts_2010_tb)
+ave_rast <- tb_sats[['ave_rast']]
+
+# create sampling grid, 0.01 dec degree spacing
+tb_grd <- grid_est(tb_seg, 0.01)
+
+# sample the satellit clarity raster
+samp_vals <- raster::extract(ave_rast, tb_grd, sp = T) %>% 
+  data.frame  
+names(samp_vals) <- c('clarity', 'Longitude', 'Latitude')
+coordinates(samp_vals) <- c('Longitude', 'Latitude')
+
+# process for seagrass depth limits and light requirements
+proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, seg_pts_yr = 2010, radius = 0.1, z_est = 'z_cmax', trace = T)
+dat <- na.omit(proc)
+
+tb_light_zcmax <- dat
+save(tb_light_zcmax, file = 'data/tb_light_zcmax.RData')
+
+######
+# irl light requirements, z_cmax
+
+source('R/funcs.r')
+
+# irl polygon segment
+data(irl_seg)
+
+# irl secchi data
+data(secc_all)
+
+# irl seagrass points
+data(sgpts_2009_irl)
+
+# select only years within last ten of seagrass survey
+yrs <- strftime(secc_all$Date, '%Y') %>% 
+  as.numeric
+yrs <- yrs <= 2009 & yrs > 1999
+secc_all <- secc_all[yrs, ]
+
+# remove stations with less than five observations
+rems <- table(secc_all$Station_ID)
+rems <- names(rems)[rems < 5]
+secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
+
+# process, get ave secchi data results
+proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, seg_pts_yr = '2009', z_est = 'z_cmax', trace = T)
+dat <- na.omit(proc)
+
+#remote bad secchi values and low conf
+dat <- dat[dat$light > 4 & dat$maxd_conf < 1 , ] 
+
+irl_light_zcmax <- dat
+save(irl_light_zcmax, file = 'data/irl_light_zcmax.RData')

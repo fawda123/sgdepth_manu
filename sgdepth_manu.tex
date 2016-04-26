@@ -139,7 +139,7 @@
   \\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
   \\{\textit {\normalsize Phone: 850-934-9308, Fax: 850-934-2401, Email: \href{mailto:le.chengfeng@epa.gov}{le.chengfeng@epa.gov}}}
   \vspace{1in} 
-  \\ Version Date:   Fri Apr 15 11:28:16 2016 -0500
+  \\ Version Date:   Tue Apr 26 08:41:54 2016 -0500
 	}
 \date{}
 \maketitle
@@ -246,7 +246,6 @@ Two approaches were used to estimate light requirements based on the availabilit
 
 
 Each coastal region varied by several characteristics that potentially explain variation of seagrass growth (\cref{tab:seg_summ}).  Mean surface area was 191.2 square kilometers, with area decreasing for the Big Bend (271.4 km), Upper Indian River Lagoon (228.5 km), Old Tampa Bay (205.5 km), and Choctawhatchee Bay (59.4 km) segments.  Mean depth was less than 5 meters for each segment, excluding Western Choctawhatchee Bay which was slightly deeper than the other segments (5.3 m).  Maximum depths were considerably deeper for Choctawhatchee Bay (11.9 m) and Old Tampa Bay (10.4 m), as compared to the Big Bend (3.6 m) and Indian River Lagoon (1.4 m) segments. Seagrasses covered a majority of the surface area for the Big Bend segment (74.8 \%), whereas coverage was much less for Upper Indian River Lagoon (32.8 \%), Old Tampa Bay (11.9 \%), and Western Choctawhatchee Bay (5.9 \%).  Visual examination of the seagrass coverage maps for the respective year of each segment indicated that seagrasses were not uniformly distributed (\cref{fig:seg_all}).  Seagrasses in Western Choctawhatchee Bay were sparse with the exception of a large patch located to the west of the inlet connection with the Gulf of Mexico.  Seagrasses in the Big Bend segment were located throughout with noticeable declines near the outflow of the Steinhatchee River, whereas seagrasses in Old Tampa Bay and Upper Indian River Lagoon were generally confined to shallow areas near the shore. Seagrass coverage showed a partial decline toward the northern ends of both Old Tampa Bay and Upper Indian River Lagoon segments.  Water clarity as indicated by average secchi depths was similar between the segments (1.5 m), although Choctawhatchee Bay had a slightly higher average (2.1 m).     
-
 % seagrass estimates from table
 
 
@@ -331,66 +330,46 @@ Secchi (se)&  0.19&  0.02&  0.02&  0.08\tabularnewline
 %latex.default(tab, file = "", rowlabel = "{\\bf Segment\\textsuperscript{\\textit{a}}}",     caption = cap.val, dcolumn = T, caption.loc = "top", rgroup = segs,     n.rgroup = rep(3, 4), insert.bottom = foot.val, rowname = estimate,     label = "tab:est_summ")%
 \newcolumntype{.}{D{.}{.}{-1}}
 \begin{table}[!tbp]
-\caption{Summary of seagrass depth estimates (m) for each segment using all grid locations in \cref{fig:all_ests}.  Whole segment estimates were obtained from all seagrass depth data for each segment.\label{tab:est_summ}} 
+\caption{Summary of seagrass depth estimates (m) for each segment in \cref{fig:all_ests}.  Whole segment estimates and prediction intervals were obtained from a single point estimate that included all seagrass depth data for the segment. Mean, standard error, standard deviation, minimum, and maximum values are for multiple grid points within each segment in \cref{fig:all_ests}.  Mean and standard error estimates were from intercept-only models that included Gaussian correlation structures to account for spatial dependencies between points.\label{tab:est_summ}} 
 \begin{center}
-\begin{tabular}{llllll}
+\begin{tabular}{llllllll}
 \hline\hline
-\multicolumn{1}{l}{{\bf Segment\textsuperscript{\textit{a}}}}&\multicolumn{1}{c}{Whole segment}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
+\multicolumn{1}{l}{{\bf Segment\textsuperscript{\textit{a}}}}&\multicolumn{1}{c}{Whole Segment}&\multicolumn{1}{c}{Pred. Int. (+/-)}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Err.}&\multicolumn{1}{c}{St. Dev.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
 \hline
-{\bfseries BB}&&&&&\tabularnewline
-~~$Z_{c,\,min}$&0.75&1.45&0.79&0.00&2.72\tabularnewline
-~~$Z_{c,\,med}$&2.29&1.84&0.76&0.55&2.97\tabularnewline
-~~$Z_{c,\,max}$&3.84&2.23&0.81&0.74&3.48\tabularnewline
+{\bfseries BB}&&&&&&&\tabularnewline
+~~$Z_{c,\,min}$&0.75&0.25&1.56&0.18&0.79&0.00&2.72\tabularnewline
+~~$Z_{c,\,med}$&2.29&0.19&1.94&0.17&0.76&0.55&2.97\tabularnewline
+~~$Z_{c,\,max}$&3.84&0.43&2.29&0.19&0.81&0.74&3.48\tabularnewline
 \hline
-{\bfseries OTB}&&&&&\tabularnewline
-~~$Z_{c,\,min}$&0.83&0.63&0.28&0.05&1.48\tabularnewline
-~~$Z_{c,\,med}$&0.95&0.94&0.30&0.33&1.74\tabularnewline
-~~$Z_{c,\,max}$&1.07&1.24&0.40&0.34&2.04\tabularnewline
+{\bfseries OTB}&&&&&&&\tabularnewline
+~~$Z_{c,\,min}$&0.83&0.16&0.58&0.07&0.28&0.05&1.48\tabularnewline
+~~$Z_{c,\,med}$&0.95&0.07&0.86&0.08&0.30&0.33&1.74\tabularnewline
+~~$Z_{c,\,max}$&1.07&0.21&1.17&0.12&0.40&0.34&2.04\tabularnewline
 \hline
-{\bfseries UIRL}&&&&&\tabularnewline
-~~$Z_{c,\,min}$&1.19&1.34&0.27&0.75&2.01\tabularnewline
-~~$Z_{c,\,med}$&1.48&1.52&0.23&0.98&2.08\tabularnewline
-~~$Z_{c,\,max}$&1.77&1.70&0.23&1.11&2.16\tabularnewline
+{\bfseries UIRL}&&&&&&&\tabularnewline
+~~$Z_{c,\,min}$&1.19&0.04&1.36&0.06&0.27&0.75&2.01\tabularnewline
+~~$Z_{c,\,med}$&1.48&0.02&1.51&0.08&0.23&0.98&2.08\tabularnewline
+~~$Z_{c,\,max}$&1.77&0.05&1.63&0.08&0.23&1.11&2.16\tabularnewline
 \hline
-{\bfseries WCB}&&&&&\tabularnewline
-~~$Z_{c,\,min}$&1.84&1.62&0.34&0.78&2.29\tabularnewline
-~~$Z_{c,\,med}$&2.17&2.00&0.31&1.51&2.51\tabularnewline
-~~$Z_{c,\,max}$&2.50&2.38&0.39&1.75&3.10\tabularnewline
+{\bfseries WCB}&&&&&&&\tabularnewline
+~~$Z_{c,\,min}$&1.84&0.42&1.58&0.11&0.34&0.78&2.29\tabularnewline
+~~$Z_{c,\,med}$&2.17&0.22&1.96&0.10&0.31&1.51&2.51\tabularnewline
+~~$Z_{c,\,max}$&2.50&0.47&2.36&0.14&0.39&1.75&3.10\tabularnewline
 \hline
 \end{tabular}\end{center}
 
 \textsuperscript{\textit{a}}\footnotesize BB: Big Bend, OTB: Old Tampa Bay, UIRL: Upper Indian River Lagoon, WCB: Western Choctawhatchee Bay.\end{table}
 
 
-% summary of sensitivity analysis
-%latex.default(tab, file = "", rowlabel = "Segment\\textsuperscript{\\textit{a}}",     caption = cap.val, dcolumn = T, caption.loc = "top", rowname = segs,     insert.bottom = foot.val, label = "tab:sens_summ")%
-\newcolumntype{.}{D{.}{.}{-1}}
-\begin{table}[!tbp]
-\caption{Summary of uncertainty for seagrass depth estimates (m) for each segment using all grid locations in \cref{fig:all_ests}.  Summaries are based on the widths of 95\% prediction intervals.  The uncertainty values are equally applicable to each seagrass depth measure ($Z_{c,\,min}$, $Z_{c,\,med}$, $Z_{c,\,max}$).\label{tab:sens_summ}} 
-\begin{center}
-\begin{tabular}{lllll}
-\hline\hline
-\multicolumn{1}{l}{Segment\textsuperscript{\textit{a}}}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
-\hline
-BB&0.33&0.31&0.00&1.63\tabularnewline
-OTB&0.69&0.55&0.01&2.86\tabularnewline
-UIRL&0.12&0.09&0.00&0.63\tabularnewline
-WCB&1.40&0.82&0.52&4.30\tabularnewline
-\hline
-\end{tabular}\end{center}
-
-\textsuperscript{\textit{a}}\footnotesize BB: Big Bend, OTB: Old Tampa Bay, UIRL: Upper Indian River Lagoon, WCB: Choctawhatchee Bay.\end{table}
-
-
-% summary of light requirements analysis, max depth ests
-%latex.default(tab, file = "", rowlabel = "Segment\\textsuperscript{\\textit{a}}",     rgroup = c("Choctawhatchee Bay", "Indian River Lagoon", "Tampa Bay"),     n.rgroup = c(3, 7, 4), insert.bottom = foot.val, caption = cap.val,     colheads = col_heads, cgroup = c("", "{\\bf $Z_{c,\\,max}$}",         "\\% light"), n.cgroup = c(1, 4, 4), caption.loc = "top",     rowname = rows, size = "small", label = "tab:light_summ")%
+% summary of light requirements analysis, med depth ests
+%latex.default(tab, file = "", rowlabel = "Segment\\textsuperscript{\\textit{a}}",     rgroup = c("Choctawhatchee Bay", "Indian River Lagoon", "Tampa Bay"),     n.rgroup = c(3, 7, 4), insert.bottom = foot.val, caption = cap.val,     colheads = col_heads, cgroup = c("", "{\\bf $Z_{c,\\,med}$}",         "\\% light"), n.cgroup = c(1, 4, 4), caption.loc = "top",     rowname = rows, size = "small", label = "tab:light_summ")%
 \begin{table}[!tbp]
 {\small
-\caption{Summary of maximum depth of colonization ($Z_{c,\,max}$, m) and light requirements (\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  See \cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.\label{tab:light_summ}} 
+\caption{Summary of median depth of colonization ($Z_{c,\,med}$, m) and light requirements (\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  See \cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.\label{tab:light_summ}} 
 \begin{center}
 \begin{tabular}{llcllllcllll}
 \hline\hline
-\multicolumn{1}{l}{\bfseries Segment\textsuperscript{\textit{a}}}&\multicolumn{1}{c}{\bfseries }&\multicolumn{1}{c}{\bfseries }&\multicolumn{4}{c}{\bfseries {\bf $Z_{c,\,max}$}}&\multicolumn{1}{c}{\bfseries }&\multicolumn{4}{c}{\bfseries \% light}\tabularnewline
+\multicolumn{1}{l}{\bfseries Segment\textsuperscript{\textit{a}}}&\multicolumn{1}{c}{\bfseries }&\multicolumn{1}{c}{\bfseries }&\multicolumn{4}{c}{\bfseries {\bf $Z_{c,\,med}$}}&\multicolumn{1}{c}{\bfseries }&\multicolumn{4}{c}{\bfseries \% light}\tabularnewline
 \cline{4-7} \cline{9-12}
 \multicolumn{1}{l}{}&\multicolumn{1}{c}{$n$}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
 \hline
@@ -459,25 +438,14 @@ WCB&1.40&0.82&0.52&4.30\tabularnewline
 
 % example of estimating seagrass depth of colonization
 
-
 % example of depth of col ests for wbid - big bend 820
 \begin{figure}
 \centering
-\subfloat[][Proportion of points with seagrass by depth]{
-\includegraphics[page=1,width=0.5\textwidth]{figs/est_ex.pdf}
-\label{fig:est_ex1}
-}
 
-\subfloat[][Logistic growth curve fit through points]{
-\includegraphics[page=2,width=0.5\textwidth]{figs/est_ex.pdf}
-\label{fig:est_ex2}
-}
+\includegraphics[width=0.85\textwidth]{figs/Fig3_Hagy.pdf}
 
-\subfloat[][Depth estimates]{
-\includegraphics[page=3,width=0.5\textwidth]{figs/est_ex.pdf}
-\label{fig:est_ex3}
 }
-\caption{Methods for estimating seagrass depth of colonization using sampled seagrass depth points around a single location. \Cref{fig:est_ex1} is the proportion of points with seagrass by depth using depth points within the buffer of the test location in \cref{fig:buff_ex}.  \Cref{fig:est_ex2} adds a decreasing logistic growth curve fit through the points.  \Cref{fig:est_ex3} shows three depth estimates based on a linear curve through the inflection point of logistic growth curve, including 95\% prediction intervals based on the lighter green area around the linear curve.}
+\caption{Methods for estimating seagrass depth of colonization using sampled seagrass depth points around a single location. Three depth estimates ($Z_{c,\,min}$, $Z_{c,\,med}$, $Z_{c,\,max}$) are based on a linear curve through the inflection point of a logistic growth curve .  The logistic curve is defined by the parameters $\alpha$, $\beta$, and $\gamma$ and describes the decrease in the proportion of sample points with seagrass as a function of depth below mean tide leavel (MTL).  The top figure shows the estimation method when the linear curve intercepts $\alpha$ at depth greater than zero and the bottom figure shows the estimation method when the linear curve intercepts $\alpha$ at depth less than zero.}
 \label{fig:est_ex}
 \end{figure}
 
@@ -486,7 +454,7 @@ WCB&1.40&0.82&0.52&4.30\tabularnewline
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
-\caption{Spatially-resolved estimates of seagrass depth limits (m) for four coastal segments of Florida. Maximum depth of colonization ($Z_{c,\,max}$) estimates are on the left and corresponding widths of the 95\% prediction intervals are on the right.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees. From top to bottom: Big Bend, Old Tampa Bay, Upper Indian R. Lagoon, Western Choctawhatchee Bay.}
+\caption{Spatially-resolved estimates of maximum seagrass depth of colonization (m) for four coastal segments of Florida.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees. From left to right, top to bottom: Big Bend, Old Tampa Bay, Upper Indian R. Lagoon, Western Choctawhatchee Bay.}
 \label{fig:all_ests}
 \end{figure}
 
@@ -513,7 +481,7 @@ WCB&1.40&0.82&0.52&4.30\tabularnewline
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/light_choc.pdf}
-\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
+\caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
 \label{fig:light_choc}
 \end{figure}
 
@@ -522,7 +490,7 @@ WCB&1.40&0.82&0.52&4.30\tabularnewline
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/light_tb.pdf}
-\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb}
 \end{figure}
 
@@ -531,7 +499,7 @@ WCB&1.40&0.82&0.52&4.30\tabularnewline
 \begin{figure}
 \centering
 \includegraphics[width = 0.8\textwidth]{figs/light_irl.pdf}
-\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.15 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
+\caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.15 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
 \label{fig:light_irl}
 \end{figure}
 

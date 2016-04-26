@@ -1,0 +1,112 @@
+\documentclass{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(nlme)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'nlme' was built under R version 3.2.4}}\begin{alltt}
+\hlkwd{library}\hlstd{(stargazer)}
+
+\hlkwd{data}\hlstd{(ests_out)}
+\hlstd{tmp} \hlkwb{<-} \hlkwd{filter}\hlstd{(ests_out, seg} \hlopt{==} \hlstr{'303'}\hlstd{)} \hlopt{%>%}
+  \hlkwd{select}\hlstd{(z_cmax, long, lat)}
+
+\hlstd{modnl} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{data} \hlstd{= tmp)}
+\hlstd{mod1} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{correlation} \hlstd{=} \hlkwd{corSpher}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{long} \hlopt{+} \hlstd{lat,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
+  \hlkwc{data} \hlstd{= tmp)}
+\hlstd{mod2} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{correlation} \hlstd{=} \hlkwd{corLin}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{long} \hlopt{+} \hlstd{lat,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
+  \hlkwc{data} \hlstd{= tmp)}
+\hlstd{mod3} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{correlation} \hlstd{=} \hlkwd{corRatio}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{long} \hlopt{+} \hlstd{lat,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
+  \hlkwc{data} \hlstd{= tmp)}
+\hlstd{mod4} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{correlation} \hlstd{=} \hlkwd{corGaus}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{long} \hlopt{+} \hlstd{lat,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
+  \hlkwc{data} \hlstd{= tmp)}
+\hlstd{mod5} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{correlation} \hlstd{=} \hlkwd{corExp}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{long} \hlopt{+} \hlstd{lat,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
+  \hlkwc{data} \hlstd{= tmp)}
+
+\hlcom{# AIC(modnl, mod1, mod2, mod3, mod4, mod5)}
+
+\hlkwd{stargazer}\hlstd{(modnl, mod1, mod2, mod3, mod4, mod5)}
+\end{alltt}
+\end{kframe}
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Tue, Apr 26, 2016 - 2:05:43 PM
+\begin{table}[!htbp] \centering 
+  \caption{} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{6}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-7} 
+\\[-1.8ex] & \multicolumn{6}{c}{z\_cmax} \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6)\\ 
+\hline \\[-1.8ex] 
+ Constant & 2.382$^{***}$ & 2.355$^{***}$ & 2.271$^{***}$ & 2.356$^{***}$ & 2.364$^{***}$ & 2.349$^{***}$ \\ 
+  & (0.070) & (0.136) & (0.506) & (0.219) & (0.144) & (0.177) \\ 
+  & & & & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 31 & 31 & 31 & 31 & 31 & 31 \\ 
+Log Likelihood & $-$16.082 & $-$7.722 & $-$9.699 & $-$8.044 & $-$7.326 & $-$8.639 \\ 
+Akaike Inf. Crit. & 36.165 & 23.445 & 27.399 & 24.088 & 22.652 & 25.279 \\ 
+Bayesian Inf. Crit. & 38.967 & 29.050 & 33.003 & 29.693 & 28.256 & 30.883 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{6}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+
+\end{document}
