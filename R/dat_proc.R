@@ -1,3 +1,5 @@
+source('R/funcs.r')
+
 ######
 # summary of wbid characteristics
 
@@ -142,7 +144,7 @@ for(seg in segs){
   
   rad <- 0.25 # sufficient for each seg
   test_loc <- rgeos::gCentroid(seg_shp)
-  ests <- doc_est_grd(test_loc, sgpts_shp, radius = rad)
+  ests <- doc_est_grd(test_loc, sgpts_shp, radius = rad, minpts = 1000, maxbin = 0.1)
 
   ests_seg[[seg]] <- data.frame(ests, seg = seg)
   
@@ -224,7 +226,7 @@ names(samp_vals) <- c('KD', 'Longitude', 'Latitude')
 coordinates(samp_vals) <- c('Longitude', 'Latitude')
 
 # process for seagrass depth limits and light requirements
-proc <- kd_doc(samp_vals, sgpts_2007_choc, choc_seg, radius = 0.04, trace = T)
+proc <- kd_doc(samp_vals, sgpts_2007_choc, choc_seg, radius = 0.04, z_est = 'z_cmed', trace = T)
 dat <- na.omit(proc)
 
 choc_light <- dat
@@ -251,7 +253,7 @@ names(samp_vals) <- c('clarity', 'Longitude', 'Latitude')
 coordinates(samp_vals) <- c('Longitude', 'Latitude')
 
 # process for seagrass depth limits and light requirements
-proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, seg_pts_yr = 2010, radius = 0.1, trace = T)
+proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, seg_pts_yr = 2010, radius = 0.1, z_est = 'z_cmed', trace = T)
 dat <- na.omit(proc)
 
 tb_light <- dat
@@ -283,7 +285,7 @@ rems <- names(rems)[rems < 5]
 secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
 
 # process, get ave secchi data results
-proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, seg_pts_yr = '2009', trace = T)
+proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, seg_pts_yr = '2009', z_est = 'z_cmed', trace = T)
 dat <- na.omit(proc)
 
 #remote bad secchi values and low conf

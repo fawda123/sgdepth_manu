@@ -142,8 +142,10 @@ get_ests <- function(dat_in, asym){
 # 'dat_in' is data from 'buff_ext'
 # 'depth_var' is name of depth column in input data
 # 'sg_var' is name of seagrass column in input data
-doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c('Continuous', 'Discontinuous')){
-  
+# 'maxbin' maximum bin size
+# 'minpts' minimum points in a bin
+doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c('Continuous', 'Discontinuous'), maxbin = 0.5, minpts = 50){
+
   # sanity check
   if(!'data.frame' %in% class(dat_in)) dat_in <- data.frame(dat_in)
   if(any(sign(dat_in[, depth_var]) == -1))
@@ -157,47 +159,42 @@ doc_est <- function(dat_in, depth_var = 'Depth', sg_var = 'Seagrass', sg_cat = c
 	# convert NA to zero
   dat_in[, sg_var] <- as.character(dat_in[, sg_var])
 	dat_in[dat_in[, sg_var] %in% sg_cat, sg_var] <- '1'
-	dat_in[dat_in[, sg_var] != 1, sg_var] <- '0'
+	dat_in[dat_in[, sg_var] != 1 | is.na(dat_in[, sg_var]), sg_var] <- '0'
 	dat_in[, sg_var] <- as.numeric(dat_in[, sg_var])
 
   # stop function if no seagrass found
   if(sum(dat_in[, sg_var]) == 0) stop('No seagrass present')
-	
-	###
-  # check bin fits
-	bins <- seq(0.01, 0.2, by = 0.01)
 
-	errs <- rep(NA, length = length(bins))
-	for(bin in seq_along(bins)){
-
-	  depth_rng <- range(dat_in$depth)
-    depth_vals <- seq(0, depth_rng[2], by = bins[bin])
-    binned <- mutate(dat_in, 
-  	    depth_bin = cut(depth, depth_vals)
-  	  ) %>% 
-  	  group_by(depth_bin) %>% 
-  	  summarize(
-  	    sg_prp = sum(Seagrass)/length(Seagrass)
-  	    ) %>% 
-      mutate(
-        Depth = depth_vals[1 + as.numeric(depth_bin)]
-        ) %>% 
-      select(Depth, sg_prp)
-
-    mod <- logis_est(binned, 'sg_prp')$logis_mod
-    
-    if(is.na(mod)) next
-    
-    err <- sum(summary(mod)$residuals^2)
-    errs[bin] <- err
-    
+	# create bins from shallow to inreasing depth
+	# each is a maximum width, unless there are at least a minimum number of points in the bin that define the bin width
+	dat_sub <- dat_in
+	pts <- NULL
+	while(1 <= nrow(dat_sub)){
+	  
+	  dep_rng <- with(dat_sub, Depth <= (Depth[1] + maxbin))
+	  dep_rng <- dat_sub[dep_rng, , drop = F]
+	  dep_rng <- dep_rng[1:min(minpts, nrow(dep_rng)), , drop = F]
+	  dep_bin <- with(dep_rng, data.frame(
+	    mean(Depth, na.rm = T), 
+	    length(Depth), 
+	    mean(Seagrass, na.rm = T)
+	    )
+	  )
+	  
+	  pts <- rbind(pts, dep_bin)
+	  dat_sub <- dat_sub[-c(1:nrow(dep_rng)), , drop = F]
+	  
 	}
+
+	names(pts) <- c('Depth', 'n', 'sg_prp')
 	
-	browser() # get min mod?
+	# remove depth bins with zero seagrass
+	pts <- pts[pts$sg_prp > 0, ]
 	
 	##
 	# estimate a logistic growth function for the data
-  mod_est <- logis_est(pts, 'sg_prp')
+  
+	mod_est <- logis_est(pts, 'sg_prp')
 
   # output
 	preds <- mod_est$pred
@@ -424,6 +421,8 @@ buff_ext <- function(pts, center, buff = 0.03){
 #' @param rem_miss logical indicating if unestimable points are removed from the output, default \code{TRUE}
 #' @param trace logical indicating if progress is returned in console, default \code{FALSE}
 #' @param out_sens logical indicating if output should include lower and upper estimates of seagrass growth limits
+#' @param maxbin maximum bin size, passed to \code{\link{doc_est}}
+#' @param minpts minimum points in a bin, passed to \code{\link{doc_est}}
 #' @param ... arguments passed to \code{\link{sens}}
 #' 
 #' @details This function estimates three seagrass depth of colonization values for each point in a sampling grid.  Functions \code{\link{buff_ext} and \code{\link{doc_est}} are used iteratively for each point in the sample grid.
@@ -431,8 +430,8 @@ buff_ext <- function(pts, center, buff = 0.03){
 #' @import sp
 #' 
 #' @return 
-doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace = FALSE, out_sens = F, ...){
-      
+doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace = FALSE, out_sens = F, maxbin = 0.5, minpts = 50, ...){
+
   # get estimates for each point
   maxd <- vector('list', length = length(grid_in))
   for(i in 1:length(grid_in)){
@@ -443,7 +442,7 @@ doc_est_grd <- function(grid_in, dat_in, radius = 0.06, rem_miss = TRUE, trace =
     ests <- try({
       buff_pts <- buff_ext(dat_in, eval_pt, buff = radius)
   	  est_pts <- data.frame(buff_pts)
-      ests <- doc_est(est_pts)
+      ests <- doc_est(est_pts, maxbin = maxbin, minpts = minpts)
       ests
     }, silent = T)
     
