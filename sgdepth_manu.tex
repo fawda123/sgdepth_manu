@@ -104,6 +104,14 @@
 \acrodef{NAVD88}{North American Vertical Datum of 1988}
 \acrodef{NOAA}{National Oceanic and Atmospheric Administration}
 
+%for supplemental figures/tables
+\newcommand{\beginsupplement}{%
+        \setcounter{table}{0}
+        \renewcommand{\thetable}{S\arabic{table}}%
+        \setcounter{figure}{0}
+        \renewcommand{\thefigure}{S\arabic{figure}}%
+     }
+
 %knitr options
 
 
@@ -139,7 +147,7 @@
   \\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
   \\{\textit {\normalsize Phone: 850-934-9308, Fax: 850-934-2401, Email: \href{mailto:le.chengfeng@epa.gov}{le.chengfeng@epa.gov}}}
   \vspace{1in} 
-  \\ Version Date:   Tue Apr 26 18:06:23 2016 -0500
+  \\ Version Date:   Wed Apr 27 14:29:29 2016 -0500
 	}
 \date{}
 \maketitle
@@ -185,7 +193,7 @@ Secchi (se)&  0.19&  0.02&  0.02&  0.08\tabularnewline
 \hline
 \end{tabular}\end{center}
 
-\footnotesize \textsuperscript{\textit{a}} BB: Big Bend, OTB: Old Tampa Bay, UIRL: Upper Indian R. Lagoon, WCB: Western Choctawhatchee Bay\\\textsuperscript{\textit{b}} Seagrass coverage data sources, see \cref{sec:data_srcs} for bathymetry data sources:\scriptsize\\BB: \url{http://atoll.floridamarine.org/Data/metadata/SDE_Current/seagrass_bigbend_2006_poly.htm}\\OTB: \url{http://www.swfwmd.state.fl.us/data/gis/layer_library/category/swim}\\UIRL: \url{http://www.sjrwmd.com/gisdevelopment/docs/themes.html}\\WCB: \url{http://atoll.floridamarine.org/data/metadata/SDE_Current/seagrass_chotawhatchee_2007_poly.htm}\end{table}
+\footnotesize \textsuperscript{\textit{a}} BB: Big Bend, OTB: Old Tampa Bay, UIRL: Upper Indian R. Lagoon, WCB: Western Choctawhatchee Bay\\\textsuperscript{\textit{b}} Seagrass coverage data sources, see methods for bathymetry data sources:\scriptsize\\BB: \url{http://atoll.floridamarine.org/Data/metadata/SDE_Current/seagrass_bigbend_2006_poly.htm}\\OTB: \url{http://www.swfwmd.state.fl.us/data/gis/layer_library/category/swim}\\UIRL: \url{http://www.sjrwmd.com/gisdevelopment/docs/themes.html}\\WCB: \url{http://atoll.floridamarine.org/data/metadata/SDE_Current/seagrass_chotawhatchee_2007_poly.htm}\end{table}
 
 
 % comparisons with segment wide ests
@@ -335,7 +343,7 @@ Secchi (se)&  0.19&  0.02&  0.02&  0.08\tabularnewline
 \label{fig:clarity_tb}
 \end{figure}
 
-% estimated light requirements for Choctawhatchee Bay
+% estimated light requirements for Choctawhatchee Bay, z_cmed
 
 \begin{figure}
 \centering
@@ -344,7 +352,7 @@ Secchi (se)&  0.19&  0.02&  0.02&  0.08\tabularnewline
 \label{fig:light_choc}
 \end{figure}
 
-% estimated light requirements for Tampa Bay
+% estimated light requirements for Tampa Bay, z_cmed
 
 \begin{figure}
 \centering
@@ -353,13 +361,44 @@ Secchi (se)&  0.19&  0.02&  0.02&  0.08\tabularnewline
 \label{fig:light_tb}
 \end{figure}
 
-% estimated light requirements for Indian River Lagoon
+% estimated light requirements for Indian River Lagoon, zcmed
 
 \begin{figure}
 \centering
 \includegraphics[width = 0.8\textwidth]{figs/light_irl.pdf}
 \caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.15 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
 \label{fig:light_irl}
+\end{figure}
+\clearpage
+
+% supplementary material
+\beginsupplement
+
+% estimated light requirements for Choctawhatchee Bay, z_cmax
+
+\begin{figure}
+\centering
+\includegraphics[width = 0.95\textwidth]{figs/light_choc_zcmax.pdf}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
+\label{fig:light_choc_zcmax}
+\end{figure}
+
+% estimated light requirements for Tampa Bay, z_cmax
+
+\begin{figure}
+\centering
+\includegraphics[width = 0.95\textwidth]{figs/light_tb_zcmax.pdf}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\label{fig:light_tb_zcmax}
+\end{figure}
+
+% estimated light requirements for Indian River Lagoon, z_cmax
+
+\begin{figure}
+\centering
+\includegraphics[width = 0.8\textwidth]{figs/light_irl_zcmax.pdf}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.15 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
+\label{fig:light_irl_zcmax}
 \end{figure}
 
 \end{document}
