@@ -220,7 +220,7 @@ save(ests_out_nonsigs, file = 'data/ests_out_nonsigs.RData')
 save(ests_out, file = 'data/ests_out.RData')
 
 ######
-# Choctawhatchee light
+# Choctawhatchee light, z_cmed
 
 source('R/funcs.r')
 
@@ -247,7 +247,7 @@ choc_light <- dat
 save(choc_light, file = 'data/choc_light.RData')
 
 ######
-# TB light requirements
+# TB light requirements, z_cmed
 
 source('R/funcs.r')
 
@@ -274,7 +274,7 @@ tb_light <- dat
 save(tb_light, file = 'data/tb_light.RData')
 
 ######
-# irl light requirements
+# irl light requirements, z_cmed
 
 source('R/funcs.r')
 
