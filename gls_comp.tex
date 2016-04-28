@@ -48,16 +48,16 @@
 \newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
 
 \usepackage{alltt}
+
+% knitr and global options
+
+
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
 \begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(nlme)}
-\end{alltt}
-
-
-{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'nlme' was built under R version 3.2.4}}\begin{alltt}
 \hlkwd{library}\hlstd{(stargazer)}
 
 \hlkwd{data}\hlstd{(ests_out)}
@@ -78,13 +78,17 @@
 
 \hlcom{# AIC(modnl, mod1, mod2, mod3, mod4, mod5)}
 
-\hlkwd{stargazer}\hlstd{(modnl, mod1, mod2, mod3, mod4, mod5)}
+\hlkwd{stargazer}\hlstd{(modnl, mod1, mod2, mod3, mod4, mod5,}
+  \hlkwc{title} \hlstd{=} \hlstr{'Comparison of regression models with different correlation structures for grid locations.'}\hlstd{,}
+  \hlkwc{column.labels} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{'null'}\hlstd{,} \hlstr{'Spher'}\hlstd{,} \hlstr{'Lin'}\hlstd{,} \hlstr{'Ratio'}\hlstd{,} \hlstr{'Gaus'}\hlstd{,} \hlstr{'Exp'}\hlstd{),}
+  \hlkwc{model.numbers} \hlstd{= F}
+  \hlstd{)}
 \end{alltt}
 \end{kframe}
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Tue, Apr 26, 2016 - 2:05:43 PM
+% Date and time: Thu, Apr 28, 2016 - 5:06:05 PM
 \begin{table}[!htbp] \centering 
-  \caption{} 
+  \caption{Comparison of regression models with different correlation structures for grid locations.} 
   \label{} 
 \begin{tabular}{@{\extracolsep{5pt}}lcccccc} 
 \\[-1.8ex]\hline 
@@ -92,7 +96,7 @@
  & \multicolumn{6}{c}{\textit{Dependent variable:}} \\ 
 \cline{2-7} 
 \\[-1.8ex] & \multicolumn{6}{c}{z\_cmax} \\ 
-\\[-1.8ex] & (1) & (2) & (3) & (4) & (5) & (6)\\ 
+ & null & Spher & Lin & Ratio & Gaus & Exp \\ 
 \hline \\[-1.8ex] 
  Constant & 2.382$^{***}$ & 2.355$^{***}$ & 2.271$^{***}$ & 2.356$^{***}$ & 2.364$^{***}$ & 2.349$^{***}$ \\ 
   & (0.070) & (0.136) & (0.506) & (0.219) & (0.144) & (0.177) \\ 
@@ -105,6 +109,207 @@ Bayesian Inf. Crit. & 38.967 & 29.050 & 33.003 & 29.693 & 28.256 & 30.883 \\
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{6}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{data}\hlstd{(choc_light)}
+\hlkwd{data}\hlstd{(irl_light)}
+\hlkwd{data}\hlstd{(tb_light)}
+
+\hlstd{choc_light} \hlkwb{<-} \hlkwd{select}\hlstd{(choc_light, z_c_all, light, seg, Longitude, Latitude)} \hlopt{%>%}
+  \hlkwd{mutate}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'choc'}\hlstd{)}
+\hlstd{irl_light} \hlkwb{<-} \hlkwd{select}\hlstd{(irl_light, z_c_all, light, seg, Longitude, Latitude)} \hlopt{%>%}
+  \hlkwd{mutate}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'irl'}\hlstd{)}
+\hlstd{tb_light} \hlkwb{<-} \hlkwd{select}\hlstd{(tb_light, z_c_all, light, seg, Longitude, Latitude)} \hlopt{%>%}
+  \hlkwd{mutate}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'tb'}\hlstd{)}
+
+\hlstd{all_light} \hlkwb{<-} \hlkwd{rbind}\hlstd{(choc_light, irl_light, tb_light)}
+
+\hlstd{znl} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_c_all} \hlopt{~} \hlnum{0} \hlopt{+} \hlstd{bay,} \hlkwc{data} \hlstd{= all_light)}
+\hlstd{zm1} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_c_all} \hlopt{~} \hlnum{0} \hlopt{+} \hlstd{bay,}
+  \hlkwc{correlation} \hlstd{=} \hlkwd{corGaus}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{Latitude} \hlopt{+} \hlstd{Longitude} \hlopt{|} \hlstd{bay,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
+  \hlkwc{data} \hlstd{= all_light)}
+
+\hlstd{lnl} \hlkwb{<-} \hlkwd{gls}\hlstd{(light} \hlopt{~} \hlnum{0} \hlopt{+} \hlstd{bay,} \hlkwc{data} \hlstd{= all_light)}
+\hlstd{lm1} \hlkwb{<-} \hlkwd{gls}\hlstd{(light} \hlopt{~} \hlnum{0} \hlopt{+} \hlstd{bay,}
+  \hlkwc{correlation} \hlstd{=} \hlkwd{corGaus}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{Latitude} \hlopt{+} \hlstd{Longitude} \hlopt{|} \hlstd{bay,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
+  \hlkwc{data} \hlstd{= all_light)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(znl)}
+\end{alltt}
+\begin{verbatim}
+## Generalized least squares fit by REML
+##   Model: z_c_all ~ 0 + bay 
+##   Data: all_light 
+##        AIC      BIC    logLik
+##   615.1603 634.0605 -303.5802
+## 
+## Coefficients:
+##            Value  Std.Error   t-value p-value
+## baychoc 2.241611 0.02161190 103.72114       0
+## bayirl  1.054048 0.05144661  20.48818       0
+## baytb   1.209990 0.01490667  81.17107       0
+## 
+##  Correlation: 
+##        baychc bayirl
+## bayirl 0            
+## baytb  0      0     
+## 
+## Standardized residuals:
+##        Min         Q1        Med         Q3        Max 
+## -4.9005199 -0.4794889  0.1430016  0.6854605  5.6116229 
+## 
+## Residual standard error: 0.3451143 
+## Degrees of freedom: 836 total; 833 residual
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(zm1)}
+\end{alltt}
+\begin{verbatim}
+## Generalized least squares fit by REML
+##   Model: z_c_all ~ 0 + bay 
+##   Data: all_light 
+##         AIC       BIC   logLik
+##   -1062.961 -1034.611 537.4807
+## 
+## Correlation Structure: Gaussian spatial correlation
+##  Formula: ~Latitude + Longitude | bay 
+##  Parameter estimate(s):
+##      range     nugget 
+## 0.02545925 0.03293515 
+## 
+## Coefficients:
+##            Value  Std.Error  t-value p-value
+## baychoc 2.020700 0.09239280 21.87075       0
+## bayirl  1.101049 0.07573749 14.53770       0
+## baytb   1.162806 0.05511339 21.09843       0
+## 
+##  Correlation: 
+##        baychc bayirl
+## bayirl 0            
+## baytb  0      0     
+## 
+## Standardized residuals:
+##        Min         Q1        Med         Q3        Max 
+## -3.9370251 -0.3373829  0.3062355  0.8650886  5.7771938 
+## 
+## Residual standard error: 0.3734619 
+## Degrees of freedom: 836 total; 833 residual
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(lnl)}
+\end{alltt}
+\begin{verbatim}
+## Generalized least squares fit by REML
+##   Model: light ~ 0 + bay 
+##   Data: all_light 
+##        AIC      BIC    logLik
+##   6030.477 6049.378 -3011.239
+## 
+## Coefficients:
+##            Value Std.Error   t-value p-value
+## baychoc 50.75848 0.5576516  91.02184       0
+## bayirl  17.93223 1.3274763  13.50851       0
+## baytb   41.57704 0.3846366 108.09435       0
+## 
+##  Correlation: 
+##        baychc bayirl
+## bayirl 0            
+## baytb  0      0     
+## 
+## Standardized residuals:
+##         Min          Q1         Med          Q3         Max 
+## -3.50916796 -0.49953556  0.01144066  0.48987965  4.08229910 
+## 
+## Residual standard error: 8.904982 
+## Degrees of freedom: 836 total; 833 residual
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(lm1)}
+\end{alltt}
+\begin{verbatim}
+## Generalized least squares fit by REML
+##   Model: light ~ 0 + bay 
+##   Data: all_light 
+##        AIC      BIC    logLik
+##   5097.712 5126.062 -2542.856
+## 
+## Correlation Structure: Gaussian spatial correlation
+##  Formula: ~Latitude + Longitude | bay 
+##  Parameter estimate(s):
+##      range     nugget 
+## 0.02741658 0.12826392 
+## 
+## Coefficients:
+##            Value Std.Error   t-value p-value
+## baychoc 48.07661  2.554597 18.819648       0
+## bayirl  17.66437  2.041874  8.651056       0
+## baytb   42.06220  1.517634 27.715639       0
+## 
+##  Correlation: 
+##        baychc bayirl
+## bayirl 0            
+## baytb  0      0     
+## 
+## Standardized residuals:
+##         Min          Q1         Med          Q3         Max 
+## -2.93104423 -0.43027644  0.06738397  0.47640756  3.90853899 
+## 
+## Residual standard error: 9.987022 
+## Degrees of freedom: 836 total; 833 residual
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{kframe}
+\begin{alltt}
+\hlkwd{stargazer}\hlstd{(znl, zm1, lnl, lm1,}
+  \hlkwc{title} \hlstd{=} \hlstr{'Inter-bay differences for median depth of colonization and light requirements. Null models do not include a grouped correlation structure.'}\hlstd{,}
+  \hlkwc{column.labels} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{'null'}\hlstd{,} \hlstr{'Gaus'}\hlstd{,} \hlstr{'null'}\hlstd{,} \hlstr{'Gaus'}\hlstd{),}
+  \hlkwc{model.numbers} \hlstd{= F}
+  \hlstd{)}
+\end{alltt}
+\end{kframe}
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Thu, Apr 28, 2016 - 5:07:45 PM
+\begin{table}[!htbp] \centering 
+  \caption{Inter-bay differences for median depth of colonization and light requirements. Null models do not include a grouped correlation structure.} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{2}{c}{z\_c\_all} & \multicolumn{2}{c}{light} \\ 
+ & null & Gaus & null & Gaus \\ 
+\hline \\[-1.8ex] 
+ baychoc & 2.242$^{***}$ & 2.021$^{***}$ & 50.758$^{***}$ & 48.077$^{***}$ \\ 
+  & (0.022) & (0.092) & (0.558) & (2.555) \\ 
+  & & & & \\ 
+ bayirl & 1.054$^{***}$ & 1.101$^{***}$ & 17.932$^{***}$ & 17.664$^{***}$ \\ 
+  & (0.051) & (0.076) & (1.327) & (2.042) \\ 
+  & & & & \\ 
+ baytb & 1.210$^{***}$ & 1.163$^{***}$ & 41.577$^{***}$ & 42.062$^{***}$ \\ 
+  & (0.015) & (0.055) & (0.385) & (1.518) \\ 
+  & & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 836 & 836 & 836 & 836 \\ 
+Log Likelihood & $-$303.580 & 537.481 & $-$3,011.239 & $-$2,542.856 \\ 
+Akaike Inf. Crit. & 615.160 & $-$1,062.961 & 6,030.477 & 5,097.712 \\ 
+Bayesian Inf. Crit. & 634.060 & $-$1,034.611 & 6,049.378 & 5,126.062 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
 \end{tabular} 
 \end{table} 
 
