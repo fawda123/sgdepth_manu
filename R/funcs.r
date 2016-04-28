@@ -652,7 +652,6 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kdconv = 1.7, z_est = 'z_cmax
   
   # get sg doc estimates for each location with secchi data
   maxd <- list()
-  maxd_conf <- list()
   for(i in 1:length(uni_secc)){
     
     if(trace) cat(length(uni_secc) - i, '\t')
@@ -662,21 +661,15 @@ secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kdconv = 1.7, z_est = 'z_cmax
       buff_pts <- buff_ext(sgpts_shp, eval_pt, buff = radius)
       est_pts <- data.frame(buff_pts)
       doc_single <- doc_est(est_pts)
-      doc_single <- sens(doc_single)
-      upper_conf <- attr(doc_single, 'upper_est')$upper_shift
-      lower_conf <- attr(doc_single, 'lower_est')$lower_shift
-      bound_conf <- upper_conf - lower_conf
-      z_c <- attr(doc_single, z_est)
-      c(z_c, bound_conf)
+      attr(doc_single, z_est)
     },  silent = T)
-  	if('try-error' %in% class(ests)) ests <- c(NA, NA)
-    maxd[[i]] <- ests[1]
-    maxd_conf[[i]] <- ests[2]
+  	if('try-error' %in% class(ests)) ests <- NA
+    maxd[[i]] <- ests 
     
   }
   
   # dataframe of all maximum depth results
-  maxd <- data.frame(uni_secc, z_c_all = do.call('c', maxd), maxd_conf = do.call('c', maxd_conf))
+  maxd <- data.frame(uni_secc, z_c_all = do.call('c', maxd))
 
   # get average secchi by station 
   # by date if multiple dates
@@ -764,7 +757,6 @@ kd_doc <- function(kd_dat, sgpts_shp, seg_shp, z_est = 'z_cmax', radius = 0.2, t
   
   # get sg doc estimates for each location with kd data
   maxd <- list()
-  maxd_conf <- list()
   for(i in 1:length(uni_kd_dat)){
     
     if(trace) cat(length(uni_kd_dat) - i, '\t')
@@ -774,21 +766,15 @@ kd_doc <- function(kd_dat, sgpts_shp, seg_shp, z_est = 'z_cmax', radius = 0.2, t
       buff_pts <- buff_ext(sgpts_shp, eval_pt, buff = radius)
       est_pts <- data.frame(buff_pts)
       doc_single <- doc_est(est_pts)
-      doc_single <- sens(doc_single)
-      upper_conf <- attr(doc_single, 'upper_est')$upper_shift
-      lower_conf <- attr(doc_single, 'lower_est')$lower_shift
-      bound_conf <- upper_conf - lower_conf
-      z_c <- attr(doc_single, z_est)
-      c(z_c, bound_conf)
+      attr(doc_single, z_est)
     },  silent = T)
-    if('try-error' %in% class(ests)) ests <- c(NA, NA)
-    maxd[[i]] <- ests[1]
-    maxd_conf[[i]] <- ests[2]
+    if('try-error' %in% class(ests)) ests <- NA
+    maxd[[i]] <- ests
     
   }
   
   # dataframe of all maximum depth results
-  maxd <- data.frame(uni_kd_dat, z_c_all = do.call('c', maxd), maxd_conf = do.call('c', maxd_conf))
+  maxd <- data.frame(uni_kd_dat, z_c_all = do.call('c', maxd))
   
   # get average kd by station 
   # by date if multiple dates
