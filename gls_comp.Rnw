@@ -53,32 +53,39 @@ irl_light <- select(irl_light, z_c_all, light, seg, Longitude, Latitude) %>%
 tb_light <- select(tb_light, z_c_all, light, seg, Longitude, Latitude) %>% 
   mutate(bay = 'tb')
 
-all_light <- rbind(choc_light, irl_light, tb_light)
+all_light <- rbind(choc_light, irl_light, tb_light) %>% 
+  mutate(bay = factor(bay))
 
-znl <- gls(z_c_all ~ 0 + bay, data = all_light)
-zm1 <- gls(z_c_all ~ 0 + bay, 
+znl <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay, data = all_light)
+zm1 <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay,
   correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = TRUE), 
   data = all_light)
 
-lnl <- gls(light ~ 0 + bay, data = all_light)
-lm1 <- gls(light ~ 0 + bay, 
+
+lnl <- lme(light ~ 0 + bay, random = ~ 1 | bay, data = all_light)
+lm1 <- lme(light ~ 0 + bay, random = ~ 1 | bay,
   correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = TRUE), 
   data = all_light)
 @
 
 <<message = F, warning = F>>=
-summary(znl)
 summary(zm1)
-summary(lnl)
 summary(lm1)
 @
 
 <<results = 'asis', message = F, warning = F>>=
+
 stargazer(znl, zm1, lnl, lm1, 
   title = 'Inter-bay differences for median depth of colonization and light requirements. Null models do not include a grouped correlation structure.',
   column.labels = c('null', 'Gaus', 'null', 'Gaus'), 
   model.numbers = F
   )
+@
+
+<<message = F, warning = F>>=
+library(multcomp)
+summary(glht(zm1, linfct = mcp(bay = 'Tukey')))
+summary(glht(lm1, linfct = mcp(bay = 'Tukey')))
 @
 
 \end{document}
