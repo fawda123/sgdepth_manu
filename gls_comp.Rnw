@@ -98,6 +98,14 @@ lm2 <- lme(light ~ 0 + bay, random = ~ 1 | bay,
 
 @
 
+
+<<>>=
+# boxplots
+ggplot(all_light, aes(x = bay, y = light)) +
+  geom_boxplot() + 
+  theme_minimal()
+@
+
 <<message = F, warning = F>>=
 summary(zm1)
 summary(lm1)

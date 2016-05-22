@@ -108,7 +108,7 @@
 \end{alltt}
 \end{kframe}
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Sun, May 22, 2016 - 9:56:11 AM
+% Date and time: Sun, May 22, 2016 - 11:26:10 AM
 \begin{table}[!htbp] \centering 
   \caption{Comparison of regression models with different correlation structures for grid locations.} 
   \label{} 
@@ -170,6 +170,25 @@ Bayesian Inf. Crit. & 38.967 & 29.050 & 33.003 & 29.693 & 28.256 & 30.883 \\
   \hlkwc{data} \hlstd{= all_light)}
 \end{alltt}
 \end{kframe}
+\end{knitrout}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# boxplots}
+\hlkwd{ggplot}\hlstd{(all_light,} \hlkwd{aes}\hlstd{(}\hlkwc{x} \hlstd{= bay,} \hlkwc{y} \hlstd{= light))} \hlopt{+}
+  \hlkwd{geom_boxplot}\hlstd{()} \hlopt{+}
+  \hlkwd{theme_minimal}\hlstd{()}
+\end{alltt}
+\end{kframe}
+
+{\centering \includegraphics[width=\maxwidth]{fig/unnamed-chunk-3-1} 
+
+}
+
+
+
 \end{knitrout}
 
 \begin{knitrout}
@@ -259,7 +278,7 @@ Bayesian Inf. Crit. & 38.967 & 29.050 & 33.003 & 29.693 & 28.256 & 30.883 \\
 \end{alltt}
 \end{kframe}
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Sun, May 22, 2016 - 9:56:12 AM
+% Date and time: Sun, May 22, 2016 - 11:26:12 AM
 \begin{table}[!htbp] \centering 
   \caption{Inter-bay differences for median depth of colonization and light requirements. Null models do not include a grouped correlation structure. Gaussian models with and without nuggets for the spatial correlation structures are also shown.} 
   \label{} 
