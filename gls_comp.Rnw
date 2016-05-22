@@ -1,4 +1,27 @@
-\documentclass{article}
+\documentclass[letterpaper,12pt]{article}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{setspace}
+\usepackage[colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=blue]{hyperref}
+\usepackage{indentfirst}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage[final]{animate}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage{rotating}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{subfig} 
+\usepackage{cleveref}
+\usepackage{paralist}
+\usepackage{acronym}
+\usepackage{outlines}
+\usepackage{amsmath}
+
+\begin{document}
+
+\setlength{\parskip}{5mm}
+\setlength{\parindent}{0in}
 
 % knitr and global options
 <<setup, include = F, cache = F>>=
@@ -58,14 +81,21 @@ all_light <- rbind(choc_light, irl_light, tb_light) %>%
 
 znl <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay, data = all_light)
 zm1 <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay,
+  correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = FALSE), 
+  data = all_light)
+zm2 <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay,
   correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = TRUE), 
   data = all_light)
 
 
 lnl <- lme(light ~ 0 + bay, random = ~ 1 | bay, data = all_light)
 lm1 <- lme(light ~ 0 + bay, random = ~ 1 | bay,
+  correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = FALSE), 
+  data = all_light)
+lm2 <- lme(light ~ 0 + bay, random = ~ 1 | bay,
   correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = TRUE), 
   data = all_light)
+
 @
 
 <<message = F, warning = F>>=
@@ -75,9 +105,9 @@ summary(lm1)
 
 <<results = 'asis', message = F, warning = F>>=
 
-stargazer(znl, zm1, lnl, lm1, 
-  title = 'Inter-bay differences for median depth of colonization and light requirements. Null models do not include a grouped correlation structure.',
-  column.labels = c('null', 'Gaus', 'null', 'Gaus'), 
+stargazer(znl, zm1, zm2, lnl, lm1, lm2,
+  title = 'Inter-bay differences for median depth of colonization and light requirements. Null models do not include a grouped correlation structure. Gaussian models with and without nuggets for the spatial correlation structures are also shown.',
+  column.labels = c('null', 'Gaus', 'Gaus, nug', 'null', 'Gaus', 'Gaus, nug'), 
   model.numbers = F
   )
 @
@@ -85,7 +115,9 @@ stargazer(znl, zm1, lnl, lm1,
 <<message = F, warning = F>>=
 library(multcomp)
 summary(glht(zm1, linfct = mcp(bay = 'Tukey')))
+summary(glht(zm2, linfct = mcp(bay = 'Tukey')))
 summary(glht(lm1, linfct = mcp(bay = 'Tukey')))
+summary(glht(lm2, linfct = mcp(bay = 'Tukey')))
 @
 
 \end{document}
