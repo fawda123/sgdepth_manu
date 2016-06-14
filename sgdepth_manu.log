@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.8.29)  27 APR 2016 15:09
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.8.29)  14 JUN 2016 17:28
 entering extended mode
 **sgdepth_manu.tex
 (M:\docs\manuscripts\sgdepth_manu\sgdepth_manu.tex
@@ -417,7 +417,7 @@ Package: paralist 2013/06/09 v2.4 Extended list environments
 \plparsep=\skip59
 \pl@lab=\toks24
 )
-(C:/PROGRA~1/R/R-32~1.3/share/texmf/tex/latex\Sweave.sty
+(C:/PROGRA~1/R/R-33~1.0/share/texmf/tex/latex\Sweave.sty
 Package: Sweave 
 
 (C:\Users\mbeck\AppData\Roaming\MiKTeX\2.9\tex\latex\fancyvrb\fancyvrb.sty
@@ -724,7 +724,7 @@ Package pdftex.def Info: figs/seg_all.pdf used on input line 304.
 (pdftex.def)             Requested size: 469.75502pt x 597.87521pt.
 
 
-LaTeX Warning: Float too large for page by 0.94519pt on input line 307.
+LaTeX Warning: Float too large for page by 15.44519pt on input line 307.
 
 <figs/Fig3_Hagy.pdf, id=68, 433.70804pt x 567.5433pt>
 File: figs/Fig3_Hagy.pdf Graphic file (type pdf)
@@ -777,21 +777,21 @@ manuscripts/sgdepth_manu/figs/kd_choc.pdf>] [10 <M:/docs/manuscripts/sgdepth_ma
 nu/figs/clarity_tb.pdf>] [11 <M:/docs/manuscripts/sgdepth_manu/figs/light_choc.
 pdf>] [12 <M:/docs/manuscripts/sgdepth_manu/figs/light_tb.pdf>] [13 <M:/docs/ma
 nuscripts/sgdepth_manu/figs/light_irl.pdf>]
-<figs/light_choc_zcmax.pdf, id=298, 578.16pt x 578.16pt>
+<figs/light_choc_zcmax.pdf, id=294, 578.16pt x 578.16pt>
 File: figs/light_choc_zcmax.pdf Graphic file (type pdf)
 
 <use figs/light_choc_zcmax.pdf>
 Package pdftex.def Info: figs/light_choc_zcmax.pdf used on input line 381.
 (pdftex.def)             Requested size: 446.26582pt x 446.26086pt.
 
-<figs/light_tb_zcmax.pdf, id=299, 505.89pt x 542.025pt>
+<figs/light_tb_zcmax.pdf, id=295, 505.89pt x 542.025pt>
 File: figs/light_tb_zcmax.pdf Graphic file (type pdf)
 
 <use figs/light_tb_zcmax.pdf>
 Package pdftex.def Info: figs/light_tb_zcmax.pdf used on input line 390.
 (pdftex.def)             Requested size: 446.26582pt x 478.14963pt.
 
-<figs/light_irl_zcmax.pdf, id=302, 469.755pt x 614.295pt>
+<figs/light_irl_zcmax.pdf, id=298, 469.755pt x 614.295pt>
 File: figs/light_irl_zcmax.pdf Graphic file (type pdf)
 
 <use figs/light_irl_zcmax.pdf>
@@ -827,9 +827,9 @@ ic/uhvr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:
 /Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmbi8a.pfb><C:/Program Files/M
 iKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
 ype1/urw/times/utmri8a.pfb>
-Output written on sgdepth_manu.pdf (16 pages, 6795548 bytes).
+Output written on sgdepth_manu.pdf (16 pages, 5101450 bytes).
 PDF statistics:
- 388 PDF objects out of 1000 (max. 8388607)
+ 384 PDF objects out of 1000 (max. 8388607)
  36 named destinations out of 1000 (max. 500000)
  76 words of extra memory for PDF output out of 10000 (max. 10000000)
 
