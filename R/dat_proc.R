@@ -1,6 +1,7 @@
 source('R/funcs.r')
 library(dplyr)
 library(tidyr)
+library(maptools)
 
 ######
 # summary of wbid characteristics
@@ -271,6 +272,17 @@ proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, seg_pts_yr = 2010, radius = 0
 dat <- na.omit(proc)
 
 tb_light <- dat
+
+# remove points not near seagrass 
+data(sgbuff_2010_tb)
+
+# mask tb doc and light ests by 1km buffer of seagrass
+coordinates(tb_light) = ~Longitude+Latitude
+tmp <- tb_light  %over% sgbuff_2010_tb %>% 
+  is.na(.) %>% 
+  !.
+tb_light <- data.frame(tb_light)[tmp, ]
+
 save(tb_light, file = 'data/tb_light.RData')
 
 ######
@@ -360,6 +372,17 @@ proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, seg_pts_yr = 2010, radius = 0
 dat <- na.omit(proc)
 
 tb_light_zcmax <- dat
+
+# remove points not near seagrass 
+data(sgbuff_2010_tb)
+
+# mask tb doc and light ests by 1km buffer of seagrass
+coordinates(tb_light_zcmax) = ~Longitude+Latitude
+tmp <- tb_light_zcmax %over% sgbuff_2010_tb %>% 
+  is.na(.) %>% 
+  !.
+tb_light_zcmax <- data.frame(tb_light_zcmax)[tmp, ]
+
 save(tb_light_zcmax, file = 'data/tb_light_zcmax.RData')
 
 ######

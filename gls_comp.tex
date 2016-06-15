@@ -66,8 +66,6 @@
 \usepackage{acronym}
 \usepackage{outlines}
 \usepackage{amsmath}
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\begin{document}
 
 \setlength{\parskip}{5mm}
 \setlength{\parindent}{0in}
@@ -75,238 +73,44 @@
 % knitr and global options
 
 
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
-\begin{kframe}
-\begin{alltt}
-\hlkwd{library}\hlstd{(nlme)}
-\hlkwd{library}\hlstd{(stargazer)}
+\section{Between-bay comparisons}    
 
-\hlkwd{data}\hlstd{(ests_out)}
-\hlstd{tmp} \hlkwb{<-} \hlkwd{filter}\hlstd{(ests_out, seg} \hlopt{==} \hlstr{'303'}\hlstd{)} \hlopt{%>%}
-  \hlkwd{select}\hlstd{(z_cmax, long, lat)}
 
-\hlstd{modnl} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{data} \hlstd{= tmp)}
-\hlstd{mod1} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{correlation} \hlstd{=} \hlkwd{corSpher}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{long} \hlopt{+} \hlstd{lat,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
-  \hlkwc{data} \hlstd{= tmp)}
-\hlstd{mod2} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{correlation} \hlstd{=} \hlkwd{corLin}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{long} \hlopt{+} \hlstd{lat,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
-  \hlkwc{data} \hlstd{= tmp)}
-\hlstd{mod3} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{correlation} \hlstd{=} \hlkwd{corRatio}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{long} \hlopt{+} \hlstd{lat,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
-  \hlkwc{data} \hlstd{= tmp)}
-\hlstd{mod4} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{correlation} \hlstd{=} \hlkwd{corGaus}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{long} \hlopt{+} \hlstd{lat,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
-  \hlkwc{data} \hlstd{= tmp)}
-\hlstd{mod5} \hlkwb{<-} \hlkwd{gls}\hlstd{(z_cmax} \hlopt{~} \hlnum{1}\hlstd{,} \hlkwc{correlation} \hlstd{=} \hlkwd{corExp}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{long} \hlopt{+} \hlstd{lat,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
-  \hlkwc{data} \hlstd{= tmp)}
 
-\hlcom{# AIC(modnl, mod1, mod2, mod3, mod4, mod5)}
 
-\hlkwd{stargazer}\hlstd{(modnl, mod1, mod2, mod3, mod4, mod5,}
-  \hlkwc{title} \hlstd{=} \hlstr{'Comparison of regression models with different correlation structures for grid locations.'}\hlstd{,}
-  \hlkwc{column.labels} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{'null'}\hlstd{,} \hlstr{'Spher'}\hlstd{,} \hlstr{'Lin'}\hlstd{,} \hlstr{'Ratio'}\hlstd{,} \hlstr{'Gaus'}\hlstd{,} \hlstr{'Exp'}\hlstd{),}
-  \hlkwc{model.numbers} \hlstd{= F}
-  \hlstd{)}
-\end{alltt}
-\end{kframe}
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Sun, May 22, 2016 - 11:26:10 AM
+% Date and time: Wed, Jun 15, 2016 - 4:11:40 PM
 \begin{table}[!htbp] \centering 
-  \caption{Comparison of regression models with different correlation structures for grid locations.} 
+  \caption{Inter-bay differences for median depth of colonization and light requirements.  Gaussian models with nuggets for the spatial correlation structures were used.  Tampa Bay data were masked to remove points farther than 1km from seagrass.} 
   \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lcccccc} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
- & \multicolumn{6}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-7} 
-\\[-1.8ex] & \multicolumn{6}{c}{z\_cmax} \\ 
- & null & Spher & Lin & Ratio & Gaus & Exp \\ 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & z\_c\_all & light \\ 
+\\[-1.8ex] & (1) & (2)\\ 
 \hline \\[-1.8ex] 
- Constant & 2.382$^{***}$ & 2.355$^{***}$ & 2.271$^{***}$ & 2.356$^{***}$ & 2.364$^{***}$ & 2.349$^{***}$ \\ 
-  & (0.070) & (0.136) & (0.506) & (0.219) & (0.144) & (0.177) \\ 
-  & & & & & & \\ 
+ baychoc & 2.033 & 49.743 \\ 
+  & (0.119) & (2.997) \\ 
+  & & \\ 
+ bayirl & 1.098 & 17.731 \\ 
+  & (0.109) & (2.853) \\ 
+  & & \\ 
+ baytb & 1.158 & 40.816 \\ 
+  & (0.097) & (2.520) \\ 
+  & & \\ 
 \hline \\[-1.8ex] 
-Observations & 31 & 31 & 31 & 31 & 31 & 31 \\ 
-Log Likelihood & $-$16.082 & $-$7.722 & $-$9.699 & $-$8.044 & $-$7.326 & $-$8.639 \\ 
-Akaike Inf. Crit. & 36.165 & 23.445 & 27.399 & 24.088 & 22.652 & 25.279 \\ 
-Bayesian Inf. Crit. & 38.967 & 29.050 & 33.003 & 29.693 & 28.256 & 30.883 \\ 
+Observations & 518 & 518 \\ 
+Log Likelihood & 170.629 & $-$1,685.096 \\ 
+Akaike Inf. Crit. & $-$327.259 & 3,384.193 \\ 
+Bayesian Inf. Crit. & $-$297.550 & 3,413.902 \\ 
 \hline 
 \hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{6}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
-\end{tabular} 
-\end{table} 
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{data}\hlstd{(choc_light)}
-\hlkwd{data}\hlstd{(irl_light)}
-\hlkwd{data}\hlstd{(tb_light)}
-
-\hlstd{choc_light} \hlkwb{<-} \hlkwd{select}\hlstd{(choc_light, z_c_all, light, seg, Longitude, Latitude)} \hlopt{%>%}
-  \hlkwd{mutate}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'choc'}\hlstd{)}
-\hlstd{irl_light} \hlkwb{<-} \hlkwd{select}\hlstd{(irl_light, z_c_all, light, seg, Longitude, Latitude)} \hlopt{%>%}
-  \hlkwd{mutate}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'irl'}\hlstd{)}
-\hlstd{tb_light} \hlkwb{<-} \hlkwd{select}\hlstd{(tb_light, z_c_all, light, seg, Longitude, Latitude)} \hlopt{%>%}
-  \hlkwd{mutate}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'tb'}\hlstd{)}
-
-\hlstd{all_light} \hlkwb{<-} \hlkwd{rbind}\hlstd{(choc_light, irl_light, tb_light)} \hlopt{%>%}
-  \hlkwd{mutate}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlkwd{factor}\hlstd{(bay))}
-
-\hlstd{znl} \hlkwb{<-} \hlkwd{lme}\hlstd{(z_c_all} \hlopt{~} \hlnum{0} \hlopt{+} \hlstd{bay,} \hlkwc{random} \hlstd{=} \hlopt{~} \hlnum{1} \hlopt{|} \hlstd{bay,} \hlkwc{data} \hlstd{= all_light)}
-\hlstd{zm1} \hlkwb{<-} \hlkwd{lme}\hlstd{(z_c_all} \hlopt{~} \hlnum{0} \hlopt{+} \hlstd{bay,} \hlkwc{random} \hlstd{=} \hlopt{~} \hlnum{1} \hlopt{|} \hlstd{bay,}
-  \hlkwc{correlation} \hlstd{=} \hlkwd{corGaus}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{Latitude} \hlopt{+} \hlstd{Longitude} \hlopt{|} \hlstd{bay,} \hlkwc{nugget} \hlstd{=} \hlnum{FALSE}\hlstd{),}
-  \hlkwc{data} \hlstd{= all_light)}
-\hlstd{zm2} \hlkwb{<-} \hlkwd{lme}\hlstd{(z_c_all} \hlopt{~} \hlnum{0} \hlopt{+} \hlstd{bay,} \hlkwc{random} \hlstd{=} \hlopt{~} \hlnum{1} \hlopt{|} \hlstd{bay,}
-  \hlkwc{correlation} \hlstd{=} \hlkwd{corGaus}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{Latitude} \hlopt{+} \hlstd{Longitude} \hlopt{|} \hlstd{bay,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
-  \hlkwc{data} \hlstd{= all_light)}
-
-
-\hlstd{lnl} \hlkwb{<-} \hlkwd{lme}\hlstd{(light} \hlopt{~} \hlnum{0} \hlopt{+} \hlstd{bay,} \hlkwc{random} \hlstd{=} \hlopt{~} \hlnum{1} \hlopt{|} \hlstd{bay,} \hlkwc{data} \hlstd{= all_light)}
-\hlstd{lm1} \hlkwb{<-} \hlkwd{lme}\hlstd{(light} \hlopt{~} \hlnum{0} \hlopt{+} \hlstd{bay,} \hlkwc{random} \hlstd{=} \hlopt{~} \hlnum{1} \hlopt{|} \hlstd{bay,}
-  \hlkwc{correlation} \hlstd{=} \hlkwd{corGaus}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{Latitude} \hlopt{+} \hlstd{Longitude} \hlopt{|} \hlstd{bay,} \hlkwc{nugget} \hlstd{=} \hlnum{FALSE}\hlstd{),}
-  \hlkwc{data} \hlstd{= all_light)}
-\hlstd{lm2} \hlkwb{<-} \hlkwd{lme}\hlstd{(light} \hlopt{~} \hlnum{0} \hlopt{+} \hlstd{bay,} \hlkwc{random} \hlstd{=} \hlopt{~} \hlnum{1} \hlopt{|} \hlstd{bay,}
-  \hlkwc{correlation} \hlstd{=} \hlkwd{corGaus}\hlstd{(}\hlkwc{form} \hlstd{=} \hlopt{~} \hlstd{Latitude} \hlopt{+} \hlstd{Longitude} \hlopt{|} \hlstd{bay,} \hlkwc{nugget} \hlstd{=} \hlnum{TRUE}\hlstd{),}
-  \hlkwc{data} \hlstd{= all_light)}
-\end{alltt}
-\end{kframe}
-\end{knitrout}
-
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlcom{# boxplots}
-\hlkwd{ggplot}\hlstd{(all_light,} \hlkwd{aes}\hlstd{(}\hlkwc{x} \hlstd{= bay,} \hlkwc{y} \hlstd{= light))} \hlopt{+}
-  \hlkwd{geom_boxplot}\hlstd{()} \hlopt{+}
-  \hlkwd{theme_minimal}\hlstd{()}
-\end{alltt}
-\end{kframe}
-
-{\centering \includegraphics[width=\maxwidth]{fig/unnamed-chunk-3-1} 
-
-}
-
-
-
-\end{knitrout}
-
-\begin{knitrout}
-\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
-\begin{alltt}
-\hlkwd{summary}\hlstd{(zm1)}
-\end{alltt}
-\begin{verbatim}
-## Linear mixed-effects model fit by REML
-##  Data: all_light 
-##         AIC       BIC   logLik
-##   -87.99629 -59.64608 49.99814
-## 
-## Random effects:
-##  Formula: ~1 | bay
-##         (Intercept)  Residual
-## StdDev:  0.04474165 0.2800867
-## 
-## Correlation Structure: Gaussian spatial correlation
-##  Formula: ~Latitude + Longitude | bay 
-##  Parameter estimate(s):
-##       range 
-## 0.007992795 
-## Fixed effects: z_c_all ~ 0 + bay 
-##            Value  Std.Error DF  t-value p-value
-## baychoc 2.124354 0.05637388  0 37.68330     NaN
-## bayirl  1.073833 0.06374245  0 16.84643     NaN
-## baytb   1.199982 0.04764828  0 25.18416     NaN
-##  Correlation: 
-##        baychc bayirl
-## bayirl 0            
-## baytb  0      0     
-## 
-## Standardized Within-Group Residuals:
-##        Min         Q1        Med         Q3        Max 
-## -5.6196257 -0.5367480  0.2614813  0.9666520  7.3331159 
-## 
-## Number of Observations: 836
-## Number of Groups: 3
-\end{verbatim}
-\begin{alltt}
-\hlkwd{summary}\hlstd{(lm1)}
-\end{alltt}
-\begin{verbatim}
-## Linear mixed-effects model fit by REML
-##  Data: all_light 
-##        AIC      BIC    logLik
-##   5680.798 5709.149 -2834.399
-## 
-## Random effects:
-##  Formula: ~1 | bay
-##         (Intercept) Residual
-## StdDev:    1.335232  8.35838
-## 
-## Correlation Structure: Gaussian spatial correlation
-##  Formula: ~Latitude + Longitude | bay 
-##  Parameter estimate(s):
-##       range 
-## 0.007154898 
-## Fixed effects: light ~ 0 + bay 
-##            Value Std.Error DF  t-value p-value
-## baychoc 51.19770  1.640932  0 31.20037     NaN
-## bayirl  17.83239  1.889493  0  9.43766     NaN
-## baytb   41.65458  1.408418  0 29.57544     NaN
-##  Correlation: 
-##        baychc bayirl
-## bayirl 0            
-## baytb  0      0     
-## 
-## Standardized Within-Group Residuals:
-##          Min           Q1          Med           Q3          Max 
-## -3.791201263 -0.554951340 -0.005255754  0.506392145  4.296715152 
-## 
-## Number of Observations: 836
-## Number of Groups: 3
-\end{verbatim}
-\end{kframe}
-\end{knitrout}
-
-\begin{kframe}
-\begin{alltt}
-\hlkwd{stargazer}\hlstd{(znl, zm1, zm2, lnl, lm1, lm2,}
-  \hlkwc{title} \hlstd{=} \hlstr{'Inter-bay differences for median depth of colonization and light requirements. Null models do not include a grouped correlation structure. Gaussian models with and without nuggets for the spatial correlation structures are also shown.'}\hlstd{,}
-  \hlkwc{column.labels} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{'null'}\hlstd{,} \hlstr{'Gaus'}\hlstd{,} \hlstr{'Gaus, nug'}\hlstd{,} \hlstr{'null'}\hlstd{,} \hlstr{'Gaus'}\hlstd{,} \hlstr{'Gaus, nug'}\hlstd{),}
-  \hlkwc{model.numbers} \hlstd{= F}
-  \hlstd{)}
-\end{alltt}
-\end{kframe}
-% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Sun, May 22, 2016 - 11:26:12 AM
-\begin{table}[!htbp] \centering 
-  \caption{Inter-bay differences for median depth of colonization and light requirements. Null models do not include a grouped correlation structure. Gaussian models with and without nuggets for the spatial correlation structures are also shown.} 
-  \label{} 
-\begin{tabular}{@{\extracolsep{5pt}}lcccccc} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{6}{c}{\textit{Dependent variable:}} \\ 
-\cline{2-7} 
-\\[-1.8ex] & \multicolumn{3}{c}{z\_c\_all} & \multicolumn{3}{c}{light} \\ 
- & null & Gaus & Gaus, nug & null & Gaus & Gaus, nug \\ 
-\hline \\[-1.8ex] 
- baychoc & 2.242 & 2.124 & 2.021 & 50.758 & 51.198 & 48.077 \\ 
-  & (0.059) & (0.056) & (0.110) & (1.528) & (1.641) & (3.012) \\ 
-  & & & & & & \\ 
- bayirl & 1.054 & 1.074 & 1.101 & 17.932 & 17.832 & 17.664 \\ 
-  & (0.075) & (0.064) & (0.096) & (1.946) & (1.889) & (2.591) \\ 
-  & & & & & & \\ 
- baytb & 1.210 & 1.200 & 1.163 & 41.577 & 41.655 & 42.062 \\ 
-  & (0.057) & (0.048) & (0.081) & (1.474) & (1.408) & (2.202) \\ 
-  & & & & & & \\ 
-\hline \\[-1.8ex] 
-Observations & 836 & 836 & 836 & 836 & 836 & 836 \\ 
-Log Likelihood & $-$303.580 & 49.998 & 537.481 & $-$3,011.239 & $-$2,834.399 & $-$2,542.856 \\ 
-Akaike Inf. Crit. & 617.160 & $-$87.996 & $-$1,060.961 & 6,032.477 & 5,680.798 & 5,099.712 \\ 
-Bayesian Inf. Crit. & 640.785 & $-$59.646 & $-$1,027.886 & 6,056.103 & 5,709.149 & 5,132.787 \\ 
-\hline 
-\hline \\[-1.8ex] 
-\textit{Note:}  & \multicolumn{6}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
 \end{tabular} 
 \end{table} 
 
@@ -315,30 +119,7 @@ Bayesian Inf. Crit. & 640.785 & $-$59.646 & $-$1,027.886 & 6,056.103 & 5,709.149
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(multcomp)}
-\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(zm1,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
-\end{alltt}
-\begin{verbatim}
-## 
-## 	 Simultaneous Tests for General Linear Hypotheses
-## 
-## Multiple Comparisons of Means: Tukey Contrasts
-## 
-## 
-## Fit: lme.formula(fixed = z_c_all ~ 0 + bay, data = all_light, random = ~1 | 
-##     bay, correlation = corGaus(form = ~Latitude + Longitude | 
-##     bay, nugget = FALSE))
-## 
-## Linear Hypotheses:
-##                 Estimate Std. Error z value Pr(>|z|)    
-## irl - choc == 0 -1.05052    0.08509 -12.345   <1e-04 ***
-## tb - choc == 0  -0.92437    0.07381 -12.523   <1e-04 ***
-## tb - irl == 0    0.12615    0.07958   1.585    0.251    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## (Adjusted p values reported -- single-step method)
-\end{verbatim}
-\begin{alltt}
-\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(zm2,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(zmall,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
 \end{alltt}
 \begin{verbatim}
 ## 
@@ -353,38 +134,15 @@ Bayesian Inf. Crit. & 640.785 & $-$59.646 & $-$1,027.886 & 6,056.103 & 5,709.149
 ## 
 ## Linear Hypotheses:
 ##                 Estimate Std. Error z value Pr(>|z|)    
-## irl - choc == 0 -0.91965    0.14626  -6.288   <1e-05 ***
-## tb - choc == 0  -0.85789    0.13672  -6.275   <1e-05 ***
-## tb - irl == 0    0.06176    0.12606   0.490    0.876    
+## irl - choc == 0 -0.93416    0.16081  -5.809   <1e-05 ***
+## tb - choc == 0  -0.87432    0.15340  -5.700   <1e-05 ***
+## tb - irl == 0    0.05984    0.14569   0.411    0.911    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
 \end{verbatim}
 \begin{alltt}
-\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lm1,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
-\end{alltt}
-\begin{verbatim}
-## 
-## 	 Simultaneous Tests for General Linear Hypotheses
-## 
-## Multiple Comparisons of Means: Tukey Contrasts
-## 
-## 
-## Fit: lme.formula(fixed = light ~ 0 + bay, data = all_light, random = ~1 | 
-##     bay, correlation = corGaus(form = ~Latitude + Longitude | 
-##     bay, nugget = FALSE))
-## 
-## Linear Hypotheses:
-##                 Estimate Std. Error z value Pr(>|z|)    
-## irl - choc == 0  -33.365      2.503 -13.332   <1e-04 ***
-## tb - choc == 0    -9.543      2.162  -4.413   <1e-04 ***
-## tb - irl == 0     23.822      2.357  10.108   <1e-04 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## (Adjusted p values reported -- single-step method)
-\end{verbatim}
-\begin{alltt}
-\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lm2,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lmall,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{bay} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
 \end{alltt}
 \begin{verbatim}
 ## 
@@ -399,11 +157,310 @@ Bayesian Inf. Crit. & 640.785 & $-$59.646 & $-$1,027.886 & 6,056.103 & 5,709.149
 ## 
 ## Linear Hypotheses:
 ##                 Estimate Std. Error z value Pr(>|z|)    
-## irl - choc == 0  -30.412      3.973  -7.654   <1e-04 ***
-## tb - choc == 0    -6.014      3.731  -1.612    0.239    
-## tb - irl == 0     24.398      3.400   7.175   <1e-04 ***
+## irl - choc == 0  -32.011      4.138  -7.736   <0.001 ***
+## tb - choc == 0    -8.927      3.915  -2.280   0.0586 .  
+## tb - irl == 0     23.085      3.807   6.064   <0.001 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## (Adjusted p values reported -- single-step method)
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\section{Within-bay comparisons}
+
+
+
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Wed, Jun 15, 2016 - 4:11:50 PM
+\begin{table}[!htbp] \centering 
+  \caption{Linears models of depth of colonization and light requirements comparing bay segments of Tampa Bay.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay). Data were masked to remove points farther than 1km from seagrass.} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & z\_c\_all & light \\ 
+\\[-1.8ex] & (1) & (2)\\ 
+\hline \\[-1.8ex] 
+ segHB & 1.075 & 34.084 \\ 
+  & (0.128) & (7.320) \\ 
+  & & \\ 
+ segLTB & 1.294 & 39.990 \\ 
+  & (0.108) & (6.096) \\ 
+  & & \\ 
+ segMTB & 1.373 & 36.077 \\ 
+  & (0.102) & (5.656) \\ 
+  & & \\ 
+ segOTB & 0.840 & 48.855 \\ 
+  & (0.107) & (6.013) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & 218 & 218 \\ 
+Log Likelihood & 369.383 & $-$709.479 \\ 
+Akaike Inf. Crit. & $-$722.766 & 1,434.959 \\ 
+Bayesian Inf. Crit. & $-$695.838 & 1,461.886 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Wed, Jun 15, 2016 - 4:11:50 PM
+\begin{table}[!htbp] \centering 
+  \caption{Linears models of depth of colonization and light requirements comparing bay segments of Choctawhatchee Bay.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & z\_c\_all & light \\ 
+\\[-1.8ex] & (1) & (2)\\ 
+\hline \\[-1.8ex] 
+ segCCB & 1.991 & 50.644 \\ 
+  & (0.203) & (4.523) \\ 
+  & & \\ 
+ segECB & 0.862 & 63.981 \\ 
+  & (0.412) & (9.167) \\ 
+  & & \\ 
+ segWCB & 2.336 & 45.808 \\ 
+  & (0.234) & (5.164) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & 255 & 255 \\ 
+Log Likelihood & 86.461 & $-$782.632 \\ 
+Akaike Inf. Crit. & $-$158.922 & 1,579.265 \\ 
+Bayesian Inf. Crit. & $-$134.216 & 1,603.971 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Wed, Jun 15, 2016 - 4:11:50 PM
+\begin{table}[!htbp] \centering 
+  \caption{Linears models of depth of colonization and light requirements comparing bay segments of Indian River Lagoon.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).} 
+  \label{} 
+\begin{tabular}{@{\extracolsep{5pt}}lcc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{2}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-3} 
+\\[-1.8ex] & z\_c\_all & light \\ 
+\\[-1.8ex] & (1) & (2)\\ 
+\hline \\[-1.8ex] 
+ segBR & 1.021 & 20.746 \\ 
+  & (0.275) & (7.814) \\ 
+  & & \\ 
+ segLCIRL & 1.212 & 13.619 \\ 
+  & (0.233) & (6.690) \\ 
+  & & \\ 
+ segLIRL & 1.545 & 9.197 \\ 
+  & (0.275) & (7.397) \\ 
+  & & \\ 
+ segLML & 0.981 & 22.147 \\ 
+  & (0.272) & (7.180) \\ 
+  & & \\ 
+ segUCIRL & 0.932 & 20.018 \\ 
+  & (0.233) & (6.654) \\ 
+  & & \\ 
+ segUIRL & 1.030 & 24.091 \\ 
+  & (0.282) & (8.948) \\ 
+  & & \\ 
+ segUML & 0.775 & 23.552 \\ 
+  & (0.254) & (7.180) \\ 
+  & & \\ 
+\hline \\[-1.8ex] 
+Observations & 45 & 45 \\ 
+Log Likelihood & 59.214 & $-$128.060 \\ 
+Akaike Inf. Crit. & $-$96.427 & 278.121 \\ 
+Bayesian Inf. Crit. & $-$78.414 & 296.134 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+
+\clearpage
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(multcomp)}
+\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(zc1,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	 Simultaneous Tests for General Linear Hypotheses
+## 
+## Multiple Comparisons of Means: Tukey Contrasts
+## 
+## 
+## Fit: lme.formula(fixed = z_c_all ~ 0 + seg, data = tb_light, random = ~1 | 
+##     seg, correlation = corGaus(form = ~Latitude + Longitude | 
+##     seg, nugget = TRUE))
+## 
+## Linear Hypotheses:
+##                Estimate Std. Error z value Pr(>|z|)   
+## LTB - HB == 0   0.21927    0.16785   1.306  0.55790   
+## MTB - HB == 0   0.29853    0.16375   1.823  0.26158   
+## OTB - HB == 0  -0.23503    0.16718  -1.406  0.49468   
+## MTB - LTB == 0  0.07926    0.14849   0.534  0.95069   
+## OTB - LTB == 0 -0.45430    0.15227  -2.984  0.01531 * 
+## OTB - MTB == 0 -0.53357    0.14774  -3.611  0.00188 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## (Adjusted p values reported -- single-step method)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lm1,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	 Simultaneous Tests for General Linear Hypotheses
+## 
+## Multiple Comparisons of Means: Tukey Contrasts
+## 
+## 
+## Fit: lme.formula(fixed = light ~ 0 + seg, data = tb_light, random = ~1 | 
+##     seg, correlation = corGaus(form = ~Latitude + Longitude | 
+##     seg, nugget = TRUE))
+## 
+## Linear Hypotheses:
+##                Estimate Std. Error z value Pr(>|z|)
+## LTB - HB == 0     5.906      9.526   0.620    0.925
+## MTB - HB == 0     1.993      9.250   0.215    0.996
+## OTB - HB == 0    14.771      9.473   1.559    0.401
+## MTB - LTB == 0   -3.913      8.316  -0.471    0.965
+## OTB - LTB == 0    8.865      8.563   1.035    0.728
+## OTB - MTB == 0   12.778      8.255   1.548    0.408
+## (Adjusted p values reported -- single-step method)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(zc2,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	 Simultaneous Tests for General Linear Hypotheses
+## 
+## Multiple Comparisons of Means: Tukey Contrasts
+## 
+## 
+## Fit: lme.formula(fixed = z_c_all ~ 0 + seg, data = choc_light, random = ~1 | 
+##     seg, correlation = corGaus(form = ~Latitude + Longitude | 
+##     seg, nugget = TRUE))
+## 
+## Linear Hypotheses:
+##                Estimate Std. Error z value Pr(>|z|)   
+## ECB - CCB == 0  -1.1293     0.4588  -2.461  0.03522 * 
+## WCB - CCB == 0   0.3448     0.3096   1.114  0.49898   
+## WCB - ECB == 0   1.4741     0.4733   3.115  0.00515 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## (Adjusted p values reported -- single-step method)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lm2,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	 Simultaneous Tests for General Linear Hypotheses
+## 
+## Multiple Comparisons of Means: Tukey Contrasts
+## 
+## 
+## Fit: lme.formula(fixed = light ~ 0 + seg, data = choc_light, random = ~1 | 
+##     seg, correlation = corGaus(form = ~Latitude + Longitude | 
+##     seg, nugget = TRUE))
+## 
+## Linear Hypotheses:
+##                Estimate Std. Error z value Pr(>|z|)
+## ECB - CCB == 0   13.337     10.222   1.305    0.386
+## WCB - CCB == 0   -4.836      6.864  -0.704    0.757
+## WCB - ECB == 0  -18.173     10.522  -1.727    0.190
+## (Adjusted p values reported -- single-step method)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(zc3,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	 Simultaneous Tests for General Linear Hypotheses
+## 
+## Multiple Comparisons of Means: Tukey Contrasts
+## 
+## 
+## Fit: lme.formula(fixed = z_c_all ~ 0 + seg, data = irl_light, random = ~1 | 
+##     seg, correlation = corGaus(form = ~Latitude + Longitude | 
+##     seg, nugget = TRUE))
+## 
+## Linear Hypotheses:
+##                     Estimate Std. Error z value Pr(>|z|)
+## LCIRL - BR == 0     0.190379   0.360031   0.529    0.998
+## LIRL - BR == 0      0.523831   0.388774   1.347    0.829
+## LML - BR == 0      -0.040662   0.386613  -0.105    1.000
+## UCIRL - BR == 0    -0.088792   0.360395  -0.246    1.000
+## UIRL - BR == 0      0.008486   0.393707   0.022    1.000
+## UML - BR == 0      -0.246138   0.374128  -0.658    0.995
+## LIRL - LCIRL == 0   0.333452   0.360185   0.926    0.968
+## LML - LCIRL == 0   -0.231041   0.357851  -0.646    0.995
+## UCIRL - LCIRL == 0 -0.279171   0.329351  -0.848    0.980
+## UIRL - LCIRL == 0  -0.181893   0.365504  -0.498    0.999
+## UML - LCIRL == 0   -0.436517   0.344325  -1.268    0.866
+## LML - LIRL == 0    -0.564493   0.386756  -1.460    0.768
+## UCIRL - LIRL == 0  -0.612623   0.360549  -1.699    0.616
+## UIRL - LIRL == 0   -0.515345   0.393848  -1.308    0.848
+## UML - LIRL == 0    -0.769968   0.374276  -2.057    0.377
+## UCIRL - LML == 0   -0.048130   0.358217  -0.134    1.000
+## UIRL - LML == 0     0.049148   0.391715   0.125    1.000
+## UML - LML == 0     -0.205476   0.372031  -0.552    0.998
+## UIRL - UCIRL == 0   0.097279   0.365863   0.266    1.000
+## UML - UCIRL == 0   -0.157345   0.344705  -0.456    0.999
+## UML - UIRL == 0    -0.254624   0.379398  -0.671    0.994
+## (Adjusted p values reported -- single-step method)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lm3,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	 Simultaneous Tests for General Linear Hypotheses
+## 
+## Multiple Comparisons of Means: Tukey Contrasts
+## 
+## 
+## Fit: lme.formula(fixed = light ~ 0 + seg, data = irl_light, random = ~1 | 
+##     seg, correlation = corGaus(form = ~Latitude + Longitude | 
+##     seg, nugget = TRUE))
+## 
+## Linear Hypotheses:
+##                    Estimate Std. Error z value Pr(>|z|)
+## LCIRL - BR == 0     -7.1268    10.2864  -0.693    0.993
+## LIRL - BR == 0     -11.5483    10.7595  -1.073    0.935
+## LML - BR == 0        1.4016    10.6112   0.132    1.000
+## UCIRL - BR == 0     -0.7274    10.2631  -0.071    1.000
+## UIRL - BR == 0       3.3456    11.8790   0.282    1.000
+## UML - BR == 0        2.8061    10.6112   0.264    1.000
+## LIRL - LCIRL == 0   -4.4215     9.9736  -0.443    0.999
+## LML - LCIRL == 0     8.5284     9.8135   0.869    0.977
+## UCIRL - LCIRL == 0   6.3994     9.4360   0.678    0.994
+## UIRL - LCIRL == 0   10.4724    11.1722   0.937    0.966
+## UML - LCIRL == 0     9.9329     9.8135   1.012    0.951
+## LML - LIRL == 0     12.9499    10.3083   1.256    0.871
+## UCIRL - LIRL == 0   10.8210     9.9496   1.088    0.931
+## UIRL - LIRL == 0    14.8939    11.6092   1.283    0.859
+## UML - LIRL == 0     14.3544    10.3083   1.393    0.805
+## UCIRL - LML == 0    -2.1290     9.7891  -0.217    1.000
+## UIRL - LML == 0      1.9440    11.4720   0.169    1.000
+## UML - LML == 0       1.4045    10.1535   0.138    1.000
+## UIRL - UCIRL == 0    4.0729    11.1507   0.365    1.000
+## UML - UCIRL == 0     3.5334     9.7891   0.361    1.000
+## UML - UIRL == 0     -0.5395    11.4720  -0.047    1.000
 ## (Adjusted p values reported -- single-step method)
 \end{verbatim}
 \end{kframe}

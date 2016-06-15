@@ -318,6 +318,7 @@ proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, seg_pts_yr = 2010, radius = 0
 % summary of wbid characteristics
 <<eval = T, echo = F>>=
 
+
 load(file = 'data/seg_summ.RData')
 
 # rearrange col orders for alphabetical
@@ -354,6 +355,7 @@ latex(
 
 % comparisons with segment wide ests
 <<eval = T, echo = F>>=
+
 
 # load data
 load(file = 'data/ests_seg.RData')
@@ -441,6 +443,7 @@ latex(
 
 % summary of light requirements analysis, med depth ests
 <<eval = T, echo = F>>=
+
 
 ##
 # load data
@@ -566,6 +569,9 @@ conts <- ContourLines2SLDF(conts)
 zc_conts <- contourLines(im, levels = -3.855)
 zc_conts <- ContourLines2SLDF(zc_conts)
 
+# subfig labels
+sublabs <- data.frame(long = -83.375, lat = 29.78, labs = c('a', 'b', 'c'))
+
 # seagrass and depth contours
 p1 <- ggplot(state, aes(long, lat, group = group)) + 
   geom_polygon(fill = 'lightgrey') +
@@ -605,7 +611,8 @@ p1 <- ggplot(state, aes(long, lat, group = group)) +
   guides(fill = guide_legend(order = 1), 
     linetype = guide_legend(order = 2), 
     colour = guide_legend(order = 3)
-  )
+  ) + 
+  geom_text(data = sublabs[1, ], aes(x = long, y = lat, label = labs, group = NULL), size = 8) 
 
 p1leg <- g_legend(p1)
 p1 <- p1 + theme(legend.position = 'none')
@@ -640,7 +647,8 @@ p2 <- ggplot(seg, aes(long, lat)) +
     axis.title = element_text(size = 20), 
     axis.line.x = element_line(), 
     axis.line.y = element_line()
-    )
+    ) + 
+  geom_text(data = sublabs[2, ], aes(x = long, y = lat, label = labs, group = NULL), size = 8) 
 
 p2leg <- g_legend(p2)
 p2 <- p2 + theme(legend.position = 'none')
@@ -680,7 +688,8 @@ p3 <- ggplot(seg, aes(long, lat)) +
     axis.title = element_text(size = 20), 
     legend.position = 'none', 
     axis.line.x = element_line(), 
-    axis.line.y = element_line())
+    axis.line.y = element_line())  + 
+  geom_text(data = sublabs[3, ], aes(x = long, y = lat, label = labs, group = NULL), size = 8) 
 
 pleg <- ggplot(seg, aes(long, lat)) + 
   geom_polygon(fill = 'white') +
@@ -713,11 +722,15 @@ theme(axis.text = element_text(size = 20),
 
 pleg <- g_legend(pleg)
 
-pdf('figs/buff_ex.pdf', height = 6, width = 6, family = 'serif')
-p1
-p2
-p3
-grid.arrange(p1leg, p2leg, pleg, heights = c(1, 0.6, 0.6), ncol = 1)
+pdf('figs/Fig1.pdf', height = 12, width = 9.5, family = 'serif')
+grid.arrange(
+  arrangeGrob(p1, p2, ncol = 2),
+  arrangeGrob( p3, 
+    arrangeGrob(p1leg, p2leg, pleg, heights = c(1, 0.7, 0.7), ncol = 1), 
+    ncol = 2
+    ), 
+  ncol = 1
+)
 dev.off()
    
 options(digits = 2)
@@ -726,29 +739,14 @@ options(digits = 2)
 % example of buffer points for depth of col
 \begin{figure}
 \centering
-\subfloat[][Seagrass coverage and bathymetry for the segment]{
-\includegraphics[width=0.5\textwidth,page=1]{figs/buff_ex.pdf}
-\label{fig:buff_ex1}
-}
-\subfloat[][Grid of locations and sample areas for estimates]{
-\includegraphics[width=0.5\textwidth,page=2]{figs/buff_ex.pdf}
-\label{fig:buff_ex2}
-}
-
-\subfloat[][Sampled seagrass data for a test point]{
-\includegraphics[width=0.5\textwidth,page=3]{figs/buff_ex.pdf}
-\label{fig:buff_ex3}
-}
-\subfloat{
-\includegraphics[width=0.5\textwidth,page=4]{figs/buff_ex.pdf}
-}
-\caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  \Cref{fig:buff_ex1} shows the seagrass coverage and depth contours at 2 meter intervals, including the whole segment estimate for depth of colonization. \cref{fig:buff_ex2} shows a grid of sampling locations with sampling radii for estimating \ac{doc} and seagrass depth points derived from bathymetry and seagrass coverage layers.  \cref{fig:buff_ex3} shows an example of sampled seagrass depth points for a test location.  Estimates in \cref{fig:est_ex} were obtained from the test location in \cref{fig:buff_ex3}.}
+\includegraphics[width=0.9\textwidth]{figs/Fig1.pdf}
+\caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  Subfigure a shows the seagrass coverage and depth contours at 2 meter intervals, including the whole segment estimate for depth of colonization. Subfigure b shows a grid of sampling locations with sampling radii for estimating \ac{doc} and seagrass depth points derived from bathymetry and seagrass coverage layers.  Subfigure c shows an example of sampled seagrass depth points for a test location.  Estimates in \cref{fig:est_ex} were obtained from the test location in subfigure c.}
 \label{fig:buff_ex}
 \end{figure}
 
 % example of depth of col ests for wbid - big bend 820
 \begin{figure}
-\centerline{\includegraphics[width = \textwidth]{figs/seg_all.pdf}}
+\centerline{\includegraphics[width = \textwidth]{figs/Fig2.pdf}}
 \caption{Locations and seagrass coverage of estuary segments used to evaluate \acl{doc} estimates.  Seagrass coverage layers are from 2006 (BB: Big Bend), 2010 (OTB: Old Tampa Bay), 2009 (UIRL: Upper Indian R. Lagoon), and 2007 (WCB: Western Choctawhatchee Bay). SR: Steinhatchee River outflow, MI: Merritt Island National Wildlife Refuge.}
 \label{fig:seg_all}
 \end{figure}
@@ -758,7 +756,7 @@ options(digits = 2)
 % example of depth of col ests for wbid - big bend 820
 \begin{figure}
 \centering
-\includegraphics[width=0.85\textwidth]{figs/Fig3_Hagy.pdf}
+\includegraphics[width=0.85\textwidth]{figs/Fig3.pdf}
 \caption{Methods for estimating seagrass depth of colonization using sampled seagrass depth points around a single location. Three depth estimates ($Z_{c,\,min}$, $Z_{c,\,med}$, $Z_{c,\,max}$) are based on a linear curve through the inflection point of a logistic growth curve .  The logistic curve is defined by the parameters $\alpha$, $\beta$, and $\gamma$ and describes the decrease in the proportion of sample points with seagrass as a function of depth below mean tide leavel (MTL).  The top figure shows the estimation method when the linear curve intercepts $\alpha$ at depth greater than zero and the bottom figure shows the estimation method when the linear curve intercepts $\alpha$ at depth less than zero.}
 \label{fig:est_ex}
 \end{figure}
@@ -838,7 +836,7 @@ for(i in 1:length(levs)){
 # arrange all as grob
 grobwidths <- c(1, 0.3)
 
-pdf('figs/all_ests.pdf', height = 7, width = 7, family = 'serif')
+pdf('figs/Fig4.pdf', height = 7, width = 7, family = 'serif')
 grid.arrange(
   arrangeGrob(pa1, paleg1, ncol = 2, widths = grobwidths),
   arrangeGrob(pa2, paleg2, ncol = 2, widths = grobwidths),
@@ -851,7 +849,7 @@ dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.95\textwidth]{figs/all_ests.pdf}
+\includegraphics[width = 0.95\textwidth]{figs/Fig4.pdf}
 \caption{Spatially-resolved estimates of maximum seagrass depth of colonization (m) for four coastal segments of Florida.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees. From left to right, top to bottom: Big Bend, Old Tampa Bay, Upper Indian R. Lagoon, Western Choctawhatchee Bay.}
 \label{fig:all_ests}
 \end{figure}
@@ -877,6 +875,9 @@ to_plo <- sats_melt
 to_plo$variable <- factor(to_plo$variable, labels = c('Average', seq(2003, 2007)))
 seg_plo <- fortify(choc_seg)
 
+# get average only
+to_plo <- filter(to_plo, variable == 'Average')
+
 # leg lab
 leg_lab <- expression(paste(italic(K [d]), ' (', m^-1, ')')) 
 
@@ -890,7 +891,6 @@ p <- ggplot(data = seg_plo) +
   geom_polygon(aes(x = long, y = lat, group = group), 
     colour = 'black', fill = NA) +
   coord_equal() +
-  facet_wrap(~ variable, ncol = 2) + 
   scale_colour_gradientn(leg_lab, colours = cols) +
   scale_fill_gradientn(leg_lab, colours = cols) +
   scale_x_continuous(expand = c(0,0)) + 
@@ -909,14 +909,14 @@ p <- ggplot(data = seg_plo) +
     legend.text = element_text(size = 6)
     )
 
-pdf('figs/kd_choc.pdf', height = 4, width = 6, family = 'serif')
+pdf('figs/Fig5.pdf', height = 3, width = 5, family = 'serif')
 p
 dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = \textwidth]{figs/kd_choc.pdf}
-\caption{Satellite estimated light attenuation for Choctawhatchee Bay.  Each facet is an annual average of light attenuation for available years of satellite data up to the year of seagrass coverage used to estimate depth of colonization.  The first facet is an average of all years.  See \cref{fig:light_choc} for segment identification.}
+\includegraphics[width = \textwidth]{figs/Fig5.pdf}
+\caption{Satellite estimated light attenuation for Choctawhatchee Bay as an average of all years from 2003 to 2007.  See \cref{fig:light_choc} for segment identification.}
 \label{fig:kd_choc}
 \end{figure}
 
@@ -940,6 +940,9 @@ seg_plo <- fortify(tb_seg)
 # leg lab
 leg_lab <- 'Clarity (m)'
 
+# get average only
+to_plo <- filter(to_plo, variable == 'Average')
+
 # make plot
 p <- ggplot(data = seg_plo) +
   geom_polygon(aes(x = long, y = lat, group = group), 
@@ -950,7 +953,6 @@ p <- ggplot(data = seg_plo) +
   geom_polygon(aes(x = long, y = lat, group = group), 
     colour = 'black', fill = NA) +
   coord_equal() +
-  facet_wrap(~ variable) + 
   scale_colour_gradientn(leg_lab, colours = cols) +
   scale_fill_gradientn(leg_lab, colours = cols) +
   scale_x_continuous(expand = c(0,0)) + 
@@ -968,14 +970,14 @@ p <- ggplot(data = seg_plo) +
     axis.line.y = element_line()
     )
 
-pdf('figs/clarity_tb.pdf', height = 7.5, width = 7, family = 'serif')
+pdf('figs/Fig6.pdf', height = 5.5, width = 5, family = 'serif')
 p
 dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = \textwidth]{figs/clarity_tb.pdf}
-\caption{Satellite estimated water clarity for Tampa Bay.  Each facet is an annual average of water clarity for available years of satellite data. The first facet is an average of all years.  See \cref{fig:light_tb} for segment identification.}
+\includegraphics[width = \textwidth]{figs/Fig6.pdf}
+\caption{Satellite estimated water clarity for Tampa Bay as an average of all years from 2006 to 2010. See \cref{fig:light_tb} for segment identification.}
 \label{fig:clarity_tb}
 \end{figure}
 
@@ -1108,7 +1110,7 @@ pB$widths[2:3] <- maxWidth
 pC$widths[2:3] <- maxWidth
 pD$widths[2:3] <- maxWidth
 
-pdf('figs/light_choc.pdf', height = 8, width = 8, family = 'serif')
+pdf('figs/Fig7.pdf', height = 8, width = 8, family = 'serif')
 grid.arrange(pA, p1leg, pB, blankPanel, pC, p3leg, pD, blankPanel, 
   ncol = 2, nrow = 4, 
   widths = c(1, 0.2), heights = c(1, 0.7, 1, 0.7))
@@ -1116,7 +1118,7 @@ dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.95\textwidth]{figs/light_choc.pdf}
+\includegraphics[width = 0.95\textwidth]{figs/Fig7.pdf}
 \caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
 \label{fig:light_choc}
 \end{figure}
@@ -1129,6 +1131,14 @@ options(digits = 7)
 
 data(tb_light)
 data(tb_seg)
+data(sgbuff_2010_tb)
+
+# mask tb doc and light ests by 1km buffer of seagrass
+coordinates(tb_light) = ~Longitude+Latitude
+tmp <- tb_light  %over% sgbuff_2010_tb %>% 
+  is.na(.) %>% 
+  !.
+tb_light <- data.frame(tb_light)[tmp, ]
 
 # centroids for labels
 labs <- data.frame(rgeos::gCentroid(tb_seg, byid = T))
@@ -1234,14 +1244,14 @@ p4 <- ggplot(dat, aes(x = seg, y = light)) +
     ) + 
   coord_flip()
 
-pdf('figs/light_tb.pdf', height = 7.5, width = 7, family = 'serif')
+pdf('figs/Fig8.pdf', height = 7.5, width = 7, family = 'serif')
 grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
   widths = c(1, 0.3, 0.75))
 dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.95\textwidth]{figs/light_tb.pdf}
+\includegraphics[width = 0.95\textwidth]{figs/Fig8.pdf}
 \caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb}
 \end{figure}
@@ -1359,7 +1369,7 @@ p4 <- ggplot(dat, aes(x = seg, y = light)) +
     ) + 
   coord_flip()
 
-pdf('figs/light_irl.pdf', height = 8.5, width = 6.5, family = 'serif')
+pdf('figs/Fig9.pdf', height = 8.5, width = 6.5, family = 'serif')
 grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
   widths = c(1, 0.3, 0.75))
 dev.off()
@@ -1368,7 +1378,7 @@ options(digits = 1)
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.8\textwidth]{figs/light_irl.pdf}
+\includegraphics[width = 0.8\textwidth]{figs/Fig9.pdf}
 \caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.15 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
 \label{fig:light_irl}
 \end{figure}
@@ -1506,7 +1516,7 @@ pB$widths[2:3] <- maxWidth
 pC$widths[2:3] <- maxWidth
 pD$widths[2:3] <- maxWidth
 
-pdf('figs/light_choc_zcmax.pdf', height = 8, width = 8, family = 'serif')
+pdf('figs/FigS1.pdf', height = 8, width = 8, family = 'serif')
 grid.arrange(pA, p1leg, pB, blankPanel, pC, p3leg, pD, blankPanel, 
   ncol = 2, nrow = 4, 
   widths = c(1, 0.2), heights = c(1, 0.7, 1, 0.7))
@@ -1514,14 +1524,13 @@ dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.95\textwidth]{figs/light_choc_zcmax.pdf}
+\includegraphics[width = 0.95\textwidth]{figs/FigS1.pdf}
 \caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
 \label{fig:light_choc_zcmax}
 \end{figure}
 
 % estimated light requirements for Tampa Bay, z_cmax
 <<light_tb_zcmax, echo = F, eval = T, cache = T, results = 'hide'>>=
-
 # reset digits to default
 options(digits = 7)
 
@@ -1632,14 +1641,14 @@ p4 <- ggplot(dat, aes(x = seg, y = light)) +
     ) + 
   coord_flip()
 
-pdf('figs/light_tb_zcmax.pdf', height = 7.5, width = 7, family = 'serif')
+pdf('figs/FigS2.pdf', height = 7.5, width = 7, family = 'serif')
 grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
   widths = c(1, 0.3, 0.75))
 dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.95\textwidth]{figs/light_tb_zcmax.pdf}
+\includegraphics[width = 0.95\textwidth]{figs/FigS2.pdf}
 \caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb_zcmax}
 \end{figure}
@@ -1757,7 +1766,7 @@ p4 <- ggplot(dat, aes(x = seg, y = light)) +
     ) + 
   coord_flip()
 
-pdf('figs/light_irl_zcmax.pdf', height = 8.5, width = 6.5, family = 'serif')
+pdf('figs/FigS3.pdf', height = 8.5, width = 6.5, family = 'serif')
 grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
   widths = c(1, 0.3, 0.75))
 dev.off()
@@ -1766,7 +1775,7 @@ options(digits = 1)
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.8\textwidth]{figs/light_irl_zcmax.pdf}
+\includegraphics[width = 0.8\textwidth]{figs/FigS3.pdf}
 \caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.15 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
 \label{fig:light_irl_zcmax}
 \end{figure}

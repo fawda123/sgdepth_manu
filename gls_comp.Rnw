@@ -18,8 +18,6 @@
 \usepackage{outlines}
 \usepackage{amsmath}
 
-\begin{document}
-
 \setlength{\parskip}{5mm}
 \setlength{\parindent}{0in}
 
@@ -35,36 +33,9 @@ options(replace.assign = TRUE, width = 80)
 
 \begin{document}
 
-<<results = 'asis', message = F, warning = F>>=
-library(nlme)
-library(stargazer)
+\section{Between-bay comparisons}    
 
-data(ests_out)
-tmp <- filter(ests_out, seg == '303') %>% 
-  select(z_cmax, long, lat)
-
-modnl <- gls(z_cmax ~ 1, data = tmp)
-mod1 <- gls(z_cmax ~ 1, correlation = corSpher(form = ~ long + lat, nugget = TRUE), 
-  data = tmp)
-mod2 <- gls(z_cmax ~ 1, correlation = corLin(form = ~ long + lat, nugget = TRUE), 
-  data = tmp)
-mod3 <- gls(z_cmax ~ 1, correlation = corRatio(form = ~ long + lat, nugget = TRUE), 
-  data = tmp)
-mod4 <- gls(z_cmax ~ 1, correlation = corGaus(form = ~ long + lat, nugget = TRUE), 
-  data = tmp)
-mod5 <- gls(z_cmax ~ 1, correlation = corExp(form = ~ long + lat, nugget = TRUE), 
-  data = tmp)
-
-# AIC(modnl, mod1, mod2, mod3, mod4, mod5)
-
-stargazer(modnl, mod1, mod2, mod3, mod4, mod5, 
-  title = 'Comparison of regression models with different correlation structures for grid locations.',
-  column.labels = c('null', 'Spher', 'Lin', 'Ratio', 'Gaus', 'Exp'), 
-  model.numbers = F
-  )
-@
-
-<<cache = TRUE>>=
+<<cache = TRUE, echo = F>>=
 data(choc_light)
 data(irl_light)
 data(tb_light)
@@ -79,53 +50,88 @@ tb_light <- select(tb_light, z_c_all, light, seg, Longitude, Latitude) %>%
 all_light <- rbind(choc_light, irl_light, tb_light) %>% 
   mutate(bay = factor(bay))
 
-znl <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay, data = all_light)
-zm1 <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay,
-  correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = FALSE), 
-  data = all_light)
-zm2 <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay,
+zmall <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay,
   correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = TRUE), 
   data = all_light)
-
-
-lnl <- lme(light ~ 0 + bay, random = ~ 1 | bay, data = all_light)
-lm1 <- lme(light ~ 0 + bay, random = ~ 1 | bay,
-  correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = FALSE), 
-  data = all_light)
-lm2 <- lme(light ~ 0 + bay, random = ~ 1 | bay,
+lmall <- lme(light ~ 0 + bay, random = ~ 1 | bay,
   correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = TRUE), 
   data = all_light)
 
 @
 
-
-<<>>=
-# boxplots
-ggplot(all_light, aes(x = bay, y = light)) +
-  geom_boxplot() + 
-  theme_minimal()
-@
-
-<<message = F, warning = F>>=
-summary(zm1)
-summary(lm1)
-@
-
-<<results = 'asis', message = F, warning = F>>=
-
-stargazer(znl, zm1, zm2, lnl, lm1, lm2,
-  title = 'Inter-bay differences for median depth of colonization and light requirements. Null models do not include a grouped correlation structure. Gaussian models with and without nuggets for the spatial correlation structures are also shown.',
-  column.labels = c('null', 'Gaus', 'Gaus, nug', 'null', 'Gaus', 'Gaus, nug'), 
-  model.numbers = F
+<<results = 'asis', message = F, warning = F, echo = F>>=
+library(stargazer)
+stargazer(zmall, lmall,
+  title = 'Inter-bay differences for median depth of colonization and light requirements.  Gaussian models with nuggets for the spatial correlation structures were used.  Tampa Bay data were masked to remove points farther than 1km from seagrass.'
   )
 @
 
 <<message = F, warning = F>>=
 library(multcomp)
-summary(glht(zm1, linfct = mcp(bay = 'Tukey')))
-summary(glht(zm2, linfct = mcp(bay = 'Tukey')))
-summary(glht(lm1, linfct = mcp(bay = 'Tukey')))
-summary(glht(lm2, linfct = mcp(bay = 'Tukey')))
+summary(glht(zmall, linfct = mcp(bay = 'Tukey')))
+summary(glht(lmall, linfct = mcp(bay = 'Tukey')))
+@
+
+\section{Within-bay comparisons}
+
+<<message = F, warning = F, echo = F>>=
+library(maptools)
+library(nlme)
+library(stargazer)
+
+data(tb_light)
+data(choc_light)
+data(irl_light)
+
+tb_light$seg <- factor(tb_light$seg)
+choc_light$seg <- factor(choc_light$seg)
+irl_light$seg <- factor(irl_light$seg)
+
+zc1 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data = tb_light)
+zc2 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data = choc_light)
+zc3 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data =irl_light)
+
+lm1 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data = tb_light)
+lm2 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data = choc_light)
+lm3 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data =irl_light)
+@
+
+<<results = 'asis', message = F, warning = F, echo = F>>=
+library(stargazer)
+stargazer(zc1, lm1,
+  title = 'Linears models of depth of colonization and light requirements comparing bay segments of Tampa Bay.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay). Data were masked to remove points farther than 1km from seagrass.'
+  )
+stargazer(zc2, lm2,
+  title = 'Linears models of depth of colonization and light requirements comparing bay segments of Choctawhatchee Bay.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).'
+  )
+
+stargazer(zc3, lm3,
+  title = 'Linears models of depth of colonization and light requirements comparing bay segments of Indian River Lagoon.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).'
+  )
+@
+
+\clearpage
+<<message = F, warning = F>>=
+library(multcomp)
+summary(glht(zc1, linfct = mcp(seg = 'Tukey')))
+summary(glht(lm1, linfct = mcp(seg = 'Tukey')))
+summary(glht(zc2, linfct = mcp(seg = 'Tukey')))
+summary(glht(lm2, linfct = mcp(seg = 'Tukey')))
+summary(glht(zc3, linfct = mcp(seg = 'Tukey')))
+summary(glht(lm3, linfct = mcp(seg = 'Tukey')))
+
 @
 
 \end{document}

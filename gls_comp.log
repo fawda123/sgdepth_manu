@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.8.29)  22 MAY 2016 11:26
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.8.29)  15 JUN 2016 16:11
 entering extended mode
 **gls_comp.tex
 (M:\docs\manuscripts\sgdepth_manu\gls_comp.tex
@@ -514,21 +514,33 @@ LaTeX Warning: Label `' multiply defined.
 
 LaTeX Warning: Label `@cref' multiply defined.
 
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `@cref' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `@cref' multiply defined.
+
 )
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 77.
+LaTeX Font Info:    ... okay on input line 77.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 77.
+LaTeX Font Info:    ... okay on input line 77.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 77.
+LaTeX Font Info:    ... okay on input line 77.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 77.
+LaTeX Font Info:    ... okay on input line 77.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 77.
+LaTeX Font Info:    ... okay on input line 77.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 77.
+LaTeX Font Info:    ... okay on input line 77.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 77.
+LaTeX Font Info:    ... okay on input line 77.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -565,7 +577,7 @@ LaTeX Font Info:    ... okay on input line 70.
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
 \AtBeginShipoutBox=\box32
-Package hyperref Info: Link coloring ON on input line 70.
+Package hyperref Info: Link coloring ON on input line 77.
 ("C:\Program Files\MiKTeX 2.9\tex\latex\hyperref\nameref.sty"
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
@@ -574,9 +586,9 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count160
 )
-LaTeX Info: Redefining \ref on input line 70.
-LaTeX Info: Redefining \pageref on input line 70.
-LaTeX Info: Redefining \nameref on input line 70.
+LaTeX Info: Redefining \ref on input line 77.
+LaTeX Info: Redefining \pageref on input line 77.
+LaTeX Info: Redefining \nameref on input line 77.
 
 (M:\docs\manuscripts\sgdepth_manu\gls_comp.out)
 (M:\docs\manuscripts\sgdepth_manu\gls_comp.out)
@@ -584,165 +596,80 @@ LaTeX Info: Redefining \nameref on input line 70.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
-
-
-! LaTeX Error: Can be used only in preamble.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.78 \begin{document}
-                     
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
+Package color Info: Redefining color shadecolor on input line 119.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <12> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 82.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 121.
 
-Overfull \hbox (42.77023pt too wide) in paragraph at lines 90--90
-[][]\OT1/cmtt/m/n/12 mod1[] []<-[] []gls[][](z_cmax[] []~[] []1[][],[] []correl
-ation[] []=[] []corSpher[][]([][]form[] []=[] []~[] []long[] []+[] []lat,[] []n
-ugget[] []=[] []TRUE[][]),[][] 
+Overfull \hbox (11.89522pt too wide) in paragraph at lines 131--131
+[]\OT1/cmtt/m/n/12 ## Fit: lme.formula(fixed = z_c_all ~ 0 + bay, data = all_li
+ght, random = ~1 |[] 
  []
 
-
-Overfull \hbox (30.42023pt too wide) in paragraph at lines 92--92
-[][]\OT1/cmtt/m/n/12 mod2[] []<-[] []gls[][](z_cmax[] []~[] []1[][],[] []correl
-ation[] []=[] []corLin[][]([][]form[] []=[] []~[] []long[] []+[] []lat,[] []nug
-get[] []=[] []TRUE[][]),[][] 
- []
-
-
-Overfull \hbox (42.77023pt too wide) in paragraph at lines 94--94
-[][]\OT1/cmtt/m/n/12 mod3[] []<-[] []gls[][](z_cmax[] []~[] []1[][],[] []correl
-ation[] []=[] []corRatio[][]([][]form[] []=[] []~[] []long[] []+[] []lat,[] []n
-ugget[] []=[] []TRUE[][]),[][] 
- []
-
-
-Overfull \hbox (36.59523pt too wide) in paragraph at lines 96--96
-[][]\OT1/cmtt/m/n/12 mod4[] []<-[] []gls[][](z_cmax[] []~[] []1[][],[] []correl
-ation[] []=[] []corGaus[][]([][]form[] []=[] []~[] []long[] []+[] []lat,[] []nu
-gget[] []=[] []TRUE[][]),[][] 
- []
-
-
-Overfull \hbox (30.42023pt too wide) in paragraph at lines 98--98
-[][]\OT1/cmtt/m/n/12 mod5[] []<-[] []gls[][](z_cmax[] []~[] []1[][],[] []correl
-ation[] []=[] []corExp[][]([][]form[] []=[] []~[] []long[] []+[] []lat,[] []nug
-get[] []=[] []TRUE[][]),[][] 
- []
-
-
-Overfull \hbox (160.09529pt too wide) in paragraph at lines 104--104
-[]  []\OT1/cmtt/m/n/12 title[] []=[] []Comparison of regression models with di
-fferent correlation structures for grid locations.[][],[][] 
- []
-
-Package color Info: Redefining color shadecolor on input line 139.
 [1
 
-{C:/Users/mbeck/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Overfull \hbox (11.89522pt too wide) in paragraph at lines 145--145
-[][]\OT1/cmtt/m/n/12 choc_light[] []<-[] []select[][](choc_light, z_c_all, ligh
-t, seg, Longitude, Latitude)[] []%>%[][] 
+{C:/Users/mbeck/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
+[3] [4] [5]
+Package color Info: Redefining color shadecolor on input line 292.
+
+Overfull \hbox (5.72021pt too wide) in paragraph at lines 304--304
+[]\OT1/cmtt/m/n/12 ## Fit: lme.formula(fixed = z_c_all ~ 0 + seg, data = tb_lig
+ht, random = ~1 |[] 
  []
 
 
-Overfull \hbox (5.72021pt too wide) in paragraph at lines 157--157
-[]  []\OT1/cmtt/m/n/12 correlation[] []=[] []corGaus[][]([][]form[] []=[] []~[]
- []Latitude[] []+[] []Longitude[] []|[] []bay,[] []nugget[] []=[] []FALSE[][]),
-[][] 
+Overfull \hbox (18.07022pt too wide) in paragraph at lines 354--354
+[]\OT1/cmtt/m/n/12 ## Fit: lme.formula(fixed = z_c_all ~ 0 + seg, data = choc_l
+ight, random = ~1 |[] 
  []
 
 
-Overfull \hbox (5.72021pt too wide) in paragraph at lines 166--166
-[]  []\OT1/cmtt/m/n/12 correlation[] []=[] []corGaus[][]([][]form[] []=[] []~[]
- []Latitude[] []+[] []Longitude[] []|[] []bay,[] []nugget[] []=[] []FALSE[][]),
-[][] 
- []
-
-Package color Info: Redefining color shadecolor on input line 177.
-<fig/unnamed-chunk-3-1.pdf, id=16, 505.89pt x 505.89pt>
-File: fig/unnamed-chunk-3-1.pdf Graphic file (type pdf)
-
-<use fig/unnamed-chunk-3-1.pdf>
-Package pdftex.def Info: fig/unnamed-chunk-3-1.pdf used on input line 186.
-(pdftex.def)             Requested size: 469.75502pt x 469.76265pt.
-Package color Info: Redefining color shadecolor on input line 195.
- [2] [3 <M:/docs/manuscripts/sgdepth_manu/fig/unnamed-chunk-3-1.pdf>] [4]
-Overfull \hbox (1055.47073pt too wide) in paragraph at lines 274--274
-[]  []\OT1/cmtt/m/n/12 title[] []=[] []Inter-bay differences for median depth 
-of colonization and light requirements. Null models do not include a grouped co
-rrelation structure. Gaussian models with and without nuggets for the spatial c
-orrelation structures are also shown.[][],[][] 
+Overfull \hbox (5.72021pt too wide) in paragraph at lines 377--377
+[]\OT1/cmtt/m/n/12 ## Fit: lme.formula(fixed = light ~ 0 + seg, data = choc_lig
+ht, random = ~1 |[] 
  []
 
 
-Overfull \hbox (11.89522pt too wide) in paragraph at lines 275--275
-[]  []\OT1/cmtt/m/n/12 column.labels[] []=[] []c[][]([][]null[][],[] []Gaus
-[][],[] []Gaus, nug[][],[] []null[][],[] []Gaus[][],[] []Gaus, nug[][])
-,[][] 
- []
-
-
-Overfull \hbox (52.18588pt too wide) in paragraph at lines 285--311
- [][] 
- []
-
-Package color Info: Redefining color shadecolor on input line 315.
-
-Overfull \hbox (11.89522pt too wide) in paragraph at lines 327--327
-[]\OT1/cmtt/m/n/12 ## Fit: lme.formula(fixed = z_c_all ~ 0 + bay, data = all_li
+Overfull \hbox (11.89522pt too wide) in paragraph at lines 398--398
+[]\OT1/cmtt/m/n/12 ## Fit: lme.formula(fixed = z_c_all ~ 0 + seg, data = irl_li
 ght, random = ~1 |[] 
  []
 
+[6
 
-Overfull \hbox (11.89522pt too wide) in paragraph at lines 350--350
-[]\OT1/cmtt/m/n/12 ## Fit: lme.formula(fixed = z_c_all ~ 0 + bay, data = all_li
-ght, random = ~1 |[] 
- []
-
-[5] [6] [7]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 412.
-Package atenddvi Info: Last page = 8.
- [8]
-Package atveryend Info: Executing hook `AfterLastShipout' on input line 412.
+] [7] [8]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 469.
+Package atenddvi Info: Last page = 9.
+ [9]
+Package atveryend Info: Executing hook `AfterLastShipout' on input line 469.
  (M:\docs\manuscripts\sgdepth_manu\gls_comp.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 412.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 412.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 469.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 469.
 Package rerunfilecheck Info: File `gls_comp.out' has not changed.
-(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+(rerunfilecheck)             Checksum: 72E6BB9987DCF4630E75ECA94DAB4913;117.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 412.
- )
-(\end occurred inside a group at level 1)
-
-### semi simple group (level 1) entered at line 78 (\begingroup)
-### bottom level 
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 469.
+ ) 
 Here is how much of TeX's memory you used:
- 10342 strings out of 493921
- 166425 string characters out of 3147282
- 319276 words of memory out of 3000000
- 13481 multiletter control sequences out of 15000+200000
- 7734 words of font info for 29 fonts, out of 3000000 for 9000
+ 10347 strings out of 493921
+ 166402 string characters out of 3147282
+ 324276 words of memory out of 3000000
+ 13483 multiletter control sequences out of 15000+200000
+ 8172 words of font info for 30 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 44i,10n,42p,370b,423s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmi
-tt10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb
-><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Prog
-ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program File
-s/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files/MiKTeX 2.9/font
-s/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on gls_comp.pdf (8 pages, 93893 bytes).
+ 44i,10n,42p,453b,411s stack positions out of 5000i,500n,10000p,200000b,50000s
+<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Pr
+ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Fi
+les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTe
+X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
+/public/amsfonts/cm/cmti12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
+amsfonts/cm/cmtt12.pfb>
+Output written on gls_comp.pdf (9 pages, 93529 bytes).
 PDF statistics:
- 79 PDF objects out of 1000 (max. 8388607)
- 11 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 89 PDF objects out of 1000 (max. 8388607)
+ 16 named destinations out of 1000 (max. 500000)
+ 17 words of extra memory for PDF output out of 10000 (max. 10000000)
 

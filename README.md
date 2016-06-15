@@ -40,6 +40,8 @@ Most data were created in `R/dat_proc.R`.  Others were created in the sg_depth r
 
 `sg_shps.RData` Shapefiles of seagrass coverage polygons for each segment
 
+`sgbuff_2010_tb.RData` Buffered polygon layer of seagrass for Tampa Bay (all segments), buffer is 1km
+
 `sgpts_2009_irl.RData` All seagrass depth points for Choctawhatchee Bay (all segments)
 
 `sgpts_2009_irl.RData` All seagrass depth points for Indian River Lagoon (all segments)
