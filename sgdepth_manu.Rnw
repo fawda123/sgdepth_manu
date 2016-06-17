@@ -478,6 +478,43 @@ all_light <- rbind(choc_light, irl_light, tb_light) %>%
     max_light = max(light)
     )
 
+# means need to be from mixed models
+data(tb_light)
+data(choc_light)
+data(irl_light)
+
+tb_light$seg <- factor(tb_light$seg)
+choc_light$seg <- factor(choc_light$seg)
+irl_light$seg <- factor(irl_light$seg)
+
+zc1 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data = tb_light)
+zc2 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data = choc_light)
+zc3 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data =irl_light)
+
+lm1 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data = tb_light)
+lm2 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data = choc_light)
+lm3 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
+  correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
+  data =irl_light)
+
+avezc <- lapply(list(zc2, zc3, zc1), function(x) x$coefficients$fixed) %>% 
+  unlist
+avelight <- lapply(list(lm2, lm3, lm1), function(x) x$coefficients$fixed) %>% 
+  unlist 
+
+all_light$mean_z_cmed <- avezc
+all_light$mean_light <- avelight
+
 save(all_light, file = 'data/all_light.RData')
 
 # load data
