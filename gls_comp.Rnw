@@ -125,11 +125,17 @@ stargazer(zc3, lm3,
 \clearpage
 <<message = F, warning = F>>=
 library(multcomp)
-summary(glht(zc1, linfct = mcp(seg = 'Tukey')))
+zc1 <- glht(zc1, linfct = mcp(seg = 'Tukey'))
+summary(zc1)
+cld(zc1)
 summary(glht(lm1, linfct = mcp(seg = 'Tukey')))
-summary(glht(zc2, linfct = mcp(seg = 'Tukey')))
+zc2 <- glht(zc2, linfct = mcp(seg = 'Tukey'))
+summary(zc2)
+cld(zc2)
 summary(glht(lm2, linfct = mcp(seg = 'Tukey')))
-summary(glht(zc3, linfct = mcp(seg = 'Tukey')))
+zc3 <- glht(zc3, linfct = mcp(seg = 'Tukey'))
+summary(zc3)
+cld(zc3)
 summary(glht(lm3, linfct = mcp(seg = 'Tukey')))
 
 @

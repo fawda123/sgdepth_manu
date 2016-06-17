@@ -82,7 +82,7 @@
 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Wed, Jun 15, 2016 - 4:11:40 PM
+% Date and time: Fri, Jun 17, 2016 - 2:13:48 PM
 \begin{table}[!htbp] \centering 
   \caption{Inter-bay differences for median depth of colonization and light requirements.  Gaussian models with nuggets for the spatial correlation structures were used.  Tampa Bay data were masked to remove points farther than 1km from seagrass.} 
   \label{} 
@@ -173,7 +173,7 @@ Bayesian Inf. Crit. & $-$297.550 & 3,413.902 \\
 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Wed, Jun 15, 2016 - 4:11:50 PM
+% Date and time: Fri, Jun 17, 2016 - 2:13:57 PM
 \begin{table}[!htbp] \centering 
   \caption{Linears models of depth of colonization and light requirements comparing bay segments of Tampa Bay.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay). Data were masked to remove points farther than 1km from seagrass.} 
   \label{} 
@@ -209,7 +209,7 @@ Bayesian Inf. Crit. & $-$695.838 & 1,461.886 \\
 \end{table} 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Wed, Jun 15, 2016 - 4:11:50 PM
+% Date and time: Fri, Jun 17, 2016 - 2:13:57 PM
 \begin{table}[!htbp] \centering 
   \caption{Linears models of depth of colonization and light requirements comparing bay segments of Choctawhatchee Bay.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).} 
   \label{} 
@@ -242,7 +242,7 @@ Bayesian Inf. Crit. & $-$134.216 & 1,603.971 \\
 \end{table} 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Wed, Jun 15, 2016 - 4:11:50 PM
+% Date and time: Fri, Jun 17, 2016 - 2:13:57 PM
 \begin{table}[!htbp] \centering 
   \caption{Linears models of depth of colonization and light requirements comparing bay segments of Indian River Lagoon.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).} 
   \label{} 
@@ -292,7 +292,8 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(multcomp)}
-\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(zc1,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\hlstd{zc1} \hlkwb{<-} \hlkwd{glht}\hlstd{(zc1,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{))}
+\hlkwd{summary}\hlstd{(zc1)}
 \end{alltt}
 \begin{verbatim}
 ## 
@@ -316,6 +317,13 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{cld}\hlstd{(zc1)}
+\end{alltt}
+\begin{verbatim}
+##   HB  LTB  MTB  OTB 
+## "ab"  "b"  "b"  "a"
 \end{verbatim}
 \begin{alltt}
 \hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lm1,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
@@ -342,7 +350,8 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ## (Adjusted p values reported -- single-step method)
 \end{verbatim}
 \begin{alltt}
-\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(zc2,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\hlstd{zc2} \hlkwb{<-} \hlkwd{glht}\hlstd{(zc2,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{))}
+\hlkwd{summary}\hlstd{(zc2)}
 \end{alltt}
 \begin{verbatim}
 ## 
@@ -357,12 +366,19 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ## 
 ## Linear Hypotheses:
 ##                Estimate Std. Error z value Pr(>|z|)   
-## ECB - CCB == 0  -1.1293     0.4588  -2.461  0.03522 * 
-## WCB - CCB == 0   0.3448     0.3096   1.114  0.49898   
-## WCB - ECB == 0   1.4741     0.4733   3.115  0.00515 **
+## ECB - CCB == 0  -1.1293     0.4588  -2.461  0.03549 * 
+## WCB - CCB == 0   0.3448     0.3096   1.114  0.49901   
+## WCB - ECB == 0   1.4741     0.4733   3.115  0.00492 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{cld}\hlstd{(zc2)}
+\end{alltt}
+\begin{verbatim}
+## CCB ECB WCB 
+## "b" "a" "b"
 \end{verbatim}
 \begin{alltt}
 \hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lm2,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
@@ -386,7 +402,8 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ## (Adjusted p values reported -- single-step method)
 \end{verbatim}
 \begin{alltt}
-\hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(zc3,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
+\hlstd{zc3} \hlkwb{<-} \hlkwd{glht}\hlstd{(zc3,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{))}
+\hlkwd{summary}\hlstd{(zc3)}
 \end{alltt}
 \begin{verbatim}
 ## 
@@ -423,6 +440,13 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ## UML - UCIRL == 0   -0.157345   0.344705  -0.456    0.999
 ## UML - UIRL == 0    -0.254624   0.379398  -0.671    0.994
 ## (Adjusted p values reported -- single-step method)
+\end{verbatim}
+\begin{alltt}
+\hlkwd{cld}\hlstd{(zc3)}
+\end{alltt}
+\begin{verbatim}
+##    BR LCIRL  LIRL   LML UCIRL  UIRL   UML 
+##   "a"   "a"   "a"   "a"   "a"   "a"   "a"
 \end{verbatim}
 \begin{alltt}
 \hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lm3,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
