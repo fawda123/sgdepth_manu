@@ -336,7 +336,7 @@ rows <- c('Year\\textsuperscript{\\textit{b}}', 'Latitude', 'Longitude', 'Surfac
 # shorten names
 names(tab) <- gsub('BB', 'BB\\\\textsuperscript{\\\\textit{a}}', names(tab))
 
-cap.val <- "Characteristics of coastal segments used to evaluate seagrass \\acl{doc} estimates (see \\cref{fig:seg_all} for spatial distribution).  Year is the date of the seagrass coverage and bathymetric data.  Latitude and longitude are the geographic centers of each segment.  Area and depth values are meters and square kilometers, respectively.  Secchi measurements (m) were obtained from the Florida Department of Environmental Protection's \\acl{IWR} (\\acs{IWR}) database, update number 40.  Secchi mean and standard errors are based on all observations within the ten years preceding each seagrass survey."
+cap.val <- "Characteristics of coastal segments used to evaluate seagrass \\acl{doc} estimates (see \\cref{fig:seg_all} for spatial distribution).  Year is the date of the seagrass coverage and bathymetric data.  Latitude and longitude are the geographic centers of each segment.  Area and depth values are square kilometers and meters, respectively.  Secchi measurements (m) were obtained from the Florida Department of Environmental Protection's \\acl{IWR} (\\acs{IWR}) database, update number 40.  Secchi mean and standard errors are based on all observations within the ten years preceding each seagrass survey."
 
 foot.val <- '\\footnotesize \\textsuperscript{\\textit{a}} BB: Big Bend, OTB: Old Tampa Bay, UIRL: Upper Indian R. Lagoon, WCB: Western Choctawhatchee Bay\\\\\\textsuperscript{\\textit{b}} Seagrass coverage data sources, see methods for bathymetry data sources:\\scriptsize\\\\BB: \\url{http://atoll.floridamarine.org/Data/metadata/SDE_Current/seagrass_bigbend_2006_poly.htm}\\\\OTB: \\url{http://www.swfwmd.state.fl.us/data/gis/layer_library/category/swim}\\\\UIRL: \\url{http://www.sjrwmd.com/gisdevelopment/docs/themes.html}\\\\WCB: \\url{http://atoll.floridamarine.org/data/metadata/SDE_Current/seagrass_chotawhatchee_2007_poly.htm}'
 
@@ -544,7 +544,7 @@ tab$mean_z_cmed[avals] <- paste0(tab$mean_z_cmed[avals], '\\textsuperscript{a}')
 tab$mean_z_cmed[bvals] <- paste0(tab$mean_z_cmed[bvals], '\\textsuperscript{b}')
 tab$mean_z_cmed[abvals] <- paste0(tab$mean_z_cmed[abvals], '\\textsuperscript{ab}')
 
-cap.val<-'Summary of median depth of colonization ($Z_{c,\\,med}$, m) and light requirements (\\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  See \\cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.'
+cap.val<-'Summary of median depth of colonization ($Z_{c,\\,med}$, m) and light requirements (\\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  Superscripts for mean $Z_{c,\\,med}$ denote significant differences within each bay. See \\cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.'
 
 foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize CCB: Central Choctawhatchee Bay, ECB: Eastern Choctawhatchee Bay, WCB: Western Choctawhatchee Bay, BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
 col_heads <- c('$n$', rep(c('Mean', 'St. Dev.', 'Min', 'Max'), 2))
@@ -895,7 +895,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/Fig4.pdf}
-\caption{Spatially-resolved estimates of maximum seagrass depth of colonization (m) for four coastal segments of Florida.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.02 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.06 decimal degrees. From left to right, top to bottom: Big Bend, Old Tampa Bay, Upper Indian R. Lagoon, Western Choctawhatchee Bay.}
+\caption{Spatially-resolved estimates of maximum seagrass depth of colonization (m) for four coastal segments of Florida.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.01 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.02 decimal degrees. From left to right, top to bottom: Big Bend, Old Tampa Bay, Upper Indian R. Lagoon, Western Choctawhatchee Bay.}
 \label{fig:all_ests}
 \end{figure}
 
