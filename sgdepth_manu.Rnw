@@ -1069,10 +1069,10 @@ p1 <- ggplot(fortify(choc_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous(labels = fmt()) + 
   ylab('Latitude') +
-  scale_size(name = bquote(italic('Z' ['c, med'])), range = scls, 
+  scale_size(name = bquote(italic('Z' ['c, med']) ~ (m)), range = scls, 
     breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, med'])), 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, med']) ~ (m)), 
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1087,7 +1087,8 @@ p1 <- p1 + theme(legend.position = 'none',
 # boxplots by seg, z_cmed
 # reorder seg labels
 p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
-  geom_boxplot(fill = fill_col, width = 0.6) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
   ylab(bquote(italic('Z' ['c, med']))) +
   theme_classic() +
   theme(axis.title.x = element_blank(),
@@ -1115,7 +1116,7 @@ p3 <- ggplot(fortify(choc_seg), aes(long, lat)) +
   ylab('Latitude') +
   scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = '% light\nrequirements', 
+  scale_colour_gradientn(name = '% SI', 
     colours = pt_cols,
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1130,7 +1131,8 @@ p3 <- p3 + theme(
 
 # boxplots, light requirements
 p4 <- ggplot(dat, aes(x = seg, y = light)) + 
-  geom_boxplot(fill = fill_col, width = 0.6) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
   ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.x = element_blank(),
@@ -1164,7 +1166,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/Fig7.pdf}
-\caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
+\caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend to the 5\textsuperscript{th} and 95\textsuperscript{th} percentiles with outliers beyond. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
 \label{fig:light_choc}
 \end{figure}
 
@@ -1217,10 +1219,10 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous(labels = fmt()) + 
   ylab('Latitude') +
-  scale_size(name = bquote(italic('Z' ['c, med'])), range = scls, 
+  scale_size(name = bquote(italic('Z' ['c, med']) ~ (m)), range = scls, 
     breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, med'])), 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, med']) ~ (m)), 
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1237,7 +1239,8 @@ p1 <- p1 + theme(legend.position = 'none',
 segs <- c('LTB', 'MTB', 'HB', 'OTB')
 dat$seg <- factor(dat$seg, levels = segs) 
 p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
-  geom_boxplot(fill = fill_col) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") + 
   ylab(bquote(italic('Z' ['c, med']))) +
   theme_classic() +
   theme(axis.title.y = element_blank(),
@@ -1266,7 +1269,7 @@ p3 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   ylab('Latitude') +
   scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = '% light\nrequirements', 
+  scale_colour_gradientn(name = '% SI', 
     colours = pt_cols,
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1280,7 +1283,8 @@ p3 <- p3 + theme(legend.position = 'none',
 
 # boxplots, light requirements
 p4 <- ggplot(dat, aes(x = seg, y = light)) + 
-  geom_boxplot(fill = fill_col) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
   ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.y = element_blank(),
@@ -1343,9 +1347,9 @@ p1 <- ggplot(fortify(irl_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous() + 
   ylab('Latitude') +
-  scale_size(name = bquote(italic('Z' ['c, med'])), range = scls, breaks = leg_brks, 
+  scale_size(name = bquote(italic('Z' ['c, med']) ~ (m)), range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, med'])), 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, med']) ~ (m)), 
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1362,7 +1366,8 @@ p1 <- p1 + theme(legend.position = 'none',
 segs <- c('LSL', 'LIRL', 'LCIRL', 'UCIRL', 'BR', 'UIRL', 'LML', 'UML')
 dat$seg <- factor(dat$seg, levels = segs) 
 p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
-  geom_boxplot(fill = fill_col) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") + 
   ylab(bquote(italic('Z' ['c, med']))) +
   theme_classic() +
   theme(axis.title.y = element_blank(),
@@ -1391,7 +1396,7 @@ p3 <- ggplot(fortify(irl_seg), aes(long, lat)) +
   ylab('Latitude') +
   scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = '% light\nrequirements', 
+  scale_colour_gradientn(name = '% SI', 
     colours = pt_cols,
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1405,7 +1410,8 @@ p3 <- p3 + theme(legend.position = 'none',
 
 # boxplots, light requirements
 p4 <- ggplot(dat, aes(x = seg, y = light)) + 
-  geom_boxplot(fill = fill_col) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
   ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.y = element_blank(),
@@ -1475,10 +1481,10 @@ p1 <- ggplot(fortify(choc_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous(labels = fmt()) + 
   ylab('Latitude') +
-  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, 
+  scale_size(name = bquote(italic('Z' ['c, max']) ~ (m)), range = scls, 
     breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, max'])), 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, max']) ~ (m)), 
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1493,7 +1499,8 @@ p1 <- p1 + theme(legend.position = 'none',
 # boxplots by seg, z_cmax
 # reorder seg labels
 p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
-  geom_boxplot(fill = fill_col, width = 0.6) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") + 
   ylab(bquote(italic('Z' ['c, max']))) +
   theme_classic() +
   theme(axis.title.x = element_blank(),
@@ -1521,7 +1528,7 @@ p3 <- ggplot(fortify(choc_seg), aes(long, lat)) +
   ylab('Latitude') +
   scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = '% light\nrequirements', 
+  scale_colour_gradientn(name = '% SI', 
     colours = pt_cols,
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1536,7 +1543,8 @@ p3 <- p3 + theme(
 
 # boxplots, light requirements
 p4 <- ggplot(dat, aes(x = seg, y = light)) + 
-  geom_boxplot(fill = fill_col, width = 0.6) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
   ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.x = element_blank(),
@@ -1570,7 +1578,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/FigS1.pdf}
-\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend beyond the boxes as 1.5 multiplied by the interquartile range. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
+\caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend to the 5\textsuperscript{th} and 95\textsuperscript{th} percentiles with outliers beyond. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
 \label{fig:light_choc_zcmax}
 \end{figure}
 
@@ -1614,10 +1622,10 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous(labels = fmt()) + 
   ylab('Latitude') +
-  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, 
+  scale_size(name = bquote(italic('Z' ['c, max']) ~ (m)), range = scls, 
     breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, max'])), 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, max']) ~ (m)), 
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1633,8 +1641,9 @@ p1 <- p1 + theme(legend.position = 'none',
 # reorder seg labels
 segs <- c('LTB', 'MTB', 'HB', 'OTB')
 dat$seg <- factor(dat$seg, levels = segs) 
-p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
-  geom_boxplot(fill = fill_col) + 
+p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) +
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
   ylab(bquote(italic('Z' ['c, max']))) +
   theme_classic() +
   theme(axis.title.y = element_blank(),
@@ -1663,7 +1672,7 @@ p3 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   ylab('Latitude') +
   scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = '% light\nrequirements', 
+  scale_colour_gradientn(name = '% SI', 
     colours = pt_cols,
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1676,8 +1685,9 @@ p3 <- p3 + theme(legend.position = 'none',
   )
 
 # boxplots, light requirements
-p4 <- ggplot(dat, aes(x = seg, y = light)) + 
-  geom_boxplot(fill = fill_col) + 
+p4 <- ggplot(dat, aes(x = seg, y = light)) +
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
   ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.y = element_blank(),
@@ -1740,9 +1750,9 @@ p1 <- ggplot(fortify(irl_seg), aes(long, lat)) +
   xlab('Longitude') +
   scale_y_continuous() + 
   ylab('Latitude') +
-  scale_size(name = bquote(italic('Z' ['c, max'])), range = scls, breaks = leg_brks, 
+  scale_size(name = bquote(italic('Z' ['c, max']) ~ (m)), range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = bquote(italic('Z' ['c, max'])), 
+  scale_colour_gradientn(name = bquote(italic('Z' ['c, max']) ~ (m)), 
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1759,7 +1769,8 @@ p1 <- p1 + theme(legend.position = 'none',
 segs <- c('LSL', 'LIRL', 'LCIRL', 'UCIRL', 'BR', 'UIRL', 'LML', 'UML')
 dat$seg <- factor(dat$seg, levels = segs) 
 p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
-  geom_boxplot(fill = fill_col) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
   ylab(bquote(italic('Z' ['c, max']))) +
   theme_classic() +
   theme(axis.title.y = element_blank(),
@@ -1788,7 +1799,7 @@ p3 <- ggplot(fortify(irl_seg), aes(long, lat)) +
   ylab('Latitude') +
   scale_size(name = '% light\nrequirements', range = scls, breaks = leg_brks, 
     labels = leg_labs) + 
-  scale_colour_gradientn(name = '% light\nrequirements', 
+  scale_colour_gradientn(name = '% SI', 
     colours = pt_cols,
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
@@ -1802,7 +1813,8 @@ p3 <- p3 + theme(legend.position = 'none',
 
 # boxplots, light requirements
 p4 <- ggplot(dat, aes(x = seg, y = light)) + 
-  geom_boxplot(fill = fill_col) + 
+  stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
+  stat_summary(fun.y = o, geom = "point") +
   ylab('% light requirements') +
   theme_classic() +
   theme(axis.title.y = element_blank(),

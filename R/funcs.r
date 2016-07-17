@@ -823,6 +823,21 @@ fmt <- function(){
 }
 
 ######
+# for boxplot summaries as 0.05 and 0.95 quantiles
+# http://stackoverflow.com/questions/4765482/changing-whisker-definition-in-geom-boxplot
+f <- function(x) {
+  r <- quantile(x, probs = c(0.05, 0.25, 0.5, 0.75, 0.95))
+  names(r) <- c("ymin", "lower", "middle", "upper", "ymax")
+  r
+}
+# example with outliers
+# define outlier as you want    
+o <- function(x) {
+  subset(x, x < quantile(x, 0.05) | quantile(x, 0.95) < x)
+}
+
+
+######
 #' Convert a data frame to raster
 #'
 #' @param dat_in data.frame to conver to raster, must include lon, lat columns named accordingly
