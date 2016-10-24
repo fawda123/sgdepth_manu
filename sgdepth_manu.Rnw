@@ -544,28 +544,33 @@ tab$mean_z_cmed[avals] <- paste0(tab$mean_z_cmed[avals], '\\textsuperscript{a}')
 tab$mean_z_cmed[bvals] <- paste0(tab$mean_z_cmed[bvals], '\\textsuperscript{b}')
 tab$mean_z_cmed[abvals] <- paste0(tab$mean_z_cmed[abvals], '\\textsuperscript{ab}')
 
+# add rows for overall means
+choc <- c('255' , '2\\textsuperscript{1}', '0.1', '0.6', '2.8', '50\\textsuperscript{1}', '3.0', '20', '87')
+irl <- c('45', '1.1\\textsuperscript{2}', '0.1', '0.8', '1.6', '18\\textsuperscript{2}', '2.9', '7.5', '31')
+tb <- c('218', '1.2\\textsuperscript{2}', '0.1', '0.6', '1.6', '41\\textsuperscript{1}', '2.5', '13', '66')
+tab <- as.matrix(tab)
+tab <- rbind(choc, tab[1:3, ], irl, tab[4:10, ], tb, tab[11:14, ])
+rows <- paste('\\hspace{0.02in}', rows)
+rows <- c('\\textbf{Choctawhatchee}', rows[1:3], '\\textbf{Indian River}', rows[4:10], '\\textbf{Tampa Bay}', rows[11:14])
+
 cap.val<-'Summary of median depth of colonization ($Z_{c,\\,med}$, m) and light requirements (\\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  Superscripts for mean $Z_{c,\\,med}$ denote significant differences within each bay. See \\cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.'
 
 foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize CCB: Central Choctawhatchee Bay, ECB: Eastern Choctawhatchee Bay, WCB: Western Choctawhatchee Bay, BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
-col_heads <- c('$n$', rep(c('Mean', 'St. Dev.', 'Min', 'Max'), 2))
+col_heads <- c('$n$', rep(c('Mean', 'St. Err.', 'Min', 'Max'), 2))
 
 latex( 
   tab,
   file = '',
   rowlabel = 'Segment\\textsuperscript{\\textit{a}}',
-  rgroup = c('Choctawhatchee Bay', 'Indian River Lagoon', 'Tampa Bay'), 
-  n.rgroup = c(3, 7, 4),
   insert.bottom = foot.val,
   caption = cap.val,
   colheads = col_heads,
-  cgroup = c('', '{\\bf $Z_{c,\\,med}$}', '\\% light'), 
+  cgroup = c('', '$\\mathbf Z_{c,\\,med}$', '{\\bf \\% light}'), 
   n.cgroup = c(1, 4, 4),
   caption.loc = 'top',
   rowname = rows,
-  size = 'small', 
-  label = 'tab:light_summ'
+  size = 'small'
   )
-
 @
 
 \clearpage

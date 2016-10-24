@@ -21,6 +21,7 @@
 \newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
 \newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
 \newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
 
 \usepackage{framed}
 \makeatletter
@@ -147,7 +148,7 @@
   \\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
   \\{\textit {\normalsize Phone: 850-934-9308, Fax: 850-934-2401, Email: \href{mailto:le.chengfeng@epa.gov}{le.chengfeng@epa.gov}}}
   \vspace{1in} 
-  \\ Version Date:   Thu Jul 14 17:32:34 2016 -0500
+  \\ Version Date:   Mon Jul 25 14:07:19 2016 -0500
 	}
 \date{}
 \maketitle
@@ -232,36 +233,34 @@ Secchi (se)&  0.19&  0.02&  0.02&  0.08\tabularnewline
 
 
 % summary of light requirements analysis, med depth ests
-%latex.default(tab, file = "", rowlabel = "Segment\\textsuperscript{\\textit{a}}",     rgroup = c("Choctawhatchee Bay", "Indian River Lagoon", "Tampa Bay"),     n.rgroup = c(3, 7, 4), insert.bottom = foot.val, caption = cap.val,     colheads = col_heads, cgroup = c("", "{\\bf $Z_{c,\\,med}$}",         "\\% light"), n.cgroup = c(1, 4, 4), caption.loc = "top",     rowname = rows, size = "small", label = "tab:light_summ")%
+%latex.default(tab, file = "", rowlabel = "Segment\\textsuperscript{\\textit{a}}",     insert.bottom = foot.val, caption = cap.val, colheads = col_heads,     cgroup = c("", "$\\mathbf Z_{c,\\,med}$", "{\\bf \\% light}"),     n.cgroup = c(1, 4, 4), caption.loc = "top", rowname = rows,     size = "small")%
 \begin{table}[!tbp]
 {\small
-\caption{Summary of median depth of colonization ($Z_{c,\,med}$, m) and light requirements (\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  Superscripts for mean $Z_{c,\,med}$ denote significant differences within each bay. See \cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.\label{tab:light_summ}} 
+\caption{Summary of median depth of colonization ($Z_{c,\,med}$, m) and light requirements (\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  Superscripts for mean $Z_{c,\,med}$ denote significant differences within each bay. See \cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.\label{tab}} 
 \begin{center}
 \begin{tabular}{llcllllcllll}
 \hline\hline
-\multicolumn{1}{l}{\bfseries Segment\textsuperscript{\textit{a}}}&\multicolumn{1}{c}{\bfseries }&\multicolumn{1}{c}{\bfseries }&\multicolumn{4}{c}{\bfseries {\bf $Z_{c,\,med}$}}&\multicolumn{1}{c}{\bfseries }&\multicolumn{4}{c}{\bfseries \% light}\tabularnewline
+\multicolumn{1}{l}{\bfseries Segment\textsuperscript{\textit{a}}}&\multicolumn{1}{c}{\bfseries }&\multicolumn{1}{c}{\bfseries }&\multicolumn{4}{c}{\bfseries $\mathbf Z_{c,\,med}$}&\multicolumn{1}{c}{\bfseries }&\multicolumn{4}{c}{\bfseries {\bf \% light}}\tabularnewline
 \cline{4-7} \cline{9-12}
-\multicolumn{1}{l}{}&\multicolumn{1}{c}{$n$}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Dev.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
+\multicolumn{1}{l}{}&\multicolumn{1}{c}{$n$}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Err.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Err.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
 \hline
-{\bfseries Choctawhatchee Bay}&&&&&&&&&&&\tabularnewline
-~~CCB&111&&2.0\textsuperscript{b}&0.6&0.6&4.2&&50.6&13.2&19.5&87.1\tabularnewline
-~~ECB&4&&0.9\textsuperscript{a}&0.1&0.7&0.9&&64.0& 8.9&55.1&74.7\tabularnewline
-~~WCB&140&&2.3\textsuperscript{b}&0.3&1.7&2.8&&45.8& 6.4&22.0&70.0\tabularnewline
-\hline
-{\bfseries Indian River Lagoon}&&&&&&&&&&&\tabularnewline
-~~BR&2&&1.0\textsuperscript{a}&0.1&1.0&1.1&&20.7& 0.8&20.2&21.3\tabularnewline
-~~LCIRL&14&&1.2\textsuperscript{a}&0.3&0.9&1.6&&13.6& 6.3& 5.8&24.7\tabularnewline
-~~LIRL&3&&1.5\textsuperscript{a}&0.0&1.5&1.6&& 9.2& 2.8& 6.0&11.2\tabularnewline
-~~LML&4&&1.0\textsuperscript{a}&0.0&1.0&1.0&&22.1& 2.2&19.3&24.3\tabularnewline
-~~UCIRL&17&&0.9\textsuperscript{a}&0.1&0.8&1.1&&20.0& 7.0& 7.5&30.7\tabularnewline
-~~UIRL&1&&1.0\textsuperscript{a}& &1.0&1.0&&24.1& &24.1&24.1\tabularnewline
-~~UML&4&&0.8\textsuperscript{a}&0.1&0.8&1.0&&23.6& 6.4&15.2&30.9\tabularnewline
-\hline
-{\bfseries Tampa Bay}&&&&&&&&&&&\tabularnewline
-~~HB&20&&1.1\textsuperscript{ab}&0.2&0.8&1.3&&34.1&11.2&12.8&55.7\tabularnewline
-~~LTB&60&&1.3\textsuperscript{b}&0.1&1.1&1.5&&40.0& 7.5&23.8&55.5\tabularnewline
-~~MTB&74&&1.4\textsuperscript{b}&0.1&1.1&1.6&&36.1& 7.6&17.0&57.5\tabularnewline
-~~OTB&64&&0.8\textsuperscript{a}&0.2&0.6&1.1&&48.9& 8.7&29.9&66.0\tabularnewline
+\textbf{Choctawhatchee}&255&&2\textsuperscript{1}&0.1&0.6&2.8&&50\textsuperscript{1}&3.0&20&87\tabularnewline
+\hspace{0.02in} CCB&111&&2.0\textsuperscript{b}&0.6&0.6&4.2&&50.6&13.2&19.5&87.1\tabularnewline
+\hspace{0.02in} ECB&4&&0.9\textsuperscript{a}&0.1&0.7&0.9&&64.0& 8.9&55.1&74.7\tabularnewline
+\hspace{0.02in} WCB&140&&2.3\textsuperscript{b}&0.3&1.7&2.8&&45.8& 6.4&22.0&70.0\tabularnewline
+\textbf{Indian River}&45&&1.1\textsuperscript{2}&0.1&0.8&1.6&&18\textsuperscript{2}&2.9&7.5&31\tabularnewline
+\hspace{0.02in} BR&2&&1.0\textsuperscript{a}&0.1&1.0&1.1&&20.7& 0.8&20.2&21.3\tabularnewline
+\hspace{0.02in} LCIRL&14&&1.2\textsuperscript{a}&0.3&0.9&1.6&&13.6& 6.3& 5.8&24.7\tabularnewline
+\hspace{0.02in} LIRL&3&&1.5\textsuperscript{a}&0.0&1.5&1.6&& 9.2& 2.8& 6.0&11.2\tabularnewline
+\hspace{0.02in} LML&4&&1.0\textsuperscript{a}&0.0&1.0&1.0&&22.1& 2.2&19.3&24.3\tabularnewline
+\hspace{0.02in} UCIRL&17&&0.9\textsuperscript{a}&0.1&0.8&1.1&&20.0& 7.0& 7.5&30.7\tabularnewline
+\hspace{0.02in} UIRL&1&&1.0\textsuperscript{a}& &1.0&1.0&&24.1& &24.1&24.1\tabularnewline
+\hspace{0.02in} UML&4&&0.8\textsuperscript{a}&0.1&0.8&1.0&&23.6& 6.4&15.2&30.9\tabularnewline
+\textbf{Tampa Bay}&218&&1.2\textsuperscript{2}&0.1&0.6&1.6&&41\textsuperscript{1}&2.5&13&66\tabularnewline
+\hspace{0.02in} HB&20&&1.1\textsuperscript{ab}&0.2&0.8&1.3&&34.1&11.2&12.8&55.7\tabularnewline
+\hspace{0.02in} LTB&60&&1.3\textsuperscript{b}&0.1&1.1&1.5&&40.0& 7.5&23.8&55.5\tabularnewline
+\hspace{0.02in} MTB&74&&1.4\textsuperscript{b}&0.1&1.1&1.6&&36.1& 7.6&17.0&57.5\tabularnewline
+\hspace{0.02in} OTB&64&&0.8\textsuperscript{a}&0.2&0.6&1.1&&48.9& 8.7&29.9&66.0\tabularnewline
 \hline
 \end{tabular}\end{center}}
 
