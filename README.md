@@ -36,17 +36,21 @@ Most data were created in `R/dat_proc.R`.  Others were created in the sg_depth r
 
 `secc_all.RData` Secchi data for all of Florida from IWR40 database, created in sg_depth.RProj
 
+`secc_all_tb.RData` Secchi data for all of Tampa Bay from http://www.tampabay.wateratlas.usf.edu/datadownload, data are in m, note that `secc_all.RData` has less coverage
+
 `seg_summ.RData` Summarized data for table of segment characteristics
 
 `sg_shps.RData` Shapefiles of seagrass coverage polygons for each segment
 
 `sgbuff_2010_tb.RData` Buffered polygon layer of seagrass for Tampa Bay (all segments), buffer is 1km
 
-`sgpts_2009_irl.RData` All seagrass depth points for Choctawhatchee Bay (all segments)
+`sgpts_2007_choc.RData` All seagrass depth points for Choctawhatchee Bay (all segments)
 
 `sgpts_2009_irl.RData` All seagrass depth points for Indian River Lagoon (all segments)
 
 `sgpts_2010_tb.RData` All seagrass depth points for Tampa Bay (all segments)
+
+`sgpts_all_tb.RData` list of SpatialPointsDataFrames of seagrass depth points for 11 years of data (1988 - 2010), corrected to local mean sea level with vdatum tool
 
 `shps.RData` Multiple shapefiles for each segment, including all segment polygons, individual segment polygons, and seagrass depth points for each segment
 

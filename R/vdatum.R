@@ -1,5 +1,5 @@
 ######
-# vertical datum conversion to MSL
+# vertical datum conversion to LMSL (local mean sea level)
 # all need to be converted except IRL
 # tampa bay is nadv88
 # all others are mllw from USGS bathymetry
@@ -129,7 +129,6 @@ save(shps, file = 'data/shps.RData')
 file.remove('data/sgpts_2010_tb.RData')
 sgpts_2010_tb <- out_ls[['sgpts_2010_tb.txt']]
 save(sgpts_2010_tb, file = 'data/sgpts_2010_tb.RData')
-
 
 ##
 # use this if processing individual files different from above
