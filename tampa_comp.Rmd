@@ -1,0 +1,88 @@
+---
+output:
+  html_document:
+    keep_md: yes
+    toc: no
+    self_contained: no
+  pdf_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(maptools)
+library(tidyverse)
+library(tidyr)
+library(purrr)
+```
+
+```{r fig.width = 7, fig.height = 6, echo = F, message = F}
+data(tb_light_allsat)
+data(tb_light_allsec)
+
+sec <- reshape2::melt(tb_light_allsec, id.vars = names(tb_light_allsec[[1]])) %>% 
+  mutate(est = 'Secchi')
+sat <- reshape2::melt(tb_light_allsat, id.vars = names(tb_light_allsat[[1]])) %>% 
+  mutate(est = 'Satellite')
+
+tb_ts <- rbind(sec, sat) %>% 
+  rename(yr = L1)
+
+ggplot(tb_ts, aes(x = factor(yr), y = SD, fill = est)) +
+  geom_boxplot() +
+  theme_bw() +
+  facet_wrap(~seg, ncol = 1)
+
+ggplot(tb_ts, aes(x = factor(yr), y = light, fill = seg)) +
+  geom_boxplot() +
+  theme_bw() + 
+  facet_wrap(~est, ncol = 1)
+
+summs <- group_by(tb_ts, seg, yr, est) %>% 
+  summarise(
+    SD = mean(SD), 
+    z_c_all = mean(z_c_all), 
+    light = mean(light)
+  )
+labs <- filter(summs, yr %in% c('1988', '2004', '2010')) %>% 
+  filter(!(yr %in% '2004' & est %in% 'Secchi'))
+ggplot(summs, aes(x = z_c_all, y = light, colour = seg)) +
+  geom_path() +
+  geom_point() + 
+  geom_label(data = labs, aes(label = yr), size = 3, label.padding = unit(0.1, "lines")) +
+  theme_bw() + 
+  facet_wrap(~est, ncol = 1)
+
+
+toplo1 <- filter(tb_ts, est %in% 'Secchi')
+toplo2 <- filter(tb_ts, as.numeric(yr) > 2003)
+
+ggplot(toplo1, aes(x = Longitude, y = Latitude, size = z_c_all, fill= z_c_all)) + 
+  geom_point(pch = 21) + 
+  facet_wrap( ~ yr) + 
+  coord_equal() + 
+  theme_bw() + 
+  scale_fill_distiller(palette = 'Set1')
+
+ggplot(toplo1, aes(x = Longitude, y = Latitude, size = light, fill= light)) + 
+  geom_point(pch = 21) + 
+  facet_wrap( ~ yr) + 
+  coord_equal() + 
+  theme_bw() + 
+  scale_fill_distiller(palette = 'Set1')
+
+ggplot(toplo2, aes(x = Longitude, y = Latitude, size = light, fill= light)) + 
+  geom_point(pch = 21) + 
+  facet_grid(est ~ yr) + 
+  coord_equal() + 
+  theme_bw() + 
+  scale_fill_distiller(palette = 'Set1')
+
+
+ggplot(toplo2, aes(x = Longitude, y = Latitude, size = z_c_all, fill= z_c_all)) + 
+  geom_point(pch = 21) + 
+  facet_grid(est ~ yr) + 
+  coord_equal() + 
+  theme_bw() + 
+  scale_fill_distiller(palette = 'Spectral')
+```  
