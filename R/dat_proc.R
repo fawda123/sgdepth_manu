@@ -248,7 +248,6 @@ choc_light <- dat
 save(choc_light, file = 'data/choc_light.RData')
 
 ######
-# TB light requirements, z_cmed
 
 source('R/funcs.r')
 
@@ -419,3 +418,135 @@ dat <- dat[dat$light > 4 & dat$maxd_conf < 1 , ]
 
 irl_light_zcmax <- dat
 save(irl_light_zcmax, file = 'data/irl_light_zcmax.RData')
+
+######
+# evaluate all tb estimates for multi years, secchi data
+
+rm(list = ls())
+
+source('R/funcs.r')
+
+# irl polygon segment
+data(tb_seg)
+
+# irl secchi data
+data(secc_all_tb)
+
+# irl seagrass points
+data(sgpts_all_tb)
+
+# 1km seagrass buffer for clipping
+data(sgbuff_2010_tb)
+
+# years  to iterate and list to fill
+yrs <- names(secc_all_tb)
+out_ls <- vector('list', length = length(yrs))
+names(out_ls) <- as.character(yrs)
+
+# process years
+for(i in seq_along(yrs)){
+  
+  cat(i, 'of', length(yrs),'\n')
+  
+  # get yr index and data in the year
+  yr <- yrs[i]
+  secc <- secc_all_tb[[i]]
+  sgpts <- sgpts_all_tb[[i]]
+  
+  # process
+  proc <- secc_doc(secc, sgpts, tb_seg, radius = 0.15, seg_pts_yr = yr, z_est = 'z_cmed', trace = T)
+  dat <- na.omit(proc)
+
+  # mask tb doc and light ests by 1km buffer of seagrass
+  coordinates(dat) = ~Longitude+Latitude
+  tmp <- dat %over% sgbuff_2010_tb %>%
+    is.na(.) %>%
+    !.
+  dat <- data.frame(dat)[tmp, ] %>% 
+    select(-matches('optional'))
+
+  # save output
+  out_ls[[yr]] <- dat
+  
+}
+
+tb_light_allsec <- out_ls
+save(tb_light_allsec, file = 'data/tb_light_allsec.RData', compress = 'xz')
+
+######
+# get ests using sat data but same locations as secchi
+# from 2004 to 2010
+
+rm(list = ls())
+
+source('R/funcs.r')
+
+# irl polygon segment
+data(tb_seg)
+
+# irl secchi data
+data(secc_all_tb)
+
+# irl seagrass points
+data(sgpts_all_tb)
+
+# 1km seagrass buffer for clipping
+data(sgbuff_2010_tb)
+
+# satellite data, 2003 to 2010
+data(tb_sats_all)
+
+sat_dat <- tb_sats_all$sats_all
+  
+# yrs to eval, years with satellite data and seagrass coverage
+# note that previous analysis averaged water clarity from sat data from 2006 to 2010
+yrsinsat <- names(tb_sats_all$sats_all) %>% 
+  grep('[0-9]+', ., value = T) %>% 
+  gsub('^.*_', '', .)
+yrsinsat <- yrsinsat[yrsinsat %in% names(secc_all_tb)]
+out_ls <- vector('list', length = length(yrsinsat))
+names(out_ls) <- as.character(yrsinsat)
+
+# process years
+for(i in seq_along(yrsinsat)){
+  
+  cat(i, 'of', length(yrsinsat),'\n')
+  
+  # get yr index and data in the year
+  yr <- yrsinsat[i]
+  secc <- secc_all_tb[[yr]]
+  sgpts <- sgpts_all_tb[[yr]]
+  
+  # satellite data
+  yrcol <- paste0('clarity_', yr)
+  torast <- sat_dat[, c('lon', 'lat', yrcol)]
+  sat_rast <- make_rast_fun(torast, yrcol)
+  
+  # extract secchi locations on sat data
+  # sample the satellit clarity raster
+  samp_vals <- raster::extract(sat_rast, secc, sp = T)
+  samp_vals <- data.frame(samp_vals) %>% 
+    .[, c(yrcol, 'Longitude', 'Latitude')] %>% 
+    na.omit
+  names(samp_vals)[names(samp_vals) %in% yrcol] <- 'SD'
+  coordinates(samp_vals) <- c('Longitude', 'Latitude')
+
+  # process
+  proc <- secc_doc(samp_vals, sgpts, tb_seg, radius = 0.15, seg_pts_yr = yr, z_est = 'z_cmed', trace = T)
+  dat <- na.omit(proc)
+
+  # mask tb doc and light ests by 1km buffer of seagrass
+  coordinates(dat) = ~Longitude+Latitude
+  tmp <- dat %over% sgbuff_2010_tb %>%
+    is.na(.) %>%
+    !.
+  dat <- data.frame(dat)[tmp, ] %>% 
+    select(-matches('optional'))
+
+  # save output
+  out_ls[[yr]] <- dat
+  
+}
+
+tb_light_allsat <- out_ls
+save(tb_light_allsat, file = 'data/tb_light_allsat.RData')

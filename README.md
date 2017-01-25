@@ -56,8 +56,14 @@ Most data were created in `R/dat_proc.R`.  Others were created in the sg_depth r
 
 `tb_light.RData` Seagrass light requirements for Tampa Bay, slightly modified output from `secchi_doc` function, created in `light_tb` chunk
 
+`tb_light_allsat.RData` list of data frames for seagrass light requirements for Tampa Bay 2004 to 2010 (years with satellite, secchi, and seagrass data), estimated using satellite data at secchi locations from `secc_all_tb.RData` and seagrass depth points in `sgpts_all_tb.RData`
+
+`tb_light_allsec.RData` list of data frames for seagrass light requirements for Tampa Bay 1988 to 2010 (years with secchi, and seagrass data), estimated using secchi data from `secc_all_tb.RData` and seagrass depth points in `sgpts_all_tb.RData`
+
 `tb_light_zcmax.RData` Same as `tb_light.RData` but estimated using z_cmax
 
-`tb_sats.RData` Two element list including raster image of all averaged clarity data and data frame of each year of clarity data from satellite images for Tampa Bay 2003-2010, processed in sg_depth.RProj
+`tb_sats.RData` Two element list including raster image of all averaged clarity data and data frame of each year of clarity data from satellite images for Tampa Bay 2006-2010, processed in sg_depth.RProj
+
+`tb_sats_all.RData` Same as `tb_sats.RData` but includes 2003 to 2010.
 
 `tb_seg.RData` Shapefile polygon of Tampa Bay, all segments
