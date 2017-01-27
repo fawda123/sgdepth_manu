@@ -3,7 +3,7 @@
 
 
 
-Secchi data from the Tampa Bay Water Atlas ([link](http://www.tampabay.wateratlas.usf.edu/)) were obtained for all locations in the same years with seagrass coverage: 1988, 1990, 1992, 1994, 1996, 1999, 2001, 2004, 2006, 2008, and 2010.  Secchi data with a minimum of then monthly observations were averaged within each year at each location. 
+Secchi data from the Tampa Bay Water Atlas ([link](http://www.tampabay.wateratlas.usf.edu/)) were obtained for all locations in the same years with seagrass coverage: 1988, 1990, 1992, 1994, 1996, 1999, 2001, 2004, 2006, 2008, and 2010.  Secchi data with a minimum of ten monthly observations were averaged within each year at each location. 
 
 Satellite data were available for 2003 through 2010, with four years overlapping with seagrass data.
 
@@ -289,14 +289,3 @@ ggplot(toplo2, aes(x = Longitude, y = Latitude, size = light, fill= light)) +
 ```
 
 ![](tampa_comp_files/figure-html/unnamed-chunk-5-5.png)<!-- -->
-
-```r
-ggplot(toplo2, aes(x = Longitude, y = Latitude, size = z_c_all, fill= z_c_all)) + 
-  geom_point(pch = 21) + 
-  facet_grid(est ~ yr) + 
-  coord_equal() + 
-  theme_bw() + 
-  scale_fill_distiller(palette = 'Spectral')
-```
-
-![](tampa_comp_files/figure-html/unnamed-chunk-5-6.png)<!-- -->

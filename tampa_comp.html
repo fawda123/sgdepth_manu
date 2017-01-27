@@ -121,7 +121,7 @@ $(document).ready(function () {
 
 <div id="annual-changes-in-depth-of-colonization-and-light-requirements-in-tampa-bay" class="section level3">
 <h3>Annual changes in depth of colonization and light requirements in Tampa Bay</h3>
-<p>Secchi data from the Tampa Bay Water Atlas (<a href="http://www.tampabay.wateratlas.usf.edu/">link</a>) were obtained for all locations in the same years with seagrass coverage: 1988, 1990, 1992, 1994, 1996, 1999, 2001, 2004, 2006, 2008, and 2010. Secchi data with a minimum of then monthly observations were averaged within each year at each location.</p>
+<p>Secchi data from the Tampa Bay Water Atlas (<a href="http://www.tampabay.wateratlas.usf.edu/">link</a>) were obtained for all locations in the same years with seagrass coverage: 1988, 1990, 1992, 1994, 1996, 1999, 2001, 2004, 2006, 2008, and 2010. Secchi data with a minimum of ten monthly observations were averaged within each year at each location.</p>
 <p>Satellite data were available for 2003 through 2010, with four years overlapping with seagrass data.</p>
 <pre class="r"><code># load data
 data(tb_seg)
@@ -351,13 +351,6 @@ ggplot(toplo1, aes(x = Longitude, y = Latitude, size = z_c_all, fill= z_c_all)) 
   theme_bw() + 
   scale_fill_distiller(palette = &#39;Set1&#39;)</code></pre>
 <p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-5.png" /><!-- --></p>
-<pre class="r"><code>ggplot(toplo2, aes(x = Longitude, y = Latitude, size = z_c_all, fill= z_c_all)) + 
-  geom_point(pch = 21) + 
-  facet_grid(est ~ yr) + 
-  coord_equal() + 
-  theme_bw() + 
-  scale_fill_distiller(palette = &#39;Spectral&#39;)</code></pre>
-<p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-6.png" /><!-- --></p>
 </div>
 
 
