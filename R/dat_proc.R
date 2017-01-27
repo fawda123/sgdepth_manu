@@ -2,6 +2,8 @@ source('R/funcs.r')
 library(dplyr)
 library(tidyr)
 library(maptools)
+library(foreach)
+library(doParallel)
 
 ######
 # summary of wbid characteristics
@@ -440,12 +442,21 @@ data(sgbuff_2010_tb)
 
 # years  to iterate and list to fill
 yrs <- names(secc_all_tb)
-out_ls <- vector('list', length = length(yrs))
-names(out_ls) <- as.character(yrs)
+
+# setup parallel
+registerDoParallel(cores = 6)
+strt <- Sys.time()
 
 # process years
-for(i in seq_along(yrs)){
+out_ls <- foreach(i = seq_along(yrs)) %dopar% {
+
+  source('R/funcs.R')
   
+  # progress
+  sink('log.txt')
+  cat(i, 'of', length(yrs),'\n')
+  print(Sys.time() - strt)
+  sink()
   cat(i, 'of', length(yrs),'\n')
   
   # get yr index and data in the year
@@ -455,7 +466,8 @@ for(i in seq_along(yrs)){
   
   # process
   proc <- secc_doc(secc, sgpts, tb_seg, radius = 0.15, seg_pts_yr = yr, z_est = 'z_cmed', trace = T)
-  dat <- na.omit(proc)
+  dat <- na.omit(proc) %>% 
+    select(-Station_ID) #  this is important, these are produced in the function, not the same between analyses
 
   # mask tb doc and light ests by 1km buffer of seagrass
   coordinates(dat) = ~Longitude+Latitude
@@ -465,12 +477,14 @@ for(i in seq_along(yrs)){
   dat <- data.frame(dat)[tmp, ] %>% 
     select(-matches('optional'))
 
-  # save output
-  out_ls[[yr]] <- dat
+  # return output
+  dat
   
 }
 
+names(out_ls) <- as.character(yrs)
 tb_light_allsec <- out_ls
+
 save(tb_light_allsec, file = 'data/tb_light_allsec.RData', compress = 'xz')
 
 ######
@@ -504,12 +518,21 @@ yrsinsat <- names(tb_sats_all$sats_all) %>%
   grep('[0-9]+', ., value = T) %>% 
   gsub('^.*_', '', .)
 yrsinsat <- yrsinsat[yrsinsat %in% names(secc_all_tb)]
-out_ls <- vector('list', length = length(yrsinsat))
-names(out_ls) <- as.character(yrsinsat)
+
+# setup parallel
+registerDoParallel(cores = 6)
+strt <- Sys.time()
 
 # process years
-for(i in seq_along(yrsinsat)){
+out_ls <- foreach(i = seq_along(yrsinsat)) %dopar% {
   
+  source('R/funcs.R')
+  
+  # progress
+  sink('log.txt')
+  cat(i, 'of', length(yrsinsat),'\n')
+  print(Sys.time() - strt)
+  sink()
   cat(i, 'of', length(yrsinsat),'\n')
   
   # get yr index and data in the year
@@ -533,7 +556,8 @@ for(i in seq_along(yrsinsat)){
 
   # process
   proc <- secc_doc(samp_vals, sgpts, tb_seg, radius = 0.15, seg_pts_yr = yr, z_est = 'z_cmed', trace = T)
-  dat <- na.omit(proc)
+  dat <- na.omit(proc) %>% 
+    select(-Station_ID) #  this is important, these are produced in the function, not the same between analyses
 
   # mask tb doc and light ests by 1km buffer of seagrass
   coordinates(dat) = ~Longitude+Latitude
@@ -543,10 +567,12 @@ for(i in seq_along(yrsinsat)){
   dat <- data.frame(dat)[tmp, ] %>% 
     select(-matches('optional'))
 
-  # save output
-  out_ls[[yr]] <- dat
+  # return output
+  dat
   
 }
+
+names(out_ls) <- as.character(yrsinsat)
 
 tb_light_allsat <- out_ls
 save(tb_light_allsat, file = 'data/tb_light_allsat.RData')

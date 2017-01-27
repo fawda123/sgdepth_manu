@@ -119,7 +119,246 @@ $(document).ready(function () {
 </div>
 
 
-<p><img src="tampa_comp_files/figure-html/unnamed-chunk-1-1.png" /><!-- --><img src="tampa_comp_files/figure-html/unnamed-chunk-1-2.png" /><!-- --><img src="tampa_comp_files/figure-html/unnamed-chunk-1-3.png" /><!-- --><img src="tampa_comp_files/figure-html/unnamed-chunk-1-4.png" /><!-- --><img src="tampa_comp_files/figure-html/unnamed-chunk-1-5.png" /><!-- --><img src="tampa_comp_files/figure-html/unnamed-chunk-1-6.png" /><!-- --><img src="tampa_comp_files/figure-html/unnamed-chunk-1-7.png" /><!-- --></p>
+<div id="annual-changes-in-depth-of-colonization-and-light-requirements-in-tampa-bay" class="section level3">
+<h3>Annual changes in depth of colonization and light requirements in Tampa Bay</h3>
+<p>Secchi data from the Tampa Bay Water Atlas (<a href="http://www.tampabay.wateratlas.usf.edu/">link</a>) were obtained for all locations in the same years with seagrass coverage: 1988, 1990, 1992, 1994, 1996, 1999, 2001, 2004, 2006, 2008, and 2010. Secchi data with a minimum of then monthly observations were averaged within each year at each location.</p>
+<p>Satellite data were available for 2003 through 2010, with four years overlapping with seagrass data.</p>
+<pre class="r"><code># load data
+data(tb_seg)
+data(tb_sats_all)
+sats_melt &lt;- reshape2::melt(tb_sats_all[[&#39;sats_all&#39;]], id.var = c(&#39;lat&#39;, &#39;lon&#39;))
+
+# color ramp
+cols &lt;- rev(c(&#39;blue&#39;, &#39;lightblue&#39;, &#39;yellow&#39;, &#39;brown&#39;))
+
+# prep data
+to_plo &lt;- sats_melt
+to_plo$variable &lt;- factor(to_plo$variable, labels = c(&#39;Average&#39;, seq(2003, 2010)))
+seg_plo &lt;- fortify(tb_seg)
+
+# leg lab
+leg_lab &lt;- &#39;Clarity (m)&#39;
+
+# make plot
+p &lt;- ggplot(data = seg_plo) +
+  geom_polygon(aes(x = long, y = lat, group = group), 
+    colour = &#39;black&#39;, fill = colors()[245]) +
+  geom_tile(data = subset(to_plo, !is.na(value)), 
+    aes(x = lon, y = lat, fill = value, colour = value)
+  ) +
+  geom_polygon(aes(x = long, y = lat, group = group), 
+    colour = &#39;black&#39;, fill = NA) +
+  coord_equal() +
+  facet_wrap(~ variable) + 
+  scale_colour_gradientn(leg_lab, colours = cols) +
+  scale_fill_gradientn(leg_lab, colours = cols) +
+  scale_x_continuous(expand = c(0,0)) + 
+  scale_y_continuous(expand = c(0,0)) +
+  theme_classic() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(), 
+    axis.title.x = element_blank(), 
+    axis.title.y = element_blank(),
+    axis.text.x = element_text(size = 8), 
+    axis.text.y = element_text(size = 8), 
+    legend.position = &#39;top&#39;
+    )
+p</code></pre>
+<p><img src="tampa_comp_files/figure-html/unnamed-chunk-1-1.png" /><!-- --></p>
+<p>Secchi and satellite clarity (m) by year, all matched locations:</p>
+<pre class="r"><code># polygon segment
+data(tb_seg)
+
+# secchi data
+data(secc_all_tb)
+
+# seagrass points
+data(sgpts_all_tb)
+
+# 1km seagrass buffer for clipping
+data(sgbuff_2010_tb)
+
+# satellite data, 2003 to 2010
+data(tb_sats_all)
+
+sat_dat &lt;- tb_sats_all$sats_all
+  
+# yrs to eval, years with satellite data and seagrass coverage
+# note that previous analysis averaged water clarity from sat data from 2006 to 2010
+yrsinsat &lt;- names(tb_sats_all$sats_all) %&gt;% 
+  grep(&#39;[0-9]+&#39;, ., value = T) %&gt;% 
+  gsub(&#39;^.*_&#39;, &#39;&#39;, .)
+yrsinsat &lt;- yrsinsat[yrsinsat %in% names(secc_all_tb)]
+
+out_ls &lt;- vector(&#39;list&#39;, length = length(yrsinsat))
+names(out_ls) &lt;- yrsinsat
+
+# process years
+for(i in seq_along(yrsinsat)){
+  
+  source(&#39;R/funcs.R&#39;)
+  
+  # get yr index and data in the year
+  yr &lt;- yrsinsat[i]
+  secc &lt;- secc_all_tb[[yr]]
+
+  # satellite data
+  yrcol &lt;- paste0(&#39;clarity_&#39;, yr)
+  torast &lt;- sat_dat[, c(&#39;lon&#39;, &#39;lat&#39;, yrcol)]
+  sat_rast &lt;- make_rast_fun(torast, yrcol)
+  
+  # extract secchi locations on sat data
+  # sample the satellit clarity raster
+  samp_vals &lt;- raster::extract(sat_rast, secc, sp = T)
+  samp_vals &lt;- data.frame(samp_vals, ests = &#39;Satellite&#39;) %&gt;% 
+    .[, c(&#39;Longitude&#39;, &#39;Latitude&#39;, yrcol, &#39;ests&#39;)]
+  names(samp_vals)[names(samp_vals) %in% yrcol] &lt;- &#39;clarity&#39;
+  
+  # format secchi data for combo with sat ests
+  secc &lt;- as.data.frame(secc) %&gt;% 
+    select(Longitude, Latitude, SD) %&gt;% 
+    rename(
+      clarity = SD
+      ) %&gt;% 
+    mutate(
+      ests = &#39;Secchi&#39;
+      )
+  
+  out &lt;- rbind(samp_vals, secc) %&gt;% 
+    data.frame(., yr= yr)
+  
+  out_ls[[i]] &lt;- out
+
+}
+
+toplo &lt;- do.call(&#39;rbind&#39;, out_ls) %&gt;% 
+  spread(ests, clarity)
+
+ggplot(toplo, aes(x = Secchi, y = Satellite)) + 
+  geom_point() + 
+  geom_abline(yintercept = 0, slope = 1) + 
+  facet_wrap(~yr) + 
+  theme_bw()</code></pre>
+<pre><code>## Warning: Ignoring unknown parameters: yintercept</code></pre>
+<pre><code>## Warning: Removed 41 rows containing missing values (geom_point).</code></pre>
+<p><img src="tampa_comp_files/figure-html/unnamed-chunk-2-1.png" /><!-- --></p>
+<p>Regression models comparing Satellite, Secchi all dates (2006 is removed in the second). Chen et al. 2007 report R2 of 0.67 between in situ secchi and satellie-derived Kd.</p>
+<pre class="r"><code>modall &lt;- lm(Satellite ~ Secchi, toplo)
+modno06 &lt;- lm(Satellite ~ Secchi, toplo[!toplo$yr %in% &#39;2006&#39;, ])
+summary(modall)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Satellite ~ Secchi, data = toplo)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.92467 -0.32848 -0.02056  0.28565  1.27893 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  1.07229    0.09698   11.06   &lt;2e-16 ***
+## Secchi       0.44337    0.04134   10.73   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.4101 on 151 degrees of freedom
+##   (41 observations deleted due to missingness)
+## Multiple R-squared:  0.4324, Adjusted R-squared:  0.4286 
+## F-statistic:   115 on 1 and 151 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code>summary(modno06)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Satellite ~ Secchi, data = toplo[!toplo$yr %in% 
+##     &quot;2006&quot;, ])
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.78567 -0.27926 -0.00947  0.26968  1.35266 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.76540    0.10357    7.39  1.5e-11 ***
+## Secchi       0.61690    0.04746   13.00  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.3772 on 132 degrees of freedom
+##   (37 observations deleted due to missingness)
+## Multiple R-squared:  0.5614, Adjusted R-squared:  0.558 
+## F-statistic: 168.9 on 1 and 132 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Comparisons of satellite and secchi data, within 1km of seagrass:</p>
+<pre class="r"><code># secchi and satellite light ests, all years
+data(tb_light_allsat)
+data(tb_light_allsec)
+
+sec &lt;- reshape2::melt(tb_light_allsec, id.vars = names(tb_light_allsec[[1]])) %&gt;% 
+  mutate(est = &#39;Secchi&#39;)
+sat &lt;- reshape2::melt(tb_light_allsat, id.vars = names(tb_light_allsat[[1]])) %&gt;% 
+  mutate(est = &#39;Satellite&#39;)
+
+# subset secchi data with estimable sat data
+tb_ts &lt;- rbind(sec, sat) %&gt;%
+  select(-Station_ID) %&gt;% 
+  rename(yr = L1)
+
+ggplot(tb_ts, aes(x = factor(yr), y = SD, fill = est)) +
+  geom_boxplot() +
+  theme_bw() +
+  facet_wrap(~seg, ncol = 1)</code></pre>
+<p><img src="tampa_comp_files/figure-html/unnamed-chunk-4-1.png" /><!-- --></p>
+<pre class="r"><code>ggplot(tb_ts, aes(x = factor(yr), y = light, fill = seg)) +
+  geom_boxplot() +
+  theme_bw() + 
+  facet_wrap(~est, ncol = 1)</code></pre>
+<p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-1.png" /><!-- --></p>
+<pre class="r"><code>summs &lt;- group_by(tb_ts, seg, yr, est) %&gt;% 
+  summarise(
+    SD = mean(SD), 
+    z_c_all = mean(z_c_all), 
+    light = mean(light)
+  )
+labs &lt;- filter(summs, yr %in% c(&#39;1988&#39;, &#39;2004&#39;, &#39;2010&#39;)) %&gt;% 
+  filter(!(yr %in% &#39;2004&#39; &amp; est %in% &#39;Secchi&#39;))
+ggplot(summs, aes(x = z_c_all, y = light, colour = seg)) +
+  geom_path() +
+  geom_point() + 
+  geom_label(data = labs, aes(label = yr), size = 3, label.padding = unit(0.1, &quot;lines&quot;)) +
+  theme_bw() + 
+  facet_wrap(~est, ncol = 1)</code></pre>
+<p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-2.png" /><!-- --></p>
+<pre class="r"><code>toplo1 &lt;- filter(tb_ts, est %in% &#39;Secchi&#39;)
+toplo2 &lt;- filter(tb_ts, as.numeric(yr) &gt; 2003)
+
+ggplot(toplo1, aes(x = Longitude, y = Latitude, size = z_c_all, fill= z_c_all)) + 
+  geom_point(pch = 21) + 
+  facet_wrap( ~ yr) + 
+  coord_equal() + 
+  theme_bw() + 
+  scale_fill_distiller(palette = &#39;Set1&#39;)</code></pre>
+<p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-3.png" /><!-- --></p>
+<pre class="r"><code>ggplot(toplo1, aes(x = Longitude, y = Latitude, size = light, fill= light)) + 
+  geom_point(pch = 21) + 
+  facet_wrap( ~ yr) + 
+  coord_equal() + 
+  theme_bw() + 
+  scale_fill_distiller(palette = &#39;Set1&#39;)</code></pre>
+<p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-4.png" /><!-- --></p>
+<pre class="r"><code>ggplot(toplo2, aes(x = Longitude, y = Latitude, size = light, fill= light)) + 
+  geom_point(pch = 21) + 
+  facet_grid(est ~ yr) + 
+  coord_equal() + 
+  theme_bw() + 
+  scale_fill_distiller(palette = &#39;Set1&#39;)</code></pre>
+<p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-5.png" /><!-- --></p>
+<pre class="r"><code>ggplot(toplo2, aes(x = Longitude, y = Latitude, size = z_c_all, fill= z_c_all)) + 
+  geom_point(pch = 21) + 
+  facet_grid(est ~ yr) + 
+  coord_equal() + 
+  theme_bw() + 
+  scale_fill_distiller(palette = &#39;Spectral&#39;)</code></pre>
+<p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-6.png" /><!-- --></p>
+</div>
 
 
 
