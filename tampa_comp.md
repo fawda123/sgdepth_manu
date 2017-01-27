@@ -214,7 +214,6 @@ sat <- reshape2::melt(tb_light_allsat, id.vars = names(tb_light_allsat[[1]])) %>
 
 # subset secchi data with estimable sat data
 tb_ts <- rbind(sec, sat) %>%
-  select(-Station_ID) %>% 
   rename(yr = L1)
 
 ggplot(tb_ts, aes(x = factor(yr), y = SD, fill = est)) +
