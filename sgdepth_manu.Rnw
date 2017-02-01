@@ -75,6 +75,7 @@ library(tidyr)
 library(dplyr)
 library(purrr)
 library(nlme)
+library(ggsn)
 @
 
 % get the version based on commit date
@@ -619,20 +620,36 @@ conts <- ContourLines2SLDF(conts)
 zc_conts <- contourLines(im, levels = -3.855)
 zc_conts <- ContourLines2SLDF(zc_conts)
 
+# for labelling contours
+clevs <- data.frame(conts) %>% 
+  mutate(id = row.names(.))
+cont_labs <- fortify(conts) %>% 
+  group_by(id) %>% 
+  filter(lat == quantile(lat, 0.5, type = 1)) %>% 
+  left_join(., clevs, by = 'id') %>% 
+  mutate(level = -1 * as.numeric(as.character(level)))
+w <- 0.015
+h <- 0.015
+
 # subfig labels
 sublabs <- data.frame(long = -83.375, lat = 29.78, labs = c('a', 'b', 'c'))
 
 # seagrass and depth contours
 p1 <- ggplot(state, aes(long, lat, group = group)) + 
   geom_polygon(fill = 'lightgrey') +
-  geom_polygon(data = seg, fill = 'white', col = 'black', aes(size = 'Segment polygon')) + 
+  geom_path(data = conts, 
+    aes(group = group, linetype = 'dashed')
+    ) + 
+  geom_rect(data = cont_labs, aes(xmin = long - w/2, xmax = long + w/2, 
+    ymin = lat - h/2, ymax = lat + h/2), fill = 'white') +
+  geom_text(data = cont_labs, 
+    aes(group = group, label = level), size = 3
+    ) + 
+  geom_polygon(data = seg, fill = alpha('white', 0), col = 'black', aes(size = 'Segment polygon')) + 
   geom_polygon(data = sgpoly, aes(group = group, fill = 'Seagrass coverage'), 
     alpha = 0.7) + 
   geom_polygon(data = state, aes(group = group), 
     fill = 'grey') + 
-  geom_path(data = conts, 
-    aes(group = group, linetype = 'dashed')
-    ) + 
   geom_path(data = zc_conts, 
     aes(group = group, colour = 'Estimated depth\nlimit for segment'), 
     size = 2
@@ -698,7 +715,7 @@ p2 <- ggplot(seg, aes(long, lat)) +
     axis.line.x = element_line(), 
     axis.line.y = element_line()
     ) + 
-  geom_text(data = sublabs[2, ], aes(x = long, y = lat, label = labs, group = NULL), size = 8) 
+  geom_text(data = sublabs[2, ], aes(x = long, y = lat, label = labs, group = NULL), size = 8)
 
 p2leg <- g_legend(p2)
 p2 <- p2 + theme(legend.position = 'none')
@@ -739,7 +756,9 @@ p3 <- ggplot(seg, aes(long, lat)) +
     legend.position = 'none', 
     axis.line.x = element_line(), 
     axis.line.y = element_line())  + 
-  geom_text(data = sublabs[3, ], aes(x = long, y = lat, label = labs, group = NULL), size = 8) 
+  geom_text(data = sublabs[3, ], aes(x = long, y = lat, label = labs, group = NULL), size = 8) + 
+  scalebar(location = 'bottomleft', y.min = 29.42, y.max = 29.5, x.min = -83.63, x.max = -83.45, 
+    dist=5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 4, height = 0.05)
 
 pleg <- ggplot(seg, aes(long, lat)) + 
   geom_polygon(fill = 'white') +
