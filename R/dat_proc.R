@@ -250,6 +250,7 @@ choc_light <- dat
 save(choc_light, file = 'data/choc_light.RData')
 
 ######
+# TB light requirements zcmed
 
 source('R/funcs.r')
 
@@ -269,7 +270,7 @@ names(samp_vals) <- c('clarity', 'Longitude', 'Latitude')
 coordinates(samp_vals) <- c('Longitude', 'Latitude')
 
 # process for seagrass depth limits and light requirements
-proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, seg_pts_yr = 2010, radius = 0.1, z_est = 'z_cmed', trace = T)
+proc <- kd_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, z_est = 'z_cmed', trace = T)
 dat <- na.omit(proc)
 
 tb_light <- dat
@@ -312,7 +313,7 @@ rems <- names(rems)[rems < 5]
 secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
 
 # process, get ave secchi data results
-proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, seg_pts_yr = '2009', z_est = 'z_cmed', trace = T)
+proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, z_est = 'z_cmed', trace = T)
 dat <- na.omit(proc)
 
 #remote bad secchi values and low conf
@@ -369,7 +370,7 @@ names(samp_vals) <- c('clarity', 'Longitude', 'Latitude')
 coordinates(samp_vals) <- c('Longitude', 'Latitude')
 
 # process for seagrass depth limits and light requirements
-proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, seg_pts_yr = 2010, radius = 0.1, z_est = 'z_cmax', trace = T)
+proc <- kd_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, z_est = 'z_cmax', trace = T)
 dat <- na.omit(proc)
 
 tb_light_zcmax <- dat
@@ -412,7 +413,7 @@ rems <- names(rems)[rems < 5]
 secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
 
 # process, get ave secchi data results
-proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, seg_pts_yr = '2009', z_est = 'z_cmax', trace = T)
+proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, z_est = 'z_cmax', trace = T)
 dat <- na.omit(proc)
 
 #remote bad secchi values and low conf
@@ -465,7 +466,7 @@ out_ls <- foreach(i = seq_along(yrs)) %dopar% {
   sgpts <- sgpts_all_tb[[i]]
   
   # process
-  proc <- secc_doc(secc, sgpts, tb_seg, radius = 0.15, seg_pts_yr = yr, z_est = 'z_cmed', trace = T)
+  proc <- secc_doc(secc, sgpts, tb_seg, radius = 0.15, z_est = 'z_cmed', trace = T)
   dat <- na.omit(proc) %>% 
     select(-Station_ID) #  this is important, these are produced in the function, not the same between analyses
 
@@ -508,13 +509,13 @@ data(sgpts_all_tb)
 data(sgbuff_2010_tb)
 
 # satellite data, 2003 to 2010
-data(tb_sats_all)
+data(tb_sats)
 
-sat_dat <- tb_sats_all$sats_all
+sat_dat <- tb_sats$sats_all
   
 # yrs to eval, years with satellite data and seagrass coverage
 # note that previous analysis averaged water clarity from sat data from 2006 to 2010
-yrsinsat <- names(tb_sats_all$sats_all) %>% 
+yrsinsat <- names(tb_sats$sats_all) %>% 
   grep('[0-9]+', ., value = T) %>% 
   gsub('^.*_', '', .)
 yrsinsat <- yrsinsat[yrsinsat %in% names(secc_all_tb)]
@@ -555,7 +556,7 @@ out_ls <- foreach(i = seq_along(yrsinsat)) %dopar% {
   coordinates(samp_vals) <- c('Longitude', 'Latitude')
 
   # process
-  proc <- secc_doc(samp_vals, sgpts, tb_seg, radius = 0.15, seg_pts_yr = yr, z_est = 'z_cmed', trace = T)
+  proc <- kd_doc(samp_vals, sgpts, tb_seg, radius = 0.15, z_est = 'z_cmed', trace = T)
   dat <- na.omit(proc) %>% 
     select(-Station_ID) #  this is important, these are produced in the function, not the same between analyses
 

@@ -615,16 +615,13 @@ sens.doc <- function(doc_in, level = 0.05, trace = T, remzero = T, ...){
 #' @param kdconv numeric value indicating conversion factor for the product of secchi depth and light extinction coefficient
 #' @param z_est chr indicating which seagrass colonization depth to evaluate
 #' @param radius sampling radius for estimating seagrass depth of colonization in decimal degress
-#' @param seg_pts_yr numeric indicating year of seagrass coverage data
 #' @param trace logical indicating if progress is returned to console
 #' 
 #' @import dplyr
 #' 
 #' @return A four-element list where the first is a SpatialPolygonsDataFrame of the segment, the second is a data frame of all dates of all secchi data for the segment and the spatially-referenced depth of colonization estimate, the third is a summarized version of the second element for all unique locations with secchi data averaged across dates, and the third is depth of colonization data matched to the nearest date of the secchi data for the seagrass coverage.  The third and fourth elements include light requirements and segment names for each location.  
-secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kdconv = 1.7, z_est = 'z_cmax', radius = 0.2, seg_pts_yr, trace = F){
+secc_doc <- function(secc_dat, sgpts_shp, seg_shp, kdconv = 1.7, z_est = 'z_cmax', radius = 0.2, trace = F){
     
-  if('character' %in% class(seg_pts_yr)) seg_pts_yr <- as.numeric(seg_pts_yr)
-  if('factor' %in% class(seg_pts_yr)) stop('seg_pts_yr cannot be a factor')
   if(!'seg' %in% names(seg_shp)) stop('seg_shp input does not have seg column')
   stopifnot(z_est %in% c('z_cmin', 'z_cmed', 'z_cmax'))
 
@@ -742,7 +739,7 @@ kd_doc <- function(kd_dat, sgpts_shp, seg_shp, z_est = 'z_cmax', radius = 0.2, t
   if(nrow(kd_dat) == 0) stop('No kd data for segment')
   
   # add unique id if not present
-  if(!grepl('Station_ID', names(kd_dat)))
+  if(!'Station_ID' %in% names(kd_dat))
     kd_dat$Station_ID <- seq(1:nrow(kd_dat))
   
   # get unique locations of kd data

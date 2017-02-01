@@ -306,11 +306,11 @@ locs <- with(locs, data.frame(
 samp_vals <- raster::extract(ave_rast, locs, sp = T) %>% 
   data.frame  
 samp_vals <- cbind(samp_vals, data.frame(locs))
-names(samp_vals) <- c('SD', 'Longitude', 'Latitude')
+names(samp_vals) <- c('KD', 'Longitude', 'Latitude')
 coordinates(samp_vals) <- c('Longitude', 'Latitude')
 
 # process for seagrass depth limits and light requirements
-proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, seg_pts_yr = 2010, radius = 0.1, trace = T)
+proc <- kd_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, trace = T)
 @
 
 %%%%%%
@@ -999,7 +999,7 @@ data(tb_sats)
 sats_melt <- reshape2::melt(tb_sats[['sats_all']], id.var = c('lat', 'lon'))
 
 # color ramp
-cols <- rev(c('blue', 'lightblue', 'yellow', 'brown'))
+cols <- c('blue', 'lightblue', 'yellow', 'brown')
 
 # prep data
 to_plo <- sats_melt
@@ -1007,7 +1007,7 @@ to_plo$variable <- factor(to_plo$variable, labels = c('Average', seq(2006, 2010)
 seg_plo <- fortify(tb_seg)
 
 # leg lab
-leg_lab <- 'Clarity (m)'
+leg_lab <- expression(paste(italic(K [d]), ' (', m^-1, ')')) 
 
 # get average only
 to_plo <- filter(to_plo, variable == 'Average')
