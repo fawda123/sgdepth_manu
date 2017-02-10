@@ -148,7 +148,7 @@
   \\{\textit {\normalsize Gulf Ecology Division, 1 Sabine Island Drive, Gulf Breeze, FL 32561}}
   \\{\textit {\normalsize Phone: 850-934-9308, Fax: 850-934-2401, Email: \href{mailto:le.chengfeng@epa.gov}{le.chengfeng@epa.gov}}}
   \vspace{1in} 
-  \\ Version Date:   Fri Jan 27 16:48:40 2017 -0600
+  \\ Version Date:   Thu Feb 2 18:57:37 2017 -0600
 	}
 \date{}
 \maketitle
@@ -231,7 +231,7 @@ Secchi (se)&  0.19&  0.02&  0.02&  0.08\tabularnewline
 
 
 % summary of light requirements analysis, med depth ests
-%latex.default(tab, file = "", rowlabel = "Segment\\textsuperscript{\\textit{a}}",     insert.bottom = foot.val, caption = cap.val, colheads = col_heads,     cgroup = c("", "$\\mathbf Z_{c,\\,med}$", "{\\bf \\% light}"),     n.cgroup = c(1, 4, 4), caption.loc = "top", rowname = rows,     size = "small")%
+%latex.default(tab, file = "", rowlabel = "Segment\\textsuperscript{\\textit{a}}",     insert.bottom = foot.val, caption = cap.val, colheads = col_heads,     cgroup = c("", "$\\mathbf Z_{c,\\,med}$", "{\\bf \\% light}"),     n.cgroup = c(1, 4, 4), caption.loc = "top", rowname = rows,     rgroup = names(rowgrps), n.rgroup = rowgrps, size = "small")%
 \begin{table}[!tbp]
 {\small
 \caption{Summary of median depth of colonization ($Z_{c,\,med}$, m) and light requirements (\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  Superscripts for mean $Z_{c,\,med}$ denote significant differences within each bay. See \cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.\label{tab}} 
@@ -242,23 +242,25 @@ Secchi (se)&  0.19&  0.02&  0.02&  0.08\tabularnewline
 \cline{4-7} \cline{9-12}
 \multicolumn{1}{l}{}&\multicolumn{1}{c}{$n$}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Err.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{Mean}&\multicolumn{1}{c}{St. Err.}&\multicolumn{1}{c}{Min}&\multicolumn{1}{c}{Max}\tabularnewline
 \hline
-\textbf{Choctawhatchee}&255&&2\textsuperscript{1}&0.1&0.6&2.8&&50\textsuperscript{1}&3.0&20&87\tabularnewline
-\hspace{0.02in} CCB&111&&2.0\textsuperscript{b}&0.6&0.6&4.2&&50.6&13.2&19.5&87.1\tabularnewline
-\hspace{0.02in} ECB&4&&0.9\textsuperscript{a}&0.1&0.7&0.9&&64.0& 8.9&55.1&74.7\tabularnewline
-\hspace{0.02in} WCB&140&&2.3\textsuperscript{b}&0.3&1.7&2.8&&45.8& 6.4&22.0&70.0\tabularnewline
-\textbf{Indian River}&45&&1.1\textsuperscript{2}&0.1&0.8&1.6&&18\textsuperscript{2}&2.9&7.5&31\tabularnewline
-\hspace{0.02in} BR&2&&1.0\textsuperscript{a}&0.1&1.0&1.1&&20.7& 0.8&20.2&21.3\tabularnewline
-\hspace{0.02in} LCIRL&14&&1.2\textsuperscript{a}&0.3&0.9&1.6&&13.6& 6.3& 5.8&24.7\tabularnewline
-\hspace{0.02in} LIRL&3&&1.5\textsuperscript{a}&0.0&1.5&1.6&& 9.2& 2.8& 6.0&11.2\tabularnewline
-\hspace{0.02in} LML&4&&1.0\textsuperscript{a}&0.0&1.0&1.0&&22.1& 2.2&19.3&24.3\tabularnewline
-\hspace{0.02in} UCIRL&17&&0.9\textsuperscript{a}&0.1&0.8&1.1&&20.0& 7.0& 7.5&30.7\tabularnewline
-\hspace{0.02in} UIRL&1&&1.0\textsuperscript{a}& &1.0&1.0&&24.1& &24.1&24.1\tabularnewline
-\hspace{0.02in} UML&4&&0.8\textsuperscript{a}&0.1&0.8&1.0&&23.6& 6.4&15.2&30.9\tabularnewline
-\textbf{Tampa Bay}&218&&1.2\textsuperscript{2}&0.1&0.6&1.6&&41\textsuperscript{1}&2.5&13&66\tabularnewline
-\hspace{0.02in} HB&20&&1.1\textsuperscript{ab}&0.2&0.8&1.3&&34.1&11.2&12.8&55.7\tabularnewline
-\hspace{0.02in} LTB&60&&1.3\textsuperscript{b}&0.1&1.1&1.5&&40.0& 7.5&23.8&55.5\tabularnewline
-\hspace{0.02in} MTB&74&&1.4\textsuperscript{b}&0.1&1.1&1.6&&36.1& 7.6&17.0&57.5\tabularnewline
-\hspace{0.02in} OTB&64&&0.8\textsuperscript{a}&0.2&0.6&1.1&&48.9& 8.7&29.9&66.0\tabularnewline
+{\bfseries Choctawhatchee Bay}&&&&&&&&&&&\tabularnewline
+~~CCB&171&&1.9\textsuperscript{ab}&0.2&0.5&4.2&&56.4& 5.2&19.5&91.7\tabularnewline
+~~ECB&16&&0.8\textsuperscript{a}&0.4&0.4&0.9&&74.7&10.0&58.0&88.6\tabularnewline
+~~WCB&151&&2.3\textsuperscript{b}&0.3&1.6&2.8&&46.4& 6.4&22.3&77.9\tabularnewline
+\hline
+{\bfseries Indian River Lagoon}&&&&&&&&&&&\tabularnewline
+~~BR&2&&1.0\textsuperscript{a}&0.4&1.0&1.1&&20.7& 7.5&20.2&21.3\tabularnewline
+~~LCIRL&14&&1.2\textsuperscript{a}&0.3&0.9&1.6&&13.6& 6.4& 5.8&24.7\tabularnewline
+~~LIRL&3&&1.6\textsuperscript{a}&0.4&1.5&1.6&& 9.2& 7.1& 6.0&11.2\tabularnewline
+~~LML&4&&1.0\textsuperscript{a}&0.4&1.0&1.0&&22.1& 6.9&19.3&24.3\tabularnewline
+~~UCIRL&17&&1.0\textsuperscript{a}&0.3&0.8&1.1&&20.0& 6.4& 7.5&30.7\tabularnewline
+~~UIRL&1&&1.0\textsuperscript{a}&0.4&1.0&1.0&&24.1& 8.6&24.1&24.1\tabularnewline
+~~UML&6&&1.0\textsuperscript{a}&0.3&0.8&1.0&&24.0& 6.7&15.2&30.9\tabularnewline
+\hline
+{\bfseries Tampa Bay}&&&&&&&&&&&\tabularnewline
+~~HB&22&&1.0\textsuperscript{ab}&0.2&0.6&1.3&&41.1& 6.0&17.7&50.8\tabularnewline
+~~LTB&70&&1.3\textsuperscript{ab}&0.1&0.8&1.5&&39.1& 4.8&21.0&58.7\tabularnewline
+~~MTB&73&&1.4\textsuperscript{b}&0.1&1.1&1.6&&36.4& 4.7&11.8&50.2\tabularnewline
+~~OTB&87&&0.8\textsuperscript{a}&0.1&0.5&1.1&&48.7& 4.9&31.5&77.4\tabularnewline
 \hline
 \end{tabular}\end{center}}
 \textsuperscript{\textit{a}}\footnotesize CCB: Central Choctawhatchee Bay, ECB: Eastern Choctawhatchee Bay, WCB: Western Choctawhatchee Bay, BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.\end{table}

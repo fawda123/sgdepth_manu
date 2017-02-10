@@ -306,11 +306,11 @@ locs <- with(locs, data.frame(
 samp_vals <- raster::extract(ave_rast, locs, sp = T) %>% 
   data.frame  
 samp_vals <- cbind(samp_vals, data.frame(locs))
-names(samp_vals) <- c('KD', 'Longitude', 'Latitude')
+names(samp_vals) <- c('clarity', 'Longitude', 'Latitude')
 coordinates(samp_vals) <- c('Longitude', 'Latitude')
 
 # process for seagrass depth limits and light requirements
-proc <- kd_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, trace = T)
+proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, trace = T)
 @
 
 %%%%%%
@@ -460,7 +460,8 @@ data(choc_light)
 choc_light <- mutate(choc_light, bay = 'Choctawhatchee Bay') %>% 
   select(bay, seg, z_c_all, light)
 irl_light <- mutate(irl_light, bay = 'Indian River Lagoon')%>% 
-  select(bay, seg, z_c_all, light)
+  select(bay, seg, z_c_all, light) %>% 
+  filter(!seg %in% 'LSL')
 tb_light <- mutate(tb_light, bay = 'Tampa Bay')%>% 
   select(bay, seg, z_c_all, light)
 
@@ -470,11 +471,11 @@ all_light <- rbind(choc_light, irl_light, tb_light) %>%
   summarize(
     n_locs = length(seg), 
     mean_z_cmed = mean(z_c_all), 
-    sd_z_cmed = sd(z_c_all),
+    se_z_cmed = sd(z_c_all),
     min_z_cmed = min(z_c_all),
     max_z_cmed = max(z_c_all),
     mean_light = mean(light),
-    sd_light = sd(light),
+    se_light = sd(light),
     min_light = min(light),
     max_light = max(light)
     )
@@ -483,6 +484,8 @@ all_light <- rbind(choc_light, irl_light, tb_light) %>%
 data(tb_light)
 data(choc_light)
 data(irl_light)
+
+irl_light <- filter(irl_light, !seg %in% 'LSL')
 
 tb_light$seg <- factor(tb_light$seg)
 choc_light$seg <- factor(choc_light$seg)
@@ -510,11 +513,17 @@ lm3 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
 
 avezc <- lapply(list(zc2, zc3, zc1), function(x) x$coefficients$fixed) %>% 
   unlist
+sezc <- lapply(list(zc2, zc3, zc1), function(x) summary(x)$tTable[, 2]) %>% 
+  unlist
 avelight <- lapply(list(lm2, lm3, lm1), function(x) x$coefficients$fixed) %>% 
   unlist 
+selight <- lapply(list(lm2, lm3, lm1), function(x) summary(x)$tTable[, 2]) %>% 
+  unlist
 
 all_light$mean_z_cmed <- avezc
+all_light$se_z_cmed <- sezc
 all_light$mean_light <- avelight
+all_light$se_light <- selight
 
 save(all_light, file = 'data/all_light.RData')
 
@@ -525,6 +534,7 @@ data(all_light)
 tab <- data.frame(all_light)
 # tab <- tab[, !grepl('_light$', names(tab))]
 rows <- tab[, 2]
+rowgrps <- table(tab[, 1])
 tab <- tab[, -c(1:2)]
 tab[, 2:9] <- formtab_fun(tab[, 2:9], 1, 1, 1)
 nms <- names(tab) # this is fucked
@@ -538,21 +548,12 @@ names(tab) <- nms
 
 # add sig letters to mean_z_cmed from gls comparisons
 avals <- c(2, 4:10, 14)
-bvals <- c(1, 3, 12, 13)
-abvals <- c(11)
+bvals <- c(3, 13)
+abvals <- c(1, 11:12)
 tab$mean_z_cmed <- as.character(tab$mean_z_cmed)
 tab$mean_z_cmed[avals] <- paste0(tab$mean_z_cmed[avals], '\\textsuperscript{a}')
 tab$mean_z_cmed[bvals] <- paste0(tab$mean_z_cmed[bvals], '\\textsuperscript{b}')
 tab$mean_z_cmed[abvals] <- paste0(tab$mean_z_cmed[abvals], '\\textsuperscript{ab}')
-
-# add rows for overall means
-choc <- c('255' , '2\\textsuperscript{1}', '0.1', '0.6', '2.8', '50\\textsuperscript{1}', '3.0', '20', '87')
-irl <- c('45', '1.1\\textsuperscript{2}', '0.1', '0.8', '1.6', '18\\textsuperscript{2}', '2.9', '7.5', '31')
-tb <- c('218', '1.2\\textsuperscript{2}', '0.1', '0.6', '1.6', '41\\textsuperscript{1}', '2.5', '13', '66')
-tab <- as.matrix(tab)
-tab <- rbind(choc, tab[1:3, ], irl, tab[4:10, ], tb, tab[11:14, ])
-rows <- paste('\\hspace{0.02in}', rows)
-rows <- c('\\textbf{Choctawhatchee}', rows[1:3], '\\textbf{Indian River}', rows[4:10], '\\textbf{Tampa Bay}', rows[11:14])
 
 cap.val<-'Summary of median depth of colonization ($Z_{c,\\,med}$, m) and light requirements (\\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  Superscripts for mean $Z_{c,\\,med}$ denote significant differences within each bay. See \\cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.'
 
@@ -570,6 +571,8 @@ latex(
   n.cgroup = c(1, 4, 4),
   caption.loc = 'top',
   rowname = rows,
+  rgroup = names(rowgrps),
+  n.rgroup = rowgrps,
   size = 'small'
   )
 @
@@ -989,7 +992,7 @@ dev.off()
 \end{figure}
 
 % satellite estimates of water clarity for Tampa Bay
-<<clarity_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
+<<kd_tb, echo = F, eval = T, cache = T, results = 'hide'>>=
 options(digits = 7) 
 
 # load data
@@ -1008,10 +1011,11 @@ seg_plo <- fortify(tb_seg)
 # leg lab
 leg_lab <- expression(paste(italic(K [d]), ' (', m^-1, ')')) 
 
-# get average only
-to_plo <- filter(to_plo, variable == 'Average')
+# get average only, convert to kd
+to_plo <- filter(to_plo, variable == 'Average') %>% 
+  mutate(value = 1.7/value) %>% 
+  filter(value <= 1.4)
   
-
 # make plot
 p <- ggplot(data = seg_plo) +
   geom_polygon(aes(x = long, y = lat, group = group), 
@@ -1348,7 +1352,8 @@ labs <- labs[!labs$seg %in% c('LSL', 'LHR'), ]
 fill_col <- colors()[245]
 
 # format data, remove outliers
-dat <- data.frame(irl_light)
+dat <- data.frame(irl_light) %>% 
+  filter(!seg %in% 'LSL')
 
 # color ramp for all graphs
 pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')

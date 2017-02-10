@@ -265,12 +265,13 @@ tb_grd <- grid_est(tb_seg, 0.01)
 
 # sample the satellit clarity raster
 samp_vals <- raster::extract(ave_rast, tb_grd, sp = T) %>% 
-  data.frame  
+  data.frame %>% 
+  select(-optional)
 names(samp_vals) <- c('clarity', 'Longitude', 'Latitude')
 coordinates(samp_vals) <- c('Longitude', 'Latitude')
 
 # process for seagrass depth limits and light requirements
-proc <- kd_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, z_est = 'z_cmed', trace = T)
+proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, z_est = 'z_cmed', trace = T)
 dat <- na.omit(proc)
 
 tb_light <- dat
@@ -316,8 +317,8 @@ secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
 proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, z_est = 'z_cmed', trace = T)
 dat <- na.omit(proc)
 
-#remote bad secchi values and low conf
-dat <- dat[dat$light > 4 & dat$maxd_conf < 1 , ] 
+#remove bad secchi values
+dat <- dat[dat$light > 4, ] 
 
 irl_light <- dat
 save(irl_light, file = 'data/irl_light.RData')
@@ -370,7 +371,7 @@ names(samp_vals) <- c('clarity', 'Longitude', 'Latitude')
 coordinates(samp_vals) <- c('Longitude', 'Latitude')
 
 # process for seagrass depth limits and light requirements
-proc <- kd_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, z_est = 'z_cmax', trace = T)
+proc <- secc_doc(samp_vals, sgpts_2010_tb, tb_seg, radius = 0.1, z_est = 'z_cmax', trace = T)
 dat <- na.omit(proc)
 
 tb_light_zcmax <- dat
@@ -416,8 +417,8 @@ secc_all <- secc_all[!secc_all$Station_ID %in% rems, ]
 proc <- secc_doc(secc_all, sgpts_2009_irl, irl_seg, radius = 0.15, z_est = 'z_cmax', trace = T)
 dat <- na.omit(proc)
 
-#remote bad secchi values and low conf
-dat <- dat[dat$light > 4 & dat$maxd_conf < 1 , ] 
+#remove bad secchi values
+dat <- dat[dat$light > 4, ] 
 
 irl_light_zcmax <- dat
 save(irl_light_zcmax, file = 'data/irl_light_zcmax.RData')

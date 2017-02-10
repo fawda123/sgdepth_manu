@@ -21,6 +21,7 @@
 \newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
 \newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
 \newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
 
 \usepackage{framed}
 \makeatletter
@@ -82,7 +83,7 @@
 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Thu, Jul 14, 2016 - 4:05:25 PM
+% Date and time: Fri, Feb 10, 2017 - 11:24:19 AM
 \begin{table}[!htbp] \centering 
   \caption{Inter-bay differences for median depth of colonization and light requirements.  Gaussian models with nuggets for the spatial correlation structures were used.  Tampa Bay data were masked to remove points farther than 1km from seagrass.} 
   \label{} 
@@ -94,20 +95,20 @@
 \\[-1.8ex] & z\_c\_all & light \\ 
 \\[-1.8ex] & (1) & (2)\\ 
 \hline \\[-1.8ex] 
- baychoc & 2.033 & 49.743 \\ 
-  & (0.119) & (2.997) \\ 
+ baychoc & 1.425 & 54.711 \\ 
+  & (0.379) & (3.228) \\ 
   & & \\ 
- bayirl & 1.098 & 17.731 \\ 
-  & (0.109) & (2.853) \\ 
+ bayirl & 1.118 & 18.139 \\ 
+  & (0.264) & (2.989) \\ 
   & & \\ 
- baytb & 1.158 & 40.816 \\ 
-  & (0.097) & (2.520) \\ 
+ baytb & 0.911 & 42.017 \\ 
+  & (0.309) & (2.627) \\ 
   & & \\ 
 \hline \\[-1.8ex] 
-Observations & 518 & 518 \\ 
-Log Likelihood & 170.629 & $-$1,685.096 \\ 
-Akaike Inf. Crit. & $-$327.259 & 3,384.193 \\ 
-Bayesian Inf. Crit. & $-$297.550 & 3,413.902 \\ 
+Observations & 637 & 637 \\ 
+Log Likelihood & $-$173.039 & $-$2,143.144 \\ 
+Akaike Inf. Crit. & 360.079 & 4,300.287 \\ 
+Bayesian Inf. Crit. & 391.243 & 4,331.452 \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
@@ -133,12 +134,10 @@ Bayesian Inf. Crit. & $-$297.550 & 3,413.902 \\
 ##     bay, nugget = TRUE))
 ## 
 ## Linear Hypotheses:
-##                 Estimate Std. Error z value Pr(>|z|)    
-## irl - choc == 0 -0.93416    0.16081  -5.809   <1e-05 ***
-## tb - choc == 0  -0.87432    0.15340  -5.700   <1e-05 ***
-## tb - irl == 0    0.05984    0.14569   0.411    0.911    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+##                 Estimate Std. Error z value Pr(>|z|)
+## irl - choc == 0  -0.3075     0.4614  -0.667    0.782
+## tb - choc == 0   -0.5142     0.4886  -1.052    0.542
+## tb - irl == 0    -0.2066     0.4060  -0.509    0.866
 ## (Adjusted p values reported -- single-step method)
 \end{verbatim}
 \begin{alltt}
@@ -157,9 +156,9 @@ Bayesian Inf. Crit. & $-$297.550 & 3,413.902 \\
 ## 
 ## Linear Hypotheses:
 ##                 Estimate Std. Error z value Pr(>|z|)    
-## irl - choc == 0  -32.011      4.138  -7.736   <0.001 ***
-## tb - choc == 0    -8.927      3.915  -2.280   0.0586 .  
-## tb - irl == 0     23.085      3.807   6.064   <0.001 ***
+## irl - choc == 0  -36.572      4.400  -8.313  < 0.001 ***
+## tb - choc == 0   -12.694      4.162  -3.050  0.00645 ** 
+## tb - irl == 0     23.878      3.979   6.001  < 0.001 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
@@ -173,7 +172,7 @@ Bayesian Inf. Crit. & $-$297.550 & 3,413.902 \\
 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Thu, Jul 14, 2016 - 4:05:29 PM
+% Date and time: Fri, Feb 10, 2017 - 11:24:25 AM
 \begin{table}[!htbp] \centering 
   \caption{Linears models of depth of colonization and light requirements comparing bay segments of Tampa Bay.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay). Data were masked to remove points farther than 1km from seagrass.} 
   \label{} 
@@ -185,23 +184,23 @@ Bayesian Inf. Crit. & $-$297.550 & 3,413.902 \\
 \\[-1.8ex] & z\_c\_all & light \\ 
 \\[-1.8ex] & (1) & (2)\\ 
 \hline \\[-1.8ex] 
- segHB & 1.075 & 34.084 \\ 
-  & (0.128) & (7.320) \\ 
+ segHB & 0.962 & 41.104 \\ 
+  & (0.159) & (6.008) \\ 
   & & \\ 
- segLTB & 1.294 & 39.990 \\ 
-  & (0.108) & (6.096) \\ 
+ segLTB & 1.261 & 39.099 \\ 
+  & (0.129) & (4.839) \\ 
   & & \\ 
- segMTB & 1.373 & 36.077 \\ 
-  & (0.102) & (5.656) \\ 
+ segMTB & 1.376 & 36.375 \\ 
+  & (0.126) & (4.718) \\ 
   & & \\ 
- segOTB & 0.840 & 48.855 \\ 
-  & (0.107) & (6.013) \\ 
+ segOTB & 0.796 & 48.739 \\ 
+  & (0.132) & (4.906) \\ 
   & & \\ 
 \hline \\[-1.8ex] 
-Observations & 218 & 218 \\ 
-Log Likelihood & 369.383 & $-$709.479 \\ 
-Akaike Inf. Crit. & $-$722.766 & 1,434.959 \\ 
-Bayesian Inf. Crit. & $-$695.838 & 1,461.886 \\ 
+Observations & 252 & 252 \\ 
+Log Likelihood & 406.686 & $-$806.168 \\ 
+Akaike Inf. Crit. & $-$797.372 & 1,628.335 \\ 
+Bayesian Inf. Crit. & $-$769.265 & 1,656.443 \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
@@ -209,7 +208,7 @@ Bayesian Inf. Crit. & $-$695.838 & 1,461.886 \\
 \end{table} 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Thu, Jul 14, 2016 - 4:05:29 PM
+% Date and time: Fri, Feb 10, 2017 - 11:24:26 AM
 \begin{table}[!htbp] \centering 
   \caption{Linears models of depth of colonization and light requirements comparing bay segments of Choctawhatchee Bay.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).} 
   \label{} 
@@ -221,20 +220,20 @@ Bayesian Inf. Crit. & $-$695.838 & 1,461.886 \\
 \\[-1.8ex] & z\_c\_all & light \\ 
 \\[-1.8ex] & (1) & (2)\\ 
 \hline \\[-1.8ex] 
- segCCB & 1.991 & 50.644 \\ 
-  & (0.203) & (4.523) \\ 
+ segCCB & 1.867 & 56.408 \\ 
+  & (0.217) & (5.161) \\ 
   & & \\ 
- segECB & 0.862 & 63.981 \\ 
-  & (0.412) & (9.167) \\ 
+ segECB & 0.807 & 74.685 \\ 
+  & (0.414) & (10.049) \\ 
   & & \\ 
- segWCB & 2.336 & 45.808 \\ 
-  & (0.234) & (5.164) \\ 
+ segWCB & 2.328 & 46.350 \\ 
+  & (0.264) & (6.398) \\ 
   & & \\ 
 \hline \\[-1.8ex] 
-Observations & 255 & 255 \\ 
-Log Likelihood & 86.461 & $-$782.632 \\ 
-Akaike Inf. Crit. & $-$158.922 & 1,579.265 \\ 
-Bayesian Inf. Crit. & $-$134.216 & 1,603.971 \\ 
+Observations & 338 & 338 \\ 
+Log Likelihood & $-$36.030 & $-$1,125.501 \\ 
+Akaike Inf. Crit. & 86.059 & 2,265.002 \\ 
+Bayesian Inf. Crit. & 112.758 & 2,291.701 \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
@@ -242,7 +241,7 @@ Bayesian Inf. Crit. & $-$134.216 & 1,603.971 \\
 \end{table} 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Thu, Jul 14, 2016 - 4:05:29 PM
+% Date and time: Fri, Feb 10, 2017 - 11:24:26 AM
 \begin{table}[!htbp] \centering 
   \caption{Linears models of depth of colonization and light requirements comparing bay segments of Indian River Lagoon.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).} 
   \label{} 
@@ -255,31 +254,31 @@ Bayesian Inf. Crit. & $-$134.216 & 1,603.971 \\
 \\[-1.8ex] & (1) & (2)\\ 
 \hline \\[-1.8ex] 
  segBR & 1.021 & 20.746 \\ 
-  & (0.275) & (7.814) \\ 
+  & (0.362) & (7.526) \\ 
   & & \\ 
- segLCIRL & 1.212 & 13.619 \\ 
-  & (0.233) & (6.690) \\ 
+ segLCIRL & 1.235 & 13.619 \\ 
+  & (0.316) & (6.408) \\ 
   & & \\ 
- segLIRL & 1.545 & 9.197 \\ 
-  & (0.275) & (7.397) \\ 
+ segLIRL & 1.557 & 9.197 \\ 
+  & (0.363) & (7.112) \\ 
   & & \\ 
- segLML & 0.981 & 22.147 \\ 
-  & (0.272) & (7.180) \\ 
+ segLML & 0.989 & 22.147 \\ 
+  & (0.363) & (6.896) \\ 
   & & \\ 
- segUCIRL & 0.932 & 20.018 \\ 
-  & (0.233) & (6.654) \\ 
+ segUCIRL & 1.010 & 20.018 \\ 
+  & (0.318) & (6.373) \\ 
   & & \\ 
  segUIRL & 1.030 & 24.091 \\ 
-  & (0.282) & (8.948) \\ 
+  & (0.366) & (8.649) \\ 
   & & \\ 
- segUML & 0.775 & 23.552 \\ 
-  & (0.254) & (7.180) \\ 
+ segUML & 0.960 & 24.019 \\ 
+  & (0.331) & (6.673) \\ 
   & & \\ 
 \hline \\[-1.8ex] 
-Observations & 45 & 45 \\ 
-Log Likelihood & 59.214 & $-$128.060 \\ 
-Akaike Inf. Crit. & $-$96.427 & 278.121 \\ 
-Bayesian Inf. Crit. & $-$78.414 & 296.134 \\ 
+Observations & 47 & 47 \\ 
+Log Likelihood & 56.756 & $-$133.830 \\ 
+Akaike Inf. Crit. & $-$91.512 & 289.659 \\ 
+Bayesian Inf. Crit. & $-$72.934 & 308.237 \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
@@ -308,12 +307,12 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ## 
 ## Linear Hypotheses:
 ##                Estimate Std. Error z value Pr(>|z|)   
-## LTB - HB == 0   0.21927    0.16785   1.306  0.55790   
-## MTB - HB == 0   0.29853    0.16375   1.823  0.26158   
-## OTB - HB == 0  -0.23503    0.16718  -1.406  0.49468   
-## MTB - LTB == 0  0.07926    0.14849   0.534  0.95069   
-## OTB - LTB == 0 -0.45430    0.15227  -2.984  0.01531 * 
-## OTB - MTB == 0 -0.53357    0.14774  -3.611  0.00188 **
+## LTB - HB == 0    0.2987     0.2049   1.458  0.46234   
+## MTB - HB == 0    0.4138     0.2030   2.038  0.17346   
+## OTB - HB == 0   -0.1660     0.2062  -0.805  0.85174   
+## MTB - LTB == 0   0.1150     0.1810   0.636  0.92023   
+## OTB - LTB == 0  -0.4647     0.1846  -2.518  0.05702 . 
+## OTB - MTB == 0  -0.5797     0.1825  -3.177  0.00781 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
@@ -323,7 +322,7 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 \end{alltt}
 \begin{verbatim}
 ##   HB  LTB  MTB  OTB 
-## "ab"  "b"  "b"  "a"
+## "ab" "ab"  "b"  "a"
 \end{verbatim}
 \begin{alltt}
 \hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lm1,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
@@ -341,12 +340,12 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ## 
 ## Linear Hypotheses:
 ##                Estimate Std. Error z value Pr(>|z|)
-## LTB - HB == 0     5.906      9.526   0.620    0.925
-## MTB - HB == 0     1.993      9.250   0.215    0.996
-## OTB - HB == 0    14.771      9.473   1.559    0.401
-## MTB - LTB == 0   -3.913      8.316  -0.471    0.965
-## OTB - LTB == 0    8.865      8.563   1.035    0.728
-## OTB - MTB == 0   12.778      8.255   1.548    0.408
+## LTB - HB == 0    -2.005      7.715  -0.260    0.994
+## MTB - HB == 0    -4.729      7.640  -0.619    0.926
+## OTB - HB == 0     7.635      7.757   0.984    0.758
+## MTB - LTB == 0   -2.724      6.758  -0.403    0.978
+## OTB - LTB == 0    9.640      6.890   1.399    0.499
+## OTB - MTB == 0   12.364      6.806   1.817    0.264
 ## (Adjusted p values reported -- single-step method)
 \end{verbatim}
 \begin{alltt}
@@ -366,9 +365,9 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ## 
 ## Linear Hypotheses:
 ##                Estimate Std. Error z value Pr(>|z|)   
-## ECB - CCB == 0  -1.1293     0.4588  -2.461  0.03549 * 
-## WCB - CCB == 0   0.3448     0.3096   1.114  0.49901   
-## WCB - ECB == 0   1.4741     0.4733   3.115  0.00492 **
+## ECB - CCB == 0  -1.0606     0.4673  -2.270  0.05825 . 
+## WCB - CCB == 0   0.4604     0.3415   1.348  0.36329   
+## WCB - ECB == 0   1.5210     0.4912   3.097  0.00543 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
@@ -377,8 +376,8 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 \hlkwd{cld}\hlstd{(zc2)}
 \end{alltt}
 \begin{verbatim}
-## CCB ECB WCB 
-## "b" "a" "b"
+##  CCB  ECB  WCB 
+## "ab"  "a"  "b"
 \end{verbatim}
 \begin{alltt}
 \hlkwd{summary}\hlstd{(}\hlkwd{glht}\hlstd{(lm2,} \hlkwc{linfct} \hlstd{=} \hlkwd{mcp}\hlstd{(}\hlkwc{seg} \hlstd{=} \hlstr{'Tukey'}\hlstd{)))}
@@ -395,10 +394,12 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ##     seg, nugget = TRUE))
 ## 
 ## Linear Hypotheses:
-##                Estimate Std. Error z value Pr(>|z|)
-## ECB - CCB == 0   13.337     10.222   1.305    0.386
-## WCB - CCB == 0   -4.836      6.864  -0.704    0.757
-## WCB - ECB == 0  -18.173     10.522  -1.727    0.190
+##                Estimate Std. Error z value Pr(>|z|)  
+## ECB - CCB == 0    18.28      11.30   1.618   0.2335  
+## WCB - CCB == 0   -10.06       8.22  -1.224   0.4337  
+## WCB - ECB == 0   -28.34      11.91  -2.378   0.0442 *
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
 \end{verbatim}
 \begin{alltt}
@@ -418,27 +419,27 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ## 
 ## Linear Hypotheses:
 ##                     Estimate Std. Error z value Pr(>|z|)
-## LCIRL - BR == 0     0.190379   0.360031   0.529    0.998
-## LIRL - BR == 0      0.523831   0.388774   1.347    0.829
-## LML - BR == 0      -0.040662   0.386613  -0.105    1.000
-## UCIRL - BR == 0    -0.088792   0.360395  -0.246    1.000
-## UIRL - BR == 0      0.008486   0.393707   0.022    1.000
-## UML - BR == 0      -0.246138   0.374128  -0.658    0.995
-## LIRL - LCIRL == 0   0.333452   0.360185   0.926    0.968
-## LML - LCIRL == 0   -0.231041   0.357851  -0.646    0.995
-## UCIRL - LCIRL == 0 -0.279171   0.329351  -0.848    0.980
-## UIRL - LCIRL == 0  -0.181893   0.365504  -0.498    0.999
-## UML - LCIRL == 0   -0.436517   0.344325  -1.268    0.866
-## LML - LIRL == 0    -0.564493   0.386756  -1.460    0.768
-## UCIRL - LIRL == 0  -0.612623   0.360549  -1.699    0.616
-## UIRL - LIRL == 0   -0.515345   0.393848  -1.308    0.848
-## UML - LIRL == 0    -0.769968   0.374276  -2.057    0.377
-## UCIRL - LML == 0   -0.048130   0.358217  -0.134    1.000
-## UIRL - LML == 0     0.049148   0.391715   0.125    1.000
-## UML - LML == 0     -0.205476   0.372031  -0.552    0.998
-## UIRL - UCIRL == 0   0.097279   0.365863   0.266    1.000
-## UML - UCIRL == 0   -0.157345   0.344705  -0.456    0.999
-## UML - UIRL == 0    -0.254624   0.379398  -0.671    0.994
+## LCIRL - BR == 0     0.214204   0.480563   0.446    0.999
+## LIRL - BR == 0      0.536046   0.512571   1.046    0.943
+## LML - BR == 0      -0.032428   0.512530  -0.063    1.000
+## UCIRL - BR == 0    -0.011314   0.482368  -0.023    1.000
+## UIRL - BR == 0      0.008486   0.514792   0.016    1.000
+## UML - BR == 0      -0.061691   0.490519  -0.126    1.000
+## LIRL - LCIRL == 0   0.321842   0.480783   0.669    0.994
+## LML - LCIRL == 0   -0.246632   0.480738  -0.513    0.999
+## UCIRL - LCIRL == 0 -0.225518   0.448443  -0.503    0.999
+## UIRL - LCIRL == 0  -0.205717   0.483149  -0.426    1.000
+## UML - LCIRL == 0   -0.275895   0.457199  -0.603    0.997
+## LML - LIRL == 0    -0.568474   0.512735  -1.109    0.925
+## UCIRL - LIRL == 0  -0.547360   0.482586  -1.134    0.917
+## UIRL - LIRL == 0   -0.527559   0.514997  -1.024    0.948
+## UML - LIRL == 0    -0.597737   0.490734  -1.218    0.887
+## UCIRL - LML == 0    0.021114   0.482542   0.044    1.000
+## UIRL - LML == 0     0.040915   0.514955   0.079    1.000
+## UML - LML == 0     -0.029263   0.490690  -0.060    1.000
+## UIRL - UCIRL == 0   0.019801   0.484944   0.041    1.000
+## UML - UCIRL == 0   -0.050377   0.459095  -0.110    1.000
+## UML - UIRL == 0    -0.070178   0.493052  -0.142    1.000
 ## (Adjusted p values reported -- single-step method)
 \end{verbatim}
 \begin{alltt}
@@ -463,28 +464,28 @@ Bayesian Inf. Crit. & $-$78.414 & 296.134 \\
 ##     seg, nugget = TRUE))
 ## 
 ## Linear Hypotheses:
-##                    Estimate Std. Error z value Pr(>|z|)
-## LCIRL - BR == 0     -7.1268    10.2864  -0.693    0.993
-## LIRL - BR == 0     -11.5483    10.7595  -1.073    0.935
-## LML - BR == 0        1.4016    10.6112   0.132    1.000
-## UCIRL - BR == 0     -0.7274    10.2631  -0.071    1.000
-## UIRL - BR == 0       3.3456    11.8790   0.282    1.000
-## UML - BR == 0        2.8061    10.6112   0.264    1.000
-## LIRL - LCIRL == 0   -4.4215     9.9736  -0.443    0.999
-## LML - LCIRL == 0     8.5284     9.8135   0.869    0.977
-## UCIRL - LCIRL == 0   6.3994     9.4360   0.678    0.994
-## UIRL - LCIRL == 0   10.4724    11.1722   0.937    0.966
-## UML - LCIRL == 0     9.9329     9.8135   1.012    0.951
-## LML - LIRL == 0     12.9499    10.3083   1.256    0.871
-## UCIRL - LIRL == 0   10.8210     9.9496   1.088    0.931
-## UIRL - LIRL == 0    14.8939    11.6092   1.283    0.859
-## UML - LIRL == 0     14.3544    10.3083   1.393    0.805
-## UCIRL - LML == 0    -2.1290     9.7891  -0.217    1.000
-## UIRL - LML == 0      1.9440    11.4720   0.169    1.000
-## UML - LML == 0       1.4045    10.1535   0.138    1.000
-## UIRL - UCIRL == 0    4.0729    11.1507   0.365    1.000
-## UML - UCIRL == 0     3.5334     9.7891   0.361    1.000
-## UML - UIRL == 0     -0.5395    11.4720  -0.047    1.000
+##                     Estimate Std. Error z value Pr(>|z|)
+## LCIRL - BR == 0     -7.12681    9.88463  -0.721    0.991
+## LIRL - BR == 0     -11.54834   10.35471  -1.115    0.923
+## LML - BR == 0        1.40159   10.20749   0.137    1.000
+## UCIRL - BR == 0     -0.72737    9.86144  -0.074    1.000
+## UIRL - BR == 0       3.34556   11.46463   0.292    1.000
+## UML - BR == 0        3.27282   10.05811   0.325    1.000
+## LIRL - LCIRL == 0   -4.42153    9.57348  -0.462    0.999
+## LML - LCIRL == 0     8.52840    9.41405   0.906    0.971
+## UCIRL - LCIRL == 0   6.39944    9.03767   0.708    0.992
+## UIRL - LCIRL == 0   10.47236   10.76426   0.973    0.959
+## UML - LCIRL == 0    10.39962    9.25187   1.124    0.920
+## LML - LIRL == 0     12.94993    9.90648   1.307    0.848
+## UCIRL - LIRL == 0   10.82097    9.54953   1.133    0.917
+## UIRL - LIRL == 0    14.89390   11.19747   1.330    0.837
+## UML - LIRL == 0     14.82116    9.75249   1.520    0.731
+## UCIRL - LML == 0    -2.12896    9.38969  -0.227    1.000
+## UIRL - LML == 0      1.94396   11.06147   0.176    1.000
+## UML - LML == 0       1.87122    9.59604   0.195    1.000
+## UIRL - UCIRL == 0    4.07293   10.74297   0.379    1.000
+## UML - UCIRL == 0     4.00018    9.22709   0.434    0.999
+## UML - UIRL == 0     -0.07274   10.92378  -0.007    1.000
 ## (Adjusted p values reported -- single-step method)
 \end{verbatim}
 \end{kframe}

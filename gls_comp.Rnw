@@ -43,7 +43,8 @@ data(tb_light)
 choc_light <- select(choc_light, z_c_all, light, seg, Longitude, Latitude) %>% 
   mutate(bay = 'choc')
 irl_light <- select(irl_light, z_c_all, light, seg, Longitude, Latitude) %>% 
-  mutate(bay = 'irl')
+  mutate(bay = 'irl') %>% 
+  filter(!seg %in% 'LSL')
 tb_light <- select(tb_light, z_c_all, light, seg, Longitude, Latitude) %>% 
   mutate(bay = 'tb')
 
@@ -56,7 +57,6 @@ zmall <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay,
 lmall <- lme(light ~ 0 + bay, random = ~ 1 | bay,
   correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = TRUE), 
   data = all_light)
-
 @
 
 <<results = 'asis', message = F, warning = F, echo = F>>=
@@ -64,17 +64,20 @@ library(stargazer)
 stargazer(zmall, lmall,
   title = 'Inter-bay differences for median depth of colonization and light requirements.  Gaussian models with nuggets for the spatial correlation structures were used.  Tampa Bay data were masked to remove points farther than 1km from seagrass.'
   )
+
 @
 
 <<message = F, warning = F>>=
 library(multcomp)
 summary(glht(zmall, linfct = mcp(bay = 'Tukey')))
 summary(glht(lmall, linfct = mcp(bay = 'Tukey')))
+
 @
 
 \section{Within-bay comparisons}
 
 <<message = F, warning = F, echo = F>>=
+
 library(maptools)
 library(nlme)
 library(stargazer)
@@ -85,6 +88,7 @@ data(irl_light)
 
 tb_light$seg <- factor(tb_light$seg)
 choc_light$seg <- factor(choc_light$seg)
+irl_light <- filter(irl_light, !seg %in% 'LSL')
 irl_light$seg <- factor(irl_light$seg)
 
 zc1 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
@@ -120,6 +124,7 @@ stargazer(zc2, lm2,
 stargazer(zc3, lm3,
   title = 'Linears models of depth of colonization and light requirements comparing bay segments of Indian River Lagoon.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).'
   )
+
 @
 
 \clearpage
@@ -137,7 +142,6 @@ zc3 <- glht(zc3, linfct = mcp(seg = 'Tukey'))
 summary(zc3)
 cld(zc3)
 summary(glht(lm3, linfct = mcp(seg = 'Tukey')))
-
 @
 
 \end{document}
