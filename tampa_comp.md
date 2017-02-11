@@ -11,8 +11,8 @@ Satellite data were available for 2003 through 2010, with four years overlapping
 ```r
 # load data
 data(tb_seg)
-data(tb_sats_all)
-sats_melt <- reshape2::melt(tb_sats_all[['sats_all']], id.var = c('lat', 'lon'))
+data(tb_sats)
+sats_melt <- reshape2::melt(tb_sats[['sats_all']], id.var = c('lat', 'lon'))
 
 # color ramp
 cols <- rev(c('blue', 'lightblue', 'yellow', 'brown'))
@@ -71,13 +71,13 @@ data(sgpts_all_tb)
 data(sgbuff_2010_tb)
 
 # satellite data, 2003 to 2010
-data(tb_sats_all)
+data(tb_sats)
 
-sat_dat <- tb_sats_all$sats_all
+sat_dat <- tb_sats$sats_all
   
 # yrs to eval, years with satellite data and seagrass coverage
 # note that previous analysis averaged water clarity from sat data from 2006 to 2010
-yrsinsat <- names(tb_sats_all$sats_all) %>% 
+yrsinsat <- names(tb_sats$sats_all) %>% 
   grep('[0-9]+', ., value = T) %>% 
   gsub('^.*_', '', .)
 yrsinsat <- yrsinsat[yrsinsat %in% names(secc_all_tb)]

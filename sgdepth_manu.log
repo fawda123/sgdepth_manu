@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.8.29)  10 FEB 2017 13:17
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.8.29)  10 FEB 2017 17:34
 entering extended mode
 **sgdepth_manu.tex
 (M:\docs\manuscripts\sgdepth_manu\sgdepth_manu.tex
@@ -694,11 +694,11 @@ Package pdftex.def Info: figs/Fig2.pdf used on input line 287.
 
 LaTeX Warning: Float too large for page by 15.44519pt on input line 290.
 
-<figs/Fig3.pdf, id=58, 443.79192pt x 582.68895pt>
+<figs/Fig3.pdf, id=58, 426.59375pt x 555.57562pt>
 File: figs/Fig3.pdf Graphic file (type pdf)
  <use figs/Fig3.pdf>
 Package pdftex.def Info: figs/Fig3.pdf used on input line 297.
-(pdftex.def)             Requested size: 399.29463pt x 524.27295pt.
+(pdftex.def)             Requested size: 399.29463pt x 520.05397pt.
 
 <figs/Fig4.pdf, id=59, 505.89pt x 505.89pt>
 File: figs/Fig4.pdf Graphic file (type pdf)
@@ -742,19 +742,19 @@ sgdepth_manu/figs/Fig5.pdf>] [10 <M:/docs/manuscripts/sgdepth_manu/figs/Fig6.pd
 f>] [11 <M:/docs/manuscripts/sgdepth_manu/figs/Fig7.pdf>] [12 <M:/docs/manuscri
 pts/sgdepth_manu/figs/Fig8.pdf>] [13 <M:/docs/manuscripts/sgdepth_manu/figs/Fig
 9.pdf>]
-<figs/FigS1.pdf, id=301, 578.16pt x 578.16pt>
+<figs/FigS1.pdf, id=308, 578.16pt x 578.16pt>
 File: figs/FigS1.pdf Graphic file (type pdf)
  <use figs/FigS1.pdf>
 Package pdftex.def Info: figs/FigS1.pdf used on input line 364.
 (pdftex.def)             Requested size: 446.26582pt x 446.26086pt.
 
-<figs/FigS2.pdf, id=302, 505.89pt x 542.025pt>
+<figs/FigS2.pdf, id=309, 505.89pt x 542.025pt>
 File: figs/FigS2.pdf Graphic file (type pdf)
  <use figs/FigS2.pdf>
 Package pdftex.def Info: figs/FigS2.pdf used on input line 373.
 (pdftex.def)             Requested size: 446.26582pt x 478.14963pt.
 
-<figs/FigS3.pdf, id=305, 469.755pt x 614.295pt>
+<figs/FigS3.pdf, id=312, 469.755pt x 614.295pt>
 File: figs/FigS3.pdf Graphic file (type pdf)
  <use figs/FigS3.pdf>
 Package pdftex.def Info: figs/FigS3.pdf used on input line 382.
@@ -790,9 +790,9 @@ a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program
  Files/MiKTeX 2.9/fonts/type1/urw/times/utmbi8a.pfb><C:/Program Files/MiKTeX 2.
 9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw
 /times/utmri8a.pfb>
-Output written on sgdepth_manu.pdf (16 pages, 8248669 bytes).
+Output written on sgdepth_manu.pdf (16 pages, 8412593 bytes).
 PDF statistics:
- 397 PDF objects out of 1000 (max. 8388607)
+ 404 PDF objects out of 1000 (max. 8388607)
  32 named destinations out of 1000 (max. 500000)
  61 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -65,11 +65,11 @@ p <- ggplot(data = seg_plo) +
     legend.position = 'top'
     )
 p
+
 ```
 
 Secchi and satellite clarity (m) by year, all matched locations:
 ```{r fig.width = 8, fig.height = 8, echo = T, message = F}
-
 # polygon segment
 data(tb_seg)
 
@@ -151,6 +151,7 @@ modall <- lm(Satellite ~ Secchi, toplo)
 modno06 <- lm(Satellite ~ Secchi, toplo[!toplo$yr %in% '2006', ])
 summary(modall)
 summary(modno06)
+
 ```
 
 Comparisons of satellite and secchi data, within 1km of seagrass:
@@ -172,6 +173,7 @@ ggplot(tb_ts, aes(x = factor(yr), y = SD, fill = est)) +
   geom_boxplot() +
   theme_bw() +
   facet_wrap(~seg, ncol = 1)
+
 ```
 
 ```{r fig.width = 7, fig.height = 6, echo = T, message = F}
@@ -218,4 +220,5 @@ ggplot(toplo2, aes(x = Longitude, y = Latitude, size = light, fill= light)) +
   coord_equal() + 
   theme_bw() + 
   scale_fill_distiller(palette = 'Set1')
+
 ```  

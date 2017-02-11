@@ -784,6 +784,7 @@ pleg <- ggplot(seg, aes(long, lat)) +
     data = data.frame(est_pts), 
     aes(Var1, Var2, size = 'rad', pch = 'rad', colour = 'rad')
   )  +
+  scale_colour_manual('', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c('black', 'red', 'grey60')) +
   scale_size_manual('', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c(3, 4, 10)) +
   scale_shape_manual('', labels = c('Estimation grid', 'Test point', 'Sample area'), values = c(1, 16, 1)) +
 theme(axis.text = element_text(size = 20),
