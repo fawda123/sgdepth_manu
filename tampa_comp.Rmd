@@ -16,6 +16,7 @@ library(maptools)
 library(tidyverse)
 library(tidyr)
 library(purrr)
+
 ```
 
 Secchi data from the Tampa Bay Water Atlas ([link](http://www.tampabay.wateratlas.usf.edu/)) were obtained for all locations in the same years with seagrass coverage: 1988, 1990, 1992, 1994, 1996, 1999, 2001, 2004, 2006, 2008, and 2010.  Secchi data with a minimum of ten monthly observations were averaged within each year at each location. 
@@ -140,7 +141,7 @@ toplo <- do.call('rbind', out_ls) %>%
 
 ggplot(toplo, aes(x = Secchi, y = Satellite)) + 
   geom_point() + 
-  geom_abline(yintercept = 0, slope = 1) + 
+  geom_abline(intercept = 0, slope = 1) + 
   facet_wrap(~yr) + 
   theme_bw()
 ```
@@ -176,21 +177,24 @@ ggplot(tb_ts, aes(x = factor(yr), y = SD, fill = est)) +
 
 ```
 
-```{r fig.width = 7, fig.height = 6, echo = T, message = F}
+```{r fig.width = 7, fig.height = 6, echo = T, message = F, warning = F}
 ggplot(tb_ts, aes(x = factor(yr), y = light, fill = seg)) +
   geom_boxplot() +
   theme_bw() + 
   facet_wrap(~est, ncol = 1)
 
-summs <- group_by(tb_ts, seg, yr, est) %>% 
+summs <- mutate(tb_ts, 
+    Kd = 1.7/SD
+  ) %>% 
+  group_by(seg, yr, est) %>% 
   summarise(
-    SD = mean(SD), 
+    Kd = mean(Kd), 
     z_c_all = mean(z_c_all), 
     light = mean(light)
   )
 labs <- filter(summs, yr %in% c('1988', '2004', '2010')) %>% 
   filter(!(yr %in% '2004' & est %in% 'Secchi'))
-ggplot(summs, aes(x = z_c_all, y = light, colour = seg)) +
+ggplot(summs, aes(x = Kd, y = z_c_all, colour = seg)) +
   geom_path() +
   geom_point() + 
   geom_label(data = labs, aes(label = yr), size = 3, label.padding = unit(0.1, "lines")) +

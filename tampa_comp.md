@@ -128,17 +128,13 @@ toplo <- do.call('rbind', out_ls) %>%
 
 ggplot(toplo, aes(x = Secchi, y = Satellite)) + 
   geom_point() + 
-  geom_abline(yintercept = 0, slope = 1) + 
+  geom_abline(intercept = 0, slope = 1) + 
   facet_wrap(~yr) + 
   theme_bw()
 ```
 
 ```
-## Warning: Ignoring unknown parameters: yintercept
-```
-
-```
-## Warning: Removed 41 rows containing missing values (geom_point).
+## Warning: Removed 26 rows containing missing values (geom_point).
 ```
 
 ![](tampa_comp_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
@@ -158,19 +154,19 @@ summary(modall)
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.92467 -0.32848 -0.02056  0.28565  1.27893 
+## -0.87240 -0.35453 -0.02326  0.26654  1.18229 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  1.07229    0.09698   11.06   <2e-16 ***
-## Secchi       0.44337    0.04134   10.73   <2e-16 ***
+## (Intercept)  1.19859    0.11604  10.329  < 2e-16 ***
+## Secchi       0.38984    0.04654   8.377 1.96e-13 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.4101 on 151 degrees of freedom
-##   (41 observations deleted due to missingness)
-## Multiple R-squared:  0.4324,	Adjusted R-squared:  0.4286 
-## F-statistic:   115 on 1 and 151 DF,  p-value: < 2.2e-16
+## Residual standard error: 0.4156 on 110 degrees of freedom
+##   (26 observations deleted due to missingness)
+## Multiple R-squared:  0.3895,	Adjusted R-squared:  0.3839 
+## F-statistic: 70.17 on 1 and 110 DF,  p-value: 1.963e-13
 ```
 
 ```r
@@ -184,20 +180,20 @@ summary(modno06)
 ##     "2006", ])
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.78567 -0.27926 -0.00947  0.26968  1.35266 
+##     Min      1Q  Median      3Q     Max 
+## -0.8354 -0.2969  0.0026  0.2659  0.9698 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)  0.76540    0.10357    7.39  1.5e-11 ***
-## Secchi       0.61690    0.04746   13.00  < 2e-16 ***
+## (Intercept)  0.77972    0.12985   6.005 4.72e-08 ***
+## Secchi       0.63113    0.05759  10.958  < 2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.3772 on 132 degrees of freedom
-##   (37 observations deleted due to missingness)
-## Multiple R-squared:  0.5614,	Adjusted R-squared:  0.558 
-## F-statistic: 168.9 on 1 and 132 DF,  p-value: < 2.2e-16
+## Residual standard error: 0.3666 on 84 degrees of freedom
+##   (20 observations deleted due to missingness)
+## Multiple R-squared:  0.5884,	Adjusted R-squared:  0.5835 
+## F-statistic: 120.1 on 1 and 84 DF,  p-value: < 2.2e-16
 ```
 
 Comparisons of satellite and secchi data, within 1km of seagrass:
@@ -235,15 +231,18 @@ ggplot(tb_ts, aes(x = factor(yr), y = light, fill = seg)) +
 ![](tampa_comp_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 ```r
-summs <- group_by(tb_ts, seg, yr, est) %>% 
+summs <- mutate(tb_ts, 
+    Kd = 1.7/SD
+  ) %>% 
+  group_by(seg, yr, est) %>% 
   summarise(
-    SD = mean(SD), 
+    Kd = mean(Kd), 
     z_c_all = mean(z_c_all), 
     light = mean(light)
   )
 labs <- filter(summs, yr %in% c('1988', '2004', '2010')) %>% 
   filter(!(yr %in% '2004' & est %in% 'Secchi'))
-ggplot(summs, aes(x = z_c_all, y = light, colour = seg)) +
+ggplot(summs, aes(x = Kd, y = z_c_all, colour = seg)) +
   geom_path() +
   geom_point() + 
   geom_label(data = labs, aes(label = yr), size = 3, label.padding = unit(0.1, "lines")) +
@@ -288,3 +287,20 @@ ggplot(toplo2, aes(x = Longitude, y = Latitude, size = light, fill= light)) +
 ```
 
 ![](tampa_comp_files/figure-html/unnamed-chunk-5-5.png)<!-- -->
+
+```r
+toplo3 <- filter(tb_ts, as.numeric(yr) > 2003) %>% 
+  select(est, Longitude, Latitude, yr, light) %>% 
+  spread(est, light)
+
+ggplot(toplo3, aes(x = Satellite, y = Secchi)) + 
+  geom_point(pch = 21) + 
+  facet_grid( ~ yr) + 
+  theme_bw()
+```
+
+```
+## Warning: Removed 25 rows containing missing values (geom_point).
+```
+
+![](tampa_comp_files/figure-html/unnamed-chunk-5-6.png)<!-- -->

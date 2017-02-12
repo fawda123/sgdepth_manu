@@ -237,11 +237,10 @@ toplo &lt;- do.call(&#39;rbind&#39;, out_ls) %&gt;%
 
 ggplot(toplo, aes(x = Secchi, y = Satellite)) + 
   geom_point() + 
-  geom_abline(yintercept = 0, slope = 1) + 
+  geom_abline(intercept = 0, slope = 1) + 
   facet_wrap(~yr) + 
   theme_bw()</code></pre>
-<pre><code>## Warning: Ignoring unknown parameters: yintercept</code></pre>
-<pre><code>## Warning: Removed 41 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 26 rows containing missing values (geom_point).</code></pre>
 <p><img src="tampa_comp_files/figure-html/unnamed-chunk-2-1.png" /><!-- --></p>
 <p>Regression models comparing Satellite, Secchi all dates (2006 is removed in the second). Chen et al. 2007 report R2 of 0.67 between in situ secchi and satellie-derived Kd.</p>
 <pre class="r"><code>modall &lt;- lm(Satellite ~ Secchi, toplo)
@@ -253,19 +252,19 @@ summary(modall)</code></pre>
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.92467 -0.32848 -0.02056  0.28565  1.27893 
+## -0.87240 -0.35453 -0.02326  0.26654  1.18229 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  1.07229    0.09698   11.06   &lt;2e-16 ***
-## Secchi       0.44337    0.04134   10.73   &lt;2e-16 ***
+## (Intercept)  1.19859    0.11604  10.329  &lt; 2e-16 ***
+## Secchi       0.38984    0.04654   8.377 1.96e-13 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.4101 on 151 degrees of freedom
-##   (41 observations deleted due to missingness)
-## Multiple R-squared:  0.4324, Adjusted R-squared:  0.4286 
-## F-statistic:   115 on 1 and 151 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.4156 on 110 degrees of freedom
+##   (26 observations deleted due to missingness)
+## Multiple R-squared:  0.3895, Adjusted R-squared:  0.3839 
+## F-statistic: 70.17 on 1 and 110 DF,  p-value: 1.963e-13</code></pre>
 <pre class="r"><code>summary(modno06)</code></pre>
 <pre><code>## 
 ## Call:
@@ -273,20 +272,20 @@ summary(modall)</code></pre>
 ##     &quot;2006&quot;, ])
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.78567 -0.27926 -0.00947  0.26968  1.35266 
+##     Min      1Q  Median      3Q     Max 
+## -0.8354 -0.2969  0.0026  0.2659  0.9698 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  0.76540    0.10357    7.39  1.5e-11 ***
-## Secchi       0.61690    0.04746   13.00  &lt; 2e-16 ***
+## (Intercept)  0.77972    0.12985   6.005 4.72e-08 ***
+## Secchi       0.63113    0.05759  10.958  &lt; 2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.3772 on 132 degrees of freedom
-##   (37 observations deleted due to missingness)
-## Multiple R-squared:  0.5614, Adjusted R-squared:  0.558 
-## F-statistic: 168.9 on 1 and 132 DF,  p-value: &lt; 2.2e-16</code></pre>
+## Residual standard error: 0.3666 on 84 degrees of freedom
+##   (20 observations deleted due to missingness)
+## Multiple R-squared:  0.5884, Adjusted R-squared:  0.5835 
+## F-statistic: 120.1 on 1 and 84 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>Comparisons of satellite and secchi data, within 1km of seagrass:</p>
 <pre class="r"><code># secchi and satellite light ests, all years
 data(tb_light_allsat)
@@ -311,15 +310,18 @@ ggplot(tb_ts, aes(x = factor(yr), y = SD, fill = est)) +
   theme_bw() + 
   facet_wrap(~est, ncol = 1)</code></pre>
 <p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-1.png" /><!-- --></p>
-<pre class="r"><code>summs &lt;- group_by(tb_ts, seg, yr, est) %&gt;% 
+<pre class="r"><code>summs &lt;- mutate(tb_ts, 
+    Kd = 1.7/SD
+  ) %&gt;% 
+  group_by(seg, yr, est) %&gt;% 
   summarise(
-    SD = mean(SD), 
+    Kd = mean(Kd), 
     z_c_all = mean(z_c_all), 
     light = mean(light)
   )
 labs &lt;- filter(summs, yr %in% c(&#39;1988&#39;, &#39;2004&#39;, &#39;2010&#39;)) %&gt;% 
   filter(!(yr %in% &#39;2004&#39; &amp; est %in% &#39;Secchi&#39;))
-ggplot(summs, aes(x = z_c_all, y = light, colour = seg)) +
+ggplot(summs, aes(x = Kd, y = z_c_all, colour = seg)) +
   geom_path() +
   geom_point() + 
   geom_label(data = labs, aes(label = yr), size = 3, label.padding = unit(0.1, &quot;lines&quot;)) +
@@ -350,6 +352,16 @@ ggplot(toplo1, aes(x = Longitude, y = Latitude, size = z_c_all, fill= z_c_all)) 
   theme_bw() + 
   scale_fill_distiller(palette = &#39;Set1&#39;)</code></pre>
 <p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-5.png" /><!-- --></p>
+<pre class="r"><code>toplo3 &lt;- filter(tb_ts, as.numeric(yr) &gt; 2003) %&gt;% 
+  select(est, Longitude, Latitude, yr, light) %&gt;% 
+  spread(est, light)
+
+ggplot(toplo3, aes(x = Satellite, y = Secchi)) + 
+  geom_point(pch = 21) + 
+  facet_grid( ~ yr) + 
+  theme_bw()</code></pre>
+<pre><code>## Warning: Removed 25 rows containing missing values (geom_point).</code></pre>
+<p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-6.png" /><!-- --></p>
 </div>
 
 

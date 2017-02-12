@@ -1,2 +1,2 @@
 2 of 4 
-Time difference of 17.82524 secs
+Time difference of 16.515 secs

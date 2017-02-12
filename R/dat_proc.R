@@ -430,13 +430,13 @@ rm(list = ls())
 
 source('R/funcs.r')
 
-# irl polygon segment
+# tb polygon segment
 data(tb_seg)
 
-# irl secchi data
+# tb secchi data
 data(secc_all_tb)
 
-# irl seagrass points
+# tb seagrass points
 data(sgpts_all_tb)
 
 # 1km seagrass buffer for clipping
@@ -471,14 +471,16 @@ out_ls <- foreach(i = seq_along(yrs)) %dopar% {
   dat <- na.omit(proc) %>% 
     select(-Station_ID) #  this is important, these are produced in the function, not the same between analyses
 
-  # mask tb doc and light ests by 1km buffer of seagrass
-  coordinates(dat) = ~Longitude+Latitude
-  tmp <- dat %over% sgbuff_2010_tb %>%
-    is.na(.) %>%
-    !.
-  dat <- data.frame(dat)[tmp, ] %>% 
-    select(-matches('optional'))
+  # # mask tb doc and light ests by 1km buffer of seagrass
+  # coordinates(dat) = ~Longitude+Latitude
+  # tmp <- dat %over% sgbuff_2010_tb %>%
+  #   is.na(.) %>%
+  #   !.
+  # dat <- data.frame(dat)[tmp, ] %>%
+  #   select(-matches('optional'))
 
+  dat <- select(dat, -matches('optional'))
+  
   # return output
   dat
   
@@ -497,13 +499,13 @@ rm(list = ls())
 
 source('R/funcs.r')
 
-# irl polygon segment
+# tb polygon segment
 data(tb_seg)
 
-# irl secchi data
+# tb secchi data
 data(secc_all_tb)
 
-# irl seagrass points
+# tb seagrass points
 data(sgpts_all_tb)
 
 # 1km seagrass buffer for clipping
@@ -557,18 +559,20 @@ out_ls <- foreach(i = seq_along(yrsinsat)) %dopar% {
   coordinates(samp_vals) <- c('Longitude', 'Latitude')
 
   # process
-  proc <- kd_doc(samp_vals, sgpts, tb_seg, radius = 0.15, z_est = 'z_cmed', trace = T)
+  proc <- secc_doc(samp_vals, sgpts, tb_seg, radius = 0.15, z_est = 'z_cmed', trace = T)
   dat <- na.omit(proc) %>% 
     select(-Station_ID) #  this is important, these are produced in the function, not the same between analyses
 
-  # mask tb doc and light ests by 1km buffer of seagrass
-  coordinates(dat) = ~Longitude+Latitude
-  tmp <- dat %over% sgbuff_2010_tb %>%
-    is.na(.) %>%
-    !.
-  dat <- data.frame(dat)[tmp, ] %>% 
-    select(-matches('optional'))
-
+  # # mask tb doc and light ests by 1km buffer of seagrass
+  # coordinates(dat) = ~Longitude+Latitude
+  # tmp <- dat %over% sgbuff_2010_tb %>%
+  #   is.na(.) %>%
+  #   !.
+  # dat <- data.frame(dat)[tmp, ] %>% 
+  #   select(-matches('optional'))
+  
+  dat <- select(dat, -matches('optional'))
+  
   # return output
   dat
   
