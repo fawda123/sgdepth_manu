@@ -352,16 +352,6 @@ ggplot(toplo1, aes(x = Longitude, y = Latitude, size = z_c_all, fill= z_c_all)) 
   theme_bw() + 
   scale_fill_distiller(palette = &#39;Set1&#39;)</code></pre>
 <p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-5.png" /><!-- --></p>
-<pre class="r"><code>toplo3 &lt;- filter(tb_ts, as.numeric(yr) &gt; 2003) %&gt;% 
-  select(est, Longitude, Latitude, yr, light) %&gt;% 
-  spread(est, light)
-
-ggplot(toplo3, aes(x = Satellite, y = Secchi)) + 
-  geom_point(pch = 21) + 
-  facet_grid( ~ yr) + 
-  theme_bw()</code></pre>
-<pre><code>## Warning: Removed 25 rows containing missing values (geom_point).</code></pre>
-<p><img src="tampa_comp_files/figure-html/unnamed-chunk-5-6.png" /><!-- --></p>
 </div>
 
 

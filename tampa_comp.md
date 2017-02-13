@@ -287,20 +287,3 @@ ggplot(toplo2, aes(x = Longitude, y = Latitude, size = light, fill= light)) +
 ```
 
 ![](tampa_comp_files/figure-html/unnamed-chunk-5-5.png)<!-- -->
-
-```r
-toplo3 <- filter(tb_ts, as.numeric(yr) > 2003) %>% 
-  select(est, Longitude, Latitude, yr, light) %>% 
-  spread(est, light)
-
-ggplot(toplo3, aes(x = Satellite, y = Secchi)) + 
-  geom_point(pch = 21) + 
-  facet_grid( ~ yr) + 
-  theme_bw()
-```
-
-```
-## Warning: Removed 25 rows containing missing values (geom_point).
-```
-
-![](tampa_comp_files/figure-html/unnamed-chunk-5-6.png)<!-- -->
