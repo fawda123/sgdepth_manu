@@ -863,12 +863,22 @@ levs <- sort(unique(all_segs$group))
 
 levels(ests_out$seg) <- c('WCB', 'BB', 'OTB', 'UIRL')
 
+scbr <- list(
+  c(29.44, 29.52, -83.63, -83.45, 5, 0.05),
+  c(27.85, 27.92, -82.8, -82.65, 5, 0.05),
+  c(28.38, 28.5, -80.85, -80.725, 5, 0.05),
+  c(30.39, 30.44, -86.64, -86.59, 2.5, 0.05)
+)
+
 # assign plots by segment and doc est
 for(i in 1:length(levs)){
   
   # subset segment shapefiles and ests by segment
   seg_sub <- all_segs[all_segs$group %in% levs[i], ]
   est_sub <- ests_out[ests_out$seg %in% levs[i], ]
+  
+  # for scale bar
+  sc <- scbr[[i]]
   
   # points to plot
   pt_plo <- data.frame(est_sub[, c('seg', 'long', 'lat', 'z_cmax')])
@@ -890,7 +900,9 @@ for(i in 1:length(levs)){
     geom_point(data = pt_plo, aes(x = long, y = lat, colour = z_cmax), 
       size = pt_sz, alpha = 0.8) +
     scale_colour_gradientn(colours = col_vals) +
-    theme(legend.title = element_blank())
+    theme(legend.title = element_blank()) + 
+    scalebar(location = 'bottomleft', y.min = sc[1], y.max = sc[2], x.min = sc[3], x.max = sc[4], 
+      dist = sc[5], dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = sc[6])
 
   # legends
   paleg <- g_legend(pa)
@@ -979,7 +991,9 @@ p <- ggplot(data = seg_plo) +
     axis.line.x = element_line(), 
     axis.line.y = element_line(),
     legend.text = element_text(size = 6)
-    )
+    ) + 
+  scalebar(location = 'bottomleft', y.min = 30.375, y.max = 30.44, x.min = -86.62, x.max = -86.5, 
+    dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
 
 pdf('figs/Fig5.pdf', height = 3, width = 5, family = 'serif')
 p
@@ -1042,7 +1056,9 @@ p <- ggplot(data = seg_plo) +
     legend.position = 'top', 
     axis.line.x = element_line(), 
     axis.line.y = element_line()
-    )
+    ) + 
+  scalebar(location = 'bottomright', y.min = 27.54, y.max = 27.65, x.min = -82.58, x.max = -82.41, 
+    dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.05)
 
 pdf('figs/Fig6.pdf', height = 5.5, width = 5, family = 'serif')
 p
@@ -1105,7 +1121,9 @@ p1 <- ggplot(fortify(choc_seg), aes(long, lat)) +
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend())
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  scalebar(location = 'bottomleft', y.min = 30.375, y.max = 30.44, x.min = -86.64, x.max = -86.5, 
+    dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
 
 p1leg <- g_legend(p1)
 p1 <- p1 + theme(legend.position = 'none', 
@@ -1255,7 +1273,9 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend())
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  scalebar(location = 'bottomright', y.min = 27.53, y.max = 27.62, x.min = -82.58, x.max = -82.41, 
+    dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
 
 p1leg <- g_legend(p1)
 p1 <- p1 + theme(legend.position = 'none',
@@ -1329,7 +1349,7 @@ dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.95\textwidth]{figs/Fig8.pdf}
+\includegraphics[width = 0.7\textwidth]{figs/Fig8.pdf}
 \caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb}
 \end{figure}
@@ -1383,7 +1403,9 @@ p1 <- ggplot(fortify(irl_seg), aes(long, lat)) +
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend())
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  scalebar(location = 'bottomleft', y.min = 27.16, y.max = 27.5, x.min = -81.2, x.max = -80, 
+    dist = 30, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
 
 p1leg <- g_legend(p1)
 p1 <- p1 + theme(legend.position = 'none',
@@ -1599,7 +1621,9 @@ p1 <- ggplot(fortify(choc_seg), aes(long, lat)) +
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend())
+  guides(colour = guide_legend(), size = guide_legend()) +
+  scalebar(location = 'bottomleft', y.min = 30.375, y.max = 30.44, x.min = -86.64, x.max = -86.5, 
+    dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
 
 p1leg <- g_legend(p1)
 p1 <- p1 + theme(legend.position = 'none', 
@@ -1740,7 +1764,9 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend())
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  scalebar(location = 'bottomright', y.min = 27.53, y.max = 27.63, x.min = -82.58, x.max = -82.41, 
+    dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
 
 p1leg <- g_legend(p1)
 p1 <- p1 + theme(legend.position = 'none',
@@ -1867,7 +1893,9 @@ p1 <- ggplot(fortify(irl_seg), aes(long, lat)) +
     colours = rev(pt_cols),
     breaks = leg_brks, labels = leg_labs) +
   guides(colour = guide_legend(), size = guide_legend()) + 
-  guides(colour = guide_legend(), size = guide_legend())
+  guides(colour = guide_legend(), size = guide_legend()) + 
+  scalebar(location = 'bottomleft', y.min = 27.16, y.max = 27.5, x.min = -81.2, x.max = -80, 
+    dist = 30, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
 
 p1leg <- g_legend(p1)
 p1 <- p1 + theme(legend.position = 'none',
@@ -2005,14 +2033,17 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   ) + 
   coord_equal() +
   scale_x_continuous(labels = fmt()) + 
-  scale_y_continuous(labels = fmt()) 
+  scale_y_continuous(labels = fmt())  + 
+  scalebar(location = 'bottomright', y.min = 27.53, y.max = 27.62, x.min = -82.58, x.max = -82.41, 
+    dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
+
 pdf('figs/FigS4.pdf', height = 5.5, width = 5, family = 'serif')
 p1
 dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.6\textwidth]{figs/FigS4.pdf}
+\includegraphics[width = 0.7\textwidth]{figs/FigS4.pdf}
 \caption{Locations of selected water quality stations monitored by the Hillsborough County Environmental Protection Commission (TBEP 2011).  Secchi observations at each station were used to evaluate changes in light requirements of seagrass at approximate biennial intervals from 1988 to 2010. Stations were chosen based on continuity of data for the period of interest.  HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:tb_ts_locs}
 \end{figure}
