@@ -1066,7 +1066,7 @@ dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = \textwidth]{figs/Fig6.pdf}
+\includegraphics[width = 0.7\textwidth]{figs/Fig6.pdf}
 \caption{Satellite estimated water clarity for Tampa Bay as an average of all years from 2006 to 2010. See \cref{fig:light_tb} for segment identification.}
 \label{fig:clarity_tb}
 \end{figure}
@@ -1196,7 +1196,7 @@ pA <- ggplot_gtable(ggplot_build(p1))
 pB <- ggplot_gtable(ggplot_build(p2))
 pC <- ggplot_gtable(ggplot_build(p3))
 pD <- ggplot_gtable(ggplot_build(p4))
-maxWidth = unit.pmax(pA$widths[2:3], pB$widths[2:3], pD$widths[2:3], pD$widths[2:3])
+maxWidth = grid::unit.pmax(pA$widths[2:3], pB$widths[2:3], pD$widths[2:3], pD$widths[2:3])
 
 # Set the widths
 pA$widths[2:3] <- maxWidth
@@ -1349,7 +1349,7 @@ dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.7\textwidth]{figs/Fig8.pdf}
+\includegraphics[width = 0.95\textwidth]{figs/Fig8.pdf}
 \caption{Estimated median depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb}
 \end{figure}
@@ -1550,7 +1550,7 @@ p2 <- ggplot(summs, aes(x = kd, y = z_c_all, colour = Segment)) +
 # align
 pA <- ggplot_gtable(ggplot_build(p1))
 pB <- ggplot_gtable(ggplot_build(p2))
-maxWidth = unit.pmax(pA$widths[2:3], pB$widths[2:3])
+maxWidth = grid::unit.pmax(pA$widths[2:3], pB$widths[2:3])
 
 # Set the widths
 pA$widths[2:3] <- maxWidth
@@ -1696,7 +1696,7 @@ pA <- ggplot_gtable(ggplot_build(p1))
 pB <- ggplot_gtable(ggplot_build(p2))
 pC <- ggplot_gtable(ggplot_build(p3))
 pD <- ggplot_gtable(ggplot_build(p4))
-maxWidth = unit.pmax(pA$widths[2:3], pB$widths[2:3], pD$widths[2:3], pD$widths[2:3])
+maxWidth = grid::unit.pmax(pA$widths[2:3], pB$widths[2:3], pD$widths[2:3], pD$widths[2:3])
 
 # Set the widths
 pA$widths[2:3] <- maxWidth
