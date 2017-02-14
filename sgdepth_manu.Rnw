@@ -1571,6 +1571,78 @@ dev.off()
 % supplementary material
 \beginsupplement
 
+% secchi locations used to track light requirement changes over time
+<<tb_ts_locs, echo = F, eval = T, cache = T, results = 'hide'>>=
+data(tb_seg)
+data(tb_light_allsec)
+
+# EPC routine monitoring stations
+stats <- foreign::read.dbf('M:/GIS/tb_sta.dbf') %>% 
+  select(sta, Actual_Lat, Actual_Lon) %>% 
+  rename(
+    StationID = sta, 
+    Latitude = Actual_Lat, 
+    Longitude = Actual_Lon
+  ) %>% 
+  mutate(
+    StationID = as.character(StationID)
+  )
+    
+# secchi and satellite light ests, all years
+sec <- reshape2::melt(tb_light_allsec, id.vars = names(tb_light_allsec[[1]])) %>% 
+  rename(yr = L1) %>% 
+  mutate(kd = 1.7/SD)
+
+# complete year locs
+yrloc <- select(sec, yr, Longitude, Latitude) %>% 
+  unite('lon_lat', Longitude, Latitude, remove = F) %>% 
+  complete(lon_lat, yr) %>% 
+  arrange(yr)
+
+# remove locations that aren't common between all years, get unique stations for plot
+torm <- unique(yrloc$lon_lat[is.na(yrloc$Longitude)])
+sec <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>% 
+  filter(!lon_lat %in% torm) %>% 
+  left_join(., stats, by = c('Latitude', 'Longitude')) %>% 
+  select(StationID, Latitude, Longitude) %>% 
+  unique
+
+# centroids for labels
+labs <- data.frame(rgeos::gCentroid(tb_seg, byid = T))
+labs$seg <- c('HB', 'LTB', 'MTB', 'OTB')
+labs[2, 1] <- -82.67
+labs[2, 2] <- 27.65
+labs[4, 1] <- -82.64
+labs[4, 2] <- 27.935
+
+# map, z_cmed
+p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
+  geom_polygon(colour = 'black', fill = colors()[245], aes(group = group)) +
+  geom_text(data = sec, aes(x = Longitude, y = Latitude, label = StationID), 
+    size = 3, fontface = 'italic') +
+  geom_text(data = labs, aes(label = seg, x = x, y = y), size = 6) +
+  theme_classic() +
+  theme(
+    axis.title.x = element_blank(), 
+    axis.title.y = element_blank()
+  ) + 
+  coord_equal() +
+  scale_x_continuous(labels = fmt()) + 
+  scale_y_continuous(labels = fmt())  + 
+  scalebar(location = 'bottomright', y.min = 27.53, y.max = 27.62, x.min = -82.58, x.max = -82.41, 
+    dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
+
+pdf('figs/FigS1.pdf', height = 5.5, width = 5, family = 'serif')
+p1
+dev.off()
+@
+\begin{figure}
+\centering
+\includegraphics[width = 0.7\textwidth]{figs/FigS1.pdf}
+\caption{Locations of selected water quality stations monitored by the Hillsborough County Environmental Protection Commission (TBEP 2011).  Secchi observations at each station were used to evaluate changes in light requirements of seagrass at approximate biennial intervals from 1988 to 2010. Stations were chosen based on continuity of data for the period of interest.  HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\label{fig:tb_ts_locs}
+\end{figure}
+
 % estimated light requirements for Choctawhatchee Bay, z_cmax
 <<light_choc_zcmax, echo = F, eval = T, cache = T, include = FALSE, results = 'hide'>>=
 
@@ -1704,7 +1776,7 @@ pB$widths[2:3] <- maxWidth
 pC$widths[2:3] <- maxWidth
 pD$widths[2:3] <- maxWidth
 
-pdf('figs/FigS1.pdf', height = 8, width = 8, family = 'serif')
+pdf('figs/FigS2.pdf', height = 8, width = 8, family = 'serif')
 grid.arrange(pA, p1leg, pB, blankPanel, pC, p3leg, pD, blankPanel, 
   ncol = 2, nrow = 4, 
   widths = c(1, 0.2), heights = c(1, 0.7, 1, 0.7))
@@ -1712,7 +1784,7 @@ dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.95\textwidth]{figs/FigS1.pdf}
+\includegraphics[width = 0.95\textwidth]{figs/FigS2.pdf}
 \caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend to the 5\textsuperscript{th} and 95\textsuperscript{th} percentiles with outliers beyond. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
 \label{fig:light_choc_zcmax}
 \end{figure}
@@ -1833,14 +1905,14 @@ p4 <- ggplot(dat, aes(x = seg, y = light)) +
     ) + 
   coord_flip()
 
-pdf('figs/FigS2.pdf', height = 7.5, width = 7, family = 'serif')
+pdf('figs/FigS3.pdf', height = 7.5, width = 7, family = 'serif')
 grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
   widths = c(1, 0.3, 0.75))
 dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.95\textwidth]{figs/FigS2.pdf}
+\includegraphics[width = 0.95\textwidth]{figs/FigS3.pdf}
 \caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb_zcmax}
 \end{figure}
@@ -1962,7 +2034,7 @@ p4 <- ggplot(dat, aes(x = seg, y = light)) +
     ) + 
   coord_flip()
 
-pdf('figs/FigS3.pdf', height = 8.5, width = 6.5, family = 'serif')
+pdf('figs/FigS4.pdf', height = 8.5, width = 6.5, family = 'serif')
 grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
   widths = c(1, 0.3, 0.75))
 dev.off()
@@ -1971,81 +2043,9 @@ options(digits = 1)
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.8\textwidth]{figs/FigS3.pdf}
+\includegraphics[width = 0.8\textwidth]{figs/FigS4.pdf}
 \caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.15 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
 \label{fig:light_irl_zcmax}
-\end{figure}
-
-% secchi locations used to track light requirement changes over time
-<<tb_ts_locs, echo = F, eval = T, cache = T, results = 'hide'>>=
-data(tb_seg)
-data(tb_light_allsec)
-
-# EPC routine monitoring stations
-stats <- foreign::read.dbf('M:/GIS/tb_sta.dbf') %>% 
-  select(sta, Actual_Lat, Actual_Lon) %>% 
-  rename(
-    StationID = sta, 
-    Latitude = Actual_Lat, 
-    Longitude = Actual_Lon
-  ) %>% 
-  mutate(
-    StationID = as.character(StationID)
-  )
-    
-# secchi and satellite light ests, all years
-sec <- reshape2::melt(tb_light_allsec, id.vars = names(tb_light_allsec[[1]])) %>% 
-  rename(yr = L1) %>% 
-  mutate(kd = 1.7/SD)
-
-# complete year locs
-yrloc <- select(sec, yr, Longitude, Latitude) %>% 
-  unite('lon_lat', Longitude, Latitude, remove = F) %>% 
-  complete(lon_lat, yr) %>% 
-  arrange(yr)
-
-# remove locations that aren't common between all years, get unique stations for plot
-torm <- unique(yrloc$lon_lat[is.na(yrloc$Longitude)])
-sec <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>% 
-  filter(!lon_lat %in% torm) %>% 
-  left_join(., stats, by = c('Latitude', 'Longitude')) %>% 
-  select(StationID, Latitude, Longitude) %>% 
-  unique
-
-# centroids for labels
-labs <- data.frame(rgeos::gCentroid(tb_seg, byid = T))
-labs$seg <- c('HB', 'LTB', 'MTB', 'OTB')
-labs[2, 1] <- -82.67
-labs[2, 2] <- 27.65
-labs[4, 1] <- -82.64
-labs[4, 2] <- 27.935
-
-# map, z_cmed
-p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
-  geom_polygon(colour = 'black', fill = colors()[245], aes(group = group)) +
-  geom_text(data = sec, aes(x = Longitude, y = Latitude, label = StationID), 
-    size = 3, fontface = 'italic') +
-  geom_text(data = labs, aes(label = seg, x = x, y = y), size = 6) +
-  theme_classic() +
-  theme(
-    axis.title.x = element_blank(), 
-    axis.title.y = element_blank()
-  ) + 
-  coord_equal() +
-  scale_x_continuous(labels = fmt()) + 
-  scale_y_continuous(labels = fmt())  + 
-  scalebar(location = 'bottomright', y.min = 27.53, y.max = 27.62, x.min = -82.58, x.max = -82.41, 
-    dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
-
-pdf('figs/FigS4.pdf', height = 5.5, width = 5, family = 'serif')
-p1
-dev.off()
-@
-\begin{figure}
-\centering
-\includegraphics[width = 0.7\textwidth]{figs/FigS4.pdf}
-\caption{Locations of selected water quality stations monitored by the Hillsborough County Environmental Protection Commission (TBEP 2011).  Secchi observations at each station were used to evaluate changes in light requirements of seagrass at approximate biennial intervals from 1988 to 2010. Stations were chosen based on continuity of data for the period of interest.  HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
-\label{fig:tb_ts_locs}
 \end{figure}
 
 \end{document}
