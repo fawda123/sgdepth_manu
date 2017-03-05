@@ -187,7 +187,7 @@ for(seg in segs){
   sgpts_shp <- shps[[grep(paste0('^sgpts.*', seg, '.shp$'), names(shps))]]
   
   grid_spc <- 0.01
-  rad <- 0.02
+  rad <- 0.01
   grid_seed <- 4321
   set.seed(grid_seed)
   pts <- grid_est(seg_shp, spacing = grid_spc) 
