@@ -604,7 +604,7 @@ set.seed(4321)
 est_pts <- grid_est(seg, spacing = 0.02)
 sgrass <- sgrass[sample(1:length(sgrass), 1000), ]
 test_pt <- est_pts[27, ]
-buff_pts <- buff_ext(sgrass, test_pt, buff = 0.02)
+buff_pts <- buff_ext(sgrass, test_pt, buff = 0.04)
 
 # format buff_pts and sgrass for plotting
 buff_pts <- data.frame(buff_pts)
@@ -633,6 +633,9 @@ cont_labs <- fortify(conts) %>%
   mutate(level = -1 * as.numeric(as.character(level)))
 w <- 0.015
 h <- 0.015
+
+xlims <- c(-83.68, -83.35)
+ylims <- c(29.4, 29.8)
 
 # subfig labels
 sublabs <- data.frame(long = -83.375, lat = 29.78, labs = c('a', 'b', 'c'))
@@ -668,8 +671,8 @@ p1 <- ggplot(state, aes(long, lat, group = group)) +
   xlab('Longitude') +
   ylab('Latitude') +
   coord_map(
-    xlim = c(-83.65, -83.35),
-    ylim = c(29.4, 29.8)
+    xlim = xlims,
+    ylim = ylims
   ) +
   theme(axis.text = element_text(size = 10),
     axis.title = element_text(size = 20), 
@@ -703,13 +706,13 @@ p2 <- ggplot(seg, aes(long, lat)) +
   ) +  
   geom_point(
     data = data.frame(est_pts), 
-    aes(Var1, Var2), size = 17, pch = 1, colour = 'grey60'
+    aes(Var1, Var2), size = 33, pch = 1, colour = 'grey60'
   ) +
   scale_shape_manual('', values = c(2, 16)) +
   coord_equal() +
   coord_map(
-    xlim = c(-83.65, -83.35),
-    ylim = c(29.4, 29.8)
+    xlim = xlims,
+    ylim = ylims
     ) + 
   theme_classic() +
   theme(axis.text = element_text(size = 10),
@@ -732,8 +735,8 @@ p3 <- ggplot(seg, aes(long, lat)) +
   xlab('Longitude') +
   ylab('Latitude') +
   coord_map(
-    xlim = c(-83.65, -83.35),
-    ylim = c(29.4, 29.8)
+    xlim = xlims,
+    ylim = ylims
     ) +
   geom_point(
     data = buff_pts,
@@ -750,7 +753,7 @@ p3 <- ggplot(seg, aes(long, lat)) +
   ) +
   geom_point(
     data = data.frame(test_pt),
-    aes(Var1, Var2), size = 17, pch = 1, colour = 'grey60'
+    aes(Var1, Var2), size = 33, pch = 1, colour = 'grey60'
   ) +
   scale_shape_manual('', values = c(2, 16)) +
   theme(axis.text = element_text(size = 10),
@@ -760,7 +763,7 @@ p3 <- ggplot(seg, aes(long, lat)) +
     axis.line.x = element_line(), 
     axis.line.y = element_line())  + 
   geom_text(data = sublabs[3, ], aes(x = long, y = lat, label = labs, group = NULL), size = 8) + 
-  scalebar(location = 'bottomleft', y.min = 29.42, y.max = 29.5, x.min = -83.63, x.max = -83.45, 
+  scalebar(location = 'bottomleft', y.min = 29.42, y.max = 29.5, x.min = -83.66, x.max = -83.45, 
     dist=5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 4, height = 0.05)
 
 pleg <- ggplot(seg, aes(long, lat)) + 
@@ -770,8 +773,8 @@ pleg <- ggplot(seg, aes(long, lat)) +
   coord_equal() +
   xlab('Longitude') +
   ylab('Latitude') +
-  scale_x_continuous(limits = c(-83.65, -83.35)) +
-  scale_y_continuous(limits = c(29.4, 29.8)) +
+  scale_x_continuous(limits = xlims) +
+  scale_y_continuous(limits = ylims) +
   geom_point(
     data = data.frame(est_pts), 
     aes(Var1, Var2, colour = 'grid', size = 'grid', pch = 'grid')
@@ -812,7 +815,7 @@ options(digits = 2)
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{figs/Fig1.pdf}
-\caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  Subfigure a shows the seagrass coverage and depth contours at 2 meter intervals, including the whole segment estimate for depth of colonization. Subfigure b shows a grid of sampling locations with sampling radii for estimating \ac{doc} and seagrass depth points derived from bathymetry and seagrass coverage layers.  Subfigure c shows an example of sampled seagrass depth points for a test location.  Estimates in \cref{fig:est_ex} were obtained from the test location in subfigure c.}
+\caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  Subfigure a shows the seagrass coverage and depth contours at 2 meter intervals, including the whole segment estimate for depth of colonization. Subfigure b shows a grid of sampling locations with sampling radii for estimating \ac{doc} and seagrass depth points derived from bathymetry and seagrass coverage layers.  Subfigure c shows an example of sampled seagrass depth points for a test location.}
 \label{fig:buff_ex}
 \end{figure}
 
