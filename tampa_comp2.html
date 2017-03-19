@@ -121,6 +121,44 @@ $(document).ready(function () {
 
 <div id="light-requirements-changes-from-1988-to-2014" class="section level3">
 <h3>Light requirements changes from 1988 to 2014</h3>
+<div id="kd" class="section level4">
+<h4>kd</h4>
+<pre class="r"><code>data(tb_light_allsec)
+
+##
+# formatting
+
+# melt, rename yr
+sec &lt;- reshape2::melt(tb_light_allsec, id.vars = names(tb_light_allsec[[1]])) %&gt;% 
+  rename(yr = L1) %&gt;% 
+  mutate(kd = 1.7/SD)
+
+# complete yeear, locations
+yrloc &lt;- select(sec, yr, Longitude, Latitude) %&gt;% 
+  unite('lon_lat', Longitude, Latitude, remove = F) %&gt;% 
+  complete(lon_lat, yr) %&gt;% 
+  arrange(yr)
+
+# locations that aren't common between all years
+torm &lt;- unique(yrloc$lon_lat[is.na(yrloc$Longitude)])
+
+# remove unique locations, get 1988, 2014, take difference
+tocmp &lt;- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %&gt;% 
+  filter(!lon_lat %in% torm) %&gt;% 
+  rename(Segment = seg) %&gt;% 
+  select(lon_lat, yr, Longitude, Latitude, kd) %&gt;% 
+  filter(yr %in% c(1988, 2014)) %&gt;% 
+  spread(yr, kd) %&gt;% 
+  mutate(kddif = `2014` - `1988`)
+
+range(tocmp$`1988`)</code></pre>
+<pre><code>## [1] 0.4745897 1.4650085</code></pre>
+<pre class="r"><code>range(tocmp$`2014`)</code></pre>
+<pre><code>## [1] 0.3856377 0.9540926</code></pre>
+<pre class="r"><code>summary(tocmp$kddif)</code></pre>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -0.51090 -0.21690 -0.14590 -0.18200 -0.13150 -0.03531</code></pre>
+</div>
 <div id="depth-of-colonization" class="section level4">
 <h4>depth of colonization</h4>
 <pre class="r"><code>data(tb_light_allsec)
@@ -154,6 +192,9 @@ range(tocmp$`1988`)</code></pre>
 <pre><code>## [1] 0.7755338 1.2216710</code></pre>
 <pre class="r"><code>range(tocmp$`2014`)</code></pre>
 <pre><code>## [1] 1.054655 1.439785</code></pre>
+<pre class="r"><code>summary(tocmp$zcdif)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## 0.03439 0.06526 0.13700 0.13600 0.16530 0.29730</code></pre>
 <pre class="r"><code>mod &lt;- lm(`2014` ~ `1988`, tocmp)
 summary(mod)</code></pre>
 <pre><code>## 
@@ -316,6 +357,9 @@ range(tocmp$`1988`)</code></pre>
 <pre><code>## [1] 20.71158 60.09769</code></pre>
 <pre class="r"><code>range(tocmp$`2014`)</code></pre>
 <pre><code>## [1] 33.70088 63.16836</code></pre>
+<pre class="r"><code>summary(tocmp$sidif)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  -3.526   1.810   4.487   5.129   7.919  13.940</code></pre>
 <pre class="r"><code>mod &lt;- lm(`2014` ~ `1988`, tocmp)
 summary(mod)</code></pre>
 <pre><code>## 

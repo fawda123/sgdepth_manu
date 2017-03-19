@@ -3,6 +3,62 @@
 
 
 
+#### kd
+
+
+```r
+data(tb_light_allsec)
+
+##
+# formatting
+
+# melt, rename yr
+sec <- reshape2::melt(tb_light_allsec, id.vars = names(tb_light_allsec[[1]])) %>% 
+  rename(yr = L1) %>% 
+  mutate(kd = 1.7/SD)
+
+# complete yeear, locations
+yrloc <- select(sec, yr, Longitude, Latitude) %>% 
+  unite('lon_lat', Longitude, Latitude, remove = F) %>% 
+  complete(lon_lat, yr) %>% 
+  arrange(yr)
+
+# locations that aren't common between all years
+torm <- unique(yrloc$lon_lat[is.na(yrloc$Longitude)])
+
+# remove unique locations, get 1988, 2014, take difference
+tocmp <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>% 
+  filter(!lon_lat %in% torm) %>% 
+  rename(Segment = seg) %>% 
+  select(lon_lat, yr, Longitude, Latitude, kd) %>% 
+  filter(yr %in% c(1988, 2014)) %>% 
+  spread(yr, kd) %>% 
+  mutate(kddif = `2014` - `1988`)
+
+range(tocmp$`1988`)
+```
+
+```
+## [1] 0.4745897 1.4650085
+```
+
+```r
+range(tocmp$`2014`)
+```
+
+```
+## [1] 0.3856377 0.9540926
+```
+
+```r
+summary(tocmp$kddif)
+```
+
+```
+##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## -0.51090 -0.21690 -0.14590 -0.18200 -0.13150 -0.03531
+```
+
 #### depth of colonization
 
 
@@ -47,6 +103,15 @@ range(tocmp$`2014`)
 
 ```
 ## [1] 1.054655 1.439785
+```
+
+```r
+summary(tocmp$zcdif)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+## 0.03439 0.06526 0.13700 0.13600 0.16530 0.29730
 ```
 
 ```r
@@ -117,7 +182,7 @@ ggplot(tocmp, aes(x = `1988`, y = `2014`)) +
   ggtitle('Zcmed difference')
 ```
 
-![](tampa_comp2_files/figure-html/unnamed-chunk-1-1.png)<!-- -->
+![](tampa_comp2_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
 
 ```r
 # residual variation by location of difference in light requirements
@@ -127,7 +192,7 @@ ggplot(tocmp, aes(x = Longitude, y = Latitude, colour = zcdif, size = zcdif)) +
   theme_bw()
 ```
 
-![](tampa_comp2_files/figure-html/unnamed-chunk-1-2.png)<!-- -->
+![](tampa_comp2_files/figure-html/unnamed-chunk-2-2.png)<!-- -->
 
 ```r
 # t.test of difference
@@ -274,6 +339,15 @@ range(tocmp$`2014`)
 ```
 
 ```r
+summary(tocmp$sidif)
+```
+
+```
+##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  -3.526   1.810   4.487   5.129   7.919  13.940
+```
+
+```r
 mod <- lm(`2014` ~ `1988`, tocmp)
 summary(mod)
 ```
@@ -339,7 +413,7 @@ ggplot(tocmp, aes(x = `1988`, y = `2014`)) +
   ggtitle('SI difference')
 ```
 
-![](tampa_comp2_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![](tampa_comp2_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 ```r
 # residual variation by location of difference in light requirements
@@ -349,7 +423,7 @@ ggplot(tocmp, aes(x = Longitude, y = Latitude, colour = sidif, size = sidif)) +
   theme_bw()
 ```
 
-![](tampa_comp2_files/figure-html/unnamed-chunk-2-2.png)<!-- -->
+![](tampa_comp2_files/figure-html/unnamed-chunk-3-2.png)<!-- -->
 
 ```r
 # t.test of difference

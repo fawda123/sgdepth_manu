@@ -16,6 +16,42 @@ library(tidyverse)
 library(nlme)
 ```
 
+#### kd
+
+```{r fig.width = 5, fig.height = 5, echo = T, message = F}
+data(tb_light_allsec)
+
+##
+# formatting
+
+# melt, rename yr
+sec <- reshape2::melt(tb_light_allsec, id.vars = names(tb_light_allsec[[1]])) %>% 
+  rename(yr = L1) %>% 
+  mutate(kd = 1.7/SD)
+
+# complete yeear, locations
+yrloc <- select(sec, yr, Longitude, Latitude) %>% 
+  unite('lon_lat', Longitude, Latitude, remove = F) %>% 
+  complete(lon_lat, yr) %>% 
+  arrange(yr)
+
+# locations that aren't common between all years
+torm <- unique(yrloc$lon_lat[is.na(yrloc$Longitude)])
+
+# remove unique locations, get 1988, 2014, take difference
+tocmp <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>% 
+  filter(!lon_lat %in% torm) %>% 
+  rename(Segment = seg) %>% 
+  select(lon_lat, yr, Longitude, Latitude, kd) %>% 
+  filter(yr %in% c(1988, 2014)) %>% 
+  spread(yr, kd) %>% 
+  mutate(kddif = `2014` - `1988`)
+
+range(tocmp$`1988`)
+range(tocmp$`2014`)
+summary(tocmp$kddif)
+```
+
 #### depth of colonization
 
 ```{r fig.width = 5, fig.height = 5, echo = T, message = F}
@@ -49,6 +85,7 @@ tocmp <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>%
 
 range(tocmp$`1988`)
 range(tocmp$`2014`)
+summary(tocmp$zcdif)
 
 mod <- lm(`2014` ~ `1988`, tocmp)
 summary(mod)
@@ -125,6 +162,7 @@ tocmp <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>%
 
 range(tocmp$`1988`)
 range(tocmp$`2014`)
+summary(tocmp$sidif)
 
 mod <- lm(`2014` ~ `1988`, tocmp)
 summary(mod)
