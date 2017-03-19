@@ -72,6 +72,10 @@ mod2 <- gls(sidif ~ 1,
   data = tocmp)
 summary(mod2)
 
-AIC(mod1, mod2)
-anova(mod1, mod2)
+mod3 <- lm(sidif ~ Latitude + Longitude,
+  data = tocmp)
+summary(mod3)
+
+AIC(mod1, mod2, mod3)
+anova(mod1, mod2, mod3)
 ```

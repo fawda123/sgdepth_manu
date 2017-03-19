@@ -131,21 +131,61 @@ summary(mod2)
 ```
 
 ```r
-AIC(mod1, mod2)
+mod3 <- lm(sidif ~ Latitude + Longitude,
+  data = tocmp)
+summary(mod3)
 ```
 
 ```
-##      df      AIC
-## mod1  2 109.2254
-## mod2  4 103.5805
+## 
+## Call:
+## lm(formula = sidif ~ Latitude + Longitude, data = tocmp)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.2328 -2.8316 -0.1651  2.6852  6.1899 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 6539.504   1434.155   4.560 0.000376 ***
+## Latitude     -23.304      9.876  -2.360 0.032260 *  
+## Longitude     71.307     15.081   4.728 0.000269 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 3.282 on 15 degrees of freedom
+## Multiple R-squared:  0.6054,	Adjusted R-squared:  0.5528 
+## F-statistic: 11.51 on 2 and 15 DF,  p-value: 0.0009356
 ```
 
 ```r
-anova(mod1, mod2)
+AIC(mod1, mod2, mod3)
 ```
 
 ```
-##      Model df      AIC      BIC    logLik   Test  L.Ratio p-value
-## mod1     1  2 109.2254 110.8919 -52.61272                        
-## mod2     2  4 103.5805 106.9133 -47.79024 1 vs 2 9.644969   0.008
+## Warning in AIC.default(mod1, mod2, mod3): models are not all fitted to the
+## same number of observations
+```
+
+```
+##      df       AIC
+## mod1  2 109.22545
+## mod2  4 103.58048
+## mod3  4  98.58751
+```
+
+```r
+anova(mod1, mod2, mod3)
+```
+
+```
+## Warning in nlme::anova.lme(object = mod1, mod2, mod3): fitted objects with
+## different fixed effects. REML comparisons are not meaningful.
+```
+
+```
+##      Model df       AIC       BIC    logLik   Test  L.Ratio p-value
+## mod1     1  2 109.22545 110.89187 -52.61272                        
+## mod2     2  4 103.58048 106.91333 -47.79024 1 vs 2 9.644969   0.008
+## mod3     3  4  84.37155  87.20375 -38.18577
 ```
