@@ -1185,7 +1185,7 @@ p3 <- p3 + theme(
 p4 <- ggplot(dat, aes(x = seg, y = light)) + 
   stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
   stat_summary(fun.y = o, geom = "point") +
-  ylab('% light requirements') +
+  ylab('Light requirements (% SI)') +
   theme_classic() +
   theme(axis.title.x = element_blank(),
     axis.line.x = element_line(), 
@@ -1574,7 +1574,7 @@ p2 <- ggplot(sec, aes(x = factor(yr), y = light, fill = Segment)) +
     axis.title.x = element_blank()
     ) + 
   scale_fill_manual(values = cols) + 
-  scale_y_continuous('light requirements (% SI)')
+  scale_y_continuous('Light requirements (% SI)')
 
 # align
 pA <- ggplot_gtable(ggplot_build(p1))
@@ -1785,7 +1785,7 @@ p3 <- p3 + theme(
 p4 <- ggplot(dat, aes(x = seg, y = light)) + 
   stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
   stat_summary(fun.y = o, geom = "point") +
-  ylab('% light requirements') +
+  ylab('Light requirements (% SI)') +
   theme_classic() +
   theme(axis.title.x = element_blank(),
     axis.line.x = element_line(), 
