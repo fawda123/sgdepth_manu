@@ -29,3 +29,5 @@ tidyr
 purrr
 nlme
 ggsn
+ggrepel
+directlabels

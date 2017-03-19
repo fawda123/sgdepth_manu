@@ -76,6 +76,8 @@ library(dplyr)
 library(purrr)
 library(nlme)
 library(ggsn)
+library(ggrepel)
+library(directlabels)
 @
 
 % get the version based on commit date
@@ -1490,7 +1492,7 @@ options(digits = 1)
 \end{figure}
 
 % tb light requirement changes 1988 - 2010
-<<tb_ts, echo = F, eval = T, cache = T, results = 'hide'>>=
+<<tb_ts, echo = F, eval = F, cache = T, results = 'hide'>>=
 # secchi and satellite light ests, all years
 data(tb_light_allsec)
 
@@ -1513,17 +1515,6 @@ sec <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>%
 # segment colors
 cols <- rev(RColorBrewer::brewer.pal(11, 'RdYlBu')[c(2, 4, 8, 10)])
 
-# boxplots
-p1 <- ggplot(sec, aes(x = factor(yr), y = light, fill = Segment)) +
-  geom_boxplot(outlier.size = 1, lwd = 0.4) +
-  theme_bw() + 
-  theme(
-    legend.position = 'top', 
-    axis.title.x = element_blank()
-    ) + 
-  scale_fill_manual(values = cols) + 
-  scale_y_continuous('% light requirements')
-
 # get medians by segment/year
 summs <- group_by(sec, Segment, yr) %>% 
   summarise(
@@ -1532,23 +1523,58 @@ summs <- group_by(sec, Segment, yr) %>%
     light = median(light)
   )
 
+# si curves
+  
+kd <- seq(0.35, 1.5, length = 100)
+z_c_all <- seq(0.7, 1.4, length = 100)
+ests <- expand.grid(kd, z_c_all)
+si <- 100 * exp((-ests[, 1]) * ests[, 2])
+
+dat <- data.frame(ests, si)
+names(dat) <- c('kd', 'z_c_all', 'si')
+
 # labels
-labs <- filter(summs, yr %in% c('1988', '2010'))
+labs <- summs %>% 
+  mutate(
+    yr = ifelse(!yr %in% c('1988', '2014'), '', yr)
+    )
 ylab <- expression(italic(Z ['c, med']), '(m)')
 xlab <- expression(paste(italic(K [d]), ' (', m^-1, ')')) 
 
+
 # time paths
-p2 <- ggplot(summs, aes(x = kd, y = z_c_all, colour = Segment)) +
-  geom_path() +
-  geom_point(pch = 21, aes(fill = Segment), colour = 'black', size = 2.5) + 
-  geom_label(data = labs, aes(label = yr, fill = Segment), 
-    colour = 'black', size = 3.5, label.padding = unit(0.1, "lines")) +
-  scale_y_continuous(ylab) + 
+p1 <- ggplot() + 
+  stat_contour(data=dat, aes(x = kd, y = z_c_all, z = si, colour=..level..)) +
+  geom_path(data = summs, aes(x = kd, y = z_c_all, group = Segment), size = 1) +
+  geom_point(data = summs, aes(x = kd, y = z_c_all, fill = Segment), colour = 'black', size = 3, pch = 21) + 
+  geom_label_repel(data = labs, aes(x = kd, y = z_c_all, label = yr),
+    size = 3, point.padding = unit(0.6, "lines"), label.padding = unit(0.1, "lines"),
+    segment.size = 0.4) +
+  scale_y_continuous(ylab) +
   scale_x_continuous(xlab) + 
-  scale_colour_manual(values = cols) + 
   scale_fill_manual(values = cols) + 
+  facet_wrap(~Segment, scales = 'free') + 
+  scale_colour_gradient(low = 'darkgrey', high = 'darkgrey') + 
+  coord_cartesian(xlim = c(0.37, 1.49), ylim = c(0.67, 1.4)) +
   theme_bw() + 
-  theme(legend.position = 'none')
+  theme(
+    legend.position = 'none',
+    strip.background = element_blank(), 
+    panel.grid.minor = element_blank(), 
+    panel.grid.major = element_blank()
+    )
+p1 <- direct.label(p1, list('bottom.pieces', cex = 0.7))
+
+# boxplots
+p2 <- ggplot(sec, aes(x = factor(yr), y = light, fill = Segment)) +
+  geom_boxplot(outlier.size = 1, lwd = 0.4, width = 0.6) +
+  theme_bw() + 
+  theme(
+    legend.position = 'top', 
+    axis.title.x = element_blank()
+    ) + 
+  scale_fill_manual(values = cols) + 
+  scale_y_continuous('light requirements (% SI)')
 
 # align
 pA <- ggplot_gtable(ggplot_build(p1))
@@ -1559,14 +1585,17 @@ maxWidth = grid::unit.pmax(pA$widths[2:3], pB$widths[2:3])
 pA$widths[2:3] <- maxWidth
 pB$widths[2:3] <- maxWidth
 
-pdf('figs/Fig10.pdf', height = 6.5, width = 7, family = 'serif')
-grid.arrange(pA, pB, ncol = 1, heights = c(1, 0.9))
+pdf('figs/Fig10.pdf', height = 7, width = 6.5, family = 'serif')
+grid.arrange(
+  arrangeGrob(pA, pB, ncol = 1, heights = c(1.8, 1))
+)
 dev.off()
+
 @
 \begin{figure}
 \centering
 \includegraphics[width = \textwidth]{figs/Fig10.pdf}
-\caption{Summary of light requirements of seagrasses in segments of Tampa Bay. Estimates are based on Secchi observations at routine monitoring stations and median depth of colonization estimates from coverage maps at approximate biennial intervals from 1988 to 2010.  Boxplot distributions of light requirements are shown in the top plot and median changes of $Z_{c, med}$ (m) and light attenuation in each year are shown as continuous paths in the bottom plot. See \cref{fig:tb_ts_locs} for locations of stations in each segment. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\caption{Summary of light requirements of seagrasses in segments of Tampa Bay. Estimates are based on Secchi observations at routine monitoring stations and median depth of colonization estimates from coverage maps at approximate biennial intervals from 1988 to 2014. Median changes of $Z_{c, med}$ (m) and light attenuation in each year are shown as continuous paths in the top plot and boxplot distributions of light requirements are shown in the bottom plot. Contoured light requirements (\% SI) are shown in grey in the top plot. See \cref{fig:tb_ts_locs} for locations of stations in each segment. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:tb_ts}
 \end{figure}
 \clearpage
@@ -1638,11 +1667,12 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
 pdf('figs/FigS1.pdf', height = 5.5, width = 5, family = 'serif')
 p1
 dev.off()
+
 @
 \begin{figure}
 \centering
 \includegraphics[width = 0.7\textwidth]{figs/FigS1.pdf}
-\caption{Locations of selected water quality stations monitored by the Hillsborough County Environmental Protection Commission (TBEP 2011).  Secchi observations at each station were used to evaluate changes in light requirements of seagrass at approximate biennial intervals from 1988 to 2010. Stations were chosen based on continuity of data for the period of interest.  HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\caption{Locations of selected water quality stations monitored by the Hillsborough County Environmental Protection Commission (TBEP 2011).  Secchi observations at each station were used to evaluate changes in light requirements of seagrass at approximate biennial intervals from 1988 to 2014. Stations were chosen based on continuity of data for the period of interest.  HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:tb_ts_locs}
 \end{figure}
 

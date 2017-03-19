@@ -471,13 +471,13 @@ out_ls <- foreach(i = seq_along(yrs)) %dopar% {
   dat <- na.omit(proc) %>% 
     select(-Station_ID) #  this is important, these are produced in the function, not the same between analyses
 
-  # mask tb doc and light ests by 1km buffer of seagrass
-  coordinates(dat) = ~Longitude+Latitude
-  tmp <- dat %over% sgbuff_2010_tb %>%
-    is.na(.) %>%
-    !.
-  dat <- data.frame(dat)[tmp, ] %>%
-    select(-matches('optional'))
+  # # mask tb doc and light ests by 1km buffer of seagrass
+  # coordinates(dat) = ~Longitude+Latitude
+  # tmp <- dat %over% sgbuff_2010_tb %>%
+  #   is.na(.) %>%
+  #   !.
+  # dat <- data.frame(dat)[tmp, ] %>%
+  #   select(-matches('optional'))
   
   # return output
   dat
