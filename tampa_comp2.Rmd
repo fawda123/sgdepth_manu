@@ -47,9 +47,22 @@ tocmp <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>%
   spread(yr, z_c_all) %>% 
   mutate(zcdif = `2014` - `1988`)
 
+range(tocmp$`1988`)
+range(tocmp$`2014`)
+
+mod <- lm(`2014` ~ `1988`, tocmp)
+summary(mod)
+
+tocmp <- mutate(tocmp, 
+  res = resid(mod)
+)
+
+summary(lm(res ~ Latitude*Longitude, tocmp))
+
 # light requirements between years
 ggplot(tocmp, aes(x = `1988`, y = `2014`)) + 
   geom_point() + 
+  stat_smooth(method = 'lm') + 
   theme_bw() + 
   geom_abline(intercept = 0, slope = 1) + 
   coord_cartesian(ylim = c(0.5, 1.5), xlim = c(0.5, 1.5)) +
@@ -110,9 +123,22 @@ tocmp <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>%
   spread(yr, light) %>% 
   mutate(sidif = `2014` - `1988`)
 
+range(tocmp$`1988`)
+range(tocmp$`2014`)
+
+mod <- lm(`2014` ~ `1988`, tocmp)
+summary(mod)
+
+tocmp <- mutate(tocmp, 
+  res = resid(mod)
+)
+
+summary(lm(res ~ Latitude*Longitude, tocmp))
+
 # light requirements between years
 ggplot(tocmp, aes(x = `1988`, y = `2014`)) + 
   geom_point() + 
+  stat_smooth(method = 'lm') + 
   theme_bw() + 
   geom_abline(intercept = 0, slope = 1) + 
   coord_cartesian(ylim = c(0, 100), xlim = c(0, 100)) +
@@ -140,4 +166,5 @@ summary(mod2)
 
 AIC(mod1, mod2)
 anova(mod1, mod2)
+
 ```

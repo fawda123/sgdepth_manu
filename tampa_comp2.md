@@ -34,9 +34,83 @@ tocmp <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>%
   spread(yr, z_c_all) %>% 
   mutate(zcdif = `2014` - `1988`)
 
+range(tocmp$`1988`)
+```
+
+```
+## [1] 0.7755338 1.2216710
+```
+
+```r
+range(tocmp$`2014`)
+```
+
+```
+## [1] 1.054655 1.439785
+```
+
+```r
+mod <- lm(`2014` ~ `1988`, tocmp)
+summary(mod)
+```
+
+```
+## 
+## Call:
+## lm(formula = `2014` ~ `1988`, data = tocmp)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.09124 -0.05863 -0.01906  0.03841  0.17439 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)   
+## (Intercept)   0.4799     0.2008   2.389  0.02954 * 
+## `1988`        0.6875     0.1817   3.783  0.00163 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.07702 on 16 degrees of freedom
+## Multiple R-squared:  0.4721,	Adjusted R-squared:  0.4391 
+## F-statistic: 14.31 on 1 and 16 DF,  p-value: 0.001631
+```
+
+```r
+tocmp <- mutate(tocmp, 
+  res = resid(mod)
+)
+
+summary(lm(res ~ Latitude*Longitude, tocmp))
+```
+
+```
+## 
+## Call:
+## lm(formula = res ~ Latitude * Longitude, data = tocmp)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.11669 -0.02643 -0.00413  0.02045  0.12330 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(>|t|)   
+## (Intercept)        19450.131   6017.970   3.232  0.00602 **
+## Latitude            -702.523    216.939  -3.238  0.00595 **
+## Longitude            235.516     72.857   3.233  0.00602 **
+## Latitude:Longitude    -8.507      2.626  -3.239  0.00594 **
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.05859 on 14 degrees of freedom
+## Multiple R-squared:  0.4937,	Adjusted R-squared:  0.3853 
+## F-statistic: 4.551 on 3 and 14 DF,  p-value: 0.01996
+```
+
+```r
 # light requirements between years
 ggplot(tocmp, aes(x = `1988`, y = `2014`)) + 
   geom_point() + 
+  stat_smooth(method = 'lm') + 
   theme_bw() + 
   geom_abline(intercept = 0, slope = 1) + 
   coord_cartesian(ylim = c(0.5, 1.5), xlim = c(0.5, 1.5)) +
@@ -184,9 +258,81 @@ tocmp <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>%
   spread(yr, light) %>% 
   mutate(sidif = `2014` - `1988`)
 
+range(tocmp$`1988`)
+```
+
+```
+## [1] 20.71158 60.09769
+```
+
+```r
+range(tocmp$`2014`)
+```
+
+```
+## [1] 33.70088 63.16836
+```
+
+```r
+mod <- lm(`2014` ~ `1988`, tocmp)
+summary(mod)
+```
+
+```
+## 
+## Call:
+## lm(formula = `2014` ~ `1988`, data = tocmp)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -7.049 -2.060  0.380  3.304  5.571 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept) 18.25800    4.42396   4.127  0.00079 ***
+## `1988`       0.70820    0.09603   7.375 1.57e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 4.029 on 16 degrees of freedom
+## Multiple R-squared:  0.7727,	Adjusted R-squared:  0.7585 
+## F-statistic: 54.38 on 1 and 16 DF,  p-value: 1.568e-06
+```
+
+```r
+tocmp <- mutate(tocmp, 
+  res = resid(mod)
+)
+
+summary(lm(res ~ Latitude*Longitude, tocmp))
+```
+
+```
+## 
+## Call:
+## lm(formula = res ~ Latitude * Longitude, data = tocmp)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -4.406 -1.823 -0.284  1.296  5.371 
+## 
+## Coefficients:
+##                     Estimate Std. Error t value Pr(>|t|)
+## (Intercept)        -455604.9   320466.4  -1.422    0.177
+## Latitude             16543.3    11552.3   1.432    0.174
+## Longitude            -5525.5     3879.7  -1.424    0.176
+## Latitude:Longitude     200.6      139.9   1.435    0.173
+## 
+## Residual standard error: 3.12 on 14 degrees of freedom
+## Multiple R-squared:  0.4753,	Adjusted R-squared:  0.3629 
+## F-statistic: 4.227 on 3 and 14 DF,  p-value: 0.02527
+```
+
+```r
 # light requirements between years
 ggplot(tocmp, aes(x = `1988`, y = `2014`)) + 
   geom_point() + 
+  stat_smooth(method = 'lm') + 
   theme_bw() + 
   geom_abline(intercept = 0, slope = 1) + 
   coord_cartesian(ylim = c(0, 100), xlim = c(0, 100)) +
