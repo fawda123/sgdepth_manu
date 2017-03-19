@@ -16,6 +16,71 @@ library(tidyverse)
 library(nlme)
 ```
 
+#### depth of colonization
+
+```{r fig.width = 5, fig.height = 5, echo = T, message = F}
+
+data(tb_light_allsec)
+
+##
+# formatting
+
+# melt, rename yr
+sec <- reshape2::melt(tb_light_allsec, id.vars = names(tb_light_allsec[[1]])) %>% 
+  rename(yr = L1)
+
+# complete yeear, locations
+yrloc <- select(sec, yr, Longitude, Latitude) %>% 
+  unite('lon_lat', Longitude, Latitude, remove = F) %>% 
+  complete(lon_lat, yr) %>% 
+  arrange(yr)
+
+# locations that aren't common between all years
+torm <- unique(yrloc$lon_lat[is.na(yrloc$Longitude)])
+
+# remove unique locations, get 1988, 2014, take difference
+tocmp <- unite(sec, 'lon_lat', Longitude, Latitude, remove = F) %>% 
+  filter(!lon_lat %in% torm) %>% 
+  rename(Segment = seg) %>% 
+  select(lon_lat, yr, Longitude, Latitude, z_c_all) %>% 
+  filter(yr %in% c(1988, 2014)) %>% 
+  spread(yr, z_c_all) %>% 
+  mutate(zcdif = `2014` - `1988`)
+
+# light requirements between years
+ggplot(tocmp, aes(x = `1988`, y = `2014`)) + 
+  geom_point() + 
+  theme_bw() + 
+  geom_abline(intercept = 0, slope = 1) + 
+  coord_cartesian(ylim = c(0.5, 1.5), xlim = c(0.5, 1.5)) +
+  ggtitle('Zcmed difference')
+
+# residual variation by location of difference in light requirements
+ggplot(tocmp, aes(x = Longitude, y = Latitude, colour = zcdif, size = zcdif)) + 
+  geom_point() + 
+  coord_equal() + 
+  theme_bw()
+
+# t.test of difference
+with(tocmp, t.test(zcdif))
+
+# intercept only model of SI difference
+mod1 <- gls(zcdif ~ 1,
+  data = tocmp)
+summary(mod1)
+
+# intercept only model of SI difference, lat/lon correlation structure
+mod2 <- gls(zcdif ~ 1,
+  correlation = corGaus(form = ~ Latitude + Longitude, nugget = TRUE), 
+  data = tocmp)
+summary(mod2)
+
+AIC(mod1, mod2)
+anova(mod1, mod2)
+```
+
+#### light requirements
+
 ```{r fig.width = 5, fig.height = 5, echo = T, message = F}
 
 data(tb_light_allsec)
@@ -50,7 +115,8 @@ ggplot(tocmp, aes(x = `1988`, y = `2014`)) +
   geom_point() + 
   theme_bw() + 
   geom_abline(intercept = 0, slope = 1) + 
-  coord_cartesian(ylim = c(0, 100), xlim = c(0, 100))
+  coord_cartesian(ylim = c(0, 100), xlim = c(0, 100)) +
+  ggtitle('SI difference')
 
 # residual variation by location of difference in light requirements
 ggplot(tocmp, aes(x = Longitude, y = Latitude, colour = sidif, size = sidif)) + 
@@ -72,10 +138,6 @@ mod2 <- gls(sidif ~ 1,
   data = tocmp)
 summary(mod2)
 
-mod3 <- lm(sidif ~ Latitude + Longitude,
-  data = tocmp)
-summary(mod3)
-
-AIC(mod1, mod2, mod3)
-anova(mod1, mod2, mod3)
+AIC(mod1, mod2)
+anova(mod1, mod2)
 ```

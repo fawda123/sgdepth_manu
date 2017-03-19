@@ -1538,9 +1538,8 @@ labs <- summs %>%
   mutate(
     yr = ifelse(!yr %in% c('1988', '2014'), '', yr)
     )
-ylab <- expression(italic(Z ['c, med']), '(m)')
+ylab <- expression(paste(italic(Z ['c, med']), ' (m)'))
 xlab <- expression(paste(italic(K [d]), ' (', m^-1, ')')) 
-
 
 # time paths
 p1 <- ggplot() + 
