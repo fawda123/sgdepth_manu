@@ -1699,11 +1699,12 @@ pB$widths[2:3] <- maxWidth
 pdf('figs/FigS1.pdf', height = 5.5, width = 6, family = 'serif')
 grid.arrange(pA, pB, ncol = 1, heights = c(1, 0.75))
 dev.off()
+
 @
 \begin{figure}
 \centering
 \includegraphics[width = \textwidth]{figs/FigS1.pdf}
-\caption{Uncorrected satellite estimates of light attenuation in Choctawhatchee Bay (a) and example of correction with \textit{in situ} data (b). \textit{In situ} data of light attenuation were estimated as an annual average (2010) for monthly data at the sampling sites labelled as points in (a) (mean depth 7.2 m, minimum 3.5 m).  The corresponding satellite data in the same grid cells were compared to the \textit{in situ} data based on regressions of each dataset with cumulative estimates for both.  An example correction is shown in (b) where for any uncorrected satellite estimate (point 1), the corresponding cumulative estimate on the regression curve was identified (point 2), matched with the same cumulative estimate from the \textit{in situ} data (point 3), and then matched to the corresponding value on the x-axis (point 4) to yield the corrected satellite estimate.}
+\caption{Uncorrected satellite estimates of light attenuation in Choctawhatchee Bay (a) and example of correction with \textit{in situ} data (b). \textit{In situ} data of light attenuation were estimated as an annual average (2010) for monthly data at the sampling sites labelled as points in (a) (mean depth 7.2 m, minimum 3.5 m).  The corresponding satellite data in the same grid cells were compared to the \textit{in situ} data based on regressions of each dataset with frequency estimates for both.  An example correction is shown in (b) where for any uncorrected satellite estimate (point 4), the corresponding frequency estimate on the regression curve from the satellite data was identified (point 2), matched with the corresponding frequency for the \textit{in situ} data (point 3), and then related to the associated \textit{in situ} light attenuation value (point 4) to yield the corrected satellite estimate.}
 \label{fig:satcorr}
 \end{figure}
 

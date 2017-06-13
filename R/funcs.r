@@ -961,7 +961,7 @@ kd_backsat <- function(mods_in, dat_in, xsat, xrng = c(0, 2), steps = 2000,
         size = 3) +
       scale_colour_manual(values = cols, labels = leglabs) + 
       scale_x_continuous(name = expression(italic(K [d]))) + 
-      scale_y_continuous(name = expression(paste('Cumulative ', italic(K [d]))),
+      scale_y_continuous(name = expression(paste('Frequency ', italic(K [d]))),
         limits = ylim) +
       theme_classic() +
       theme(legend.title = element_blank(), 
