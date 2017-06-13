@@ -78,6 +78,7 @@ library(nlme)
 library(ggsn)
 library(ggrepel)
 library(directlabels)
+library(grid)
 @
 
 % get the version based on commit date
@@ -687,7 +688,8 @@ p1 <- ggplot(state, aes(long, lat, group = group)) +
     linetype = guide_legend(order = 2), 
     colour = guide_legend(order = 3)
   ) + 
-  geom_text(data = sublabs[1, ], aes(x = long, y = lat, label = labs, group = NULL), size = 8) 
+  geom_text(data = sublabs[1, ], aes(x = long, y = lat, label = labs, group = NULL), size = 8) +
+  geom_point(aes(x = -83.4, y = 29.673), pch = 4, size = 4)
 
 p1leg <- g_legend(p1)
 p1 <- p1 + theme(legend.position = 'none')
@@ -817,7 +819,7 @@ options(digits = 2)
 \begin{figure}
 \centering
 \includegraphics[width=0.9\textwidth]{figs/Fig1.pdf}
-\caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  Subfigure a shows the seagrass coverage and depth contours at 2 meter intervals, including the whole segment estimate for depth of colonization. Subfigure b shows a grid of sampling locations with sampling radii for estimating \ac{doc} and seagrass depth points derived from bathymetry and seagrass coverage layers.  Subfigure c shows an example of sampled seagrass depth points for a test location.}
+\caption{Examples of data and grid locations for estimating seagrass depth of colonization for a region of the Big Bend, Florida.  Subfigure a shows the seagrass coverage and depth contours at 2 meter intervals, including the whole segment estimate for depth of colonization and location of the outflow of the Steinhatchee River (x). Subfigure b shows a grid of sampling locations with sampling radii for estimating \ac{doc} and seagrass depth points derived from bathymetry and seagrass coverage layers.  Subfigure c shows an example of sampled seagrass depth points for a test location.}
 \label{fig:buff_ex}
 \end{figure}
 
@@ -885,6 +887,10 @@ for(i in 1:length(levs)){
   # for scale bar
   sc <- scbr[[i]]
   
+  # label
+  lab <- unique(est_sub$seg) %>% 
+    as.character
+  
   # points to plot
   pt_plo <- data.frame(est_sub[, c('seg', 'long', 'lat', 'z_cmax')])
   
@@ -907,7 +913,8 @@ for(i in 1:length(levs)){
     scale_colour_gradientn(colours = col_vals) +
     theme(legend.title = element_blank()) + 
     scalebar(location = 'bottomleft', y.min = sc[1], y.max = sc[2], x.min = sc[3], x.max = sc[4], 
-      dist = sc[5], dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = sc[6])
+      dist = sc[5], dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = sc[6]) + 
+    ggtitle(lab)
 
   # legends
   paleg <- g_legend(pa)
@@ -939,7 +946,7 @@ dev.off()
 \begin{figure}
 \centering
 \includegraphics[width = 0.95\textwidth]{figs/Fig4.pdf}
-\caption{Spatially-resolved estimates of maximum seagrass depth of colonization (m) for four coastal segments of Florida.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.01 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.02 decimal degrees. From left to right, top to bottom: Big Bend, Old Tampa Bay, Upper Indian R. Lagoon, Western Choctawhatchee Bay.}
+\caption{Spatially-resolved estimates of maximum seagrass depth of colonization (m) for four coastal segments of Florida.  Estimates are assigned to grid locations for each segment, where grid spacing was fixed at 0.01 decimal degrees.  Radii for sampling seagrass bathymetric data around each grid location were fixed at 0.02 decimal degrees. BB: Big Bend, OTB: Old Tampa Bay, UIRL: Upper Indian R. Lagoon, WCB: Western Choctawhatchee Bay.}
 \label{fig:all_ests}
 \end{figure}
 
@@ -1602,6 +1609,104 @@ dev.off()
 % supplementary material
 \beginsupplement
 
+<<echo = F, eval = T, cache = T, results = 'hide'>>=
+
+# reset digits to default
+options(digits = 7)
+
+# load data
+data(choc_seg)
+data(choc_sats_unc)
+data(choc_situ)
+
+# color ramp
+cols <- c('blue', 'lightblue', 'yellow', 'brown')
+
+seg_plo <- fortify(choc_seg)
+
+# get average only
+to_plo <-  choc_sats_unc[, c('lon', 'lat', 'kd_2010')] %>% 
+  rename(value = kd_2010)
+
+# leg lab
+leg_lab <- expression(paste(italic(K [d]), ' (', m^-1, ')')) 
+
+# make plot
+p1 <- ggplot(data = seg_plo) +
+  geom_polygon(aes(x = long, y = lat, group = group), 
+    colour = 'black', fill = colors()[245]) +
+  geom_tile(data = subset(to_plo, !is.na(value)), 
+    aes(x = lon, y = lat, fill = value, colour = value)
+  ) +
+  geom_polygon(aes(x = long, y = lat, group = group), 
+    colour = 'black', fill = NA) +
+  geom_point(data = choc_situ, aes(x = Longitude, y = Latitude), size = 3) + 
+  coord_equal() +
+  scale_colour_gradientn(leg_lab, colours = cols) +
+  scale_fill_gradientn(leg_lab, colours = cols) +
+  scale_x_continuous(expand = c(0,0)) + 
+  scale_y_continuous(expand = c(0,0)) +
+  theme_classic() +
+  theme(
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(), 
+    axis.title.x = element_blank(), 
+    axis.title.y = element_blank(),
+    legend.position = 'top', 
+    axis.line.x = element_line(), 
+    axis.line.y = element_line()
+    ) + 
+  scalebar(location = 'bottomleft', y.min = 30.375, y.max = 30.44, x.min = -86.62, x.max = -86.5, 
+    dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2.5, height = 0.07) + 
+  labs(subtitle = expression(paste('(a) Uncorrected satellite estimates and stations for ', italic('in situ'), ' data')))
+
+
+# sample the raster with in situ data locations
+sats_all <- choc_sats_unc
+sats_2010 <- sats_all[, c('lon', 'lat', 'kd_2010')]
+sat_rast_2010 <- make_rast_fun(sats_2010, 'kd_2010')
+
+samp_dat <- choc_situ
+coordinates(samp_dat) <- c('Longitude', 'Latitude')
+samp_dat <- raster::extract(sat_rast_2010, samp_dat) %>% 
+  data.frame  %>% 
+  mutate(
+    kPAR = choc_situ$kPAR,
+    cumkPAR = choc_situ$cumkPAR,
+    layer = kd_2010,
+    cumlayer = cumsum(layer)/max(cumsum(layer))
+    )
+samp_dat <- samp_dat[, !names(samp_dat) %in% 'kd_2010']
+
+# use kd_binomod and kd_backsat to get models for correcting and to implement
+# models for transformation
+kd_mods <- kd_mod(samp_dat, 'kPAR', 'cumkPAR', 'layer', 'cumlayer')
+
+# an example
+p2 <- kd_backsat(kd_mods, samp_dat, xsat = 0.75, plot = T, xrng = c(0, 1.5)) + 
+  labs(subtitle = '(b) Example of satellite correction')
+
+
+# Get the widths
+pA <- ggplot_gtable(ggplot_build(p1))
+pB <- ggplot_gtable(ggplot_build(p2))
+maxWidth = grid::unit.pmax(pA$widths[2:3], pB$widths[2:3])
+
+# Set the widths
+pA$widths[2:3] <- maxWidth
+pB$widths[2:3] <- maxWidth
+
+pdf('figs/FigS1.pdf', height = 5.5, width = 6, family = 'serif')
+grid.arrange(pA, pB, ncol = 1, heights = c(1, 0.75))
+dev.off()
+@
+\begin{figure}
+\centering
+\includegraphics[width = \textwidth]{figs/FigS1.pdf}
+\caption{Uncorrected satellite estimates of light attenuation in Choctawhatchee Bay (a) and example of correction with \textit{in situ} data (b). \textit{In situ} data of light attenuation were estimated as an annual average (2010) for monthly data at the sampling sites labelled as points in (a) (mean depth 7.2 m, minimum 3.5 m).  The corresponding satellite data in the same grid cells were compared to the \textit{in situ} data based on regressions of each dataset with cumulative estimates for both.  An example correction is shown in (b) where for any uncorrected satellite estimate (point 1), the corresponding cumulative estimate on the regression curve was identified (point 2), matched with the same cumulative estimate from the \textit{in situ} data (point 3), and then matched to the corresponding value on the x-axis (point 4) to yield the corrected satellite estimate.}
+\label{fig:satcorr}
+\end{figure}
+
 % secchi locations used to track light requirement changes over time
 <<tb_ts_locs, echo = F, eval = T, cache = T, results = 'hide'>>=
 data(tb_seg)
@@ -1663,15 +1768,15 @@ p1 <- ggplot(fortify(tb_seg), aes(long, lat)) +
   scalebar(location = 'bottomright', y.min = 27.53, y.max = 27.62, x.min = -82.58, x.max = -82.41, 
     dist = 5, dd2km= TRUE, model='WGS84', st.dist=.1, st.size = 2, height = 0.07)
 
-pdf('figs/FigS1.pdf', height = 5.5, width = 5, family = 'serif')
+pdf('figs/FigS2.pdf', height = 5.5, width = 5, family = 'serif')
 p1
 dev.off()
 
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.7\textwidth]{figs/FigS1.pdf}
-\caption{Locations of selected water quality stations monitored by the Hillsborough County Environmental Protection Commission (TBEP 2011).  Secchi observations at each station were used to evaluate changes in light requirements of seagrass at approximate biennial intervals from 1988 to 2014. Stations were chosen based on continuity of data for the period of interest.  HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
+\includegraphics[width = 0.7\textwidth]{figs/FigS2.pdf}
+\caption{Locations of selected water quality stations monitored by the Hillsborough County Environmental Protection Commission (TBEP 2011).  Secchi observations at each station were used to evaluate changes in light requirements of seagrass at approximate biennial intervals from 1988 to 2014. Stations are labelled by their designation and were chosen based on continuity of data for the period of interest.  HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:tb_ts_locs}
 \end{figure}
 
@@ -1808,7 +1913,7 @@ pB$widths[2:3] <- maxWidth
 pC$widths[2:3] <- maxWidth
 pD$widths[2:3] <- maxWidth
 
-pdf('figs/FigS2.pdf', height = 8, width = 8, family = 'serif')
+pdf('figs/FigS3.pdf', height = 8, width = 8, family = 'serif')
 grid.arrange(pA, p1leg, pB, blankPanel, pC, p3leg, pD, blankPanel, 
   ncol = 2, nrow = 4, 
   widths = c(1, 0.2), heights = c(1, 0.7, 1, 0.7))
@@ -1816,7 +1921,7 @@ dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.95\textwidth]{figs/FigS2.pdf}
+\includegraphics[width = 0.95\textwidth]{figs/FigS3.pdf}
 \caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Choctawhatchee Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.04 decimal degrees.  Estimates are also summarized by bay segment as boxplots where the dimensions are the 25\textsuperscript{th} percentile, median, and 75\textsuperscript{th} percentile.  Whiskers extend to the 5\textsuperscript{th} and 95\textsuperscript{th} percentiles with outliers beyond. CCB: Central Choctawhatchee Bay, ECB: East Choctawhatchee Bay, WCB: West Choctawhatchee Bay.}
 \label{fig:light_choc_zcmax}
 \end{figure}
@@ -1937,14 +2042,14 @@ p4 <- ggplot(dat, aes(x = seg, y = light)) +
     ) + 
   coord_flip()
 
-pdf('figs/FigS3.pdf', height = 7.5, width = 7, family = 'serif')
+pdf('figs/FigS4.pdf', height = 7.5, width = 7, family = 'serif')
 grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
   widths = c(1, 0.3, 0.75))
 dev.off()
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.95\textwidth]{figs/FigS3.pdf}
+\includegraphics[width = 0.95\textwidth]{figs/FigS4.pdf}
 \caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Tampa Bay, Florida. Locations are those where water clarity estimates were available from satellite observations and seagrass depth of colonization was estimable using a radius of 0.1 decimal degrees.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.}
 \label{fig:light_tb_zcmax}
 \end{figure}
@@ -2066,7 +2171,7 @@ p4 <- ggplot(dat, aes(x = seg, y = light)) +
     ) + 
   coord_flip()
 
-pdf('figs/FigS4.pdf', height = 8.5, width = 6.5, family = 'serif')
+pdf('figs/FigS5.pdf', height = 8.5, width = 6.5, family = 'serif')
 grid.arrange(p1, p1leg, p2, p3, p3leg, p4, ncol = 3, nrow = 2, 
   widths = c(1, 0.3, 0.75))
 dev.off()
@@ -2075,7 +2180,7 @@ options(digits = 1)
 @
 \begin{figure}
 \centering
-\includegraphics[width = 0.8\textwidth]{figs/FigS4.pdf}
+\includegraphics[width = 0.8\textwidth]{figs/FigS5.pdf}
 \caption{Estimated maximum depths of seagrass colonization and light requirements for multiple locations in Indian River Lagoon, Florida.  Map locations are georeferenced observations of water clarity in the Florida \acl{IWR} database, update 40.  Estimates are also summarized by bay segment as boxplots as in \cref{fig:light_choc}. Light requirements are based on averaged secchi values within ten years of the seagrass coverage data and estimated maximum depth of colonization using a radius of 0.15 decimal degrees for each secchi location to sample seagrass depth points. BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, LSL: Lower St. Lucie, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon.}
 \label{fig:light_irl_zcmax}
 \end{figure}
