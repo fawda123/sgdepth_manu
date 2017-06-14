@@ -473,14 +473,15 @@ all_light <- rbind(choc_light, irl_light, tb_light) %>%
   group_by(bay, seg) %>% 
   summarize(
     n_locs = length(seg), 
-    mean_z_cmed = mean(z_c_all), 
-    se_z_cmed = sd(z_c_all),
-    min_z_cmed = min(z_c_all),
-    max_z_cmed = max(z_c_all),
-    mean_light = mean(light),
-    se_light = sd(light),
-    min_light = min(light),
-    max_light = max(light)
+    mean_z_cmed = mean(z_c_all, na.rm = T), 
+    se_z_cmed = sd(z_c_all, na.rm = T),
+    min_z_cmed = min(z_c_all, na.rm = T),
+    max_z_cmed = max(z_c_all, na.rm = T),
+    n_locsl = length(na.omit(light)),
+    mean_light = mean(light, na.rm = T),
+    se_light = sd(light, na.rm = T),
+    min_light = min(light, na.rm = T),
+    max_light = max(light, na.rm = T)
     )
 
 # means need to be from mixed models
@@ -506,13 +507,13 @@ zc3 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
 
 lm1 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
-  data = tb_light)
+  data = tb_light, na.action = na.omit)
 lm2 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
-  data = choc_light)
+  data = choc_light, na.action = na.omit)
 lm3 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
-  data =irl_light)
+  data =irl_light,  na.action = na.omit)
 
 avezc <- lapply(list(zc2, zc3, zc1), function(x) x$coefficients$fixed) %>% 
   unlist
@@ -539,7 +540,7 @@ tab <- data.frame(all_light)
 rows <- tab[, 2]
 rowgrps <- table(tab[, 1])
 tab <- tab[, -c(1:2)]
-tab[, 2:9] <- formtab_fun(tab[, 2:9], 1, 1, 1)
+tab[, c(2:5, 7:10)] <- formtab_fun(tab[, c(2:5, 7:10)], 1, 1, 1)
 nms <- names(tab) # this is fucked
 ncoltab <- ncol(tab)
 nrowtab <- nrow(tab)
@@ -561,7 +562,7 @@ tab$mean_z_cmed[abvals] <- paste0(tab$mean_z_cmed[abvals], '\\textsuperscript{ab
 cap.val<-'Summary of median depth of colonization ($Z_{c,\\,med}$, m) and light requirements (\\%) for all bay segments of Choctawhatchee Bay, Indian River Lagoon, and Tampa Bay.  Superscripts for mean $Z_{c,\\,med}$ denote significant differences within each bay. See \\cref{fig:light_choc,fig:light_tb,fig:light_irl} for spatial distribution of the results.'
 
 foot.val<-'\\textsuperscript{\\textit{a}}\\footnotesize CCB: Central Choctawhatchee Bay, ECB: Eastern Choctawhatchee Bay, WCB: Western Choctawhatchee Bay, BR: Banana R., LCIRL: Lower Central Indian R. Lagoon, LIRL: Lower Indian R. Lagoon, LML: Lower Mosquito Lagoon, UCIRL: Upper Central Indian R. Lagoon, UIRL: Upper Indian R. Lagoon, UML: Upper Mosquito Lagoon, HB: Hillsborough Bay, LTB: Lower Tampa Bay, MTB: Middle Tampa Bay, OTB: Old Tampa Bay.' 
-col_heads <- c('$n$', rep(c('Mean', 'St. Err.', 'Min', 'Max'), 2))
+col_heads <- rep(c('$n$', 'Mean', 'St. Err.', 'Min', 'Max'), 2)
 
 latex( 
   tab,
@@ -570,8 +571,8 @@ latex(
   insert.bottom = foot.val,
   caption = cap.val,
   colheads = col_heads,
-  cgroup = c('', '$\\mathbf Z_{c,\\,med}$', '{\\bf \\% light}'), 
-  n.cgroup = c(1, 4, 4),
+  cgroup = c('$\\mathbf Z_{c,\\,med}$', '{\\bf \\% light}'), 
+  n.cgroup = c(5, 5),
   caption.loc = 'top',
   rowname = rows,
   rgroup = names(rowgrps),
@@ -1103,7 +1104,13 @@ fill_col <- colors()[245]
 # format data, remove outliers
 dat <- data.frame(choc_light)
 dat$seg <- factor(dat$seg, levels = c('WCB', 'CCB', 'ECB'))
-dat <- dat[dat$light < 80, ]
+# dat <- dat[dat$light < 80, ]
+
+# seprate zc and light datasets (some light requirement locations were removed if zc > z) 
+toplo1 <- select(dat, Longitude, Latitude, z_c_all, seg) %>% 
+  na.omit
+toplo2 <- select(dat, Longitude, Latitude, light, seg) %>% 
+  na.omit
 
 # color ramp for all graphs
 pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
@@ -1117,7 +1124,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 # map, z_cmed
 p1 <- ggplot(fortify(choc_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+  geom_point(data = toplo1, aes(x = Longitude, y = Latitude, 
     colour = z_c_all), fill = 'black', alpha = 0.8, size = 3) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
@@ -1145,7 +1152,7 @@ p1 <- p1 + theme(legend.position = 'none',
 
 # boxplots by seg, z_cmed
 # reorder seg labels
-p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
+p2 <- ggplot(toplo1, aes(x = seg, y = z_c_all)) + 
   stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
   stat_summary(fun.y = o, geom = "point") +
   ylab(bquote(italic('Z' ['c, med']))) +
@@ -1164,7 +1171,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 # map, light requirements
 p3 <- ggplot(fortify(choc_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+  geom_point(data = toplo2, aes(x = Longitude, y = Latitude, 
     colour = light), fill = 'black', alpha = 0.8, size = 3) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
@@ -1189,7 +1196,7 @@ p3 <- p3 + theme(
   )
 
 # boxplots, light requirements
-p4 <- ggplot(dat, aes(x = seg, y = light)) + 
+p4 <- ggplot(toplo2, aes(x = seg, y = light)) + 
   stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
   stat_summary(fun.y = o, geom = "point") +
   ylab('Light requirements (% SI)') +
@@ -1257,6 +1264,15 @@ dat <- data.frame(tb_light)
 # outs <- quantile(dat$light, c(0.05, 0.95))
 # dat <- dat[dat$light > outs[1] & dat$light < outs[2],]
 
+# separate zc and light datasets (some light requirement locations were removed if zc > z) 
+sgfac <- rev(c('OTB', 'HB', 'MTB', 'LTB'))
+toplo1 <- select(dat, Longitude, Latitude, z_c_all, seg) %>% 
+  na.omit %>% 
+  mutate(seg = factor(seg, levels = sgfac))
+toplo2 <- select(dat, Longitude, Latitude, light, seg) %>% 
+  na.omit %>% 
+  mutate(seg = factor(seg, levels = sgfac))
+
 # color ramp for all graphs
 pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
 
@@ -1269,7 +1285,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 # map, z_cmed
 p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+  geom_point(data = toplo1, aes(x = Longitude, y = Latitude, 
     colour = z_c_all), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
@@ -1299,7 +1315,7 @@ p1 <- p1 + theme(legend.position = 'none',
 # reorder seg labels
 segs <- c('LTB', 'MTB', 'HB', 'OTB')
 dat$seg <- factor(dat$seg, levels = segs) 
-p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
+p2 <- ggplot(toplo1, aes(x = seg, y = z_c_all)) + 
   stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
   stat_summary(fun.y = o, geom = "point") + 
   ylab(bquote(italic('Z' ['c, med']))) +
@@ -1319,7 +1335,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 # map, light requirements
 p3 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+  geom_point(data = toplo2, aes(x = Longitude, y = Latitude, 
     colour = light), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
@@ -1343,7 +1359,7 @@ p3 <- p3 + theme(legend.position = 'none',
   )
 
 # boxplots, light requirements
-p4 <- ggplot(dat, aes(x = seg, y = light)) + 
+p4 <- ggplot(toplo2, aes(x = seg, y = light)) + 
   stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
   stat_summary(fun.y = o, geom = "point") +
   ylab('% light requirements') +
@@ -1609,6 +1625,7 @@ dev.off()
 % supplementary material
 \beginsupplement
 
+% satellite correction plot
 <<echo = F, eval = T, cache = T, results = 'hide'>>=
 
 # reset digits to default
@@ -1801,7 +1818,13 @@ fill_col <- colors()[245]
 # format data, remove outliers
 dat <- data.frame(choc_light_zcmax)
 dat$seg <- factor(dat$seg, levels = c('WCB', 'CCB', 'ECB'))
-dat <- dat[dat$light < 80, ]
+# dat <- dat[dat$light < 80, ]
+
+# separate zc and light datasets (some light requirement locations were removed if zc > z) 
+toplo1 <- select(dat, Longitude, Latitude, z_c_all, seg) %>% 
+  na.omit
+toplo2 <- select(dat, Longitude, Latitude, light, seg) %>% 
+  na.omit
 
 # color ramp for all graphs
 pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
@@ -1815,7 +1838,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 # map, z_cmax
 p1 <- ggplot(fortify(choc_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+  geom_point(data = toplo1, aes(x = Longitude, y = Latitude, 
     colour = z_c_all), fill = 'black', alpha = 0.8, size = 3) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
@@ -1843,7 +1866,7 @@ p1 <- p1 + theme(legend.position = 'none',
 
 # boxplots by seg, z_cmax
 # reorder seg labels
-p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) + 
+p2 <- ggplot(toplo1, aes(x = seg, y = z_c_all)) + 
   stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
   stat_summary(fun.y = o, geom = "point") + 
   ylab(bquote(italic('Z' ['c, max']))) +
@@ -1862,7 +1885,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 # map, light requirements
 p3 <- ggplot(fortify(choc_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+  geom_point(data = toplo2, aes(x = Longitude, y = Latitude, 
     colour = light), fill = 'black', alpha = 0.8, size = 3) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
@@ -1887,7 +1910,7 @@ p3 <- p3 + theme(
   )
 
 # boxplots, light requirements
-p4 <- ggplot(dat, aes(x = seg, y = light)) + 
+p4 <- ggplot(toplo2, aes(x = seg, y = light)) + 
   stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
   stat_summary(fun.y = o, geom = "point") +
   ylab('Light requirements (% SI)') +
@@ -1946,6 +1969,15 @@ dat <- data.frame(tb_light_zcmax)
 # outs <- quantile(dat$light, c(0.05, 0.95))
 # dat <- dat[dat$light > outs[1] & dat$light < outs[2],]
 
+# separate zc and light datasets (some light requirement locations were removed if zc > z) 
+sgfac <- rev(c('OTB', 'HB', 'MTB', 'LTB'))
+toplo1 <- select(dat, Longitude, Latitude, z_c_all, seg) %>% 
+  na.omit %>% 
+  mutate(seg = factor(seg, levels = sgfac))
+toplo2 <- select(dat, Longitude, Latitude, light, seg) %>% 
+  na.omit %>% 
+  mutate(seg = factor(seg, levels = sgfac))
+
 # color ramp for all graphs
 pt_cols <- c('blue', 'lightblue', 'yellow', 'brown')
 
@@ -1958,7 +1990,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 # map, z_cmax
 p1 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+  geom_point(data = toplo1, aes(x = Longitude, y = Latitude, 
     colour = z_c_all), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
@@ -1988,7 +2020,7 @@ p1 <- p1 + theme(legend.position = 'none',
 # reorder seg labels
 segs <- c('LTB', 'MTB', 'HB', 'OTB')
 dat$seg <- factor(dat$seg, levels = segs) 
-p2 <- ggplot(dat, aes(x = seg, y = z_c_all)) +
+p2 <- ggplot(toplo1, aes(x = seg, y = z_c_all)) +
   stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
   stat_summary(fun.y = o, geom = "point") +
   ylab(bquote(italic('Z' ['c, max']))) +
@@ -2008,7 +2040,7 @@ leg_labs <- form_fun(leg_brks, 2, 2, 2)
 # map, light requirements
 p3 <- ggplot(fortify(tb_seg), aes(long, lat)) + 
   geom_polygon(colour = 'black', fill = fill_col, aes(group = group)) +
-  geom_point(data = dat, aes(x = Longitude, y = Latitude, 
+  geom_point(data = toplo2, aes(x = Longitude, y = Latitude, 
     colour = light), fill = 'black', alpha = 0.8) +
   geom_text(data = labs, aes(label = seg, x = x, y = y)) +
   theme_classic() +
@@ -2032,7 +2064,7 @@ p3 <- p3 + theme(legend.position = 'none',
   )
 
 # boxplots, light requirements
-p4 <- ggplot(dat, aes(x = seg, y = light)) +
+p4 <- ggplot(toplo2, aes(x = seg, y = light)) +
   stat_summary(fun.data = f, geom = "boxplot", fill = fill_col) + 
   stat_summary(fun.y = o, geom = "point") +
   ylab('% light requirements') +

@@ -29,6 +29,7 @@ opts_chunk$set(fig.path = 'fig/', fig.align = 'center', fig.show = 'hold', messa
 
 #global R optoins
 options(replace.assign = TRUE, width = 80)
+
 @
 
 \begin{document}
@@ -56,7 +57,8 @@ zmall <- lme(z_c_all ~ 0 + bay, random = ~ 1 | bay,
   data = all_light)
 lmall <- lme(light ~ 0 + bay, random = ~ 1 | bay,
   correlation = corGaus(form = ~ Latitude + Longitude | bay, nugget = TRUE), 
-  data = all_light)
+  data = all_light, na.action = na.omit)
+
 @
 
 <<results = 'asis', message = F, warning = F, echo = F>>=
@@ -64,20 +66,17 @@ library(stargazer)
 stargazer(zmall, lmall,
   title = 'Inter-bay differences for median depth of colonization and light requirements.  Gaussian models with nuggets for the spatial correlation structures were used.  Tampa Bay data were masked to remove points farther than 1km from seagrass.'
   )
-
 @
 
 <<message = F, warning = F>>=
 library(multcomp)
 summary(glht(zmall, linfct = mcp(bay = 'Tukey')))
 summary(glht(lmall, linfct = mcp(bay = 'Tukey')))
-
 @
 
 \section{Within-bay comparisons}
 
 <<message = F, warning = F, echo = F>>=
-
 library(maptools)
 library(nlme)
 library(stargazer)
@@ -103,13 +102,13 @@ zc3 <- lme(z_c_all ~ 0 + seg, random = ~ 1 | seg,
 
 lm1 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
-  data = tb_light)
+  data = tb_light, na.action = na.omit)
 lm2 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
-  data = choc_light)
+  data = choc_light, na.action = na.omit)
 lm3 <- lme(light ~ 0 + seg, random = ~ 1 | seg,
   correlation = corGaus(form = ~ Latitude + Longitude | seg, nugget = TRUE), 
-  data =irl_light)
+  data =irl_light, na.action = na.omit)
 @
 
 <<results = 'asis', message = F, warning = F, echo = F>>=
@@ -124,7 +123,6 @@ stargazer(zc2, lm2,
 stargazer(zc3, lm3,
   title = 'Linears models of depth of colonization and light requirements comparing bay segments of Indian River Lagoon.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).'
   )
-
 @
 
 \clearpage
@@ -142,6 +140,7 @@ zc3 <- glht(zc3, linfct = mcp(seg = 'Tukey'))
 summary(zc3)
 cld(zc3)
 summary(glht(lm3, linfct = mcp(seg = 'Tukey')))
+
 @
 
 \end{document}

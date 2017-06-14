@@ -83,7 +83,7 @@
 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Fri, Feb 10, 2017 - 11:24:19 AM
+% Date and time: Wed, Jun 14, 2017 - 12:38:28 PM
 \begin{table}[!htbp] \centering 
   \caption{Inter-bay differences for median depth of colonization and light requirements.  Gaussian models with nuggets for the spatial correlation structures were used.  Tampa Bay data were masked to remove points farther than 1km from seagrass.} 
   \label{} 
@@ -95,20 +95,20 @@
 \\[-1.8ex] & z\_c\_all & light \\ 
 \\[-1.8ex] & (1) & (2)\\ 
 \hline \\[-1.8ex] 
- baychoc & 1.425 & 54.711 \\ 
-  & (0.379) & (3.228) \\ 
+ baychoc & 1.425 & 58.061 \\ 
+  & (0.379) & (3.229) \\ 
   & & \\ 
- bayirl & 1.118 & 18.139 \\ 
-  & (0.264) & (2.989) \\ 
+ bayirl & 1.118 & 18.146 \\ 
+  & (0.264) & (2.908) \\ 
   & & \\ 
- baytb & 0.911 & 42.017 \\ 
-  & (0.309) & (2.627) \\ 
+ baytb & 0.911 & 41.842 \\ 
+  & (0.309) & (2.608) \\ 
   & & \\ 
 \hline \\[-1.8ex] 
-Observations & 637 & 637 \\ 
-Log Likelihood & $-$173.039 & $-$2,143.144 \\ 
-Akaike Inf. Crit. & 360.079 & 4,300.287 \\ 
-Bayesian Inf. Crit. & 391.243 & 4,331.452 \\ 
+Observations & 637 & 570 \\ 
+Log Likelihood & $-$173.039 & $-$1,893.847 \\ 
+Akaike Inf. Crit. & 360.079 & 3,801.695 \\ 
+Bayesian Inf. Crit. & 391.243 & 3,832.077 \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
@@ -152,13 +152,13 @@ Bayesian Inf. Crit. & 391.243 & 4,331.452 \\
 ## 
 ## Fit: lme.formula(fixed = light ~ 0 + bay, data = all_light, random = ~1 | 
 ##     bay, correlation = corGaus(form = ~Latitude + Longitude | 
-##     bay, nugget = TRUE))
+##     bay, nugget = TRUE), na.action = na.omit)
 ## 
 ## Linear Hypotheses:
 ##                 Estimate Std. Error z value Pr(>|z|)    
-## irl - choc == 0  -36.572      4.400  -8.313  < 0.001 ***
-## tb - choc == 0   -12.694      4.162  -3.050  0.00645 ** 
-## tb - irl == 0     23.878      3.979   6.001  < 0.001 ***
+## irl - choc == 0  -39.915      4.346  -9.185  < 1e-04 ***
+## tb - choc == 0   -16.219      4.151  -3.907 0.000267 ***
+## tb - irl == 0     23.696      3.906   6.066  < 1e-04 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
@@ -172,7 +172,7 @@ Bayesian Inf. Crit. & 391.243 & 4,331.452 \\
 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Fri, Feb 10, 2017 - 11:24:25 AM
+% Date and time: Wed, Jun 14, 2017 - 12:38:34 PM
 \begin{table}[!htbp] \centering 
   \caption{Linears models of depth of colonization and light requirements comparing bay segments of Tampa Bay.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay). Data were masked to remove points farther than 1km from seagrass.} 
   \label{} 
@@ -184,23 +184,23 @@ Bayesian Inf. Crit. & 391.243 & 4,331.452 \\
 \\[-1.8ex] & z\_c\_all & light \\ 
 \\[-1.8ex] & (1) & (2)\\ 
 \hline \\[-1.8ex] 
- segHB & 0.962 & 41.104 \\ 
-  & (0.159) & (6.008) \\ 
+ segHB & 0.962 & 43.172 \\ 
+  & (0.159) & (6.930) \\ 
   & & \\ 
- segLTB & 1.261 & 39.099 \\ 
-  & (0.129) & (4.839) \\ 
+ segLTB & 1.261 & 38.318 \\ 
+  & (0.129) & (5.581) \\ 
   & & \\ 
- segMTB & 1.376 & 36.375 \\ 
-  & (0.126) & (4.718) \\ 
+ segMTB & 1.376 & 36.485 \\ 
+  & (0.126) & (5.450) \\ 
   & & \\ 
- segOTB & 0.796 & 48.739 \\ 
-  & (0.132) & (4.906) \\ 
+ segOTB & 0.796 & 47.726 \\ 
+  & (0.132) & (5.641) \\ 
   & & \\ 
 \hline \\[-1.8ex] 
-Observations & 252 & 252 \\ 
-Log Likelihood & 406.686 & $-$806.168 \\ 
-Akaike Inf. Crit. & $-$797.372 & 1,628.335 \\ 
-Bayesian Inf. Crit. & $-$769.265 & 1,656.443 \\ 
+Observations & 252 & 220 \\ 
+Log Likelihood & 406.686 & $-$686.499 \\ 
+Akaike Inf. Crit. & $-$797.372 & 1,388.998 \\ 
+Bayesian Inf. Crit. & $-$769.265 & 1,416.001 \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
@@ -208,7 +208,7 @@ Bayesian Inf. Crit. & $-$769.265 & 1,656.443 \\
 \end{table} 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Fri, Feb 10, 2017 - 11:24:26 AM
+% Date and time: Wed, Jun 14, 2017 - 12:38:34 PM
 \begin{table}[!htbp] \centering 
   \caption{Linears models of depth of colonization and light requirements comparing bay segments of Choctawhatchee Bay.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).} 
   \label{} 
@@ -220,20 +220,20 @@ Bayesian Inf. Crit. & $-$769.265 & 1,656.443 \\
 \\[-1.8ex] & z\_c\_all & light \\ 
 \\[-1.8ex] & (1) & (2)\\ 
 \hline \\[-1.8ex] 
- segCCB & 1.867 & 56.408 \\ 
-  & (0.217) & (5.161) \\ 
+ segCCB & 1.867 & 59.380 \\ 
+  & (0.217) & (4.599) \\ 
   & & \\ 
- segECB & 0.807 & 74.685 \\ 
-  & (0.414) & (10.049) \\ 
+ segECB & 0.807 & 74.712 \\ 
+  & (0.414) & (8.650) \\ 
   & & \\ 
- segWCB & 2.328 & 46.350 \\ 
-  & (0.264) & (6.398) \\ 
+ segWCB & 2.328 & 50.478 \\ 
+  & (0.264) & (5.724) \\ 
   & & \\ 
 \hline \\[-1.8ex] 
-Observations & 338 & 338 \\ 
-Log Likelihood & $-$36.030 & $-$1,125.501 \\ 
-Akaike Inf. Crit. & 86.059 & 2,265.002 \\ 
-Bayesian Inf. Crit. & 112.758 & 2,291.701 \\ 
+Observations & 338 & 303 \\ 
+Log Likelihood & $-$36.030 & $-$994.295 \\ 
+Akaike Inf. Crit. & 86.059 & 2,002.591 \\ 
+Bayesian Inf. Crit. & 112.758 & 2,028.517 \\ 
 \hline 
 \hline \\[-1.8ex] 
 \textit{Note:}  & \multicolumn{2}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
@@ -241,7 +241,7 @@ Bayesian Inf. Crit. & 112.758 & 2,291.701 \\
 \end{table} 
 
 % Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
-% Date and time: Fri, Feb 10, 2017 - 11:24:26 AM
+% Date and time: Wed, Jun 14, 2017 - 12:38:34 PM
 \begin{table}[!htbp] \centering 
   \caption{Linears models of depth of colonization and light requirements comparing bay segments of Indian River Lagoon.  Models have no intercept, a random segment effect, and a Gaussian correlation structure to control for spatial effects (nugget, separate for each bay).} 
   \label{} 
@@ -307,12 +307,12 @@ Bayesian Inf. Crit. & $-$72.934 & 308.237 \\
 ## 
 ## Linear Hypotheses:
 ##                Estimate Std. Error z value Pr(>|z|)   
-## LTB - HB == 0    0.2987     0.2049   1.458  0.46234   
-## MTB - HB == 0    0.4138     0.2030   2.038  0.17346   
+## LTB - HB == 0    0.2987     0.2049   1.458  0.46233   
+## MTB - HB == 0    0.4138     0.2030   2.038  0.17343   
 ## OTB - HB == 0   -0.1660     0.2062  -0.805  0.85174   
 ## MTB - LTB == 0   0.1150     0.1810   0.636  0.92023   
-## OTB - LTB == 0  -0.4647     0.1846  -2.518  0.05702 . 
-## OTB - MTB == 0  -0.5797     0.1825  -3.177  0.00781 **
+## OTB - LTB == 0  -0.4647     0.1846  -2.518  0.05677 . 
+## OTB - MTB == 0  -0.5797     0.1825  -3.177  0.00799 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
@@ -336,16 +336,16 @@ Bayesian Inf. Crit. & $-$72.934 & 308.237 \\
 ## 
 ## Fit: lme.formula(fixed = light ~ 0 + seg, data = tb_light, random = ~1 | 
 ##     seg, correlation = corGaus(form = ~Latitude + Longitude | 
-##     seg, nugget = TRUE))
+##     seg, nugget = TRUE), na.action = na.omit)
 ## 
 ## Linear Hypotheses:
 ##                Estimate Std. Error z value Pr(>|z|)
-## LTB - HB == 0    -2.005      7.715  -0.260    0.994
-## MTB - HB == 0    -4.729      7.640  -0.619    0.926
-## OTB - HB == 0     7.635      7.757   0.984    0.758
-## MTB - LTB == 0   -2.724      6.758  -0.403    0.978
-## OTB - LTB == 0    9.640      6.890   1.399    0.499
-## OTB - MTB == 0   12.364      6.806   1.817    0.264
+## LTB - HB == 0    -4.855      8.898  -0.546    0.948
+## MTB - HB == 0    -6.687      8.817  -0.758    0.873
+## OTB - HB == 0     4.553      8.936   0.510    0.957
+## MTB - LTB == 0   -1.833      7.801  -0.235    0.995
+## OTB - LTB == 0    9.408      7.936   1.185    0.635
+## OTB - MTB == 0   11.240      7.844   1.433    0.477
 ## (Adjusted p values reported -- single-step method)
 \end{verbatim}
 \begin{alltt}
@@ -365,9 +365,9 @@ Bayesian Inf. Crit. & $-$72.934 & 308.237 \\
 ## 
 ## Linear Hypotheses:
 ##                Estimate Std. Error z value Pr(>|z|)   
-## ECB - CCB == 0  -1.0606     0.4673  -2.270  0.05825 . 
-## WCB - CCB == 0   0.4604     0.3415   1.348  0.36329   
-## WCB - ECB == 0   1.5210     0.4912   3.097  0.00543 **
+## ECB - CCB == 0  -1.0606     0.4673  -2.270  0.05846 . 
+## WCB - CCB == 0   0.4604     0.3415   1.348  0.36330   
+## WCB - ECB == 0   1.5210     0.4912   3.097  0.00563 **
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
@@ -391,13 +391,13 @@ Bayesian Inf. Crit. & $-$72.934 & 308.237 \\
 ## 
 ## Fit: lme.formula(fixed = light ~ 0 + seg, data = choc_light, random = ~1 | 
 ##     seg, correlation = corGaus(form = ~Latitude + Longitude | 
-##     seg, nugget = TRUE))
+##     seg, nugget = TRUE), na.action = na.omit)
 ## 
 ## Linear Hypotheses:
 ##                Estimate Std. Error z value Pr(>|z|)  
-## ECB - CCB == 0    18.28      11.30   1.618   0.2335  
-## WCB - CCB == 0   -10.06       8.22  -1.224   0.4337  
-## WCB - ECB == 0   -28.34      11.91  -2.378   0.0442 *
+## ECB - CCB == 0   15.332      9.796   1.565   0.2566  
+## WCB - CCB == 0   -8.901      7.342  -1.212   0.4410  
+## WCB - ECB == 0  -24.234     10.372  -2.336   0.0496 *
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## (Adjusted p values reported -- single-step method)
@@ -461,7 +461,7 @@ Bayesian Inf. Crit. & $-$72.934 & 308.237 \\
 ## 
 ## Fit: lme.formula(fixed = light ~ 0 + seg, data = irl_light, random = ~1 | 
 ##     seg, correlation = corGaus(form = ~Latitude + Longitude | 
-##     seg, nugget = TRUE))
+##     seg, nugget = TRUE), na.action = na.omit)
 ## 
 ## Linear Hypotheses:
 ##                     Estimate Std. Error z value Pr(>|z|)
@@ -472,9 +472,9 @@ Bayesian Inf. Crit. & $-$72.934 & 308.237 \\
 ## UIRL - BR == 0       3.34556   11.46463   0.292    1.000
 ## UML - BR == 0        3.27282   10.05811   0.325    1.000
 ## LIRL - LCIRL == 0   -4.42153    9.57348  -0.462    0.999
-## LML - LCIRL == 0     8.52840    9.41405   0.906    0.971
+## LML - LCIRL == 0     8.52840    9.41405   0.906    0.972
 ## UCIRL - LCIRL == 0   6.39944    9.03767   0.708    0.992
-## UIRL - LCIRL == 0   10.47236   10.76426   0.973    0.959
+## UIRL - LCIRL == 0   10.47236   10.76426   0.973    0.960
 ## UML - LCIRL == 0    10.39962    9.25187   1.124    0.920
 ## LML - LIRL == 0     12.94993    9.90648   1.307    0.848
 ## UCIRL - LIRL == 0   10.82097    9.54953   1.133    0.917
