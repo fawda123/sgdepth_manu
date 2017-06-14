@@ -1084,7 +1084,7 @@ dev.off()
 \end{figure}
 
 % estimated light requirements for Choctawhatchee Bay, z_cmed
-<<light_choc, echo = F, eval = T, cache = T, include = FALSE, results = 'hide'>>=
+<<light_choc, echo = F, eval = T, cache = T, results = 'hide'>>=
 
 library(grid)
 

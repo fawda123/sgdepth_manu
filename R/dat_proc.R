@@ -9,11 +9,11 @@ library(doParallel)
 # raster files to memory
 # cb and tb bathymetry
 
-cb_bathy <- raster('M:/GIS/seagrass/cb_bathy')
-cb_bathy <- readAll(cb_bathy)
-save(cb_bathy, file = 'data/cb_bathy.RData', compress = 'xz')
+choc_bathy <- raster('M:/GIS/seagrass/choc_bathy')
+choc_bathy <- readAll(choc_bathy)
+save(choc_bathy, file = 'data/choc_bathy.RData', compress = 'xz')
 
-tb_bathy <- raster('M:/GIS/seagrass/tb_bathy_clip')
+tb_bathy <- raster('M:/GIS/seagrass/tb_bathy')
 tb_bathy <- readAll(tb_bathy)
 save(tb_bathy, file = 'data/tb_bathy.RData', compress = 'xz')
 
@@ -240,6 +240,7 @@ save(ests_out, file = 'data/ests_out.RData')
 source('R/funcs.r')
 
 # load data
+data(choc_bathy)
 data(choc_sats_crc)
 data(choc_seg)
 data(sgpts_2007_choc)
@@ -262,24 +263,18 @@ dat <- na.omit(proc)
 coordinates(dat) <- c('Longitude', 'Latitude')
 
 # raster
-rst <- raster('M:/GIS/seagrass/cb_bathy')
-dep <- raster::extract(rst, dat)
+dep <- raster::extract(choc_bathy, dat)
 
-dat <- dat %>% 
+# make light requirement estimates NA if z_c_all >= z
+dat <- data.frame(dat) %>% 
   mutate(
     z = dep,
-    rmval = ifelse(z_c_all < z, 0, 1)
+    light = ifelse(z_c_all < z, light, NA)
     ) %>% 
-  filter(rmval != 1) %>% 
-  data.frame
-
-save(choc_light, file = 'data/choc_light.RData', compress = 'xz')
-
-
-
+  select(-matches('optional'))
 
 choc_light <- dat
-save(choc_light, file = 'data/choc_light.RData')
+save(choc_light, file = 'data/choc_light.RData', compress = 'xz')
 
 ######
 # TB light requirements zcmed
@@ -287,6 +282,7 @@ save(choc_light, file = 'data/choc_light.RData')
 source('R/funcs.r')
 
 # load data
+data(tb_bathy)
 data(tb_sats)
 data(tb_seg)
 data(sgpts_2010_tb)
@@ -317,6 +313,20 @@ tmp <- tb_light  %over% sgbuff_2010_tb %>%
   is.na(.) %>% 
   !.
 tb_light <- data.frame(tb_light)[tmp, ]
+
+# remove light requirements estimates were zc > depth
+coordinates(tb_light) <- c('Longitude', 'Latitude')
+
+# raster
+dep <- raster::extract(tb_bathy, tb_light)
+
+# make light requirement estimates NA if z_c_all >= z
+tb_light <- data.frame(tb_light) %>% 
+  mutate(
+    z = dep,
+    light = ifelse(z_c_all < z, light, NA)
+    ) %>% 
+  select(-matches('optional'))
 
 save(tb_light, file = 'data/tb_light.RData')
 
@@ -361,6 +371,7 @@ save(irl_light, file = 'data/irl_light.RData')
 source('R/funcs.r')
 
 # load data
+data(choc_bathy)
 data(choc_sats_crc)
 data(choc_seg)
 data(sgpts_2007_choc)
@@ -379,6 +390,20 @@ coordinates(samp_vals) <- c('Longitude', 'Latitude')
 proc <- kd_doc(samp_vals, sgpts_2007_choc, choc_seg, radius = 0.04, z_est = 'z_cmax', trace = T)
 dat <- na.omit(proc)
 
+# remove light requirements estimates were zc > depth
+coordinates(dat) <- c('Longitude', 'Latitude')
+
+# raster
+dep <- raster::extract(choc_bathy, dat)
+
+# make light requirement estimates NA if z_c_all >= z
+dat <- data.frame(dat) %>% 
+  mutate(
+    z = dep,
+    light = ifelse(z_c_all < z, light, NA)
+    ) %>% 
+  select(-matches('optional'))
+
 choc_light_zcmax <- dat
 save(choc_light_zcmax, file = 'data/choc_light_zcmax.RData')
 
@@ -388,6 +413,7 @@ save(choc_light_zcmax, file = 'data/choc_light_zcmax.RData')
 source('R/funcs.r')
 
 # load data
+data(tb_bathy)
 data(tb_sats)
 data(tb_seg)
 data(sgpts_2010_tb)
@@ -417,6 +443,20 @@ tmp <- tb_light_zcmax %over% sgbuff_2010_tb %>%
   is.na(.) %>% 
   !.
 tb_light_zcmax <- data.frame(tb_light_zcmax)[tmp, ]
+
+# remove light requirements estimates were zc > depth
+coordinates(tb_light_zcmax) <- c('Longitude', 'Latitude')
+
+# raster
+dep <- raster::extract(tb_bathy, tb_light_zcmax)
+
+# make light requirement estimates NA if z_c_all >= z
+tb_light_zcmax <- data.frame(tb_light_zcmax) %>% 
+  mutate(
+    z = dep,
+    light = ifelse(z_c_all < z, light, NA)
+    ) %>% 
+  select(-matches('optional'))
 
 save(tb_light_zcmax, file = 'data/tb_light_zcmax.RData')
 
