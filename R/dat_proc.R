@@ -6,6 +6,18 @@ library(foreach)
 library(doParallel)
 
 ######
+# raster files to memory
+# cb and tb bathymetry
+
+cb_bathy <- raster('M:/GIS/seagrass/cb_bathy')
+cb_bathy <- readAll(cb_bathy)
+save(cb_bathy, file = 'data/cb_bathy.RData', compress = 'xz')
+
+tb_bathy <- raster('M:/GIS/seagrass/tb_bathy_clip')
+tb_bathy <- readAll(tb_bathy)
+save(tb_bathy, file = 'data/tb_bathy.RData', compress = 'xz')
+
+######
 # summary of wbid characteristics
 
 # create shapefile object of seagrass coverages
@@ -245,6 +257,26 @@ coordinates(samp_vals) <- c('Longitude', 'Latitude')
 # process for seagrass depth limits and light requirements
 proc <- kd_doc(samp_vals, sgpts_2007_choc, choc_seg, radius = 0.04, z_est = 'z_cmed', trace = T)
 dat <- na.omit(proc)
+
+# remove light requirements estimates were zc > depth
+coordinates(dat) <- c('Longitude', 'Latitude')
+
+# raster
+rst <- raster('M:/GIS/seagrass/cb_bathy')
+dep <- raster::extract(rst, dat)
+
+dat <- dat %>% 
+  mutate(
+    z = dep,
+    rmval = ifelse(z_c_all < z, 0, 1)
+    ) %>% 
+  filter(rmval != 1) %>% 
+  data.frame
+
+save(choc_light, file = 'data/choc_light.RData', compress = 'xz')
+
+
+
 
 choc_light <- dat
 save(choc_light, file = 'data/choc_light.RData')
